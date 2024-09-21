@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ft_transcendence - Pong</title>
+    <style>
+        /* Basic styles to make the game look presentable */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #282c34;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            border: 2px solid white;
+            background-color: black;
+        }
+        .controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- This is the canvas where the Pong game will run -->
+    <canvas id="pongGame" width="600" height="400"></canvas>
+    
+    <!-- Control buttons for starting and resetting the game -->
+    <div class="controls">
+        <button id="startBtn">Start Game</button>
+        <button id="resetBtn">Reset Game</button>
+    </div>
+
+    <!-- Link to the JavaScript file -->
+    <script src="js/game.js"></script>
+</body>
+</html>
