@@ -3,40 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ft_transcendence - Pong</title>
+    <title>Pong Game</title>
     <style>
-        /* Basic styles to make the game look presentable */
         body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
             background-color: #282c34;
             color: white;
-            font-family: Arial, sans-serif;
+        }
+        .screen {
+            display: none;
+            text-align: center;
+        }
+        .active {
+            display: block;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #61dafb;
+            border: none;
+            color: #282c34;
+            border-radius: 5px;
+        }
+        img {
+            width: 300px;
+            margin-bottom: 20px;
         }
         canvas {
             border: 2px solid white;
-            background-color: black;
-        }
-        .controls {
-            margin-top: 20px;
-            text-align: center;
         }
     </style>
 </head>
 <body>
-    <!-- This is the canvas where the Pong game will run -->
-    <canvas id="pongGame" width="600" height="400"></canvas>
-    
-    <!-- Control buttons for starting and resetting the game -->
-    <div class="controls">
-        <button id="startBtn">Start Game</button>
-        <button id="resetBtn">Reset Game</button>
+    <!-- Main Screen -->
+    <div id="mainScreen" class="screen active">
+        <img src="img/pong_screen_title.png" alt="Pong Game" />
+        <h1>Welcome to Pong Game</h1>
+        <button id="versusButton">Versus Mode</button>
+        <button id="tournamentButton">Tournament Mode</button>
     </div>
 
-    <!-- Link to the JavaScript file -->
-    <script src="js/game.js"></script>
+    <!-- Versus Mode Screen -->
+    <div id="versusScreen" class="screen">
+        <h1>Versus Mode</h1>
+        <canvas id="pongGame" width="600" height="400"></canvas>
+        <button id="startGameButton">Start Game</button>
+        <button id="backToMainVersus">Back to Main Menu</button>
+    </div>
+
+    <!-- Tournament Mode Screen (placeholder) -->
+    <div id="tournamentScreen" class="screen">
+        <h1>Tournament Mode</h1>
+        <button id="backToMainTournament">Back to Main Menu</button>
+    </div>
+
+    <script src="js/game.js"></script> <!-- Your Pong game logic -->
+	<script src="js/app.js"></script>  <!-- SPA logic -->
+
 </body>
 </html>

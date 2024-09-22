@@ -2,6 +2,9 @@
 const canvas = document.getElementById("pongGame");
 const context = canvas.getContext("2d");
 
+//Game already started
+let gameStarted = false;
+
 // Define the paddle properties
 const paddleWidth = 10, paddleHeight = 100;
 let leftPaddleY = 150, rightPaddleY = 150;
@@ -147,10 +150,10 @@ function updatePaddles() {
 
 // Function to handle the game loop
 function gameLoop() {
-    updatePaddles();  // Update paddle positions
-    updateBall();     // Update ball position and collisions
-    draw();           // Redraw the canvas with updated positions
-    if (!gameOver) {
+    if (!gameOver && gameStarted) {
+        updatePaddles();  // Update paddle positions
+        updateBall();     // Update ball position and collisions
+        draw();           // Redraw the canvas with updated positions
         requestAnimationFrame(gameLoop);  // Keep the loop running if the game is not over
     }
 }
@@ -191,6 +194,31 @@ document.addEventListener('keyup', (event) => {
     }
 });
 
+//Function to restart the game
+function resetGame() {
+    // Reset positions
+    leftPaddleY = 150;
+    rightPaddleY = 150;
+    ballX = canvas.width / 2;
+    ballY = canvas.height / 2;
+    
+    // Reset ball speed and direction
+    ballSpeedX = initialBallSpeed;
+    ballSpeedY = initialBallSpeed;
+    
+    // Reset scores
+    player1Score = 0;
+    player2Score = 0;
+    
+    // Clear the canvas
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Reset any game state flags
+    gameOver = false;
+	gameStarted = false;
+}
+
+
 // Function to start the game
 function startGame() {
     if (gameOver) {
@@ -200,8 +228,12 @@ function startGame() {
         gameOver = false;
         ballSpeedX = 5;  // Reset ball speed
         ballSpeedY = 5;
+		gameStarted = false;
     }
-    gameLoop();  // Start the game loop
+	if (!gameStarted) {
+		gameStarted = true;
+		gameLoop();  // Start the game loop
+	}
 }
 
 // Event listener for the start button
