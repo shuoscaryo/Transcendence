@@ -1,6 +1,6 @@
 // Select the canvas and set up the drawing context
-const canvas = document.getElementById("pongGame");
-const context = canvas.getContext("2d");
+let canvas;  // Dynamically set the canvas
+let context;  // The drawing context
 
 //Game already started
 let gameStarted = false;
@@ -11,8 +11,8 @@ let leftPaddleY = 150, rightPaddleY = 150;
 const paddleSpeed = 5;
 
 // Define square "ball" properties
-let ballX = canvas.width / 2;
-let ballY = canvas.height / 2;
+let ballX;
+let ballY;
 let ballSize = 10;  // Size of the square "ball"
 let ballSpeedX = 5;  // Ball velocity in X direction
 let ballSpeedY = 5;  // Ball velocity in Y direction
@@ -97,7 +97,7 @@ function updateBall() {
 			else {
 				ballSpeedY = initialBallSpeed;  // Reverse direction in Y
 			}
-            resetBall();  // Reset the ball after a score
+            resetParams();  // Reset the ball after a score
         } else if (ballX + ballSize > canvas.width) {
             player1Score++;  // Player 1 scores if the ball goes off the right side
             if (player1Score === winningScore) {
@@ -110,7 +110,7 @@ function updateBall() {
 			else {
 				ballSpeedY = -initialBallSpeed;  // Reverse direction in Y
 			}
-            resetBall();  // Reset the ball after a score
+            resetParams();  // Reset the ball after a score
         }
     }
 }
@@ -122,9 +122,11 @@ function increaseBallSpeed() {
 }
 
 // Function to reset the ball to the center
-function resetBall() {
+function resetParams() {
     ballX = canvas.width / 2;
     ballY = canvas.height / 2;
+	leftPaddleY = 150;
+    rightPaddleY = 150;
 }
 
 // Function to update paddle positions based on movement
@@ -195,7 +197,11 @@ document.addEventListener('keyup', (event) => {
 });
 
 //Function to restart the game
-function resetGame() {
+function resetGame(selectedCanvas) {
+	// Set the canvas
+	canvas = selectedCanvas;
+	// Get the drawing context
+	context = canvas.getContext("2d");
     // Reset positions
     leftPaddleY = 150;
     rightPaddleY = 150;
@@ -220,7 +226,13 @@ function resetGame() {
 
 
 // Function to start the game
-function startGame() {
+function startGame(selectedCanvas) {
+	// Set the canvas
+	canvas = selectedCanvas;
+	// Get the drawing context
+	context = canvas.getContext("2d");
+	ballX = canvas.width / 2;
+	ballY = canvas.height / 2;
     if (gameOver) {
         // Reset scores and the game state
         player1Score = 0;
@@ -228,6 +240,8 @@ function startGame() {
         gameOver = false;
         ballSpeedX = 5;  // Reset ball speed
         ballSpeedY = 5;
+		leftPaddleY = 150;
+   		rightPaddleY = 150;
 		gameStarted = false;
     }
 	if (!gameStarted) {
@@ -235,18 +249,3 @@ function startGame() {
 		gameLoop();  // Start the game loop
 	}
 }
-
-// Event listener for the start button
-document.getElementById("startBtn").addEventListener("click", startGame);
-
-// Reset the game when clicking the reset button
-document.getElementById("resetBtn").addEventListener("click", () => {
-    leftPaddleY = 150;
-    rightPaddleY = 150;
-    player1Score = 0;  // Reset Player 1 score
-    player2Score = 0;  // Reset Player 2 score
-    gameOver = false;  // Reset game over state
-    resetBall();  // Reset the ball position when the game is reset
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    draw();
-});

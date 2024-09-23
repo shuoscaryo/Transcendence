@@ -27,9 +27,9 @@ versusButton.addEventListener('click', () => {
 tournamentButton.addEventListener('click', () => {
     showScreen(tournamentScreen);
 });
-
+const versusCanvas = document.getElementById('pongVersusGame');
 backToMainVersus.addEventListener('click', () => {
-	resetGame(); // This function is defined in game.js
+	resetGame(versusCanvas); // This function is defined in game.js
     showScreen(mainScreen);
 });
 
@@ -39,5 +39,6 @@ backToMainTournament.addEventListener('click', () => {
 
 // Function to start the game (linking to the game logic in game.js)
 startGameButton.addEventListener('click', () => {
-    startGame();  // This function is defined in game.js
+    // Call startGame with the canvas, not the event
+    startGame(versusCanvas);  // Pass the canvas element, not the event
 });
