@@ -62,19 +62,29 @@
     <!-- Tournament Mode Screen -->
 	<div id="tournamentScreen" class="screen">
 		<h1>Tournament Mode</h1>
+		
 		<p>Players:</p>
 		<ul id="playerList"></ul> <!-- List of players -->
+
+		<!-- Input field and button to add players -->
+		<input type="text" id="playerNameInput" placeholder="Enter player name">
+		<button id="addPlayerButton">Add Player</button>
+
 		<button id="startTournamentButton">Start Tournament</button>
+		<button id="backToMainTournament">Back to Main Menu</button>
+		<button id="clearPlayersButton">Clear All Players</button>
+
 		<div id="matchInfo" style="display: none;">
 			<h2>Match: <span id="player1Name"></span> vs <span id="player2Name"></span></h2>
 			<canvas id="pongTournamentGame" width="600" height="400"></canvas>
 			<button id="nextMatchButton" style="display: none;">Next Match</button>
-			<button id="backToMainTournament">Back to Main Menu</button>
+			
 		</div>
 	</div>
 
     <script src="js/game.js"></script> <!-- Your Pong game logic -->
 	<script src="js/app.js"></script>  <!-- SPA logic -->
+	<script src="js/tournament.js"></script> <!-- Tournament logic -->
 
 </body>
 </html>
