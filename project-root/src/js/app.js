@@ -17,8 +17,6 @@ const versusCanvas = document.getElementById('pongVersusGame');
 
 // Tournament screen buttons
 const backToMainTournament = document.getElementById('backToMainTournament');
-const startTournamentButton = document.getElementById('startTournamentButton');
-const nextMatchButton = document.getElementById('nextMatchButton');
 const addPlayerButton = document.getElementById('addPlayerButton');
 
 // Tournament variables
