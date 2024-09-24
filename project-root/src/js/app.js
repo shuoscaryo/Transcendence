@@ -1,7 +1,8 @@
 // Get references to the screens and buttons
 const mainScreen = document.getElementById('mainScreen');
 const versusScreen = document.getElementById('versusScreen');
-const tournamentScreen = document.getElementById('tournamentScreen');
+const tournamentSetupScreen = document.getElementById('tournamentSetupScreen');
+const tournamentGameplayScreen = document.getElementById('tournamentGameplayScreen');
 
 
 // Main screen buttons
@@ -16,7 +17,8 @@ const backToMainVersus = document.getElementById('backToMainVersus');
 const versusCanvas = document.getElementById('pongVersusGame');
 
 // Tournament screen buttons
-const backToMainTournament = document.getElementById('backToMainTournament');
+const backToMainSetup = document.getElementById('backToMainSetup');
+const backToTournamentGameplay = document.getElementById('backToTournamentGameplay');
 const addPlayerButton = document.getElementById('addPlayerButton');
 
 // Tournament variables
@@ -27,7 +29,8 @@ const playerNameInput = document.getElementById('playerNameInput');  // Input fi
 function showScreen(screen) {
     mainScreen.classList.remove('active');
     versusScreen.classList.remove('active');
-    tournamentScreen.classList.remove('active');
+    tournamentSetupScreen.classList.remove('active');
+	tournamentGameplayScreen.classList.remove('active');
     
     screen.classList.add('active');
 }
@@ -38,7 +41,7 @@ versusButton.addEventListener('click', () => {
 });
 
 tournamentButton.addEventListener('click', () => {
-    showScreen(tournamentScreen);
+    showScreen(tournamentSetupScreen);
 });
 
 backToMainVersus.addEventListener('click', () => {
@@ -46,13 +49,30 @@ backToMainVersus.addEventListener('click', () => {
     showScreen(mainScreen);
 });
 
-backToMainTournament.addEventListener('click', () => {
+backToMainSetup.addEventListener('click', () => {
+	clearAllPlayers();  // This function is defined in tournament.js
+	resetGame(tournamentCanvas);  // This function is defined in game.js
     showScreen(mainScreen);
+});
+
+backToTournamentGameplay.addEventListener('click', () => {
+	resetGame(tournamentCanvas);  // Reset the game
+	showScreen(tournamentSetupScreen);
 });
 
 // Function to start the game (linking to the game logic in game.js)
 startGameButton.addEventListener('click', () => {
     startGame(versusCanvas);  // Pass the canvas element, not the event
+});
+
+// Event listener for starting the tournament (switch to gameplay screen)
+startTournamentButton.addEventListener('click', () => {
+    if (players.length < 2) {
+        alert('You need at least 2 players to start the tournament.');
+    } else {
+        showScreen(tournamentGameplayScreen);  // Switch to the gameplay screen
+        startTournament();  // Start the tournament logic
+    }
 });
 
 // Event listener for adding a player

@@ -48,15 +48,6 @@ function clearAllPlayers() {
     playerListElement.innerHTML = '';
 }
 
-// Start the tournament
-startTournamentButton.addEventListener('click', () => {
-    if (players.length < 2) {
-        alert('You need at least 2 players to start the tournament.');
-    } else {
-        startTournament();
-    }
-});
-
 function startTournament() {
     currentMatch = 0;
     showNextMatch();
