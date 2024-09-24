@@ -54,7 +54,7 @@ function draw() {
 
     // If the game is over, display the winning message
     if (gameOver) {
-        let winner = player1Score === winningScore ? "Player 1" : "Player 2";
+        let winner = player1Score === winningScore ? player1 : player2;
         context.fillText(winner + " Wins!", canvas.width / 2 - 70, canvas.height / 2);
 		if (canvas.id === 'pongTournamentGame') {
 			document.getElementById('nextMatchButton').style.display = 'inline';  // Show "Next Match" button after match

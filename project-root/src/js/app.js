@@ -57,6 +57,7 @@ backToMainSetup.addEventListener('click', () => {
 
 backToTournamentGameplay.addEventListener('click', () => {
 	resetGame(tournamentCanvas);  // Reset the game
+	resetTournament();  // Reset the tournament
 	showScreen(tournamentSetupScreen);
 });
 
