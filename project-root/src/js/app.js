@@ -28,8 +28,9 @@ const playerNameInput = document.getElementById('playerNameInput');  // Input fi
 // Function to show screens and update browser history
 function showScreen(screen, screenName, {saveHistory = true, replaceHistory = false} = {}) {
     // Hide all screens
-    const screens = [mainScreen, versusScreen, tournamentSetupScreen, tournamentGameplayScreen];
-    screens.forEach(s => s.style.display = 'none');
+	document.querySelectorAll('.screen').forEach(section => {
+		section.style.display = 'none';
+	});
 
     // Show the selected screen
     screen.style.display = 'block';
