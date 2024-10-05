@@ -26,7 +26,7 @@ const tournamentCanvas = document.getElementById('pongTournamentGame');
 const playerNameInput = document.getElementById('playerNameInput');  // Input field for player names
 
 // Function to show screens and update browser history
-function showScreen(screen, screenName) {
+function showScreen(screen, screenName, {saveHistory = true, replaceHistory = false} = {}) {
     // Hide all screens
     const screens = [mainScreen, versusScreen, tournamentSetupScreen, tournamentGameplayScreen];
     screens.forEach(s => s.style.display = 'none');
@@ -35,37 +35,27 @@ function showScreen(screen, screenName) {
     screen.style.display = 'block';
 
     // Update the browser history
-    history.pushState({ screen: screenName }, '', `#${screenName}`);
+	if (saveHistory && screenName != history.state.screen)
+	{
+		if (replaceHistory)
+			history.replaceState({ screen: screenName }, null, `#${screenName}`);
+		else
+    		history.pushState({ screen: screenName }, null, `#${screenName}`);
+	}
 }
 
 // Handle browser back and forward button navigation
-window.addEventListener('popstate', (event) => {
-    if (event.state && event.state.screen) {
-        const screenName = event.state.screen;
-
-        // Show the correct screen based on the state
-        switch (screenName) {
-            case 'main':
-                showScreen(mainScreen, 'main');
-                break;
-            case 'versus':
-                showScreen(versusScreen, 'versus');
-                break;
-            case 'tournamentSetup':
-                showScreen(tournamentSetupScreen, 'tournamentSetup');
-                break;
-            case 'tournamentGameplay':
-                showScreen(tournamentGameplayScreen, 'tournamentGameplay');
-                break;
-            default:
-                showScreen(mainScreen, 'main');  // Default to main screen if unknown state
-        }
-    }
-});
+window.onpopstate = (event) => {
+	const screen = event.state.screen;
+	if (screen)
+		showScreen(document.getElementById(`${screen}Screen`), screen, {saveHistory:false});
+	else
+		history.back();
+};
 
 // Initial page load
 window.onload = () => {
-    history.replaceState({ screen: 'main' }, '', '#main');
+	history.replaceState({ screen: 'main' }, null, null);
     showScreen(mainScreen, 'main');
 };
 
