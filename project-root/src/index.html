@@ -44,23 +44,23 @@
 </head>
 <body>
     <!-- Main Screen -->
-    <div id="mainScreen" class="screen active">
+    <section id="mainScreen" class="screen" data-name="">
         <img src="img/pong_screen_title.png" alt="Pong Game" />
         <h1>Welcome to Pong Game</h1>
         <button id="versusButton">Versus Mode</button>
         <button id="tournamentButton">Tournament Mode</button>
-    </div>
+    </section>
 
     <!-- Versus Mode Screen -->
-    <div id="versusScreen" class="screen">
+    <section id="versusScreen" class="screen">
         <h1>Versus Mode</h1>
         <canvas id="pongVersusGame" width="600" height="400"></canvas>
         <button id="startGameButton">Start Game</button>
         <button id="backToMainVersus">Back to Main Menu</button>
-    </div>
+    </section>
 
     <!-- Tournament Setup Screen -->
-    <div id="tournamentSetupScreen" class="screen">
+    <section id="tournamentSetupScreen" class="screen">
         <h1>Setup Tournament</h1>
         <p>Players:</p>
         <ul id="playerList"></ul>
@@ -69,10 +69,10 @@
         <button id="clearPlayersButton">Clear All Players</button>
         <button id="startTournamentButton">Start Tournament</button>
         <button id="backToMainSetup">Back to Main Menu</button>
-    </div>
+    </section>
 
     <!-- Tournament Gameplay Screen -->
-    <div id="tournamentGameplayScreen" class="screen">
+    <section id="tournamentGameplayScreen" class="screen">
         <h1>Tournament Match</h1>
         <div id="matchInfo">
             <h2>Match: <span id="player1Name"></span> vs <span id="player2Name"></span></h2>
@@ -81,7 +81,7 @@
             <button id="nextMatchButton" style="display: none;">Next Match</button>
         </div>
         <button id="backToTournamentGameplay">Back to Tournament SetUp</button>
-    </div>
+    </section>
 
     <!-- JavaScript Files -->
     <script src="js/game.js"></script>
