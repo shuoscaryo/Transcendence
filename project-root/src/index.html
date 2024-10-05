@@ -52,48 +52,40 @@
     </div>
 
     <!-- Versus Mode Screen -->
-	<div id="versusScreen" class="screen">
-		<h1>Versus Mode</h1>
-		<canvas id="pongVersusGame" width="600" height="400"></canvas>  <!-- Versus canvas -->
-		<button id="startGameButton">Start Game</button>
-		<button id="backToMainVersus">Back to Main Menu</button>
-	</div>
+    <div id="versusScreen" class="screen">
+        <h1>Versus Mode</h1>
+        <canvas id="pongVersusGame" width="600" height="400"></canvas>
+        <button id="startGameButton">Start Game</button>
+        <button id="backToMainVersus">Back to Main Menu</button>
+    </div>
 
     <!-- Tournament Setup Screen -->
-	<div id="tournamentSetupScreen" class="screen">
-		<h1>Setup Tournament</h1>
-		
-		<p>Players:</p>
-		<ul id="playerList"></ul> <!-- List of players -->
+    <div id="tournamentSetupScreen" class="screen">
+        <h1>Setup Tournament</h1>
+        <p>Players:</p>
+        <ul id="playerList"></ul>
+        <input type="text" id="playerNameInput" placeholder="Enter player name">
+        <button id="addPlayerButton">Add Player</button>
+        <button id="clearPlayersButton">Clear All Players</button>
+        <button id="startTournamentButton">Start Tournament</button>
+        <button id="backToMainSetup">Back to Main Menu</button>
+    </div>
 
-		<!-- Input field and button to add players -->
-		<input type="text" id="playerNameInput" placeholder="Enter player name">
-		<button id="addPlayerButton">Add Player</button>
-		
-		<button id="clearPlayersButton">Clear All Players</button>
-		<button id="startTournamentButton">Start Tournament</button>
-		<button id="backToMainSetup">Back to Main Menu</button>
-	</div>
+    <!-- Tournament Gameplay Screen -->
+    <div id="tournamentGameplayScreen" class="screen">
+        <h1>Tournament Match</h1>
+        <div id="matchInfo">
+            <h2>Match: <span id="player1Name"></span> vs <span id="player2Name"></span></h2>
+            <canvas id="pongTournamentGame" width="600" height="400"></canvas>
+            <button id="startMatchButton" style="display: none;">Start Match</button>
+            <button id="nextMatchButton" style="display: none;">Next Match</button>
+        </div>
+        <button id="backToTournamentGameplay">Back to Tournament SetUp</button>
+    </div>
 
-	<!-- Tournament Gameplay Screen -->
-	<div id="tournamentGameplayScreen" class="screen">
-		<h1>Tournament Match</h1>
-		
-		<div id="matchInfo">
-			<h2>Match: <span id="player1Name"></span> vs <span id="player2Name"></span></h2>
-			<canvas id="pongTournamentGame" width="600" height="400"></canvas>
-			<button id="startMatchButton" style="display: none;">Start Match</button>
-			<button id="nextMatchButton" style="display: none;">Next Match</button>
-		</div>
-
-		<button id="backToTournamentGameplay">Back to Tournament SetUp</button>
-	</div>
-
-
-
-    <script src="js/game.js"></script> <!-- Your Pong game logic -->
-	<script src="js/app.js"></script>  <!-- SPA logic -->
-	<script src="js/tournament.js"></script> <!-- Tournament logic -->
-
+    <!-- JavaScript Files -->
+    <script src="js/game.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/tournament.js"></script>
 </body>
 </html>

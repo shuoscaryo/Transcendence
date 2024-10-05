@@ -25,44 +25,80 @@ const addPlayerButton = document.getElementById('addPlayerButton');
 const tournamentCanvas = document.getElementById('pongTournamentGame');
 const playerNameInput = document.getElementById('playerNameInput');  // Input field for player names
 
-// Function to show a screen and hide the others
-function showScreen(screen) {
-    mainScreen.classList.remove('active');
-    versusScreen.classList.remove('active');
-    tournamentSetupScreen.classList.remove('active');
-	tournamentGameplayScreen.classList.remove('active');
-    
-    screen.classList.add('active');
+// Function to show screens and update browser history
+function showScreen(screen, screenName) {
+    // Hide all screens
+    const screens = [mainScreen, versusScreen, tournamentSetupScreen, tournamentGameplayScreen];
+    screens.forEach(s => s.style.display = 'none');
+
+    // Show the selected screen
+    screen.style.display = 'block';
+
+    // Update the browser history
+    history.pushState({ screen: screenName }, '', `#${screenName}`);
 }
+
+// Handle browser back and forward button navigation
+window.addEventListener('popstate', (event) => {
+    if (event.state && event.state.screen) {
+        const screenName = event.state.screen;
+
+        // Show the correct screen based on the state
+        switch (screenName) {
+            case 'main':
+                showScreen(mainScreen, 'main');
+                break;
+            case 'versus':
+                showScreen(versusScreen, 'versus');
+                break;
+            case 'tournamentSetup':
+                showScreen(tournamentSetupScreen, 'tournamentSetup');
+                break;
+            case 'tournamentGameplay':
+                showScreen(tournamentGameplayScreen, 'tournamentGameplay');
+                break;
+            default:
+                showScreen(mainScreen, 'main');  // Default to main screen if unknown state
+        }
+    }
+});
+
+// Initial page load
+window.onload = () => {
+    history.replaceState({ screen: 'main' }, '', '#main');
+    showScreen(mainScreen, 'main');
+};
 
 // Event listeners for buttons
 versusButton.addEventListener('click', () => {
-    showScreen(versusScreen);
+    showScreen(versusScreen, 'versus');
 });
 
 tournamentButton.addEventListener('click', () => {
-    showScreen(tournamentSetupScreen);
+    showScreen(tournamentSetupScreen, 'tournamentSetup');
 });
 
 backToMainVersus.addEventListener('click', () => {
 	resetGame(versusCanvas); // This function is defined in game.js
-    showScreen(mainScreen);
+    showScreen(mainScreen, 'main');
 });
 
 backToMainSetup.addEventListener('click', () => {
 	clearAllPlayers();  // This function is defined in tournament.js
 	resetGame(tournamentCanvas);  // This function is defined in game.js
-    showScreen(mainScreen);
+    showScreen(mainScreen, 'main');
 });
 
 backToTournamentGameplay.addEventListener('click', () => {
 	resetGame(tournamentCanvas);  // Reset the game
 	resetTournament();  // Reset the tournament
-	showScreen(tournamentSetupScreen);
+	showScreen(tournamentSetupScreen, 'tournamentSetup');
 });
 
 // Function to start the game (linking to the game logic in game.js)
 startGameButton.addEventListener('click', () => {
+	player1 = "Player 1";
+	player2 = "Player 2";
     startGame(versusCanvas);  // Pass the canvas element, not the event
 });
 
@@ -71,7 +107,7 @@ startTournamentButton.addEventListener('click', () => {
     if (players.length < 2) {
         alert('You need at least 2 players to start the tournament.');
     } else {
-        showScreen(tournamentGameplayScreen);  // Switch to the gameplay screen
+        showScreen(tournamentGameplayScreen, "tournamentGameplay");  // Switch to the gameplay screen
         startTournament();  // Start the tournament logic
     }
 });
