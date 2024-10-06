@@ -24,7 +24,10 @@ const playerNameInput = document.getElementById('playerNameInput');  // Input fi
 // class screen objects can contain data-name attribute to be used in the URL
 const SCREENS = {};
 document.querySelectorAll('.screen').forEach(screen => {
-  SCREENS[screen.id] = screen;
+	if (screen.id)
+		SCREENS[screen.id] = screen;
+	else
+		console.error('Screen element has no ID:', screen);
 });
 let currentScreen = SCREENS.mainScreen;
 
