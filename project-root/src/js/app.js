@@ -101,7 +101,7 @@ window.onpopstate = (event) => {
 
 // Initial page load
 window.onload = () => {
-	history.replaceState({ screen_id: currentScreen.id }, null, null);
+	history.replaceState({ screen_id: currentScreen.id }, null, window.location.pathname);
     showScreen(SCREENS.mainScreen, {saveHistory:false});
 };
 
