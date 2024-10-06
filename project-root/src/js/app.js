@@ -26,10 +26,12 @@ const SCREENS = {};
 document.querySelectorAll('.screen').forEach(screen => {
   SCREENS[screen.id] = screen;
 });
+let currentScreen = SCREENS.mainScreen;
 
 /**
- * Displays the specified screen, hides all others, and optionally updates
- * browser history.
+ * Displays the specified screen, hides and resets (if the function
+ * `${screen.id}Reset`() is present), and optionally updates browser history.
+ * Also updates the current screen to the new screen.
  *
  * @param {HTMLElement} screen - The screen element to display. This should be
  *     one of the elements in the `SCREENS` object, where each key is the `id`
@@ -57,19 +59,32 @@ function showScreen(screen, {saveHistory = true, replaceHistory = false, screenN
 	// Get the screen name in this order: screenName, screen.dataset.name, screen.id
 	if (screenName === null)
 		screenName = screen.dataset.name ?? screen.id.replace('Screen', '');
+	
+	// Reset the current screen
+	const resetFunction = `${currentScreen.id}Reset`;
+	if (typeof window[resetFunction] === 'function')
+		window[resetFunction]();
 
 	// Show only the selected screen
 	Object.values(SCREENS).forEach(section => {section.style.display = 'none';});
     screen.style.display = 'block';
-
+	
     // Update the browser history
 	if (saveHistory && (!history.state || screen.id != history.state.screen_id))
-	{
-		if (replaceHistory)
-			history.replaceState({ screen_id: screen.id }, null, screenName == '' ? window.location.pathname : `#${screenName}`);
-		else
+		{
+			if (replaceHistory)
+				history.replaceState({ screen_id: screen.id }, null, screenName == '' ? window.location.pathname : `#${screenName}`);
+			else
     		history.pushState({ screen_id: screen.id }, null, screenName == '' ? window.location.pathname : `#${screenName}`);
 	}
+	
+	// Update the current screen
+	currentScreen = screen;
+}
+
+function tournamentGameplayScreenReset() {
+	resetGame(tournamentCanvas);  // Reset the game
+	resetTournament();  // Reset the tournament
 }
 
 // Handle browser back and forward button navigation
@@ -83,7 +98,7 @@ window.onpopstate = (event) => {
 
 // Initial page load
 window.onload = () => {
-	history.replaceState({ screen_id: 'mainScreen' }, null, null);
+	history.replaceState({ screen_id: currentScreen.id }, null, null);
     showScreen(SCREENS.mainScreen, {saveHistory:false});
 };
 
@@ -108,8 +123,8 @@ backToMainSetup.addEventListener('click', () => {
 });
 
 backToTournamentGameplay.addEventListener('click', () => {
-	resetGame(tournamentCanvas);  // Reset the game
-	resetTournament();  // Reset the tournament
+	//resetGame(tournamentCanvas);  // Reset the game
+	//resetTournament();  // Reset the tournament
 	showScreen(SCREENS.tournamentSetupScreen);
 });
 
