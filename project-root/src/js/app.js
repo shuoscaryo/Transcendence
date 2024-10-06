@@ -56,39 +56,34 @@ function showScreen(screen, {saveHistory = true, replaceHistory = false, screenN
 {
 	// Get the screen name in this order: screenName, screen.dataset.name, screen.id
 	if (screenName === null)
-	{
-		if (screen.dataset.name != undefined)
-			screenName = screen.dataset.name;
-		else 
-			screenName = screen.id.replace('Screen', '');
-	}
+		screenName = screen.dataset.name ?? screen.id.replace('Screen', '');
 
 	// Show only the selected screen
 	Object.values(SCREENS).forEach(section => {section.style.display = 'none';});
     screen.style.display = 'block';
 
     // Update the browser history
-	if (saveHistory && (!history.state || screenName != history.state.screen))
+	if (saveHistory && (!history.state || screen.id != history.state.screen_id))
 	{
 		if (replaceHistory)
-			history.replaceState({ screen: screenName }, null, screenName == '' ? window.location.pathname : `#${screenName}`);
+			history.replaceState({ screen_id: screen.id }, null, screenName == '' ? window.location.pathname : `#${screenName}`);
 		else
-    		history.pushState({ screen: screenName }, null, screenName == '' ? window.location.pathname : `#${screenName}`);
+    		history.pushState({ screen_id: screen.id }, null, screenName == '' ? window.location.pathname : `#${screenName}`);
 	}
 }
 
 // Handle browser back and forward button navigation
 window.onpopstate = (event) => {
-	const screen = event.state.screen;
+	const screen = SCREENS[event.state.screen_id];
 	if (screen)
-		showScreen(document.getElementById(`${screen}Screen`), screen, {saveHistory:false});
+		showScreen(screen, {saveHistory:false});
 	else
 		history.back();
 };
 
 // Initial page load
 window.onload = () => {
-	history.replaceState({ screen: 'main' }, null, null);
+	history.replaceState({ screen_id: 'mainScreen' }, null, null);
     showScreen(SCREENS.mainScreen, {saveHistory:false});
 };
 
