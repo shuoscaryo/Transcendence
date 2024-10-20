@@ -1,0 +1,52 @@
+services:
+  postgresql:
+    build: ./requirements/mariadb
+    image: mariadb
+    container_name: mariadb
+    env_file:
+      - ${ENV_FILE}
+    volumes: 
+      - mariadb:/var/lib/mysql
+    networks:
+      - Inception
+    restart: on-failure
+    expose:
+      - "3306"
+
+  django:
+    build: ./requirements/nginx
+    image: django
+    container_name: nginx
+    ports:
+      - "443:443"
+    env_file:
+      - ${ENV_FILE}
+    volumes: 
+      - wordpress:/wordpress
+    networks:
+      - Inception
+    restart: on-failure
+    depends_on:
+      - wordpress
+
+volumes:
+  mariadb:
+    name: mariadb
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/orudek/data/mariadb
+      o: bind
+  wordpress:
+    name: wordpress
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/orudek/data/wordpress
+      o: bind
+      
+
+networks:
+  Inception:
+    driver: bridge
+    name: Inception
