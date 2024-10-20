@@ -1,52 +1,53 @@
 services:
   postgresql:
-    build: ./requirements/mariadb
-    image: mariadb
-    container_name: mariadb
     env_file:
       - ${ENV_FILE}
-    volumes: 
-      - mariadb:/var/lib/mysql
+    image: postgres:13
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
     networks:
-      - Inception
-    restart: on-failure
-    expose:
-      - "3306"
+      - app-network
 
   django:
-    build: ./requirements/nginx
+    build:
+      context: ..
+      dockerfile: Dockerfile-django
     image: django
-    container_name: nginx
+    container_name: django
     ports:
       - "443:443"
+      - "80:80" # TODO
     env_file:
       - ${ENV_FILE}
     volumes: 
-      - wordpress:/wordpress
+      - django:/django/static
     networks:
-      - Inception
+      - app-network
     restart: on-failure
     depends_on:
-      - wordpress
+      - postgresql
 
 volumes:
-  mariadb:
+  postgresql:
     name: mariadb
     driver: local
     driver_opts:
       type: none
-      device: /home/orudek/data/mariadb
+      device: ../postgresql-data
       o: bind
-  wordpress:
-    name: wordpress
+  django:
+    name: django
     driver: local
     driver_opts:
       type: none
-      device: /home/orudek/data/wordpress
+      device: ../src
       o: bind
-      
 
 networks:
-  Inception:
+  app-network:
     driver: bridge
-    name: Inception
+    name: app-network
