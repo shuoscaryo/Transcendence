@@ -1,20 +1,23 @@
-# Usar una imagen base oficial de Python
-FROM python:3.10-slim
+# Usa la imagen oficial de Python
+FROM python:3.9-slim
 
-# Establecer el directorio de trabajo dentro del contenedor
-WORKDIR /app
+# Instala las dependencias necesarias para Django
+RUN pip install --no-cache-dir django
 
-# Copiar el archivo de requerimientos al contenedor
-COPY requirements.txt /app/
+# Establece el directorio de trabajo en el contenedor
+WORKDIR /pong
 
-# Instalar las dependencias de Python (incluyendo Django)
-RUN pip install --no-cache-dir -r requirements.txt
+# Initialize the Django project
+RUN django-admin startproject pong /
 
-# Copiar el código fuente de Django al contenedor
-COPY . /app/
+# Copia solo los archivos de configuración de tu host (asumiendo que están en un directorio config/ en tu host)
+COPY ./config/settings.py /app/project_name/settings.py
+COPY ./config/urls.py /app/project_name/urls.py
+COPY ./config/wsgi.py /app/project_name/wsgi.py
 
-# Exponer el puerto que usará Django (normalmente 8000)
+
+# Expone el puerto de Django (8000 por defecto)
 EXPOSE 8000
 
-# Ejecutar el servidor de Django
+# Comando para correr el servidor de Django
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

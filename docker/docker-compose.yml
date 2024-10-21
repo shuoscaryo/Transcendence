@@ -1,30 +1,25 @@
 services:
   postgresql:
-    env_file:
-      - ${ENV_FILE}
     image: postgres:13
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - postgresql:/var/lib/postgresql/data
     networks:
       - app-network
 
   django:
     build:
       context: ..
-      dockerfile: Dockerfile-django
+      dockerfile: ./docker/django/Dockerfile
     image: django
     container_name: django
     ports:
-      - "443:443"
-      - "80:80" # TODO
-    env_file:
-      - ${ENV_FILE}
+      - "8000:8000"
     volumes: 
-      - django:/django/static
+      - frontend:/pong/static
     networks:
       - app-network
     restart: on-failure
@@ -33,14 +28,14 @@ services:
 
 volumes:
   postgresql:
-    name: mariadb
+    name: Transcendence_mariadb
     driver: local
     driver_opts:
       type: none
       device: ../postgresql-data
       o: bind
-  django:
-    name: django
+  frontend:
+    name: Transcendence_frontend
     driver: local
     driver_opts:
       type: none
@@ -50,4 +45,4 @@ volumes:
 networks:
   app-network:
     driver: bridge
-    name: app-network
+    name: Transcendence_network
