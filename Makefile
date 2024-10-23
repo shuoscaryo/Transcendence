@@ -1,7 +1,7 @@
 PROJECT := transcendence
 CONTAINERS := django postgresql
 YML_PATH = ./docker/docker-compose.yml
-VOLUMES := ./src ./postgresql-data
+VOLUMES := ./postgresql-data
 ENV_FILE := .env
 
 DOCKER_COMPOSE := sudo docker compose --env-file $(ENV_FILE) -f $(YML_PATH) -p $(PROJECT)
@@ -22,12 +22,12 @@ clean:
 	$(DOCKER_COMPOSE) down -v --remove-orphans --rmi all
 
 fclean: clean
-	sudo rm -rf $(VOL_DIR)
+	sudo rm -rf $(VOLUMES)
 
 re: fclean run
 
 $(VOLUMES):
-	mkdir -p $(VOLUME) 2>/dev/null
+	mkdir -p $(VOLUMES) 2>/dev/null
 
 exec-%:
 	$(DOCKER_COMPOSE) exec $* sh

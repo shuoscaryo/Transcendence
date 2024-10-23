@@ -13,13 +13,13 @@ services:
   django:
     build:
       context: ..
-      dockerfile: ./docker/django/Dockerfile
+      dockerfile: ./docker/Dockerfile-django
     image: django
     container_name: django
     ports:
       - "8000:8000"
     volumes: 
-      - frontend:/pong/static
+      - django:/app
     networks:
       - app-network
     restart: on-failure
@@ -28,18 +28,18 @@ services:
 
 volumes:
   postgresql:
-    name: Transcendence_mariadb
+    name: Transcendence_postgresql
     driver: local
     driver_opts:
       type: none
       device: ../postgresql-data
       o: bind
-  frontend:
-    name: Transcendence_frontend
+  django:
+    name: Transcendence_django
     driver: local
     driver_opts:
       type: none
-      device: ../src
+      device: ../django
       o: bind
 
 networks:
