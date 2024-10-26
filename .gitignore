@@ -1,0 +1,22 @@
+# Ignore everything
+*
+
+# Don't ignore directories
+!*/
+
+# Ignore all files in directories
+**/*
+
+# Don't ignore directories in directories
+!**/*/
+
+# Don't ignore these files
+!django/**/*
+!.gitignore
+!en.subject.pdf
+!Makefile
+!docker/**/*
+
+#ignore all object files and libraries
+django/**/__pycache__/
+django/**/*.pyc
