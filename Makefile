@@ -4,7 +4,7 @@ YML_PATH = ./docker/docker-compose.yml
 VOLUMES := ./postgresql-data
 ENV_FILE := .env
 
-DOCKER_COMPOSE := sudo docker compose --env-file $(ENV_FILE) -f $(YML_PATH) -p $(PROJECT)
+DOCKER_COMPOSE := sudo ENV_FILE=$(ENV_FILE) docker compose --env-file $(ENV_FILE) -f $(YML_PATH) -p $(PROJECT)
 
 run: $(VOLUMES)	
 	$(DOCKER_COMPOSE) up --build --remove-orphans
