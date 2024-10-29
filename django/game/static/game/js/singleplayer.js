@@ -154,20 +154,24 @@ function loopAI(ai, init = false)
 		return;
 	
 	if (init)
+	{
 		loopAI.time = performance.now();
-	
-	if (performance.now() - loopAI.time > 1000)
-		{
-			ai.updateParams(getParams());
-			loopAI.time = performance.now();
-		}
-		
-		move = ai.getMove();
-		
-		rightPaddleMovingUp = move < 0;
-		rightPaddleMovingDown = move > 0;
-		requestAnimationFrame(() => loopAI(ai, false));
+		loopAI.playersScore = 0;
 	}
+	
+	if (performance.now() - loopAI.time > 1000 || loopAI.playersScore != player2Score + player1Score)
+	{
+		ai.updateParams(getParams());
+		loopAI.time = performance.now();
+		loopAI.playersScore = player2Score + player1Score;
+	}
+		
+	move = ai.getMove();
+	
+	rightPaddleMovingUp = move < 0;
+	rightPaddleMovingDown = move > 0;
+	requestAnimationFrame(() => loopAI(ai, false));
+}
 	
 	
 // this one!
