@@ -158,3 +158,17 @@ addPlayerButton.addEventListener('click', () => {
         alert("Please enter a valid player name");  // Alert the user if no name was entered
     }
 });
+
+singleButton.addEventListener('click', () => {
+	showScreen(SCREENS.singleScreen);
+});
+
+startSingleGameButton.addEventListener('click', () => {
+	startGame(document.getElementById('pongSingleGame'));
+	startAI();
+});
+
+backToMainSingle.addEventListener('click', () => {
+	resetGame(document.getElementById('pongSingleGame'));
+	gameOver = true;
+});

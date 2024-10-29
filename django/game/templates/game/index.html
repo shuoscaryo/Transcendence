@@ -50,7 +50,16 @@
         <h1>Welcome to Pong Game</h1>
         <button id="versusButton">Versus Mode</button>
         <button id="tournamentButton">Tournament Mode</button>
+        <button id="singleButton">oscar mode</button>
     </section>
+
+	<!-- Single Player Screen -->
+	<section id="singleScreen" class="screen">
+		<h1>Single Player Mode</h1>
+		<canvas id="pongSingleGame" width="600" height="400"></canvas>
+		<button id="startSingleGameButton">Start Game</button>
+		<button id="backToMainSingle">Back to Main Menu</button>
+	</section>
 
     <!-- Versus Mode Screen -->
     <section id="versusScreen" class="screen">
@@ -88,5 +97,6 @@
     <script src="{% static 'game/js/game.js' %}"></script>
     <script src="{% static 'game/js/app.js' %}"></script>
     <script src="{% static 'game/js/tournament.js' %}"></script>
+	<script src="{% static 'game/js/singleplayer.js' %}"></script>
 </body>
 </html>
