@@ -168,7 +168,12 @@ startSingleGameButton.addEventListener('click', () => {
 	startAI();
 });
 
-backToMainSingle.addEventListener('click', () => {
+restartSingle.addEventListener('click', () => {
 	resetGame(document.getElementById('pongSingleGame'));
 	gameOver = true;
+});
+
+backToMainSingle.addEventListener('click', () => {
+	resetGame(document.getElementById('pongSingleGame'));
+	showScreen(SCREENS.mainScreen);
 });

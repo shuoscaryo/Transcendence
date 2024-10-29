@@ -176,4 +176,5 @@ function startAI()
 	ai = new pongAI(getParams());
 	requestAnimationFrame(() => loopAI(ai, true));
 }
-	
+
+
