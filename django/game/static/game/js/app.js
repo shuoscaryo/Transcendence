@@ -1,5 +1,4 @@
 
-
 // Main screen buttons
 const versusButton = document.getElementById('versusButton');
 const tournamentButton = document.getElementById('tournamentButton');
@@ -163,9 +162,58 @@ singleButton.addEventListener('click', () => {
 	showScreen(SCREENS.singleScreen);
 });
 
+/* THIS IS TEMPORARY */
+let pongAI = new PongAI(getParams, movePaddle);
+function tmp(init = false)
+{
+	if (init === true)
+	{
+		tmp.gols = 0;
+	}
+	if (gameOver)
+	{
+		pongAI.stop();
+		return;
+	}
+	if (tmp.gols != (player1Score + player2Score))
+	{
+		tmp.gols = player1Score + player2Score;
+		pongAI.updateParams();
+	}
+	requestAnimationFrame(tmp);
+}
+function getParams()
+{
+	canvas  = document.getElementById('pongSingleGame');
+	return {
+		paddle: {
+			y: rightPaddleY,
+			height: paddleHeight,
+			v: paddleSpeed
+		},
+		ball: {
+			x: ballX,
+			y: ballY,
+			vx: ballSpeedX,
+			vy: ballSpeedY
+		},
+		map: {
+			width: canvas.width,
+			height: canvas.height,
+			paddleOffset: 20
+		}
+	};
+}
+
+function movePaddle(move) {
+	rightPaddleMovingUp = (move === 1);
+	rightPaddleMovingDown = (move === -1);
+}
+
 startSingleGameButton.addEventListener('click', () => {
 	startGame(document.getElementById('pongSingleGame'));
-	startAI();
+	pongAI.start();
+	requestAnimationFrame(() => tmp(true));
 });
 
 restartSingle.addEventListener('click', () => {
@@ -174,6 +222,7 @@ restartSingle.addEventListener('click', () => {
 });
 
 backToMainSingle.addEventListener('click', () => {
+	pongAI.stop();
 	resetGame(document.getElementById('pongSingleGame'));
 	showScreen(SCREENS.mainScreen);
 });

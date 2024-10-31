@@ -81,15 +81,11 @@ function showNextMatch() {
 
 // Move to the next match
 nextMatchButton.addEventListener('click', () => {
-	console.log(currentPlayers);
-	console.log(player1Score);
-	console.log(player2Score);
 	if (player1Score > player2Score) {
 		currentPlayers.splice(i + 1, 1);  // Remove player 2
 	} else {
 		currentPlayers.splice(i, 1);  // Remove player 1
 	}
-	console.log(currentPlayers);
 	i++;
 	if (i + 1 >= currentPlayers.length) {
 		i = 0;
