@@ -1,4 +1,4 @@
-class Ticker {
+export class Ticker {
 	/* Global tick count, use Ticker.now() to get the current tick count */
 	static #count = 0;
 

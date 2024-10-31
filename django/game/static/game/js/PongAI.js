@@ -1,5 +1,7 @@
 "use strict";
 
+import { Ticker } from './ticker.js';
+
 /**
  * This class is used to control a paddle in the pong game. It fetches the
  * state of the game every second when the game is running.
@@ -30,7 +32,7 @@
  * 
  * Before deleting the object remember to call the stop method.
  */
-class PongAI {   
+export class PongAI {   
 	#paddle; // dictionary with the paddle position, height and speed
     #map; // dictionary with the map size and paddle offset
     #ball; // dictionary with the ball position and speed

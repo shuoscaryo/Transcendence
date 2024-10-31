@@ -1,3 +1,5 @@
+import { PongAI } from "./PongAI.js";
+
 
 // Main screen buttons
 const versusButton = document.getElementById('versusButton');
