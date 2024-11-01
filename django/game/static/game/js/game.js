@@ -62,66 +62,102 @@ function draw() {
     }
 }
 
+function normalizeVector(vector) {
+	const length = Math.sqrt(vector.x * vector.x + vector.y * vector.y);
+	return {x: vector.x / length, y: vector.y / length};
+}
+
+function paddleTiltFunction(h) {
+	return (h - paddleHeight/2)/(paddleHeight/2) * 0.26; // max 15 degrees tilt on edges
+}
+
+function reflectVector(incident, normal) {
+	const dot = incident.x * normal.x + incident.y * normal.y;
+	
+	// Calcula el vector reflejado usando la fórmula
+	return {
+	  x: incident.x - 2 * dot * normal.x,
+	  y: incident.y - 2 * dot * normal.y
+	};
+}
+
 // Function to update ball position and check for collisions
 function updateBall() {
-    if (!gameOver) {
-        ballX += ballSpeedX;
-        ballY += ballSpeedY;
+	ballX += ballSpeedX;
+	ballY += ballSpeedY;
 
-        // Check for collision with top or bottom walls
-        if (ballY < 0 || ballY + ballSize > canvas.height) {
-            ballSpeedY = -ballSpeedY;  // Reverse direction in Y
-        }
+	// Check for collision with top or bottom walls
+	if (ballY < 0 || ballY + ballSize > canvas.height) {
+		ballSpeedY = -ballSpeedY;  // Reverse direction in Y
+	}
 
-        // Check for collision with left paddle (Player 1)
-        if (ballX < 20 && ballY + ballSize > leftPaddleY && ballY < leftPaddleY + paddleHeight) {
-            ballSpeedX = Math.abs(ballSpeedX);  // Ensure the ball moves to the right
-            ballX = 20;  // Push the ball outside of the paddle
-            increaseBallSpeed();  // Increase the ball speed on paddle hit
-        }
+	// Check for collision with left paddle (Player 1)
+	const angleLimit = 10 / 180 * Math.PI;
+	if (ballX < 20 && ballY + ballSize > leftPaddleY && ballY < leftPaddleY + paddleHeight) {
+		const N = normalizeVector({x: 1, y: paddleTiltFunction(ballY + ballSize/2 - leftPaddleY)})
+		const V = reflectVector({x: ballSpeedX, y: ballSpeedY}, N);
+		if (V.x < 0 || Math.abs(V.x/V.y) < Math.tan(angleLimit)) // if bounces back or too vertical
+		{
+			const mod = Math.sqrt(V.x * V.x + V.y * V.y);
+			V.x = Math.cos(angleLimit) * mod;
+			V.y = Math.sin(angleLimit) * mod * (V.y > 0 ? 1 : -1);
+		}
+		ballSpeedX = V.x;
+		ballSpeedY = V.y;
+		ballX = 20;  // Push the ball outside of the paddle
+		increaseBallSpeed();  // Increase the ball speed on paddle hit
+	}
+	// Check for collision with right paddle (Player 2)
+	if (ballX > canvas.width - 20 && ballY + ballSize > rightPaddleY && ballY < rightPaddleY + paddleHeight) {
+		const N = normalizeVector({x: -1, y: paddleTiltFunction(ballY + ballSize/2 - rightPaddleY)})
+		const V = reflectVector({x: ballSpeedX, y: ballSpeedY}, N);
+		if (V.x > 0 || Math.abs(V.x/V.y) < Math.tan(angleLimit)) // if bounces back or too vertical
+		{
+			const mod = Math.sqrt(V.x * V.x + V.y * V.y);
+			V.x = - Math.cos(angleLimit) * mod;
+			V.y = Math.sin(angleLimit) * mod * (V.y > 0 ? 1 : -1);
+		}
+		ballSpeedX = V.x;
+		ballSpeedY = V.y;
+		ballX = canvas.width - 20 - ballSize;  // Push the ball outside of the paddle
+		increaseBallSpeed();  // Increase the ball speed on paddle hit
+	}
 
-        // Check for collision with right paddle (Player 2)
-        if (ballX + ballSize > canvas.width - 20 && ballY + ballSize > rightPaddleY && ballY < rightPaddleY + paddleHeight) {
-            ballSpeedX = -Math.abs(ballSpeedX);  // Ensure the ball moves to the left
-            ballX = canvas.width - 20 - ballSize;  // Push the ball outside of the paddle
-            increaseBallSpeed();  // Increase the ball speed on paddle hit
-        }
-
-        // Check if the ball goes out of bounds (left or right)
-        if (ballX < 0) {
-            player2Score++;  // Player 2 scores if the ball goes off the left side
-            if (player2Score === winningScore) {
-                gameOver = true;  // Player 2 wins
-            }
-			ballSpeedX = initialBallSpeed;  // Reset ball speed
-			if (player2Score % 2 === 0) {
-				ballSpeedY = -initialBallSpeed;  // Reverse direction in Y
-			}
-			else {
-				ballSpeedY = initialBallSpeed;  // Reverse direction in Y
-			}
-            resetParams();  // Reset the ball after a score
-        } else if (ballX + ballSize > canvas.width) {
-            player1Score++;  // Player 1 scores if the ball goes off the right side
-            if (player1Score === winningScore) {
-                gameOver = true;  // Player 1 wins
-            }
-			ballSpeedX = -initialBallSpeed;  // Reset ball speed
-			if (player1Score % 2 === 0) {
-				ballSpeedY = initialBallSpeed;  // Reverse direction in Y
-			}
-			else {
-				ballSpeedY = -initialBallSpeed;  // Reverse direction in Y
-			}
-            resetParams();  // Reset the ball after a score
-        }
-    }
+	// Check if the ball goes out of bounds (left or right)
+	if (ballX < 0) {
+		player2Score++;  // Player 2 scores if the ball goes off the left side
+		if (player2Score === winningScore) {
+			gameOver = true;  // Player 2 wins
+		}
+		ballSpeedX = initialBallSpeed;  // Reset ball speed
+		if (player2Score % 2 === 0) {
+			ballSpeedY = -initialBallSpeed;  // Reverse direction in Y
+		}
+		else {
+			ballSpeedY = initialBallSpeed;  // Reverse direction in Y
+		}
+		resetParams();  // Reset the ball after a score
+	} else if (ballX + ballSize > canvas.width) {
+		player1Score++;  // Player 1 scores if the ball goes off the right side
+		if (player1Score === winningScore) {
+			gameOver = true;  // Player 1 wins
+		}
+		ballSpeedX = -initialBallSpeed;  // Reset ball speed
+		if (player1Score % 2 === 0) {
+			ballSpeedY = initialBallSpeed;  // Reverse direction in Y
+		}
+		else {
+			ballSpeedY = -initialBallSpeed;  // Reverse direction in Y
+		}
+		resetParams();  // Reset the ball after a score
+	}
 }
 
 // Function to increase the ball speed after a paddle hit
 function increaseBallSpeed() {
-    ballSpeedX = ballSpeedX > 0 ? ballSpeedX + ballSpeedIncrement : ballSpeedX - ballSpeedIncrement;
-    ballSpeedY = ballSpeedY > 0 ? ballSpeedY + ballSpeedIncrement : ballSpeedY - ballSpeedIncrement;
+	let L = Math.sqrt(ballSpeedX * ballSpeedX + ballSpeedY * ballSpeedY);
+	ballSpeedX = ballSpeedX / L * (L + ballSpeedIncrement);
+	ballSpeedY = ballSpeedY / L * (L + ballSpeedIncrement);
 }
 
 // Function to reset the ball to the center
@@ -156,7 +192,7 @@ function updatePaddles() {
 // Function to handle the game loop
 function gameLoop() {
     if (!gameOver && gameStarted) {
-        updatePaddles();  // Update paddle positions
+		updatePaddles();  // Update paddle positions
         updateBall();     // Update ball position and collisions
         draw();           // Redraw the canvas with updated positions
         requestAnimationFrame(gameLoop);  // Keep the loop running if the game is not over
