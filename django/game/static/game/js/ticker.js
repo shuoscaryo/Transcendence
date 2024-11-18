@@ -3,12 +3,12 @@ export class Ticker {
 	static #count = 0;
 
 	static {
-		Ticker.#iniciarCuenta();
+		Ticker.#startCount();
 	}
 
-	static #iniciarCuenta() {
+	static #startCount() {
 		Ticker.#count++;
-		requestAnimationFrame(() => Ticker.#iniciarCuenta());
+		requestAnimationFrame(() => Ticker.#startCount());
 	}
 
 	static now() {
