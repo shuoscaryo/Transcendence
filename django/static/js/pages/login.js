@@ -1,6 +1,6 @@
-import * as events from "./login_events.js"
+import * as events from "/static/js/loginUtils/login_events.js"
 
-export function main() {
+export default function main() {
     // HTML para la página de login
     const page = document.createElement('div');
     page.innerHTML = `
@@ -11,6 +11,7 @@ export function main() {
             <button type="submit">Login</button>
         </form>
         <button id="backToMain">Back to Main Menu</button>
+        <button id="register">Register</button>
     `;
 
     // Estilos para la página de login
@@ -59,5 +60,9 @@ export function main() {
     // Add event listener to back button
     const backToMain = page.querySelector('#backToMain');
     backToMain.addEventListener('click', () => events.handleBackToMain(page));
+
+    // Add event listener to register button
+    const register = page.querySelector('#register');
+    register.addEventListener('click', () => events.handleRegister(page));
     return {page, styles};
 }

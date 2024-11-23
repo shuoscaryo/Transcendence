@@ -28,3 +28,8 @@ export function handleBackToMain() {
     document.getElementById('app').innerHTML = '';
     history.back();
 }
+
+export function handleRegister() {
+    document.getElementById('app').innerHTML = '';
+    history.pushState(null, null, '#register');
+}

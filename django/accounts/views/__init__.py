@@ -1,1 +1,1 @@
-from .login import loginPost
+from .login import login

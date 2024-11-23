@@ -1,5 +1,5 @@
+import loadPage from "/static/js/loadPage.js";
 import { PongAI } from "./PongAI.js";
-import * as login from "/static/js/pages/login.js"
 
 // Main screen buttons
 const versusButton = document.getElementById('versusButton');
@@ -231,14 +231,8 @@ backToMainSingle.addEventListener('click', () => {
 
 // TEST LOGIN SCREEN
 
-function transferContent(source, target) { // Function for transferring content from one div to another
-    while (source.firstChild)
-        target.appendChild(source.firstChild);
-}
-
 loginButton.addEventListener('click', () => {
-	showScreen(SCREENS.loginScreen);
-	const {page, styles} = login.main();
-	const appDiv = document.getElementById('app');
-	transferContent(page, appDiv);
+	loadPage('login');
+	Object.values(SCREENS).forEach(section => {section.style.display = 'none';});
+    SCREENS.loginScreen.style.display = 'block';
 });

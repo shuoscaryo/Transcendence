@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 @csrf_exempt
-def loginPost(request):
+def login(request):
     if request.method == 'POST':
         import json
         data = json.loads(request.body)
