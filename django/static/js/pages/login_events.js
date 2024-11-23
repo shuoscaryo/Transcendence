@@ -5,7 +5,7 @@ export async function handleLoginSubmit(event, form) {
     const password = form.querySelector('#password').value;
 
     try {
-        const response = await fetch('/login', {
+        const response = await fetch('/login/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password }),
@@ -13,6 +13,7 @@ export async function handleLoginSubmit(event, form) {
 
         if (response.ok) {
             alert('Login successful');
+            document.getElementById('app').innerHTML = '';
             history.back();
         } else {
             alert('Login failed');
