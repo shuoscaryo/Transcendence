@@ -1,5 +1,5 @@
 import { PongAI } from "./PongAI.js";
-
+import * as login from "/static/js/pages/login.js"
 
 // Main screen buttons
 const versusButton = document.getElementById('versusButton');
@@ -164,7 +164,7 @@ singleButton.addEventListener('click', () => {
 	showScreen(SCREENS.singleScreen);
 });
 
-/* THIS IS TEMPORARY */
+/* AI PART TEST */
 let pongAI = new PongAI(getParams, movePaddle);
 function tmp(init = false)
 {
@@ -227,4 +227,18 @@ backToMainSingle.addEventListener('click', () => {
 	pongAI.stop();
 	resetGame(document.getElementById('pongSingleGame'));
 	showScreen(SCREENS.mainScreen);
+});
+
+// TEST LOGIN SCREEN
+
+function transferContent(source, target) { // Function for transferring content from one div to another
+    while (source.firstChild)
+        target.appendChild(source.firstChild);
+}
+
+loginButton.addEventListener('click', () => {
+	showScreen(SCREENS.loginScreen);
+	const {page, styles} = login.main();
+	const appDiv = document.getElementById('app');
+	transferContent(page, appDiv);
 });

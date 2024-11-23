@@ -42,6 +42,7 @@
             border: 2px solid white;
         }
     </style>
+    <style id="dynamic-styles"></style>
 </head>
 <body>
     <!-- Main Screen -->
@@ -51,6 +52,7 @@
         <button id="versusButton">Versus Mode</button>
         <button id="tournamentButton">Tournament Mode</button>
         <button id="singleButton">oscar mode</button>
+        <button id="loginButton">Login</button>
     </section>
 
 	<!-- Single Player Screen -->
@@ -94,11 +96,19 @@
         <button id="backToTournamentGameplay">Back to Tournament SetUp</button>
     </section>
 
+    <!-- TEST LOGIN-->
+    <section id="loginScreen" class="screen">
+        <div id="app"></div>
+    </section>
+
     <!-- JavaScript Files -->
 	<script src="{% static 'game/js/ticker.js' %}" type="module"></script>
 	<script src="{% static 'game/js/PongAI.js' %}" type="module"></script>
     <script src="{% static 'game/js/game.js' %}"></script>
     <script src="{% static 'game/js/app.js' %}" type="module"></script>
     <script src="{% static 'game/js/tournament.js' %}"></script>
+    <script type="module" src="{% static 'js/pages/login.js' %}"></script>
+    <script type="module" src="{% static 'js/pages/login_events.js' %}"></script>
+
 </body>
 </html>
