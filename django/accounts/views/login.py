@@ -1,21 +1,23 @@
-from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import authenticate, login
+import json
 
-# Create your views here.
 @csrf_exempt
-def login(request):
+def APIlogin(request):
     if request.method == 'POST':
-        import json
-        data = json.loads(request.body)
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
         username = data.get('username')
         password = data.get('password')
-
-        # Lógica simple de autenticación (usa django.contrib.auth en producción)
-        if username == 'admin' and password == 'password':  # Ejemplo
-            return JsonResponse({'message': 'Login successful'}, status=200)
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return JsonResponse({'message': 'succesful login'})
         else:
-            return JsonResponse({'message': 'Invalid credentials'}, status=401)
+            return JsonResponse({'error': 'invalid credentials'}, status=401)
 
     return JsonResponse({'error': 'Method not allowed'}, status=405)

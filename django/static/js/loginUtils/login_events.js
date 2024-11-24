@@ -1,3 +1,5 @@
+import loadPage from "/static/js/loadPage.js";
+
 export async function handleLoginSubmit(event, form) {
     event.preventDefault();
 
@@ -5,7 +7,7 @@ export async function handleLoginSubmit(event, form) {
     const password = form.querySelector('#password').value;
 
     try {
-        const response = await fetch('/login/', {
+        const response = await fetch('/accounts/login/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password }),
@@ -24,12 +26,42 @@ export async function handleLoginSubmit(event, form) {
     }
 }
 
+export async function handleRegisterSubmit(event, form) {
+    event.preventDefault();
+
+    const username = form.querySelector('#username').value;
+    const email = form.querySelector('#email').value;
+    const password = form.querySelector('#password').value;
+
+    try {
+        const response = await fetch('/accounts/register/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                username,
+                email,
+                password,
+            }),
+        });
+
+        if (response.ok) {
+            alert('user registered successfuly');
+            document.getElementById('app').innerHTML = '';
+            history.back();
+        } else {
+            alert('Registration failed');
+        }
+    } catch (error) {
+        console.error('Error during registration:', error);
+        alert('An error occurred. Please try again.');
+    }
+}
+
 export function handleBackToMain() {
     document.getElementById('app').innerHTML = '';
     history.back();
 }
 
 export function handleRegister() {
-    document.getElementById('app').innerHTML = '';
-    history.pushState(null, null, '#register');
+    loadPage('register');
 }
