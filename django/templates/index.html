@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pong Game</title>
     {% load static %}
+    <!--
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -42,72 +43,19 @@
             border: 2px solid white;
         }
     </style>
+    -->
     <style id="dynamic_styles"></style>
+    
 </head>
 <body>
-    <!-- Main Screen -->
-    <section id="mainScreen" class="screen" data-name="">
-        <img src="{% static 'game/img/pong_screen_title.png' %}" alt="Pong Game" />
-        <h1>Welcome to Pong Game</h1>
-        <button id="versusButton">Versus Mode</button>
-        <button id="tournamentButton">Tournament Mode</button>
-        <button id="singleButton">oscar mode</button>
-        <button id="loginButton">Login</button>
-    </section>
-
-	<!-- Single Player Screen -->
-	<section id="singleScreen" class="screen">
-		<h1>Single Player Mode</h1>
-		<canvas id="pongSingleGame" width="600" height="400"></canvas>
-		<button id="startSingleGameButton">Start Game</button>
-		<button id="backToMainSingle">Back to Main Menu</button>
-		<button id="restartSingle">Reset</button>
-	</section>
-
-    <!-- Versus Mode Screen -->
-    <section id="versusScreen" class="screen">
-        <h1>Versus Mode</h1>
-        <canvas id="pongVersusGame" width="600" height="400"></canvas>
-        <button id="startGameButton">Start Game</button>
-        <button id="backToMainVersus">Back to Main Menu</button>
-    </section>
-
-    <!-- Tournament Setup Screen -->
-    <section id="tournamentSetupScreen" class="screen">
-        <h1>Setup Tournament</h1>
-        <p>Players:</p>
-        <ul id="playerList"></ul>
-        <input type="text" id="playerNameInput" placeholder="Enter player name">
-        <button id="addPlayerButton">Add Player</button>
-        <button id="clearPlayersButton">Clear All Players</button>
-        <button id="startTournamentButton">Start Tournament</button>
-        <button id="backToMainSetup">Back to Main Menu</button>
-    </section>
-
-    <!-- Tournament Gameplay Screen -->
-    <section id="tournamentGameplayScreen" class="screen">
-        <h1>Tournament Match</h1>
-        <div id="matchInfo">
-            <h2>Match: <span id="player1Name"></span> vs <span id="player2Name"></span></h2>
-            <canvas id="pongTournamentGame" width="600" height="400"></canvas>
-            <button id="startMatchButton" style="display: none;">Start Match</button>
-            <button id="nextMatchButton" style="display: none;">Next Match</button>
-        </div>
-        <button id="backToTournamentGameplay">Back to Tournament SetUp</button>
-    </section>
-
-    <!-- TEST LOGIN-->
-    <section id="loginScreen" class="screen">
-        <div id="app"></div>
-    </section>
-
-    <!-- JavaScript Files -->
+    <div id="app">
+    </div>
+    <script>
+        window.AppConfig = {
+            STATIC_URL: "{% static '' %}"
+        };
+        console.log(window.AppConfig);
+    </script>
     <script type="module" src="{% static 'js/main.js' %}"></script>
-	<script src="{% static 'game/js/ticker.js' %}" type="module"></script>
-    <script src="{% static 'game/js/game.js' %}"></script>
-    <script src="{% static 'game/js/app.js' %}" type="module"></script>
-    <script src="{% static 'game/js/tournament.js' %}"></script>
-
-
 </body>
 </html>

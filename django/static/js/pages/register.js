@@ -4,7 +4,7 @@ export default function main() {
     // HTML para la página de login
     const page = document.createElement('div');
     page.innerHTML = `
-        <h1>Login</h1>
+        <h1>Register</h1>
         <form id="registerForm">
             <input type="text" id="username" placeholder="Username" required />
             <input type="email" id="email" placeholder="email" required />
