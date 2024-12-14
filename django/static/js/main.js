@@ -1,4 +1,13 @@
 
+// General function to delete CSS files
+function deleteDynamicStyles() {
+    // Selecciona todos los elementos con la clase 'dynamic-style'
+    const dynamicStyles = document.querySelectorAll('link.dynamic-style, style.dynamic-style');
+    
+    // Elimina cada elemento del DOM
+    dynamicStyles.forEach(style => style.remove());
+}
+
 // General function to load CSS files
 function loadCSS(filePaths) {
     filePaths.forEach(filePath => {
@@ -108,7 +117,7 @@ function getContent()
 
     const img = document.createElement('img'); 
     const staticURL = window.AppConfig.STATIC_URL;
-    const imagePath = 'game/img/pong_screen_title.png';
+    const imagePath = 'game/img/homeLogo.png';
     const fullPath = staticURL.endsWith('/') ? staticURL + imagePath : staticURL + '/' + imagePath;
     img.src = fullPath; 
     img.alt = 'Example';
@@ -160,6 +169,7 @@ function getContent()
 
 // Loads the page content and styles
 function main() {
+    deleteDynamicStyles();
     loadCSS([
         '/static/css/main/main.css',
         '/static/css/main/sidebar.css',

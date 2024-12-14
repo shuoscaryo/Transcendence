@@ -4,4 +4,5 @@
     align-items: stretch;
     height: 100vh;
     background-color: #f0f0f0;
+    overflow: hidden; /* Evita scroll general en la página */
 }

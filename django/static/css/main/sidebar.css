@@ -5,6 +5,7 @@
     height: 100vh;
     background-color: #333;
     color: white;
+    overflow: hidden;
 }
 
 .sidebar #home-button {
@@ -46,8 +47,11 @@
     background-color: #555;
 }
 
-.sidebar div:last-child {
+.sidebar .lower-half {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    padding-bottom: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
