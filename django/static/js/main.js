@@ -2,7 +2,16 @@
 // SIDEBAR stuff
 function getHomeButton()
 {
-    return document.createElement('button');
+    const component = document.createElement('button');
+    component.id = 'homeButton';
+    component.class = 'headerButton';
+    
+    const image = document.createElement('img');
+    image.src = '/static/game/img/homeLogo.png';
+    image.alt = 'Home';
+    component.appendChild(image);
+
+    return component;
 }
 
 function getUpperHalf()
@@ -47,17 +56,20 @@ function getLoginButton()
     return component;
 }
 
-function getContractHeaderButton()
+function getCollapseHeaderButton()
 {
-    return document.createElement('button');
+    const component = document.createElement('button');
+    component.textContent = 'Collapse';
+    return component;
 }
+
 function getLowerHalf()
 {
     const component = document.createElement('div');
     const loginButton = getLoginButton();
     component.appendChild(loginButton);
 
-    const contractButton = getContractHeaderButton();
+    const contractButton = getCollapseHeaderButton();
     component.appendChild(contractButton);
 
     return component;
@@ -77,45 +89,46 @@ function getSidebar()
     return component;
 }
 
-// Loads the page content and styles
-function main() {
-    document.body.appendChild(getSidebar());
+function getContent()
+{
+    const component = document.createElement('div');
+    component.className = 'content';
+
     const img = document.createElement('img'); 
-    console.log(window.AppConfig.STATIC_URL);
     const staticURL = window.AppConfig.STATIC_URL;
     const imagePath = 'game/img/pong_screen_title.png';
     const fullPath = staticURL.endsWith('/') ? staticURL + imagePath : staticURL + '/' + imagePath;
     img.src = fullPath; 
     img.alt = 'Example';
-    document.body.appendChild(img);
-
+    component.appendChild(img);
+    
     const h1 = document.createElement('h1');
     h1.textContent = 'Welcome to Pong Game';
-    document.body.appendChild(h1);
-
+    component.appendChild(h1);
+    
     const button = document.createElement('button');
     button.textContent = 'Versus Mode';
     button.id = 'versusButton';
     button.addEventListener('click', () => {
         console.log('Versus Mode');
     });
-    document.body.appendChild(button);
-
+    component.appendChild(button);
+    
     const button2 = document.createElement('button');
     button2.textContent = 'Tournament Mode';
     button2.id = 'tournamentButton';
     button2.addEventListener('click', () => {
         console.log('Tournament Mode');
     });
-    document.body.appendChild(button2);
-
+    component.appendChild(button2);
+    
     const button3 = document.createElement('button');
     button3.textContent = 'oscar mode';
     button3.id = 'singleButton';
     button3.addEventListener('click', () => {
         console.log('oscar mode');
     });
-    document.body.appendChild(button3);
+    component.appendChild(button3);
     
     const button4 = document.createElement('button');
     button4.textContent = 'Login';
@@ -123,12 +136,26 @@ function main() {
     button4.addEventListener('click', () => {
         console.log('Login');
     });
-    document.body.appendChild(button4);
-
+    component.appendChild(button4);
+    
     // footer
     const footer = document.createElement('footer');
     footer.textContent = 'Footer';
-    document.body.appendChild(footer);
+    component.appendChild(footer);
+
+    return component;
+}
+
+// Loads the page content and styles
+function main() {
+    const app = document.getElementById('app');
+
+    const page = document.createElement('div');
+    page.className = 'page';
+    app.appendChild(page);
+
+    page.appendChild(getSidebar());
+    page.appendChild(getContent());
 }
 
 main();
