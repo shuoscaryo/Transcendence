@@ -1,0 +1,3 @@
+.content {
+    flex-grow: 1; /* El contenido crece para ocupar el espacio restante */
+}

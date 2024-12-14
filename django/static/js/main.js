@@ -1,10 +1,21 @@
 
+// General function to load CSS files
+function loadCSS(filePaths) {
+    filePaths.forEach(filePath => {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.className = 'dynamic-styles';
+        link.href = filePath;
+        document.head.appendChild(link);
+    });
+}
+
 // SIDEBAR stuff
 function getHomeButton()
 {
     const component = document.createElement('button');
-    component.id = 'homeButton';
-    component.class = 'headerButton';
+    component.id = 'home-button';
+    component.class = 'header-button';
     
     const image = document.createElement('img');
     image.src = '/static/game/img/homeLogo.png';
@@ -31,7 +42,7 @@ function getUpperHalf()
 
     buttons.forEach(button => {
         const buttonDiv = document.createElement('button');
-        buttonDiv.className = 'headerButton';
+        buttonDiv.className = 'header-button';
 
         const image = document.createElement('img');
         image.src = button.image;
@@ -66,6 +77,7 @@ function getCollapseHeaderButton()
 function getLowerHalf()
 {
     const component = document.createElement('div');
+    component.className = 'lower-half';
     const loginButton = getLoginButton();
     component.appendChild(loginButton);
 
@@ -148,6 +160,11 @@ function getContent()
 
 // Loads the page content and styles
 function main() {
+    loadCSS([
+        '/static/css/main/main.css',
+        '/static/css/main/sidebar.css',
+        '/static/css/main/content.css'
+    ]);
     const app = document.getElementById('app');
 
     const page = document.createElement('div');

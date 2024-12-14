@@ -1,0 +1,53 @@
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    width: 120px;
+    height: 100vh;
+    background-color: #333;
+    color: white;
+}
+
+.sidebar #home-button {
+    background-color: #222;
+}
+
+.sidebar #home-button:hover {
+    background-color: #555;
+}
+
+.sidebar #home-button img {
+    width: 100%;
+}
+
+.sidebar .upper-half {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: auto;
+}
+
+.sidebar .upper-half button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: white;
+    font-size: 16px;
+}
+
+.sidebar .upper-half .header-button img {
+    height: 24px;
+}
+
+.sidebar button:hover {
+    background-color: #555;
+}
+
+.sidebar div:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
