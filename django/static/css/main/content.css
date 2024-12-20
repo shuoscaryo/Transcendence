@@ -1,4 +1,0 @@
-.content {
-    flex-grow: 1; /* El contenido crece para ocupar el espacio restante */
-    overflow-y: auto; /* Scroll vertical si el contenido es muy largo */
-}

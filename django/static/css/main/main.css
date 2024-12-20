@@ -6,3 +6,12 @@
     background-color: #f0f0f0;
     overflow: hidden; /* Evita scroll general en la página */
 }
+
+.content {
+    display: flex; /* Flexbox */
+    flex-direction: column; /* Columnas */
+    flex-grow: 1; /* El contenido crece para ocupar el espacio restante */
+    overflow-y: auto; /* Scroll vertical si el contenido es muy largo */
+    background-color: #555555;
+    align-items: center
+}

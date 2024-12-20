@@ -87,6 +87,11 @@ function getLowerHalf()
 {
     const component = document.createElement('div');
     component.className = 'lower-half';
+
+    const registerButton = document.createElement('button');
+    registerButton.textContent = 'Register';
+    component.appendChild(registerButton);
+
     const loginButton = getLoginButton();
     component.appendChild(loginButton);
 
@@ -112,20 +117,17 @@ function getSidebar()
 
 function getContent()
 {
-    const component = document.createElement('div');
-    component.className = 'content';
+    const main = document.createElement('main');
+    main.id = 'main';
 
     const img = document.createElement('img'); 
-    const staticURL = window.AppConfig.STATIC_URL;
-    const imagePath = 'game/img/homeLogo.png';
-    const fullPath = staticURL.endsWith('/') ? staticURL + imagePath : staticURL + '/' + imagePath;
-    img.src = fullPath; 
+    img.src = '/static/game/img/homeLogo.png'; 
     img.alt = 'Example';
-    component.appendChild(img);
+    main.appendChild(img);
     
     const h1 = document.createElement('h1');
-    h1.textContent = 'Welcome to Pong Game';
-    component.appendChild(h1);
+    h1.textContent = 'Welcome to Online Pong';
+    main.appendChild(h1);
     
     const button = document.createElement('button');
     button.textContent = 'Versus Mode';
@@ -133,7 +135,7 @@ function getContent()
     button.addEventListener('click', () => {
         console.log('Versus Mode');
     });
-    component.appendChild(button);
+    main.appendChild(button);
     
     const button2 = document.createElement('button');
     button2.textContent = 'Tournament Mode';
@@ -141,7 +143,7 @@ function getContent()
     button2.addEventListener('click', () => {
         console.log('Tournament Mode');
     });
-    component.appendChild(button2);
+    main.appendChild(button2);
     
     const button3 = document.createElement('button');
     button3.textContent = 'oscar mode';
@@ -149,22 +151,17 @@ function getContent()
     button3.addEventListener('click', () => {
         console.log('oscar mode');
     });
-    component.appendChild(button3);
-    
+    main.appendChild(button3);
+
     const button4 = document.createElement('button');
     button4.textContent = 'Login';
     button4.id = 'loginButton';
     button4.addEventListener('click', () => {
         console.log('Login');
     });
-    component.appendChild(button4);
-    
-    // footer
-    const footer = document.createElement('footer');
-    footer.textContent = 'Footer';
-    component.appendChild(footer);
+    main.appendChild(button4);
 
-    return component;
+    return main;
 }
 
 // Loads the page content and styles
@@ -173,16 +170,27 @@ function main() {
     loadCSS([
         '/static/css/main/main.css',
         '/static/css/main/sidebar.css',
-        '/static/css/main/content.css'
+        '/static/css/main/mainView.css'
     ]);
+
     const app = document.getElementById('app');
 
     const page = document.createElement('div');
     page.className = 'page';
     app.appendChild(page);
-
+    
     page.appendChild(getSidebar());
-    page.appendChild(getContent());
+
+    const content = document.createElement('div');
+    content.className = 'content';
+    page.appendChild(content);
+    
+    content.appendChild(getContent());
+
+    const footer = document.createElement('footer');
+    footer.textContent = 'Footer';
+    content.appendChild(footer);
+
 }
 
 main();
