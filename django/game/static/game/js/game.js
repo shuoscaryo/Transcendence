@@ -199,6 +199,7 @@ function gameLoop() {
     }
 }
 
+
 // Event listener for key presses (keydown) to start movement
 document.addEventListener('keydown', (event) => {
     if (!gameOver) {
