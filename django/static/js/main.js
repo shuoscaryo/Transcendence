@@ -22,48 +22,84 @@ function loadCSS(filePaths) {
         document.head.appendChild(link);
     });
 }
+function getSection1Button(image, mainText, subText, onClick) {
+    const button = document.createElement('button');
+    button.className = 'section-1-button';
+    button.addEventListener('click', onClick);
+
+    const divLeft = document.createElement('div');
+    divLeft.className = 'section-1-button-left';
+    button.appendChild(divLeft);
+
+    const img = document.createElement('img');
+    img.src = image;
+    divLeft.appendChild(img);
+
+    const divRight = document.createElement('div');
+    divRight.className = 'section-1-button-right';
+    button.appendChild(divRight);
+
+    const h2 = document.createElement('h2');
+    h2.textContent = mainText;
+    divRight.appendChild(h2);
+
+    const p = document.createElement('p');
+    p.textContent = subText;
+    divRight.appendChild(p);
+
+    button.addEventListener('click', () => {
+        onClick();
+    });
+
+    return button;
+}
 
 function getSection1() {
     const section = document.createElement('section');
+    section.id = 'section-1';
+
+    const divCanvas = document.createElement('div');
+    divCanvas.id = 'div-canvas';
+    section.appendChild(divCanvas);
 
     const canvas = document.createElement('canvas');
     canvas.id = 'demo-gameplay';
-    section.appendChild(canvas);
-
+    canvas.width = 600;
+    canvas.height = 400;
     const pong = new PongGame(canvas);
-    Storage.add("pong",pong);
-
-    const startButton = document.createElement('button');
-    startButton.textContent = 'Start';
-    startButton.addEventListener('click', () => {
-        Storage.get("pong").start();
-    });
-    section.appendChild(startButton);
     pong.controller1 = new DemoAI(pong.leftPaddle, pong.getState.bind(pong));
-    pong.controller2 = new PongAI(pong.rightPaddle, pong.getState.bind(pong));
+    pong.controller2 = new DemoAI(pong.rightPaddle, pong.getState.bind(pong));
+    pong.start();
+    Storage.add("pong",pong);
+    divCanvas.appendChild(canvas);
 
+    const divIntro = document.createElement('div');
+    divIntro.id = 'div-intro';
+    section.appendChild(divIntro);
 
-    const stopButton = document.createElement('button');
-    stopButton.textContent = 'Stop';
-    stopButton.addEventListener('click', () => {
-        Storage.get("pong").stop();
-    });
-    section.appendChild(stopButton);
+    const h1 = document.createElement('h1');
+    h1.textContent = 'Play Pong online on the n.º 1 site!';
+    divIntro.appendChild(h1);
 
-    const resetButton = document.createElement('button');
-    resetButton.textContent = 'Reset';
-    resetButton.addEventListener('click', () => {
-        Storage.get("pong").reset();
-    });
-    section.appendChild(resetButton);
+    const divButtons = document.createElement('div');
+    divButtons.id = 'div-buttons';
+    divIntro.appendChild(divButtons);
 
-    const h2 = document.createElement('h2');
-    h2.textContent = 'Section 1';
-    section.appendChild(h2);
+    const buttonPlayVersus = getSection1Button(
+        '/static/img/versus.png',
+        'Versus Mode',
+        'Play against a friend',
+        () => {});
+    buttonPlayVersus.id = 'button-play-versus';
+    divButtons.appendChild(buttonPlayVersus);
 
-    const p = document.createElement('p');
-    p.textContent = 'hola buenos dias';
-    section.appendChild(p);
+    const buttonPlayTournament = getSection1Button(
+        '/static/img/tournament.png',
+        'Tournament Mode',
+        'Play against the computer',
+        () => {});
+    buttonPlayTournament.id = 'button-play-tournament';
+    divButtons.appendChild(buttonPlayTournament);
 
     return section;
 }

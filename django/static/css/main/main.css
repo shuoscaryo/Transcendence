@@ -15,6 +15,6 @@
     background-color: #555555;
     align-items: center
 }
-div, section, article, aside, header, footer, main, nav, canvas {
+/*div, section, article, aside, header, footer, main, nav, canvas, button {
     box-shadow: 0 0 0 1px red; /* Línea roja de 1px */
-  }
+  }*/

@@ -126,9 +126,11 @@ export class PongGame
         this.leftPaddle.pos.y = this.canvas.height / 2 - this.leftPaddle.height / 2;
         const ratio = 0.2;
         this.leftPaddle.height = ratio * this.canvas.height;
+        this.leftPaddle.moveSpeed = this.canvas.height;
         this.rightPaddle.height = ratio * this.canvas.height;
+        this.rightPaddle.moveSpeed = this.canvas.height;
 
-        this.ball.speed.setPolar(200, Math.PI / 4);
+        this.ball.speed.setPolar(this.canvas.height, Math.PI / 4);
         this.ball.pos.x = this.canvas.width / 2;
         this.ball.pos.y = this.canvas.height / 2;
 
@@ -158,7 +160,13 @@ export class PongGame
         this.#checkCollisions();
 
         // 3. Dibujar
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Limpiar canvas
+        this.#draw();
+    }
+
+    #draw()
+    {
+        this.ctx.fillStyle = '#111111';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         this.ball.draw();
         this.leftPaddle.draw();
         this.rightPaddle.draw();
@@ -242,10 +250,7 @@ export class PongGame
         this.rightPaddle.pos.y = this.canvas.height / 2 - this.rightPaddle.height / 2;
         this.player1Score = 0;
         this.player2Score = 0;
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Limpiar canvas
-        this.ball.draw();
-        this.leftPaddle.draw();
-        this.rightPaddle.draw();
+        this.#draw();
     }
     
     getState() {
