@@ -15,7 +15,7 @@ class KeyStates {
         });
     }
 
-    static isKeyPressed(key) {
+    static get(key) {
         return KeyStates.keyState[key] || false;
     }
 }

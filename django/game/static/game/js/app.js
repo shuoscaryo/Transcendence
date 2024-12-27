@@ -1,5 +1,5 @@
 import loadPage from "/static/js/loadPage.js";
-import { PongAI } from "./PongAI.js";
+import { PongAI } from "../../../../static/js/components/PongAI.js";
 
 // Main screen buttons
 const versusButton = document.getElementById('versusButton');

@@ -1,11 +1,13 @@
 import { getSidebar } from './components/sidebar.js';
 import KeyStates from './KeyStates.js';
+import { PongGame } from './components/PongGame.js';
+import { Storage } from './Storage.js';
+import { DemoAI, PongAI, PlayerController } from './Controller.js';
 
 // General function to delete CSS files
 function deleteDynamicStyles() {
     // Selecciona todos los elementos con la clase 'dynamic-style'
     const dynamicStyles = document.querySelectorAll('link.dynamic-style, style.dynamic-style');
-    
     // Elimina cada elemento del DOM
     dynamicStyles.forEach(style => style.remove());
 }
@@ -21,15 +23,56 @@ function loadCSS(filePaths) {
     });
 }
 
-function getContent()
-{
+function getSection1() {
+    const section = document.createElement('section');
+
+    const canvas = document.createElement('canvas');
+    canvas.id = 'demo-gameplay';
+    section.appendChild(canvas);
+
+    const pong = new PongGame(canvas);
+    Storage.add("pong",pong);
+
+    const startButton = document.createElement('button');
+    startButton.textContent = 'Start';
+    startButton.addEventListener('click', () => {
+        Storage.get("pong").start();
+    });
+    section.appendChild(startButton);
+    pong.controller1 = new DemoAI(pong.leftPaddle, pong.getState.bind(pong));
+    pong.controller2 = new PongAI(pong.rightPaddle, pong.getState.bind(pong));
+
+
+    const stopButton = document.createElement('button');
+    stopButton.textContent = 'Stop';
+    stopButton.addEventListener('click', () => {
+        Storage.get("pong").stop();
+    });
+    section.appendChild(stopButton);
+
+    const resetButton = document.createElement('button');
+    resetButton.textContent = 'Reset';
+    resetButton.addEventListener('click', () => {
+        Storage.get("pong").reset();
+    });
+    section.appendChild(resetButton);
+
+    const h2 = document.createElement('h2');
+    h2.textContent = 'Section 1';
+    section.appendChild(h2);
+
+    const p = document.createElement('p');
+    p.textContent = 'hola buenos dias';
+    section.appendChild(p);
+
+    return section;
+}
+
+function getContent() {
     const main = document.createElement('main');
     main.id = 'main';
 
-    const img = document.createElement('img'); 
-    img.src = '/static/game/img/homeLogo.png'; 
-    img.alt = 'Example';
-    main.appendChild(img);
+    main.appendChild(getSection1());
     
     const h1 = document.createElement('h1');
     h1.textContent = 'Welcome to Online Pong';

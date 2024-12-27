@@ -15,4 +15,3 @@ export class Ticker {
 		return Ticker.#count;
 	}
 }
-	
