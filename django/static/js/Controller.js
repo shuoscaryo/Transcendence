@@ -108,7 +108,6 @@ export class PongAI extends Controller {
         
 		// Calculate the target position of the paddle every second
 		if (this.#lastParamTime == undefined || now - this.#lastParamTime > 1) {
-            console.log(now);
             this.#params = this.getParams();
 			this.#targetPos = this.#calculateTargetPos(
                 this.#params.canvas,
@@ -122,8 +121,7 @@ export class PongAI extends Controller {
         }
 
         // Guess the position of the paddle
-        if (this.#lastResult)
-        {
+        if (this.#lastResult) {
             this.#currentPos = this.#currentPos + dt * this.paddle.moveSpeed * this.#lastResult;
             if (this.#currentPos < this.paddle.height / 2)
                 this.#currentPos = this.paddle.height / 2;
@@ -177,7 +175,7 @@ export class PongAI extends Controller {
 		if (timeToWall < timeToPaddle)
 			return this.#calculateTargetPos(canvas, x + vx * timeToWall, y + vy * timeToWall, vx, -vy);
 		// If the ball hits the other paddle, keep bouncing
-		if (vx > 0 == this.paddle.pos.x < canvas.width / 2)
+		if ((vx > 0) == (this.paddle.pos.x < canvas.width / 2))
 			return this.#calculateTargetPos(canvas, x + vx * timeToPaddle, y + vy * timeToPaddle, -vx, vy);
 		// If the ball hits this paddle, return the position
 		return y + vy * timeToPaddle;
