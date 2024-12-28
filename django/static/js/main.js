@@ -22,7 +22,7 @@ function loadCSS(filePaths) {
         document.head.appendChild(link);
     });
 }
-function getSection1Button(image, mainText, subText, onClick) {
+function getSectionButton(image, mainText, subText, onClick) {
     const button = document.createElement('button');
     button.className = 'section-1-button';
     button.addEventListener('click', onClick);
@@ -85,7 +85,7 @@ function getSection1() {
     divButtons.id = 'div-buttons';
     divIntro.appendChild(divButtons);
 
-    const buttonPlayVersus = getSection1Button(
+    const buttonPlayVersus = getSectionButton(
         '/static/game/img/playLogo.png',
         'Versus Mode',
         'Play against a friend',
@@ -93,7 +93,7 @@ function getSection1() {
     buttonPlayVersus.id = 'button-play-versus';
     divButtons.appendChild(buttonPlayVersus);
 
-    const buttonPlayTournament = getSection1Button(
+    const buttonPlayTournament = getSectionButton(
         '/static/game/img/tournamentLogo.png',
         'Tournament',
         'Create a tournament to play with friends',
@@ -112,14 +112,38 @@ function getSection2() {
     const div = document.createElement('div');
     div.id = 'div-section-2-left';
     container.appendChild(div);
+    const divText = document.createElement('div');
+    divText.id = 'div-section-2-left-text';
+    div.appendChild(divText);
 
     const h1 = document.createElement('h1');
     h1.textContent = 'Also check our major Module AI';
-    div.appendChild(h1);
+    divText.appendChild(h1);
+
+    const p = document.createElement('p');
+    p.innerHTML = `Our AI module is the best in the market,
+    with a 99% win rate<br>
+    <br>
+    It only sees the map once a second and calculates where to move the paddle
+    to bounce the ball.<br>It guesses where the paddle is by simulating the movement
+    using the time since the last call and the last move decision.<br>`;
+    divText.appendChild(p);
+
+    const button = getSectionButton(
+        '/static/game/img/AILogo.png',
+        'Play vs Bots',
+        'Play against our AI',
+        () => {});
+    button.id = 'button-play-ai';
+    div.appendChild(button);
+
+    const divImg = document.createElement('div');
+    divImg.id = 'div-section-2-right';
+    container.appendChild(divImg);
 
     const img = document.createElement('img');
     img.src = '/static/game/img/AI.png';
-    container.appendChild(img);
+    divImg.appendChild(img);
 
     return container;
 }

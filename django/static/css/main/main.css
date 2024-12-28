@@ -15,6 +15,9 @@
     background-color: #333333;
     align-items: center
 }
-/*  div, section, article, aside, header, footer, main, nav, canvas, button {
+* {
+    font-family: Arial, sans-serif;
+}
+/* div, section, article, aside, header, footer, main, nav, canvas, button {
     box-shadow: 0 0 0 1px red;
   }*/
