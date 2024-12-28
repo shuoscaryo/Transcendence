@@ -86,7 +86,7 @@ function getSection1() {
     divIntro.appendChild(divButtons);
 
     const buttonPlayVersus = getSection1Button(
-        '/static/img/versus.png',
+        '/static/game/img/playLogo.png',
         'Versus Mode',
         'Play against a friend',
         () => {});
@@ -94,12 +94,13 @@ function getSection1() {
     divButtons.appendChild(buttonPlayVersus);
 
     const buttonPlayTournament = getSection1Button(
-        '/static/img/tournament.png',
-        'Tournament Mode',
-        'Play against the computer',
+        '/static/game/img/tournamentLogo.png',
+        'Tournament',
+        'Create a tournament to play with friends',
         () => {});
     buttonPlayTournament.id = 'button-play-tournament';
     divButtons.appendChild(buttonPlayTournament);
+
 
     return section;
 }

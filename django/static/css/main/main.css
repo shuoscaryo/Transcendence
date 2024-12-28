@@ -12,9 +12,9 @@
     flex-direction: column; /* Columnas */
     flex-grow: 1; /* El contenido crece para ocupar el espacio restante */
     overflow-y: auto; /* Scroll vertical si el contenido es muy largo */
-    background-color: #555555;
+    background-color: #333333;
     align-items: center
 }
-/*div, section, article, aside, header, footer, main, nav, canvas, button {
-    box-shadow: 0 0 0 1px red; /* Línea roja de 1px */
+/*  div, section, article, aside, header, footer, main, nav, canvas, button {
+    box-shadow: 0 0 0 1px red;
   }*/
