@@ -78,7 +78,7 @@ function getSection1() {
     section.appendChild(divIntro);
 
     const h1 = document.createElement('h1');
-    h1.textContent = 'Play Pong online on the n.º 1 site!';
+    h1.textContent = 'Play Pong online on the #1 site!';
     divIntro.appendChild(h1);
 
     const divButtons = document.createElement('div');
@@ -105,11 +105,31 @@ function getSection1() {
     return section;
 }
 
+function getSection2() {
+    const container = document.createElement('section');
+    container.id = 'section-2';
+
+    const div = document.createElement('div');
+    div.id = 'div-section-2-left';
+    container.appendChild(div);
+
+    const h1 = document.createElement('h1');
+    h1.textContent = 'Also check our major Module AI';
+    div.appendChild(h1);
+
+    const img = document.createElement('img');
+    img.src = '/static/game/img/AI.png';
+    container.appendChild(img);
+
+    return container;
+}
+
 function getContent() {
     const main = document.createElement('main');
     main.id = 'main';
 
     main.appendChild(getSection1());
+    main.appendChild(getSection2());
     
     const h1 = document.createElement('h1');
     h1.textContent = 'Welcome to Online Pong';

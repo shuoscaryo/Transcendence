@@ -1,103 +1,125 @@
 #main {
-    padding: 10px;
-    padding-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  padding: 10px;
+  padding-top: 30px;
+}
+#main h1 {
+  font-family: Verdana, sans-serif;
+  font-size: 42px;
+  color: #f0f0f0; 
+  text-align: center;
 }
 
 #section-1 {
-    display: flex;
-    justify-content: left;
-    align-items: stretch;
-    gap: 50px;
+  display: flex;
+  justify-content: left;
+  align-items: stretch;
+  gap: 50px;
 }
+
 #section-1 #demo-gameplay {
-    border-radius: 10px;  /* Ajusta el valor al radio que quieras */
-    overflow: hidden;
+  border-radius: 10px;
+  overflow: hidden;
 }
+
 #section-1 #div-intro {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding-top: 30px;
-    width: 350px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 30px;
+  width: 400px;
 }
 
 #section-1 #div-intro #div-buttons{
-    display: flex;
-    flex-direction: column;
-}
-
-#section-1 #div-intro h1 {
-    font-size: 48px;
-    margin-bottom: 16px;
-    color: #f0f0f0; 
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .section-1-button {
-    display: flex;              
-    justify-content: space-between;    
-    align-items: center;        
-    border: none;
-    background-color: #fff;
-    cursor: pointer;
-    
-    /* Fuerza un ancho fijo */
-    width: 100%;          
-    margin: 0.5rem auto;   /* Centra cada botón horizontalmente */
-    
-    /* Estilos adicionales */
-    padding: 0.5rem 1rem;
-    box-sizing: border-box;
-    border-radius: 1rem;
-  }
-  
-  /* Contenedor de la imagen (izquierda) */
-  .section-1-button-left {
-    margin-right: 1rem; 
-  }
-  
-  /* Imagen */
-  .section-1-button-left img {
-    width: auto;
-    height: 70px;
-    display: block;
-  }
-  
-  /* Contenedor del texto (derecha) */
-  .section-1-button-right {
-    display: flex;
-    flex-direction: column;  
-    justify-content: center;
-    flex-grow: 1;
-    text-align: left;
-  }
-  
-  .section-1-button-right h2 {
-    font-size: 1.5rem;
-  }
-  
-  .section-1-button-right p {
-    margin: 0.2rem 0 0;
-    font-size: 0.9rem;
-    color: #d4d4d4;
-  }
-  
-  #section-1 #button-play-versus {
-    background-color: #7eb848;
-    color: #f0f0f0; 
+  display: flex;              
+  justify-content: space-between;    
+  align-items: center;        
+  border: none;
+  background-color: #fff;
+  cursor: pointer;
+
+  /* Fuerza un ancho fijo */
+  width: 100%;          
+  margin: 0.5rem auto;   /* Centra cada botón horizontalmente */
+
+  /* Estilos adicionales */
+  padding: 0.5rem 1rem;
+  box-sizing: border-box;
+  border-radius: 1rem;
+}
+
+/* Contenedor de la imagen (izquierda) */
+.section-1-button-left {
+  margin-right: 1rem; 
+}
+
+/* Imagen */
+.section-1-button-left img {
+  width: auto;
+  height: 70px;
+  display: block;
+}
+
+/* Contenedor del texto (derecha) */
+.section-1-button-right {
+  display: flex;
+  flex-direction: column;  
+  justify-content: center;
+  flex-grow: 1;
+  text-align: left;
+}
+
+.section-1-button-right h2 {
+  font-size: 1.5rem;
+}
+
+.section-1-button-right p {
+  margin: 0.2rem 0 0;
+  font-size: 0.9rem;
+  color: #d4d4d4;
+}
+
+#section-1 #button-play-versus {
+  background-color: #7eb848;
+  color: #f0f0f0; 
 }
 
 #section-1 #button-play-versus:hover {
-    background-color: #94e45f;
-    color: #f0f0f0; 
-  }
+  background-color: #94e45f;
+  color: #f0f0f0; 
+}
 
-  #section-1 #button-play-tournament {
-    background-color: #3d3d3d;
-    color: #f0f0f0; 
-  }
+#section-1 #button-play-tournament {
+  background-color: #3d3d3d;
+  color: #f0f0f0; 
+}
 
-    #section-1 #button-play-tournament:hover {
-        background-color: #5a5a5a;
-        color: #f0f0f0; 
-    }
+#section-1 #button-play-tournament:hover {
+  background-color: #5a5a5a;
+  color: #f0f0f0; 
+}
+
+/* Section 2 */
+#section-2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #242424;
+    border-radius: 10px;
+    height: 600px;
+}
+
+#section-2 img {
+    width: 100%;
+    height: 100%;
+    object-fit:scale-down;
+    border-radius: 10px;
+}
