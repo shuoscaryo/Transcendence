@@ -21,6 +21,9 @@ main section {
 /* section 1 */
 /* ######### */
 
+  #section-1 {
+    height: 400px; /* modificable */
+  }
   #section-1 #demo-gameplay {
     overflow: hidden;
     border-radius: 10px; /* modificable */
