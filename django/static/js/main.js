@@ -17,27 +17,28 @@ function loadCSS(filePaths) {
     filePaths.forEach(filePath => {
         const link = document.createElement('link');
         link.rel = 'stylesheet';
-        link.className = 'dynamic-styles';
+        link.className = 'dynamic-style';
         link.href = filePath;
         document.head.appendChild(link);
     });
 }
+
 function getSectionButton(image, mainText, subText, onClick) {
-    const button = document.createElement('button');
-    button.className = 'section-1-button';
-    button.addEventListener('click', onClick);
+    const component = document.createElement('button');
+    component.className = 'section-button';
+    component.addEventListener('click', onClick);
 
     const divLeft = document.createElement('div');
-    divLeft.className = 'section-1-button-left';
-    button.appendChild(divLeft);
+    divLeft.className = 'section-button-left';
+    component.appendChild(divLeft);
 
     const img = document.createElement('img');
     img.src = image;
     divLeft.appendChild(img);
 
     const divRight = document.createElement('div');
-    divRight.className = 'section-1-button-right';
-    button.appendChild(divRight);
+    divRight.className = 'section-button-right';
+    component.appendChild(divRight);
 
     const h2 = document.createElement('h2');
     h2.textContent = mainText;
@@ -47,11 +48,7 @@ function getSectionButton(image, mainText, subText, onClick) {
     p.textContent = subText;
     divRight.appendChild(p);
 
-    button.addEventListener('click', () => {
-        onClick();
-    });
-
-    return button;
+    return component;
 }
 
 function getSection1() {
@@ -90,7 +87,7 @@ function getSection1() {
         'Versus Mode',
         'Play against a friend',
         () => {});
-    buttonPlayVersus.id = 'button-play-versus';
+    buttonPlayVersus.classList.add('button-green');
     divButtons.appendChild(buttonPlayVersus);
 
     const buttonPlayTournament = getSectionButton(
@@ -100,7 +97,6 @@ function getSection1() {
         () => {});
     buttonPlayTournament.id = 'button-play-tournament';
     divButtons.appendChild(buttonPlayTournament);
-
 
     return section;
 }
@@ -134,6 +130,7 @@ function getSection2() {
         'Play vs Bots',
         'Play against our AI',
         () => {});
+    button.classList.add('button-green');
     button.id = 'button-play-ai';
     div.appendChild(button);
 
@@ -150,7 +147,6 @@ function getSection2() {
 
 function getContent() {
     const main = document.createElement('main');
-    main.id = 'main';
 
     main.appendChild(getSection1());
     main.appendChild(getSection2());
@@ -194,8 +190,15 @@ function getContent() {
     return main;
 }
 
+function getFooter() {
+    const component = document.createElement('footer');
+    component.className = 'footer';
+    component.textContent = 'Footer with github link and 42 link and stuff';
+    return component;
+}
+
 // Loads the page content and styles
-function main() {
+function mainPage() {
     deleteDynamicStyles();
     loadCSS([
         '/static/css/main/main.css',
@@ -206,21 +209,19 @@ function main() {
     const app = document.getElementById('app');
 
     const page = document.createElement('div');
-    page.className = 'page';
+    page.id = 'page';
     app.appendChild(page);
     
     page.appendChild(getSidebar());
 
     const content = document.createElement('div');
-    content.className = 'content';
+    content.id = 'content';
     page.appendChild(content);
     
     content.appendChild(getContent());
 
-    const footer = document.createElement('footer');
-    footer.textContent = 'Footer';
+    const footer = getFooter();
     content.appendChild(footer);
-
 }
 
-main();
+mainPage();

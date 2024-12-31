@@ -1,156 +1,150 @@
-#main {
+main {
   display: flex;
   flex-direction: column;
-  gap: 50px;
-  padding: 10px;
+  gap: 50px; /* modificable */
+  padding: 10px; /* modificable */
 }
 
-#main h1 {
-  font-size: 42px;
-  color: #f0f0f0; 
-  text-align: center;
+main h1 {
+  font-size: 42px; /* modificable */
+  text-align: center; /* modificable */
 }
 
-#main section {
+main section {
   display: flex;
   justify-content: space-between;
-  gap: 50px;
+  gap: 50px; /* modificable */
 }
 
-#section-1 #demo-gameplay {
-  border-radius: 10px;
-  overflow: hidden;
+main p {
+  font-size: 18px; /* modificable */
+  color: #d4d4d4; /* modificable */
 }
 
-#section-1 #div-intro {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding-top: 30px;
-  width: 400px;
-}
+/* ######### */
+/* section 1 */
+/* ######### */
 
-#section-1 #div-intro #div-buttons{
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
+  #section-1 #demo-gameplay {
+    overflow: hidden;
+    border-radius: 10px; /* modificable */
+  }
 
-.section-1-button {
-  display: flex;              
-  justify-content: space-between;    
-  align-items: center;        
-  border: none;
-  background-color: #fff;
-  cursor: pointer;
+  #section-1 #div-intro {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: 30px; /* modificable */
+    width: 400px; /* modificable */
+  }
 
-  /* Fuerza un ancho fijo */
-  width: 100%;          
-  margin: 0.5rem auto;   /* Centra cada botón horizontalmente */
+  #section-1 #div-intro #div-buttons{
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* modificable */
+  }
 
-  /* Estilos adicionales */
-  padding: 0.5rem 1rem;
-  box-sizing: border-box;
-  border-radius: 1rem;
-}
+  #section-1 #button-play-tournament {
+    background-color: #4b4b4b; /* modificable */
+    color: #f0f0f0;  /* modificable */
+  }
+  
+  #section-1 #button-play-tournament:hover {
+    background-color: #686868; /* modificable */
+  }
+  
+/* ############### */
+/* Section buttons */
+/* ############### */
+  
+  .section-button {
+    display: flex;
+    align-items: left;
+    width: 100%;
+    height: 80px; /* modificable */
+    border-radius: 15px; /* modificable */
+  }
+  
+  .section-button .section-button-left {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 25%; /* modificable */
+    padding: 10px; /* modificable */
+  }
+  
+  .section-button .section-button-left img {
+    width: 100%;
+    height: 100%;
+    object-fit: scale-down;
+  }
+  
+  .section-button .section-button-right {
+    display: flex;
+    flex-direction: column;  
+    justify-content: center;
+    flex-grow: 1;
+    gap: 5px; /* modificable */
+    text-align: left; /* modificable */
+    padding-right: 10px; /* modificable */
+  }
+  
+  .section-button .section-button-right h2 {
+    font-size: 24px; /* modificable */
+  }
+  
+/* ############ */
+/* button-green */
+/* ############ */
 
-/* Contenedor de la imagen (izquierda) */
-.section-1-button-left {
-  margin-right: 1rem; 
-}
+  .button-green {
+    background-color: #7eb848; /* modificable */
+  }
+  
+  .button-green:hover {
+    background-color: rgb(145, 218, 97); /* modificable */
+    color: white; /* modificable */
+  }
 
-/* Imagen */
-.section-1-button-left img {
-  width: auto;
-  height: 70px;
-  display: block;
-}
+  .button-green:hover p {
+    color: white; /* modificable */
+  }
 
-/* Contenedor del texto (derecha) */
-.section-1-button-right {
-  display: flex;
-  flex-direction: column;  
-  justify-content: center;
-  flex-grow: 1;
-  text-align: left;
-}
-
-.section-1-button-right h2 {
-  font-size: 1.5rem;
-}
-
-.section-1-button-right p {
-  margin: 0.2rem 0 0;
-  font-size: 0.9rem;
-  color: #d4d4d4;
-}
-
-#section-1 #button-play-versus {
-  background-color: #7eb848;
-  color: #f0f0f0; 
-}
-
-#section-1 #button-play-versus:hover {
-  background-color: #94e45f;
-  color: #f0f0f0; 
-}
-
-#section-1 #button-play-tournament {
-  background-color: #4b4b4b;
-  color: #f0f0f0; 
-}
-
-#section-1 #button-play-tournament:hover {
-  background-color: #686868;
-  color: #f0f0f0; 
-}
-
+/* ######### */
 /* Section 2 */
-#section-2 {
+/* ######### */
+  #section-2 {
     background-color: #242424;
     border-radius: 10px;
     height: 500px;
-}
+  }
+  
+  #section-2 #div-section-2-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px;
+    width: 500px;
+  }
 
+  #section-2 #div-section-2-right {
+    padding: 30px;
+  }
 
-#section-2 #div-section-2-left {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 30px 30px;
-  width: 500px;
-}
+  #section-2 img {
+    width: 100%;
+    height: 100%;
+    object-fit: scale-down;
+    border-radius: 10px;
+  }
 
-#section-2 #div-section-2-right {
-  padding: 30px;
-}
+  #section-2 #div-section-2-left-text {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
 
-#section-2 img {
-  width: 100%;
-  height: 100%;
-  object-fit: scale-down;
-  border-radius: 10px;
-}
-
-#section-2 #div-section-2-left-text {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-#section-2 #button-play-ai {
-  font-size: 32px;
-  color: #f0f0f0;
-  background-color: #7eb848;
-  width: 70%;
-}
-
-#section-2 #button-play-ai:hover {
-  background-color: #94e45f;
-}
-
-#section-2 p {
-  margin: 0.2rem 0 0;
-  font-size: 0.9rem;
-  color: #d4d4d4;
-}
+  #section-2 #button-play-ai {
+    width: 70%;
+  }
