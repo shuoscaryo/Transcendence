@@ -11,8 +11,13 @@
 
 button {
     cursor: pointer;
-    background-color: gray;
+    background-color: fuchsia;
     border: none;
+}
+
+p {
+    font-size: 16px; /* modificable */
+    color: #d4d4d4; /* modificable */
 }
 
 #app {
@@ -32,13 +37,20 @@ button {
 #content {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     flex-grow: 1;
     overflow-y: auto;
     background-color: #333333;
     align-items: center
 }
 
+#content footer
+{
+    padding-bottom: 10px;
+}
+
 /* style for showing borders erase it when page is finished*/
 /*div, section, article, aside, header, footer, main, nav, canvas, button {
     box-shadow: 0 0 0 1px red;
+    position: relative;
 }*/

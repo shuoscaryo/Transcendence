@@ -2,7 +2,7 @@ function getHomeButton()
 {
     const component = document.createElement('button');
     component.id = 'home-button';
-    component.class = 'header-button';
+    component.className = 'header-button';
     
     const image = document.createElement('img');
     image.src = '/static/game/img/homeLogo.png';
@@ -27,22 +27,26 @@ function getUpperHalf()
         { label: 'Profile', image: '/static/game/img/profileLogo.png', action: null},
     ];
 
-    buttons.forEach(button => {
-        const buttonDiv = document.createElement('button');
-        buttonDiv.className = 'header-button';
+    buttons.forEach(buttonData => {
+        const button = document.createElement('button');
+        button.className = 'header-button';
 
+        const div1 = document.createElement('div');
+        button.appendChild(div1);
         const image = document.createElement('img');
-        image.src = button.image;
-        image.alt = button.label;
-        buttonDiv.appendChild(image);
+        image.src = buttonData.image;
+        image.alt = buttonData.label;
+        div1.appendChild(image);
 
-        const label = document.createElement('label');
-        label.textContent = button.label;
-        buttonDiv.appendChild(label);
+        const div2 = document.createElement('div');
+        button.appendChild(div2);
+        const p = document.createElement('p');
+        p.textContent = buttonData.label;
+        div2.appendChild(p);
 
-        buttonDiv.addEventListener('click', button.action);
+        button.addEventListener('click', buttonData.action);
 
-        component.appendChild(buttonDiv);
+        component.appendChild(button);
     });
     return component;
 }

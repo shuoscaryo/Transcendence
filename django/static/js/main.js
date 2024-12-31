@@ -150,49 +150,12 @@ function getContent() {
 
     main.appendChild(getSection1());
     main.appendChild(getSection2());
-    
-    const h1 = document.createElement('h1');
-    h1.textContent = 'Welcome to Online Pong';
-    main.appendChild(h1);
-    
-    const button = document.createElement('button');
-    button.textContent = 'Versus Mode';
-    button.id = 'versusButton';
-    button.addEventListener('click', () => {
-        console.log('Versus Mode');
-    });
-    main.appendChild(button);
-    
-    const button2 = document.createElement('button');
-    button2.textContent = 'Tournament Mode';
-    button2.id = 'tournamentButton';
-    button2.addEventListener('click', () => {
-        console.log('Tournament Mode');
-    });
-    main.appendChild(button2);
-    
-    const button3 = document.createElement('button');
-    button3.textContent = 'oscar mode';
-    button3.id = 'singleButton';
-    button3.addEventListener('click', () => {
-        console.log('oscar mode');
-    });
-    main.appendChild(button3);
-
-    const button4 = document.createElement('button');
-    button4.textContent = 'Login';
-    button4.id = 'loginButton';
-    button4.addEventListener('click', () => {
-        console.log('Login');
-    });
-    main.appendChild(button4);
 
     return main;
 }
 
 function getFooter() {
     const component = document.createElement('footer');
-    component.className = 'footer';
     component.textContent = 'Footer with github link and 42 link and stuff';
     return component;
 }
