@@ -49,7 +49,7 @@ main section {
   }
   
   #section-1 #button-play-tournament:hover {
-    background-color: #686868; /* modificable */
+    background-color: #585858; /* modificable */
   }
   
 /* ############### */
@@ -101,7 +101,7 @@ main section {
   }
   
   .button-green:hover {
-    background-color: rgb(145, 218, 97); /* modificable */
+    background-color: #8ecf5a; /* modificable */
     color: white; /* modificable */
   }
 
