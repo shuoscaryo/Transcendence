@@ -109,7 +109,7 @@ class Paddle extends movingObject
     }
 }
 
-export class PongGame
+export default class PongGame
 {
     constructor(canvas)
     {

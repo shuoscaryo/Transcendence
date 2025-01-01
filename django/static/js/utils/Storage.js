@@ -1,4 +1,4 @@
-export class Storage {
+export default class Storage {
     static store = new Map();
 
     constructor() {

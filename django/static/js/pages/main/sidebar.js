@@ -84,7 +84,7 @@ function getLowerHalf()
     return component;
 }
 
-export function getSidebar()
+export default function getSidebar()
 {
     const component = document.createElement('div');
     component.className = 'sidebar';
