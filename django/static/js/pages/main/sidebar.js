@@ -48,10 +48,21 @@ function getLoginButton()
     return component;
 }
 
-function getCollapseHeaderButton()
-{
+function getCollapseHeaderButton() {
     const component = document.createElement('button');
     component.textContent = 'Collapse';
+
+    component.addEventListener('click', () => {
+        const sidebar = document.querySelector('.sidebar'); // Selecciona el elemento con la clase sidebar
+        if (sidebar) {
+            if (sidebar.style.width === '50px') {
+                sidebar.style.width = '150px'; // Cambia a tamaño expandido
+            } else {
+                sidebar.style.width = '50px'; // Cambia a tamaño colapsado
+            }
+        }
+    });
+
     return component;
 }
 
