@@ -1,3 +1,5 @@
+import Path from '/static/js/utils/Path.js';
+
 function getHomeButton()
 {
     const component = document.createElement('button');
@@ -5,7 +7,7 @@ function getHomeButton()
     component.className = 'header-button';
     
     const image = document.createElement('img');
-    image.src = '/static/game/img/homeLogo.png';
+    image.src = Path.img('homeLogo.png');
     image.alt = 'Home';
     component.appendChild(image);
 
@@ -21,10 +23,10 @@ function getUpperHalf()
     component.appendChild(homeButton);
 
     const buttons = [
-        { label: 'Play', image: '/static/game/img/playLogo.png', action: null},
-        { label: 'Friends', image: '/static/game/img/friendsLogo.png', action: null},
-        { label: 'Chat', image: '/static/game/img/chatLogo.png', action: null},
-        { label: 'Profile', image: '/static/game/img/profileLogo.png', action: null},
+        { label: 'Play', image: Path.img('playLogo.png'), action: null},
+        { label: 'Friends', image: Path.img('friendsLogo.png'), action: null},
+        { label: 'Chat', image: Path.img('chatLogo.png'), action: null},
+        { label: 'Profile', image: Path.img('profileLogo.png'), action: null},
     ];
 
     buttons.forEach(buttonData => {
@@ -35,7 +37,6 @@ function getUpperHalf()
         button.appendChild(div1);
         const image = document.createElement('img');
         image.src = buttonData.image;
-        image.alt = buttonData.label;
         div1.appendChild(image);
 
         const div2 = document.createElement('div');

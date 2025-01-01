@@ -1,5 +1,5 @@
 "use strict";
-import KeyStates from "/static/js/KeyStates.js";
+import KeyStates from "/static/js/utils/KeyStates.js";
 
 class Controller {
     constructor(paddle = null, getParamsFunction = null) {
