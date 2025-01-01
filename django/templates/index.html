@@ -9,9 +9,10 @@
     <base href="{% static '' %}">
 </head>
 <body>
-
-    <div id="app">
-    </div>
+    <div id="app"></div>
+    <script>
+        window.__STATIC_URL__ = "{% static '' %}";
+    </script>
     <script type="module" src="js/main.js"></script>
 </body>
 </html>

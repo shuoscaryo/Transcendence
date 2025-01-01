@@ -1,4 +1,6 @@
-import * as config from '/static/js/config.js';
+import Path from '/static/js/utils/Path.js';
+import * as css from '/static/js/utils/css.js';
+import Storage from '/static/js/utils/Storage.js';
 
 export default async function loadPage(pageName) {
     // Check if the input is valid (throw an error if it's not)
@@ -11,13 +13,13 @@ export default async function loadPage(pageName) {
     }
 
     // Load the page from the pages folder
-    const pageFile = await import(`${config.PAGES_FOLDER}/${pageName}.js`);
+    const pageFile = await import(Path.page(pageName, 'index.js'));
     if (pageFile.default) {
-        const {page, styles} = pageFile.default();
         const appDiv = document.getElementById('app');
-        appDiv.replaceChildren(...page.childNodes);
-        const dynamicStyles = document.getElementById('dynamic_styles');
-        dynamicStyles.textContent = styles;
+        appDiv.innerHTML = '';
+        css.deleteCss();
+        Storage.deletePageData();
+        pageFile.default();
     } else
         throw new Error(`loadPage: The page "${pageName}" does not have a default export.`); //TODO: 404 page
 }

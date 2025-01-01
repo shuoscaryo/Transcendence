@@ -1,5 +1,5 @@
+import getSectionButton from './sectionButton.js';
 import PongGame from '/static/js/utils/PongGame.js';
-import getSectionButton from '/static/js/pages/main/sectionButton.js';
 import { DemoAI } from '/static/js/utils/Controller.js';
 import Storage from '/static/js/utils/Storage.js';
 import Path from '/static/js/utils/Path.js';
@@ -20,7 +20,7 @@ function getSection1() {
     pong.controller1 = new DemoAI(pong.leftPaddle, pong.getState.bind(pong));
     pong.controller2 = new DemoAI(pong.rightPaddle, pong.getState.bind(pong));
     pong.start();
-    Storage.add("pong",pong);
+    Storage.addToView("pong", pong);
     divCanvas.appendChild(canvas);
 
     const divIntro = document.createElement('div');

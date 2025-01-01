@@ -1,3 +1,3 @@
-import mainPage from '/static/js/pages/main/index.js';
+import loadPage from '/static/js/utils/loadPage.js';
 
-mainPage();
+loadPage("home");

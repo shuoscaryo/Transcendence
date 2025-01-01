@@ -1,18 +1,6 @@
 import Path from '/static/js/utils/Path.js';
-
-function getHomeButton()
-{
-    const component = document.createElement('button');
-    component.id = 'home-button';
-    component.className = 'header-button';
-    
-    const image = document.createElement('img');
-    image.src = Path.img('homeLogo.png');
-    image.alt = 'Home';
-    component.appendChild(image);
-
-    return component;
-}
+import loadPage from '/static/js/utils/loadPage.js';
+import getHomeButton from '/static/js/components/homeButton.js';
 
 function getUpperHalf()
 {
@@ -20,6 +8,7 @@ function getUpperHalf()
     component.className = 'upper-half';
 
     const homeButton = getHomeButton();
+    homeButton.classList.add('header-button');
     component.appendChild(homeButton);
 
     const buttons = [
@@ -76,6 +65,9 @@ function getLowerHalf()
     component.appendChild(registerButton);
 
     const loginButton = getLoginButton();
+    loginButton.addEventListener('click', () => {
+        loadPage('login');
+    });
     component.appendChild(loginButton);
 
     const contractButton = getCollapseHeaderButton();

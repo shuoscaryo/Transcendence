@@ -48,7 +48,7 @@
 /* home-button */
 /* ########### */
 
-.sidebar #home-button {
+.sidebar .home-button {
   height: 120px; /* same as .sidebar width */
   padding: 10px;
 }

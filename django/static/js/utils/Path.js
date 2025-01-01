@@ -2,6 +2,7 @@ export default class Path {
     static IMG_PATH = 'img';
     static CSS_PATH = 'css';
     static JS_PATH = 'js';
+    static PAGES_PATH = 'js/pages';
 
     constructor() {
         throw new Error('Path is a static class and cannot be instantiated.');
@@ -27,5 +28,9 @@ export default class Path {
 
     static js(...segments) {
         return Path.join(Path.JS_PATH, ...segments);
+    }
+
+    static page(...segments) {
+        return Path.join(window.__STATIC_URL__, Path.PAGES_PATH, ...segments);
     }
 }
