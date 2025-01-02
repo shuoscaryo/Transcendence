@@ -1,0 +1,145 @@
+main #div-upper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    padding: 40px;
+    padding-bottom: 20px;
+    width: 100%;
+}
+
+main #div-upper #div-normal-login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+    width: 100%;
+    color: #d4d4d4;
+}
+
+#div-form {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    gap: 20px;
+    width: 100%;
+}
+
+#button-forgot-password {
+    background-color: transparent;
+    text-decoration: underline;
+    cursor: pointer;
+    color: #aaaaaa;
+}
+
+main #div-upper form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+}
+
+main #div-upper form input {
+    width: 100%;    
+    height: 40px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 2px solid #555555;
+    background-color: #444444;
+}
+
+main #div-upper form input:hover {
+    border: 2px solid #777777;
+}
+
+main #div-upper form input:focus  {
+    outline: none;
+    border: 2px solid #777777;
+    box-shadow: 0 0 5px #777777;
+}
+
+main #div-upper #button-login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 60px; /* modificable */
+    border-radius: 15px; /* modificable */
+    font-weight: bold;
+    font-size: 24px; /* modificable */
+}
+
+main #div-upper #div-other-login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 20px;
+}
+
+main #div-upper #div-other-login #button-fortito {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    overflow: hidden;
+    width: 100%;
+    height: 60px; /* modificable */
+    border-radius: 5px; /* modificable */
+    background-color: #1d1d1d; /* modificable */
+}
+
+main #div-upper #div-other-login #button-fortito:hover {
+    background-color: #1a1a1a;
+}
+
+main #div-upper #div-other-login #button-fortito #div-img {
+    justify-content: center;
+    max-width: 25%; /* modificable */
+    height: 100%; /* modificable */
+    padding: 10px; /* modificable */
+}
+
+main #div-upper #div-other-login #button-fortito #div-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: scale-down;
+}
+
+main #div-upper #div-other-login #div-text {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+    text-align: center; /* modificable */
+    padding-right: 10px; /* modificable */
+}
+
+main #div-lower {
+    background-color: #1a1a1a;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#div-lower button {
+    width: 100%;
+    padding: 20px;
+    color: #aaaaaa;
+}
+
+#div-separator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    color: #aaaaaa; /* Color de las líneas */
+}
+#div-separator::before,
+#div-separator::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid #555555; /* Color de las líneas */
+    margin: 0 10px; /* Espacio alrededor del texto */
+}

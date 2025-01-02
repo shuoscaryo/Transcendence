@@ -6,48 +6,31 @@ import loadPage from '/static/js/utils/loadPage.js';
 function getOtherLogin() {
     const component = document.createElement('div');
 
+    const separatorDiv = document.createElement('div');
+    separatorDiv.id = 'div-separator';
+    separatorDiv.textContent = 'OR';
+    component.appendChild(separatorDiv);
+
     const fortitoButton = document.createElement('button');
     fortitoButton.id = 'button-fortito';
-    fortitoButton.textContent = 'Sign in with fortito';
     fortitoButton.addEventListener('click', () => {
         loadPage('main');
     });
     component.appendChild(fortitoButton);
 
-    return component;
-}
+    const imgDiv = document.createElement('div');
+    imgDiv.id = 'div-img';
+    fortitoButton.appendChild(imgDiv);
 
-function getUpperHalf() {
-    const component = document.createElement('div');
+    const img = document.createElement('img');
+    img.src = Path.img('42Logo.png');
+    imgDiv.appendChild(img);
 
-    const divForm = document.createElement('div');
-    divForm.id = 'div-form';
-    component.appendChild(divForm);
+    const textDiv = document.createElement('div');
+    textDiv.id = 'div-text';
+    textDiv.textContent = 'Log in with 42';
+    fortitoButton.appendChild(textDiv);
 
-    const form = getForm();
-    divForm.appendChild(form);
-
-    const loginButton = document.createElement('button');
-    loginButton.classList.add('button-green');
-    loginButton.id = 'button-login';
-    loginButton.textContent = 'Log In';
-    loginButton.addEventListener('click', () => {
-        loadPage('main');
-    });
-    divForm.appendChild(loginButton);
-
-    const forgotPassword = document.createElement('button');
-    forgotPassword.id = 'button-forgot-password';
-    forgotPassword.textContent = 'Forgot Password?';
-    forgotPassword.addEventListener('click', () => {
-        loadPage('forgotPassword');
-    });
-    divForm.appendChild(forgotPassword);
-
-    const divOtherLogin = getOtherLogin();
-    divOtherLogin.id = 'div-other-login';
-    component.appendChild(divOtherLogin);
-    
     return component;
 }
 
@@ -69,21 +52,61 @@ function getForm() {
     return component;
 }
 
-function getLowerHalf() {
+function getUpperHalf() {
     const component = document.createElement('div');
+
+    const divNormalLogin = document.createElement('div');
+    divNormalLogin.id = 'div-normal-login';
+    component.appendChild(divNormalLogin);
+
+    const divForm = document.createElement('div');
+    divForm.id = 'div-form';
+    divNormalLogin.appendChild(divForm);
+
+    const form = getForm();
+    divForm.appendChild(form);
+
+    const forgotPassword = document.createElement('button');
+    forgotPassword.id = 'button-forgot-password';
+    forgotPassword.textContent = 'Forgot Password?';
+    forgotPassword.addEventListener('click', () => {
+        loadPage('forgotPassword');
+    });
+    divForm.appendChild(forgotPassword);
+    
+    const loginButton = document.createElement('button');
+    loginButton.classList.add('button-green');
+    loginButton.id = 'button-login';
+    loginButton.textContent = 'Log In';
+    loginButton.addEventListener('click', () => {
+        loadPage('main');
+    });
+    divNormalLogin.appendChild(loginButton);
+
+    const divOtherLogin = getOtherLogin();
+    divOtherLogin.id = 'div-other-login';
+    component.appendChild(divOtherLogin);
+    
     return component;
 }
 
-export default async function mainPage(view = null) {
+export default async function mainPage() {
     await css.loadPageCss([
+        Path.css("login/index.css"),
     ]);
     await css.loadViewCss([
+        Path.css("login/login.css"),
     ]);
 
     const app = document.getElementById('app');
 
     const page = document.createElement('div');
     page.id = 'page';
+    page.style.backgroundImage = `url("${Path.img('loginBackGround.png')}")`;
+    page.style.backgroundSize = "contain"; // Ajusta sin deformarse
+    page.style.backgroundRepeat = "no-repeat"; // Evita que el patrón se repita
+    page.style.backgroundPosition = "center";
+    page.style.imageRendering = "pixelated";
     app.appendChild(page);
     
     const content = document.createElement('div');
@@ -92,24 +115,23 @@ export default async function mainPage(view = null) {
     
     content.appendChild(getHomeButton());
 
-    const divMain = document.createElement('div');
-    divMain.id = 'div-main';
-    content.appendChild(divMain);
+    const main = document.createElement('main');
+    content.appendChild(main);
 
     const divUpper = getUpperHalf();
     divUpper.id = 'div-upper';
-    divMain.appendChild(divUpper);
+    main.appendChild(divUpper);
 
-
-    const divLower = getLowerHalf();
+    /* The text for register */
+    const divLower = document.createElement('div');
     divLower.id = 'div-lower';
-    divMain.appendChild(divLower);
+    main.appendChild(divLower);
 
     const registerButton = document.createElement('button');
     registerButton.id = 'button-register';
     registerButton.addEventListener('click', () => {
         loadPage('register');
     });
-    registerButton.textContent = 'Sign Up';
+    registerButton.textContent = 'New? Sign up - and start playing pong!';
     divLower.appendChild(registerButton);
 }

@@ -11,7 +11,7 @@
 
 button {
     cursor: pointer;
-    background-color: fuchsia;
+    background-color: transparent;
     border: none;
 }
 
@@ -38,6 +38,7 @@ p {
   .button-green:hover {
     background-color: #8ecf5a; /* modificable */
     color: white; /* modificable */
+    box-shadow: 0 0 5px #8ecf5a;
   }
 
   .button-green:hover p {
@@ -45,8 +46,9 @@ p {
   }
 
 
+
 /* style for showing borders erase it when page is finished*/
-div, section, article, aside, header, footer, main, nav, canvas, button {
+/*div, section, article, aside, header, footer, main, nav, canvas, button {
     box-shadow: 0 0 0 1px red;
     position: relative;
-}
+}*/

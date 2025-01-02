@@ -11,7 +11,7 @@ export default async function mainPage() {
     ]);
     await css.loadViewCss([
         Path.css('main/sidebar.css'),
-        Path.css('main/mainView.css')
+        Path.css('main/mainView.css'),
     ]);
     const app = document.getElementById('app');
 
