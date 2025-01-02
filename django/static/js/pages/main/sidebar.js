@@ -41,48 +41,26 @@ function getUpperHalf()
     return component;
 }
 
-function getLoginButton()
-{
-    const component = document.createElement('button');
-    component.textContent = 'Login';
-    return component;
-}
-
-function getCollapseHeaderButton() {
-    const component = document.createElement('button');
-    component.textContent = 'Collapse';
-
-    component.addEventListener('click', () => {
-        const sidebar = document.querySelector('.sidebar'); // Selecciona el elemento con la clase sidebar
-        if (sidebar) {
-            if (sidebar.style.width === '50px') {
-                sidebar.style.width = '150px'; // Cambia a tamaño expandido
-            } else {
-                sidebar.style.width = '50px'; // Cambia a tamaño colapsado
-            }
-        }
-    });
-
-    return component;
-}
-
 function getLowerHalf()
 {
     const component = document.createElement('div');
     component.className = 'lower-half';
 
     const registerButton = document.createElement('button');
-    registerButton.textContent = 'Register';
+    registerButton.classList.add('button-login', 'button-green');
+    registerButton.textContent = 'Sign Up';
+    registerButton.addEventListener('click', () => {
+        loadPage('register');
+    });
     component.appendChild(registerButton);
-
-    const loginButton = getLoginButton();
+    
+    const loginButton = document.createElement('button');
+    loginButton.classList.add('button-login', 'button-gray');
+    loginButton.textContent = 'Log In';
     loginButton.addEventListener('click', () => {
         loadPage('login');
     });
     component.appendChild(loginButton);
-
-    const contractButton = getCollapseHeaderButton();
-    component.appendChild(contractButton);
 
     return component;
 }

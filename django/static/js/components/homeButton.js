@@ -12,7 +12,7 @@ export default function getHomeButton()
     component.appendChild(image);
 
     component.addEventListener('click', () => {
-        loadPage('home');
+        loadPage('main');
     });
 
     return component;

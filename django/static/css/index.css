@@ -27,6 +27,24 @@ p {
     background-color: #333333;
 }
 
+/* ############ */
+/* button-green */
+/* ############ */
+
+.button-green {
+    background-color: #7eb848; /* modificable */
+  }
+  
+  .button-green:hover {
+    background-color: #8ecf5a; /* modificable */
+    color: white; /* modificable */
+  }
+
+  .button-green:hover p {
+    color: white; /* modificable */
+  }
+
+
 /* style for showing borders erase it when page is finished*/
 /*div, section, article, aside, header, footer, main, nav, canvas, button {
     box-shadow: 0 0 0 1px red;

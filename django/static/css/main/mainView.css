@@ -92,22 +92,7 @@ main section {
     font-size: 24px; /* modificable */
   }
   
-/* ############ */
-/* button-green */
-/* ############ */
 
-  .button-green {
-    background-color: #7eb848; /* modificable */
-  }
-  
-  .button-green:hover {
-    background-color: #8ecf5a; /* modificable */
-    color: white; /* modificable */
-  }
-
-  .button-green:hover p {
-    color: white; /* modificable */
-  }
 
 /* ######### */
 /* Section 2 */
