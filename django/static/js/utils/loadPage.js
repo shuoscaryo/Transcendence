@@ -2,7 +2,7 @@ import Path from '/static/js/utils/Path.js';
 import * as css from '/static/js/utils/css.js';
 import Storage from '/static/js/utils/Storage.js';
 
-export default async function loadPage(pageName) {
+export default async function loadPage(pageName, view = null) {
     // Check if the input is valid (throw an error if it's not)
     if (typeof pageName !== 'string') {
         throw new Error('loadPage: The page name must be a string.');
