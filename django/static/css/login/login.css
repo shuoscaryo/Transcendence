@@ -22,9 +22,14 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 50px;
+    
+    gap: 20px;
     width: 100%;
     color: #d4d4d4;
+}
+
+#view #div-upper #div-normal-login h1 {
+    text-align: center;
 }
 
 #div-form {
@@ -33,6 +38,7 @@
     align-items: end;
     gap: 20px;
     width: 100%;
+    margin-bottom: 30px;
 }
 
 #button-forgot-password {
