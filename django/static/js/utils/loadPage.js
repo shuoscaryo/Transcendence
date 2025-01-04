@@ -9,10 +9,9 @@ const currentPage = {
 };
 
 export default async function loadPage(pageName, view = null) {
+    const divApp = document.getElementById('app');
+    const isSamePage = currentPage.name == pageName;
     try {
-        const divApp = document.getElementById('app');
-        const isSamePage = currentPage.name == pageName;
-
         // Update the URL
         //history.pushState({}, '', Path.join('/', pageName, view));
         
@@ -35,8 +34,10 @@ export default async function loadPage(pageName, view = null) {
         Object.assign(currentPage, { name: pageName, view: view, pageFile: pageFile });
     } catch (error) {
         console.error(error);
+        if (currentPage.name != pageName && currentPage.pageFile)
+            currentPage.pageFile.default(divApp, view, !isSamePage); //TODO: 404 page
         // update the url back to the previous page
         //history.pushState({}, '', Path.join('/', currentPage.name, currentPage.view));
-        throw new Error(`loadPage: The page "${pageName}" does not have a default export.`); //TODO: 404 page
+        throw new Error(`loadPage: The page "${pageName}" does not have a default export.`);
     };
 }
