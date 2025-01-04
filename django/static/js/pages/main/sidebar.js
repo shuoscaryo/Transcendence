@@ -50,7 +50,7 @@ function getLowerHalf()
     registerButton.classList.add('button-login', 'button-green');
     registerButton.textContent = 'Sign Up';
     registerButton.addEventListener('click', () => {
-        loadPage('register');
+        loadPage('login','register');
     });
     component.appendChild(registerButton);
     
