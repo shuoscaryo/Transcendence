@@ -2,24 +2,38 @@ import Path from '/static/js/utils/Path.js';
 import * as css from '/static/js/utils/css.js';
 import Storage from '/static/js/utils/Storage.js';
 
-export default async function loadPage(pageName, view = null) {
-    // Check if the input is valid (throw an error if it's not)
-    if (typeof pageName !== 'string') {
-        throw new Error('loadPage: The page name must be a string.');
-    }
-    pageName = pageName.replace(/\.js$/, ''); // Remove the .js extension
-    if (!pageName) {
-        throw new Error('loadPage: No page name was provided.');
-    }
+const currentPage = {
+    name: null,
+    view: null,
+    pageFile: null
+};
 
-    // Load the page from the pages folder
-    const pageFile = await import(Path.page(pageName, 'index.js'));
-    if (pageFile.default) {
+export default async function loadPage(pageName, view = null) {
+    try {
         const appDiv = document.getElementById('app');
-        appDiv.innerHTML = '';
-        css.deleteCss();
-        Storage.deletePageData();
-        pageFile.default();
-    } else
+        const isSamePage = currentPage.name == pageName;
+
+        // Update the URL
+        history.pushState({}, '', Path.join('/', pageName, view));
+        
+        // If is the same page clear the page, otherwise only the view
+        const clearDiv = (isSamePage ? document.getElementById('view') : appDiv);
+        if (clearDiv)
+            clearDiv.innerHTML = '';
+        if (!isSamePage) {
+            css.deletePageCss();
+            Storage.deletePageData();
+        }
+        css.deleteViewCss();
+        Storage.deleteViewData();
+        
+        let pageFile = isSamePage ? currentPage.pageFile : await import(Path.page(pageName, 'index.js'));
+        pageFile.default(appDiv, view);
+        
+        Object.assign(currentPage, { name: pageName, view: view, pageFile: pageFile });
+    } catch (error) {
+        // update the url back to the previous page
+        //history.pushState({}, '', Path.join('/', currentPage.name, currentPage.view));
         throw new Error(`loadPage: The page "${pageName}" does not have a default export.`); //TODO: 404 page
+    };
 }

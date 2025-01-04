@@ -8,9 +8,22 @@ export default class Path {
         throw new Error('Path is a static class and cannot be instantiated.');
     }
 
+    static url() {
+        // Get the current URL
+        const currentURL = new URL(window.location.href);
+
+        // Get the path segments
+        const segments = currentURL.pathname
+            .split('/')
+            .filter(segment => segment.length > 0);
+
+        return segments;
+    }
+
     /* python os.path.join() equivalent */
     static join(...segments) {
         return segments
+            .filter(segment => segment != null) // TODO check if works
             .map(segment => segment.replace(/\/+$/, ''))
             .join('/')
             .replace(/\/{2,}/g, '/');

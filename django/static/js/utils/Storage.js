@@ -61,7 +61,6 @@ export default class Storage {
 
     static deletePageData() {
         this.#storePage.clear();
-        this.#storeView.clear();
     }
 
     static deleteViewData() {
