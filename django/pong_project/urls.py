@@ -21,5 +21,6 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
+    path('favicon.ico', views.favicon, name='favicon'),
 	path('', views.index, name='index'),
 ]

@@ -90,34 +90,40 @@ function getUpperHalf() {
     return component;
 }
 
-export default async function mainPage() {
-    await css.loadPageCss([
-        Path.css("login/index.css"),
-    ]);
-    await css.loadViewCss([
-        Path.css("login/login.css"),
-    ]);
+export default async function mainPage(divApp, view, reloadPage) {
+    if (reloadPage) {
+        await css.loadPageCss([
+            Path.css("login/index.css"),
+        ]);
+        await css.loadViewCss([
+            Path.css("login/login.css"),
+        ]);
 
-    const app = document.getElementById('app');
+        const page = document.createElement('div');
+        page.id = 'page';
+        page.style.backgroundImage = `url("${Path.img('loginBackGround.png')}")`;
+        page.style.backgroundSize = "contain"; // Ajusta sin deformarse
+        page.style.backgroundRepeat = "no-repeat"; // Evita que el patrón se repita
+        page.style.backgroundPosition = "center";
+        page.style.imageRendering = "pixelated";
+        divApp.appendChild(page);
 
-    const page = document.createElement('div');
-    page.id = 'page';
-    page.style.backgroundImage = `url("${Path.img('loginBackGround.png')}")`;
-    page.style.backgroundSize = "contain"; // Ajusta sin deformarse
-    page.style.backgroundRepeat = "no-repeat"; // Evita que el patrón se repita
-    page.style.backgroundPosition = "center";
-    page.style.imageRendering = "pixelated";
-    app.appendChild(page);
-    
-    const content = document.createElement('div');
-    content.id = 'content';
-    page.appendChild(content);
-    
-    content.appendChild(getHomeButton());
+        const content = document.createElement('div');
+        content.id = 'content';
+        page.appendChild(content);
 
-    const main = document.createElement('main');
-    content.appendChild(main);
+        content.appendChild(getHomeButton());
 
+        const divSquare = document.createElement('div');
+        divSquare.id = 'div-square-container';
+        content.appendChild(divSquare);
+
+        const main = document.createElement('main');
+        main.id = 'view';
+        divSquare.appendChild(main);
+    }
+
+    const main = document.getElementById('view');
     const divUpper = getUpperHalf();
     divUpper.id = 'div-upper';
     main.appendChild(divUpper);
@@ -134,4 +140,5 @@ export default async function mainPage() {
     });
     registerButton.textContent = 'New? Sign up - and start playing pong!';
     divLower.appendChild(registerButton);
+
 }

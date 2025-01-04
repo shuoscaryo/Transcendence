@@ -1,4 +1,13 @@
-main #div-upper {
+#view {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 20px;
+    width: 100%;
+}
+
+#view #div-upper {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -9,7 +18,7 @@ main #div-upper {
     width: 100%;
 }
 
-main #div-upper #div-normal-login {
+#view #div-upper #div-normal-login {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -33,7 +42,7 @@ main #div-upper #div-normal-login {
     color: #aaaaaa;
 }
 
-main #div-upper form {
+#view #div-upper form {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -41,7 +50,7 @@ main #div-upper form {
     width: 100%;
 }
 
-main #div-upper form input {
+#view #div-upper form input {
     width: 100%;    
     height: 40px;
     padding: 10px;
@@ -50,17 +59,17 @@ main #div-upper form input {
     background-color: #444444;
 }
 
-main #div-upper form input:hover {
+#view #div-upper form input:hover {
     border: 2px solid #777777;
 }
 
-main #div-upper form input:focus  {
+#view #div-upper form input:focus  {
     outline: none;
     border: 2px solid #777777;
     box-shadow: 0 0 5px #777777;
 }
 
-main #div-upper #button-login {
+#view #div-upper #button-login {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -71,7 +80,7 @@ main #div-upper #button-login {
     font-size: 24px; /* modificable */
 }
 
-main #div-upper #div-other-login {
+#view #div-upper #div-other-login {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -79,7 +88,7 @@ main #div-upper #div-other-login {
     gap: 20px;
 }
 
-main #div-upper #div-other-login #button-fortito {
+#view #div-upper #div-other-login #button-fortito {
     display: flex;
     align-items: center;
     justify-content: left;
@@ -90,24 +99,24 @@ main #div-upper #div-other-login #button-fortito {
     background-color: #1d1d1d; /* modificable */
 }
 
-main #div-upper #div-other-login #button-fortito:hover {
+#view #div-upper #div-other-login #button-fortito:hover {
     background-color: #1a1a1a;
 }
 
-main #div-upper #div-other-login #button-fortito #div-img {
+#view #div-upper #div-other-login #button-fortito #div-img {
     justify-content: center;
     max-width: 25%; /* modificable */
     height: 100%; /* modificable */
     padding: 10px; /* modificable */
 }
 
-main #div-upper #div-other-login #button-fortito #div-img img {
+#view #div-upper #div-other-login #button-fortito #div-img img {
     width: 100%;
     height: 100%;
     object-fit: scale-down;
 }
 
-main #div-upper #div-other-login #div-text {
+#view #div-upper #div-other-login #div-text {
     display: flex;
     justify-content: center;
     flex-grow: 1;
@@ -115,7 +124,7 @@ main #div-upper #div-other-login #div-text {
     padding-right: 10px; /* modificable */
 }
 
-main #div-lower {
+#view #div-lower {
     background-color: #1a1a1a;
     width: 100%;
     display: flex;
