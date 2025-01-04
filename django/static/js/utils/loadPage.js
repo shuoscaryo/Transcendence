@@ -10,14 +10,14 @@ const currentPage = {
 
 export default async function loadPage(pageName, view = null) {
     try {
-        const appDiv = document.getElementById('app');
+        const divApp = document.getElementById('app');
         const isSamePage = currentPage.name == pageName;
 
         // Update the URL
         //history.pushState({}, '', Path.join('/', pageName, view));
         
         // If is the same page clear the page, otherwise only the view
-        const clearDiv = (isSamePage ? document.getElementById('view') : appDiv);
+        const clearDiv = (isSamePage ? document.getElementById('view') : divApp);
         if (clearDiv)
             clearDiv.innerHTML = '';
         if (!isSamePage) {
@@ -27,11 +27,14 @@ export default async function loadPage(pageName, view = null) {
         css.deleteViewCss();
         Storage.deleteViewData();
         
-        let pageFile = isSamePage ? currentPage.pageFile : await import(Path.page(pageName, 'index.js'));
-        pageFile.default(appDiv, view);
+        // Call the page function
+        const pageFile = isSamePage ? currentPage.pageFile : await import(Path.page(pageName, 'index.js'));
+        pageFile.default(divApp, view, !isSamePage);
         
+        // Update the current page
         Object.assign(currentPage, { name: pageName, view: view, pageFile: pageFile });
     } catch (error) {
+        console.error(error);
         // update the url back to the previous page
         //history.pushState({}, '', Path.join('/', currentPage.name, currentPage.view));
         throw new Error(`loadPage: The page "${pageName}" does not have a default export.`); //TODO: 404 page

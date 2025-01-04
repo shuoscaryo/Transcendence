@@ -21,15 +21,15 @@ export default class Storage {
     }
 
     static addToView(key, instance) {
-        this.#add(`view-${key}`, instance, this.#storeView);
+        this.#add(`${key}`, instance, this.#storeView);
     }
 
     static addToPage(key, instance) {
-        this.#add(`page-${key}`, instance, this.#storePage);
+        this.#add(`${key}`, instance, this.#storePage);
     }
 
     static addToApp(key, instance) {
-        this.#add(`app-${key}`, instance, this.#storeApp);
+        this.#add(`${key}`, instance, this.#storeApp);
     }
 
     static get(key) {

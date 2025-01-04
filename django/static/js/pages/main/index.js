@@ -1,32 +1,40 @@
 import Path from '/static/js/utils/Path.js';
 import getSidebar from './sidebar.js';
-import getContent from './homeContent.js';
-import getFooter from './footer.js';
 import * as css from '/static/js/utils/css.js';
 
+let currentView = null;
+
+async function getContent(view) {
+    if (view == null)
+        view = "home";
+    const pageFile = view == currentView ? currentView : await import(Path.join('./views', `${view}.js`));
+    const content = await pageFile.default();
+    return content;
+}
+
 // Loads the page content and styles
-export default async function mainPage() {
-    await css.loadPageCss([
-        Path.css('main/main.css'),
-    ]);
-    await css.loadViewCss([
-        Path.css('main/sidebar.css'),
-        Path.css('main/mainView.css'),
-    ]);
-    const app = document.getElementById('app');
+export default async function mainPage(divApp, view, reloadPage) {
+    if (reloadPage) {
+        await css.loadPageCss([
+            Path.css('main/main.css'),
+            Path.css('main/sidebar.css'),
+        ]);
 
-    const page = document.createElement('div');
-    page.id = 'page';
-    app.appendChild(page);
+        const page = document.createElement('div');
+        page.id = 'page';
+        divApp.appendChild(page);
     
-    page.appendChild(getSidebar());
+        page.appendChild(getSidebar());
 
-    const content = document.createElement('div');
-    content.id = 'content';
-    page.appendChild(content);
-    
-    content.appendChild(getContent());
+        const content = document.createElement('div');
+        content.id = 'content';
+        page.appendChild(content);
 
-    const footer = getFooter();
-    content.appendChild(footer);
+        const main = document.createElement('main');
+        main.id = 'view';
+        content.appendChild(main);
+    }
+    const divView = document.getElementById('view');
+    const newView = await getContent(view);
+    divView.replaceChildren(...newView.children);
 }

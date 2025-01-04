@@ -1,8 +1,9 @@
-import getSectionButton from './sectionButton.js';
+import getSectionButton from '../sectionButton.js';
 import PongGame from '/static/js/utils/PongGame.js';
 import { DemoAI } from '/static/js/utils/Controller.js';
 import Storage from '/static/js/utils/Storage.js';
 import Path from '/static/js/utils/Path.js';
+import * as css from '/static/js/utils/css.js';
 
 function getSection1() {
     const section = document.createElement('section');
@@ -98,11 +99,25 @@ function getSection2() {
     return container;
 }
 
-export default function getContent() {
+function getFooter() {
+    const component = document.createElement('footer');
+    component.textContent = 'Footer with github link and 42 link and stuff';
+    return component;
+}
+
+export default async function getContent() {
+    await css.loadViewCss([
+        Path.css('main/mainView.css'),
+    ]);
+
     const main = document.createElement('main');
 
-    main.appendChild(getSection1());
-    main.appendChild(getSection2());
+    const divSections = document.createElement('div');
+    divSections.id = 'div-sections';
+    main.appendChild(divSections);
+    divSections.appendChild(getSection1());
+    divSections.appendChild(getSection2());
+    main.appendChild(getFooter());
 
     return main;
 }

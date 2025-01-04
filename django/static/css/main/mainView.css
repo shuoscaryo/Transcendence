@@ -1,7 +1,10 @@
 main {
   display: flex;
   flex-direction: column;
-  gap: 50px; /* modificable */
+  align-items: center;
+  justify-content: space-between;
+  height: 100vh;
+  gap: 20px; /* modificable */
   padding: 10px; /* modificable */
 }
 
@@ -16,6 +19,11 @@ main section {
   gap: 50px; /* modificable */
 }
 
+#div-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 50px; /* modificable */
+}
 
 /* ######### */
 /* section 1 */
