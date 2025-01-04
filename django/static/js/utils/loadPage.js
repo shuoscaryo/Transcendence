@@ -14,7 +14,7 @@ export default async function loadPage(pageName, view = null) {
         const isSamePage = currentPage.name == pageName;
 
         // Update the URL
-        history.pushState({}, '', Path.join('/', pageName, view));
+        //history.pushState({}, '', Path.join('/', pageName, view));
         
         // If is the same page clear the page, otherwise only the view
         const clearDiv = (isSamePage ? document.getElementById('view') : appDiv);
