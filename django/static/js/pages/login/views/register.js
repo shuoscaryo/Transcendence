@@ -13,7 +13,7 @@ function getOtherLogin() {
     const fortitoButton = document.createElement('button');
     fortitoButton.id = 'button-fortito';
     fortitoButton.addEventListener('click', () => {
-        loadPage('main');
+        loadPage('main','home');
     });
     component.appendChild(fortitoButton);
 
@@ -86,7 +86,7 @@ function getUpperHalf() {
     loginButton.id = 'button-login';
     loginButton.textContent = 'Sign Up';
     loginButton.addEventListener('click', () => {
-        loadPage('main');
+        loadPage('main','home');
     });
     divNormalLogin.appendChild(loginButton);
 
@@ -97,9 +97,9 @@ function getUpperHalf() {
     return component;
 }
 
-export default async function login() {
+export default async function getView() {
     await css.loadViewCss([
-        Path.css("login/login.css"),
+        Path.css("login/register.css"),
     ]);
 
     const main = document.createElement('main');

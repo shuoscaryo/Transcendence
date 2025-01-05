@@ -58,7 +58,7 @@ function getLowerHalf()
     loginButton.classList.add('button-login', 'button-gray');
     loginButton.textContent = 'Log In';
     loginButton.addEventListener('click', () => {
-        loadPage('login');
+        loadPage('login','login');
     });
     component.appendChild(loginButton);
 

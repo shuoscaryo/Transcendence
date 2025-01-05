@@ -105,7 +105,7 @@ function getFooter() {
     return component;
 }
 
-export default async function getContent() {
+export default async function getView() {
     await css.loadViewCss([
         Path.css('main/mainView.css'),
     ]);

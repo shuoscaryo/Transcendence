@@ -232,7 +232,7 @@ backToMainSingle.addEventListener('click', () => {
 // TEST LOGIN SCREEN
 
 loginButton.addEventListener('click', () => {
-	loadPage('login');
+	loadPage('login','login');
 	Object.values(SCREENS).forEach(section => {section.style.display = 'none';});
     SCREENS.loginScreen.style.display = 'block';
 });
