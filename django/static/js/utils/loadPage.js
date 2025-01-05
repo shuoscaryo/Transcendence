@@ -10,6 +10,9 @@ const current = {
 };
 
 export default async function loadPage(pageName, view) {
+    if (!pageName || !view)
+        throw new Error('loadPage: The pageName and view parameters are required.');
+
     const divApp = document.getElementById('app');
     const isSamePage = current.name == pageName;
     try {
