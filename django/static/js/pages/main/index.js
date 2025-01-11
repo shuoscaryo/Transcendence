@@ -1,14 +1,11 @@
 import Path from '/static/js/utils/Path.js';
 import getSidebar from './sidebar.js';
-import * as css from '/static/js/utils/css.js';
 
-export default async function mainPage() {
-    await css.loadPageCss([
+export default async function getPage(component, loadCssFunction) {
+    await loadCssFunction([
         Path.css('main/main.css'),
         Path.css('main/sidebar.css'),
     ]);
-
-    const component = document.createElement('div');
 
     const page = document.createElement('div');
     page.id = 'page';
@@ -23,6 +20,4 @@ export default async function mainPage() {
     const main = document.createElement('main');
     main.id = 'view';
     content.appendChild(main);
-
-    return component;
 }

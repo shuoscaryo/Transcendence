@@ -3,7 +3,7 @@ import PongGame from '/static/js/utils/PongGame.js';
 import { DemoAI } from '/static/js/utils/Controller.js';
 import Storage from '/static/js/utils/Storage.js';
 import Path from '/static/js/utils/Path.js';
-import * as css from '/static/js/utils/css.js';
+import loadPage from '/static/js/utils/loadPage.js';
 
 function getSection1() {
     const section = document.createElement('section');
@@ -40,7 +40,8 @@ function getSection1() {
         Path.img('playLogo.png'),
         'Versus Mode',
         'Play against a friend',
-        () => {});
+        () => { loadPage("home", "game");}
+    );
     buttonPlayVersus.classList.add('button-green');
     divButtons.appendChild(buttonPlayVersus);
 
@@ -105,19 +106,15 @@ function getFooter() {
     return component;
 }
 
-export default async function getView() {
-    await css.loadViewCss([
+export default async function getView(component, loadCssFunction) {
+    await loadCssFunction([
         Path.css('main/mainView.css'),
     ]);
 
-    const main = document.createElement('main');
-
     const divSections = document.createElement('div');
     divSections.id = 'div-sections';
-    main.appendChild(divSections);
+    component.appendChild(divSections);
     divSections.appendChild(getSection1());
     divSections.appendChild(getSection2());
-    main.appendChild(getFooter());
-
-    return main;
+    component.appendChild(getFooter());
 }

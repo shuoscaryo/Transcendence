@@ -5,11 +5,12 @@ import Storage from '/static/js/utils/Storage.js';
 const current = {
     name: null,
     view: null,
+    data: null,
     pageFile: null,
     viewFile: null
 };
 
-export default async function loadPage(pageName, view) {
+export default async function loadPage(pageName, view = null, data = null) {
     if (!pageName || !view)
         throw new Error('loadPage: The pageName and view parameters are required.');
 
@@ -32,29 +33,29 @@ export default async function loadPage(pageName, view) {
         
         // Replace the page frame if needed
         const pageFile = isSamePage ? current.pageFile : await import(Path.page(pageName, 'index.js'));
-        if (!isSamePage) {
-            const newPage = await pageFile.default();
-            divApp.replaceChildren(...newPage.children);
-        }
+        if (!isSamePage)
+            await pageFile.default(divApp, css.loadPageCss, data);
         // Replace the view if needed
-        const divView = document.getElementById('view');
         let viewFile = null;
-        if (divView) {
-            viewFile = current.view == view
-                ? current.viewFile
-                : await import(Path.join(
-                    '/', Path.page(pageName), 'views', `${view}.js`));
+        if (view) {
+            const divView = document.getElementById('view');
+            if (divView) {
+                viewFile = current.view == view
+                    ? current.viewFile
+                    : await import(Path.join(
+                        '/', Path.page(pageName), 'views', `${view}.js`));
 
-            const newView = await viewFile.default();
-            divView.replaceChildren(...newView.children);
+                await viewFile.default(divView, css.loadViewCss, data);
+            }
         }
-        
         // Update the current page
-        Object.assign(current, { name: pageName, view: view, pageFile: pageFile, viewFile: viewFile });
+        Object.assign(current, { name: pageName, view: view, data: data, pageFile: pageFile, viewFile: viewFile });
     } catch (error) {
         console.error(error);
         if (current.name != pageName && current.pageFile)
-            current.pageFile.default(divApp, view, !isSamePage); //TODO: 404 page
+            await current.pageFile.default(divApp, css.loadPageCss, current.data); //TODO: 404 page
+        if (current.view != view && current.viewFile && view)
+            await current.viewFile.default(document.getElementById('view'), css.loadViewCss, current.data); //TODO: 404 view
         // update the url back to the previous page
         //history.pushState({}, '', Path.join('/', current.name, current.view));
         throw new Error(`loadPage: The page "${pageName}" does not have a default export.`);

@@ -97,28 +97,25 @@ function getUpperHalf() {
     return component;
 }
 
-export default async function getView() {
-    await css.loadViewCss([
+export default async function getView(component, loadCssFunction) {
+    await loadCssFunction([
         Path.css("login/register.css"),
     ]);
 
-    const main = document.createElement('main');
     const divUpper = getUpperHalf();
     divUpper.id = 'div-upper';
-    main.appendChild(divUpper);
+    component.appendChild(divUpper);
 
     /* The text for register */
     const divLower = document.createElement('div');
     divLower.id = 'div-lower';
-    main.appendChild(divLower);
+    component.appendChild(divLower);
 
     const registerButton = document.createElement('button');
     registerButton.id = 'button-register';
     registerButton.addEventListener('click', () => {
         loadPage('login','login');
     });
-    registerButton.textContent = 'Log In';
+    registerButton.textContent = 'Already have an account? Log in';
     divLower.appendChild(registerButton);
-
-    return main;
 }
