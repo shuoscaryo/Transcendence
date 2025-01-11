@@ -142,6 +142,8 @@ export default class PongGame
 
         this.controller1 = null;
         this.controller2 = null;
+
+        this.reset();
     }
 
     #update(dt)

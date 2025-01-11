@@ -4,6 +4,7 @@ import { DemoAI } from '/static/js/utils/Controller.js';
 import Storage from '/static/js/utils/Storage.js';
 import Path from '/static/js/utils/Path.js';
 import loadPage from '/static/js/utils/loadPage.js';
+import { PlayerController, PongAI } from '/static/js/utils/Controller.js';
 
 function getSection1() {
     const section = document.createElement('section');
@@ -40,7 +41,7 @@ function getSection1() {
         Path.img('playLogo.png'),
         'Versus Mode',
         'Play against a friend',
-        () => { loadPage("home", "game");}
+        () => { loadPage("main", "game", {controllerLeft: PlayerController, controllerRight: PongAI});}
     );
     buttonPlayVersus.classList.add('button-green');
     divButtons.appendChild(buttonPlayVersus);

@@ -48,7 +48,7 @@ p {
 
 
 /* style for showing borders erase it when page is finished*/
-/*div, section, article, aside, header, footer, main, nav, canvas, button {
+div, section, article, aside, header, footer, main, nav, canvas, button {
     box-shadow: 0 0 0 1px red;
     position: relative;
-}*/
+}
