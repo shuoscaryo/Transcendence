@@ -120,10 +120,23 @@ export default class PongGame
         this.leftPaddle = new Paddle(canvas);
         this.rightPaddle = new Paddle(canvas);
 
+        this.#init();
+        this.player1Name = null;
+        this.player2Name = null;
+        this.maxScore = 5;
+        this.controllerLeft = null;
+        this.controllerRight = null;
+
+        this.reset();
+    }
+
+    #init()
+    {
         this.leftPaddle.pos.x = 20;
         this.rightPaddle.pos.x = this.canvas.width - 20 - this.rightPaddle.width;
         this.rightPaddle.pos.y = this.canvas.height / 2 - this.rightPaddle.height / 2;
         this.leftPaddle.pos.y = this.canvas.height / 2 - this.leftPaddle.height / 2;
+
         const ratio = 0.2;
         this.leftPaddle.height = ratio * this.canvas.height;
         this.leftPaddle.moveSpeed = this.canvas.height;
@@ -134,24 +147,16 @@ export default class PongGame
         this.ball.pos.x = this.canvas.width / 2;
         this.ball.pos.y = this.canvas.height / 2;
 
-        this.player1Name = null;
-        this.player2Name = null;
         this.player1Score = 0;
         this.player2Score = 0;
-        this.maxScore = 5;
-
-        this.controller1 = null;
-        this.controller2 = null;
-
-        this.reset();
     }
 
     #update(dt)
     {
-        if (this.controller1)
-            this.leftPaddle.move(this.controller1.getMove());
-        if (this.controller2)
-            this.rightPaddle.move(this.controller2.getMove());
+        if (this.controllerLeft)
+            this.leftPaddle.move(this.controllerLeft.getMove("left", this.getState()));
+        if (this.controllerRight)
+            this.rightPaddle.move(this.controllerRight.getMove("right", this.getState()));
 
         // 1. Actualizar posiciones
         this.ball.update(dt);
@@ -245,13 +250,7 @@ export default class PongGame
     reset()
     {
         this.stop();
-        this.ball.pos.x = this.canvas.width / 2;
-        this.ball.pos.y = this.canvas.height / 2;
-        this.ball.speed.setPolar(200, Math.PI / 4);
-        this.leftPaddle.pos.y = this.canvas.height / 2 - this.leftPaddle.height / 2;
-        this.rightPaddle.pos.y = this.canvas.height / 2 - this.rightPaddle.height / 2;
-        this.player1Score = 0;
-        this.player2Score = 0;
+        this.#init();
         this.#draw();
     }
     
@@ -265,11 +264,13 @@ export default class PongGame
             leftPaddle: {
                 pos: this.leftPaddle.pos,
                 speed: this.leftPaddle.speed,
+                moveSpeed: this.leftPaddle.moveSpeed,
                 height: this.leftPaddle.height
             },
             rightPaddle: {
                 pos: this.rightPaddle.pos,
                 speed: this.rightPaddle.speed,
+                moveSpeed: this.rightPaddle.moveSpeed,
                 height: this.rightPaddle.height
             },
             canvas: {

@@ -1,5 +1,6 @@
 import Path from "/static/js/utils/Path.js";
 import PongGame from "/static/js/utils/PongGame.js";
+import Storage from "/static/js/utils/Storage.js";
 
 export default async function getView(component, loadCssFunction, data) {
     await loadCssFunction([
@@ -21,8 +22,9 @@ export default async function getView(component, loadCssFunction, data) {
     component.appendChild(canvas);
 
     const pong = new PongGame(canvas);
-    pong.controller1 = new data.controllerLeft(pong.leftPaddle, pong.getState.bind(pong));
-    pong.controller2 = new data.controllerRight(pong.rightPaddle, pong.getState.bind(pong));
+    pong.controllerLeft = data.controllerLeft;
+    pong.controllerRight = data.controllerRight;
+    Storage.addToView('pong', pong);
 
     const buttonsDiv = document.createElement('div');
     buttonsDiv.id = 'div-buttons';

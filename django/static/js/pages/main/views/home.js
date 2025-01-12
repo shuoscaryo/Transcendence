@@ -19,8 +19,8 @@ function getSection1() {
     canvas.width = 600;
     canvas.height = 400;
     const pong = new PongGame(canvas);
-    pong.controller1 = new DemoAI(pong.leftPaddle, pong.getState.bind(pong));
-    pong.controller2 = new DemoAI(pong.rightPaddle, pong.getState.bind(pong));
+    pong.controllerLeft = new DemoAI();
+    pong.controllerRight = new DemoAI();
     pong.start();
     Storage.addToView("pong", pong);
     divCanvas.appendChild(canvas);
@@ -41,7 +41,10 @@ function getSection1() {
         Path.img('playLogo.png'),
         'Versus Mode',
         'Play against a friend',
-        () => { loadPage("main", "game", {controllerLeft: PlayerController, controllerRight: PongAI});}
+        () => { loadPage("main", "game", {
+            controllerLeft: new PlayerController("w", "s"),
+            controllerRight: new PlayerController("ArrowUp","ArrowDown")
+        });}
     );
     buttonPlayVersus.classList.add('button-green');
     divButtons.appendChild(buttonPlayVersus);
@@ -85,7 +88,10 @@ function getSection2() {
         Path.img('AILogo.png'),
         'Play vs Bots',
         'Play against our AI',
-        () => {});
+        () => { loadPage("main", "game", {
+            controllerLeft: new PlayerController("w", "s"),
+            controllerRight: new PongAI()
+        });});
     button.classList.add('button-green');
     button.id = 'button-play-ai';
     div.appendChild(button);
