@@ -64,7 +64,7 @@ export class PongAI extends Controller {
 	 */
 	getMove(paddleID, params) {		
 		const now = performance.now() / 1000; // milliseconds
-		const margin = 0.0; // How far the paddle can be from the target position
+		const margin = 1.0; // How far the paddle can be from the target position
 		const dt = this.#lastTickTime ? now - this.#lastTickTime : 0;
 		this.#lastTickTime = now;
 
@@ -93,7 +93,7 @@ export class PongAI extends Controller {
 
 		if (isNaN(this.#targetPos))
 			this.#result = 0;
-		else if (Math.abs(this.#paddle.pos.y - this.#targetPos) < this.#paddle.moveSpeed * margin)
+		else if (Math.abs(this.#paddle.pos.y - this.#targetPos) < this.#paddle.moveSpeed * dt * margin)
 			this.#result =  0;
 		else if (this.#paddle.pos.y > this.#targetPos)
 			this.#result = -1;
