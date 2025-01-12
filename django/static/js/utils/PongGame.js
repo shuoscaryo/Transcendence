@@ -158,15 +158,12 @@ export default class PongGame
         if (this.controllerRight)
             this.rightPaddle.move(this.controllerRight.getMove("right", this.getState()));
 
-        // 1. Actualizar posiciones
         this.ball.update(dt);
         this.leftPaddle.update(dt);
         this.rightPaddle.update(dt);
 
-        // 2. Detectar y manejar colisiones
         this.#checkCollisions();
 
-        // 3. Dibujar
         this.#draw();
     }
 
