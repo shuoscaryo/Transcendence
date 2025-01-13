@@ -58,6 +58,5 @@ export default async function loadPage(pageName, view = null, data = null) {
             await current.viewFile.default(document.getElementById('view'), css.loadViewCss, current.data); //TODO: 404 view
         // update the url back to the previous page
         //history.pushState({}, '', Path.join('/', current.name, current.view));
-        throw new Error(`loadPage: The page "${pageName}" does not have a default export.`);
     };
 }

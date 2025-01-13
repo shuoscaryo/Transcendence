@@ -130,6 +130,10 @@ export default class PongGame
         this.reset();
     }
 
+    destructor() {
+        this.stop();
+    }
+
     #init()
     {
         this.leftPaddle.pos.x = 20;

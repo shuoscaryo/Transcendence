@@ -53,7 +53,7 @@ function getSection1() {
         Path.img('tournamentLogo.png'),
         'Tournament',
         'Create a tournament to play with friends',
-        () => {});
+        () => {loadPage("main", "tournament");});
     buttonPlayTournament.id = 'button-play-tournament';
     divButtons.appendChild(buttonPlayTournament);
 
