@@ -1,0 +1,39 @@
+.tournament {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+    gap: 50px;
+}
+
+.tournament .round {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 50px;
+    width: 100%;
+}
+
+.tournament .round .match-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+    min-width: 100px;
+    height: 100px;
+}
+
+.tournament .round .match-box.active-match {
+    background-color: #111111;
+}
+
+.tournament .round #winner {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
