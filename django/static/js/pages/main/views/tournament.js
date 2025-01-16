@@ -21,6 +21,15 @@ class Tournament {
             this.matchBoxes[0][i] = shuffledPlayers[j];
             j++;
         }
+
+        // Skip the first match if it's the null one
+        if (this.matchBoxes[0]?.[0] === null)
+            this.setMatchResult(1);
+        if (this.matchBoxes[0]?.[1] === null)
+            this.setMatchResult(0);
+    }
+
+    getPlayers() {
     }
     
     setMatchResult(winner) { // winner = 0 or 1 (0 = left player, 1 = right player)
@@ -187,7 +196,7 @@ function loadFormView(component) {
     const buttonNext = document.createElement('button');
     buttonNext.textContent = 'Next';
     buttonNext.addEventListener('click', () => {
-        let players = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17];
+        let players = [1,2,3];
         //if (players.size < 2) {
         //    alert('Debes añadir al menos 2 jugadores.');
         //    return;
