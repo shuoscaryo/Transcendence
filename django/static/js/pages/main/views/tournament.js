@@ -7,17 +7,19 @@ class Tournament {
     }
 
     init(players) {
-        this.players = this.#shuffle(players);
-        this.#createMatchBoxes();
+        const shuffledPlayers = this.#shuffle(players);
+        this.#createMatchBoxes(shuffledPlayers.length);
         this.match = 0;
         this.round = 0;
         this.over = false;
 
         // Fill the first round with players
-        if (this.players.length % 2 != 0)
-            this.players = this.#addNullPlayer(this.players);
+        let j = 0;
         for (let i = 0; i < this.matchBoxes[0].length; i++) {
-            this.matchBoxes[0][i] = [this.players[2 * i], this.players[2 * i + 1]];
+            if (this.matchBoxes[0][i] === null)
+                continue;
+            this.matchBoxes[0][i] = shuffledPlayers[j];
+            j++;
         }
     }
     
@@ -26,9 +28,14 @@ class Tournament {
             return;
         
         // Write the winner on the next match box
-        this.matchBoxes[this.round + 1][Math.floor(this.match / 2)][this.match % 2] = this.matchBoxes[this.round][this.match][winner];
-        this.match += 1;
-        if (this.match == this.matchBoxes[this.round].length) {
+        for (let i = 0; i < this.matchBoxes[this.round + 1].length; i++) {
+            if (this.matchBoxes[this.round + 1][i] === undefined) {
+                this.matchBoxes[this.round + 1][i] = this.matchBoxes[this.round][this.match + winner];
+                break;
+            }
+        }
+        this.match += 2;
+        if (this.match >= this.matchBoxes[this.round].length) {
             this.match = 0;
             this.round += 1;
         }
@@ -39,8 +46,10 @@ class Tournament {
         }
 
         // Call this function again if the next match doesn't have both players
-        if (this.matchBoxes[this.round][this.match].some(player => player == null))
-            this.setMatchResult(this.matchBoxes[this.round][this.match][0] == null ? 1 : 0);
+        if (this.matchBoxes[this.round][this.match] === null)
+            this.setMatchResult(1);
+        else if (this.matchBoxes[this.round][this.match + 1] === null)
+            this.setMatchResult(0);
     }
 
     #shuffle(array) {
@@ -58,19 +67,18 @@ class Tournament {
         return array
     }
 
-    #createMatchBoxes() {
+    #createMatchBoxes(numPlayers) {
         this.matchBoxes = [];
-        const len = this.players.length;
         
-        if (len == 0)
+        if (numPlayers == 0)
             return;
         
-        const totalRounds = Math.ceil(Math.log2(len)) + 1;
+        const totalRounds = Math.ceil(Math.log2(numPlayers)) + 1;
         for (let i = 0; i < totalRounds; i++) {
-            this.matchBoxes.push([]);
-            const numBoxes = Math.ceil(len / 2 ** (i + 1));
-            for (let j = 0; j < numBoxes; j++)
-                this.matchBoxes[i].push([null, null]);
+            const roundPlayers = Math.ceil(numPlayers / 2 ** i);
+            this.matchBoxes.push(Array(roundPlayers).fill(undefined));
+            if (roundPlayers % 2 != 0)
+                this.matchBoxes[i] = this.#addNullPlayer(this.matchBoxes[i]);
         }
     }
 
@@ -78,6 +86,7 @@ class Tournament {
         const component = document.createElement('div');
         component.classList.add('tournament');
 
+        console.log(this.matchBoxes);
         const roundDiv = document.createElement('div');
         roundDiv.classList.add('round');
         component.appendChild(roundDiv);
@@ -98,7 +107,7 @@ class Tournament {
         winnerDiv.appendChild(matchBox);
         
         const matchBoxContent = document.createElement('p');
-        matchBoxContent.textContent = this.matchBoxes[this.matchBoxes.length - 1][0][0] || this.matchBoxes[this.matchBoxes.length - 1][0][1] || '-';
+        matchBoxContent.textContent = this.matchBoxes[this.matchBoxes.length - 1][0] || this.matchBoxes[this.matchBoxes.length - 1][1] || '-';
         matchBox.appendChild(matchBoxContent);
 
         for (let i = this.matchBoxes.length - 2; i >= 0;  i--) {
@@ -106,17 +115,16 @@ class Tournament {
             roundDiv.classList.add('round');
             component.appendChild(roundDiv);
 
-            for (let j = 0; j < this.matchBoxes[i].length; j++) {
+            for (let j = 0; j < this.matchBoxes[i].length; j += 2) {
                 const matchBox = document.createElement('div');
                 matchBox.classList.add('match-box');
-                console.log (i, j, this.round, this.match);
                 if (i == this.round && j == this.match)
                     matchBox.classList.add('active-match');
                 roundDiv.appendChild(matchBox);
 
                 const matchBoxContent = document.createElement('p');
-                const p1 = this.matchBoxes[i][j][0];
-                const p2 = this.matchBoxes[i][j][1];
+                const p1 = this.matchBoxes[i][j];
+                const p2 = this.matchBoxes[i][j + 1];
                 if (p1 != null && p2 != null)
                     matchBoxContent.textContent = `${p1} vs ${p2}`;
                 else if (p1 != null)
@@ -179,7 +187,7 @@ function loadFormView(component) {
     const buttonNext = document.createElement('button');
     buttonNext.textContent = 'Next';
     buttonNext.addEventListener('click', () => {
-        let players = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
+        let players = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17];
         //if (players.size < 2) {
         //    alert('Debes añadir al menos 2 jugadores.');
         //    return;
