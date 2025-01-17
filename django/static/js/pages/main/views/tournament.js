@@ -29,7 +29,8 @@ class Tournament {
             this.setMatchResult(0);
     }
 
-    getPlayers() {
+    getMatchPlayers() {
+        return [this.matchBoxes[this.round][this.match], this.matchBoxes[this.round][this.match + 1]];
     }
     
     setMatchResult(winner) { // winner = 0 or 1 (0 = left player, 1 = right player)
@@ -95,7 +96,6 @@ class Tournament {
         const component = document.createElement('div');
         component.classList.add('tournament');
 
-        console.log(this.matchBoxes);
         const roundDiv = document.createElement('div');
         roundDiv.classList.add('round');
         component.appendChild(roundDiv);
@@ -196,11 +196,10 @@ function loadFormView(component) {
     const buttonNext = document.createElement('button');
     buttonNext.textContent = 'Next';
     buttonNext.addEventListener('click', () => {
-        let players = [1,2,3];
-        //if (players.size < 2) {
-        //    alert('Debes añadir al menos 2 jugadores.');
-        //    return;
-        //}
+        if (players.size < 2) {
+            alert('Debes añadir al menos 2 jugadores.');
+            return;
+        }
         tournament.init(players);
         component.innerHTML = '';
         loadMatchesView(component);
@@ -226,7 +225,7 @@ function loadMatchesView(component) {
     buttonNext.textContent = 'Start tournament';
     buttonNext.addEventListener('click', () => {
         component.innerHTML = '';
-        loadGameView(component, matches[0]);
+        loadGameView(component);
     });
     component.appendChild(buttonNext);
 
@@ -247,11 +246,15 @@ function loadMatchesView(component) {
     component.appendChild(buttonTest1);
 }
 
-function loadGameView(component, players) {
+function loadGameView(component) {
     const gameContainer = document.createElement('div');
+    const players = tournament.getMatchPlayers();
     const game = createPongGameComponent({
         controllerLeft: new PlayerController("w", "s"),
         controllerRight: new PlayerController("ArrowUp", "ArrowDown"),
+        playerLeft: players[0],
+        playerRight: players[1],
+        scoreLimit: 1,
     });
 
     gameContainer.appendChild(game);

@@ -23,8 +23,10 @@ export default function createPongGameComponent(data) {
     component.appendChild(canvas);
 
     const pong = new PongGame(canvas);
-    pong.controllerLeft = data.controllerLeft;
-    pong.controllerRight = data.controllerRight;
+    pong.playerLeft.controller = data.controllerLeft;
+    pong.playerRight.controller = data.controllerRight;
+    pong.onGoal = (game) => {console.log(game.playerLeft.score, game.playerRight.score);};
+    pong.onGameEnd = (game) => {console.log('Game Over!');};
     Storage.addToView('pong', pong);
 
     // Create control buttons

@@ -109,6 +109,14 @@ class Paddle extends movingObject
     }
 }
 
+class Player {
+    constructor() {
+        this.name = null;
+        this.score = 0;
+        this.controller = null;
+    }
+}
+
 export default class PongGame
 {
     constructor(canvas)
@@ -120,22 +128,24 @@ export default class PongGame
         this.leftPaddle = new Paddle(canvas);
         this.rightPaddle = new Paddle(canvas);
 
-        this.#init();
-        this.player1Name = null;
-        this.player2Name = null;
-        this.maxScore = 5;
-        this.controllerLeft = null;
-        this.controllerRight = null;
-
-        this.reset();
+        this.playerLeft = new Player();
+        this.playerRight = new Player();
+        this.playerLeft.score = 0;
+        this.playerRight.score = 0;
+        this.maxScore = 1;
+        
+        this.onGameEnd = null;
+        this.onGoal = null;
+        
+        this.#startPosition();
+        this.#draw();
     }
 
     destructor() {
         this.stop();
     }
 
-    #init()
-    {
+    #startPosition() {
         this.leftPaddle.pos.x = 20;
         this.rightPaddle.pos.x = this.canvas.width - 20 - this.rightPaddle.width;
         this.rightPaddle.pos.y = this.canvas.height / 2 - this.rightPaddle.height / 2;
@@ -150,25 +160,88 @@ export default class PongGame
         this.ball.speed.setPolar(this.canvas.height, Math.PI / 4);
         this.ball.pos.x = this.canvas.width / 2;
         this.ball.pos.y = this.canvas.height / 2;
-
-        this.player1Score = 0;
-        this.player2Score = 0;
     }
 
-    #update(dt)
-    {
-        if (this.controllerLeft)
-            this.leftPaddle.move(this.controllerLeft.getMove("left", this.getState()));
-        if (this.controllerRight)
-            this.rightPaddle.move(this.controllerRight.getMove("right", this.getState()));
+    #update(dt) {
+        // Each state has its own update method
+        // If no method is found, it skips the update and the state change has to be done manually
+        const methodName = `update${this.state}`;
+        const methodInitName = methodName + "Init";
+
+        if (this.lastState !== this.state) {
+            this.lastState = this.state;
+            if (typeof this[methodInitName] === "function")
+                this[methodInitName]();
+        }
+
+        if (typeof this[methodName] === "function")
+            this[methodName](dt);
+    }
+
+    // Don't use outside of #update
+    updatePlaying(dt) {
+
+        if (this.playerLeft.controller)
+            this.leftPaddle.move(this.playerLeft.controller.getMove("left", this.getState()));
+        if (this.playerRight.controller)
+            this.rightPaddle.move(this.playerRight.controller.getMove("right", this.getState()));
 
         this.ball.update(dt);
         this.leftPaddle.update(dt);
         this.rightPaddle.update(dt);
-
         this.#checkCollisions();
-
         this.#draw();
+
+        // Check goal
+        if (this.ball.pos.x - this.ball.size < 0) {
+            this.playerRight.score++;
+            if (this.onGoal)
+                this.onGoal(this);
+            this.state = "Goal";
+            return;
+        }
+        if (this.ball.pos.x > this.canvas.width) {
+            this.playerLeft.score++;
+            if (this.onGoal)
+                this.onGoal(this);
+            this.state = "Goal";
+            return;
+        }
+    }
+
+    // Don't use outside of #update
+    updateGoalInit() {
+        this.goalTimer = performance.now() / 1000;
+    }
+
+    // Don't use outside of #update
+    updateGoal(dt) {
+        const now = performance.now() / 1000;
+
+        if (this.playerLeft.controller)
+            this.leftPaddle.move(this.playerLeft.controller.getMove("left", this.getState()));
+        if (this.playerRight.controller)
+            this.rightPaddle.move(this.playerRight.controller.getMove("right", this.getState()));
+        this.leftPaddle.update(dt);
+        this.rightPaddle.update(dt);
+        this.#checkCollisions();
+        this.#draw();
+
+        if (now - this.goalTimer > 1) {
+            if (this.playerLeft.score >= this.maxScore || this.playerRight.score >= this.maxScore) {
+                this.state = "End";
+                return;
+            }
+            this.#startPosition();
+            this.state = "Playing";
+        }
+    }
+
+    // Don't use outside of #update
+    updateEnd(dt) {
+        this.stop();
+        if (this.onGameEnd)
+            this.onGameEnd(this);
     }
 
     #draw()
@@ -225,15 +298,22 @@ export default class PongGame
     {
         if (this.animationFrameId)
             return;
+        if (this.state === "End")
+            this.reset();
+        if (this.state == undefined)
+            this.state = "Playing";
         this.lastTime = undefined;
         const gameLoop = (timestamp) => {
             if (!this.lastTime)
                 this.lastTime = timestamp;
+
             const dt = (timestamp - this.lastTime) / 1000;
             this.lastTime = timestamp;
 
             this.#update(dt);
-            this.animationFrameId = requestAnimationFrame(gameLoop);
+            // If the loop hasn't been stopped, request another frame
+            if (this.animationFrameId)
+                this.animationFrameId = requestAnimationFrame(gameLoop);
         };
 
         this.animationFrameId = requestAnimationFrame(gameLoop);
@@ -251,7 +331,10 @@ export default class PongGame
     reset()
     {
         this.stop();
-        this.#init();
+        this.#startPosition();
+        this.playerLeft.score = 0;
+        this.playerRight.score = 0;
+        this.state = "Playing";
         this.#draw();
     }
     
@@ -279,8 +362,14 @@ export default class PongGame
                 height: this.canvas.height,
                 paddleOffset: 20
             },
-            player1Score: this.player1Score,
-            player2Score: this.player2Score
+            playerLeft: {
+                name: this.playerLeft.name,
+                score: this.playerLeft.score
+            },
+            playerRight: {
+                name: this.playerRight.name,
+                score: this.playerRight.score
+            }
         }
     }
 }

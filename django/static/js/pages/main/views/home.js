@@ -19,8 +19,8 @@ function getSection1() {
     canvas.width = 600;
     canvas.height = 400;
     const pong = new PongGame(canvas);
-    pong.controllerLeft = new DemoAI();
-    pong.controllerRight = new DemoAI();
+    pong.playerLeft.controller = new DemoAI();
+    pong.playerRight.controller = new DemoAI();
     pong.start();
     Storage.addToView("pong", pong);
     divCanvas.appendChild(canvas);
