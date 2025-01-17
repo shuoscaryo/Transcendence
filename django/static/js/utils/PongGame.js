@@ -193,7 +193,7 @@ export default class PongGame
         this.#draw();
 
         // Check goal
-        if (this.ball.pos.x - this.ball.size < 0) {
+        if (this.ball.pos.x + this.ball.size < 0) {
             this.playerRight.score++;
             if (this.onGoal)
                 this.onGoal(this);

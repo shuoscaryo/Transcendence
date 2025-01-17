@@ -26,7 +26,11 @@ export default function createPongGameComponent(data) {
     pong.playerLeft.controller = data.controllerLeft;
     pong.playerRight.controller = data.controllerRight;
     pong.onGoal = (game) => {console.log(game.playerLeft.score, game.playerRight.score);};
-    pong.onGameEnd = (game) => {console.log('Game Over!');};
+    pong.onGameEnd = (game) => {console.log('Game Over!')
+        if (game.playerLeft.score == game.maxScore)
+            console.log("Player left Wins!")
+        else
+            console.log("Player Right Wins!");};
     Storage.addToView('pong', pong);
 
     // Create control buttons
