@@ -1,11 +1,11 @@
 import getSectionButton from '../sectionButton.js';
 import PongGame from '/static/js/utils/PongGame.js';
 import { DemoAI } from '/static/js/utils/Controller.js';
-import Storage from '/static/js/utils/Storage.js';
 import Path from '/static/js/utils/Path.js';
 import loadPage from '/static/js/utils/loadPage.js';
 import { PlayerController, PongAI } from '/static/js/utils/Controller.js';
 
+let demoPong = null;
 function getSection1() {
     const section = document.createElement('section');
     section.id = 'section-1';
@@ -21,8 +21,8 @@ function getSection1() {
     const pong = new PongGame(canvas);
     pong.playerLeft.controller = new DemoAI();
     pong.playerRight.controller = new DemoAI();
+    pong.onGameEnd = (game) => {game.start();};
     pong.start();
-    Storage.addToView("pong", pong);
     divCanvas.appendChild(canvas);
 
     const divIntro = document.createElement('div');
@@ -41,10 +41,22 @@ function getSection1() {
         Path.img('playLogo.png'),
         'Versus Mode',
         'Play against a friend',
-        () => { loadPage("main", "game", {
-            controllerLeft: new PlayerController("w", "s"),
-            controllerRight: new PlayerController("ArrowUp","ArrowDown")
-        });}
+        () => {
+            loadPage("main", "game", {
+                playerLeft: { 
+                    controller: new PlayerController("w", "s"),
+                    name: "anon1",
+                },
+                playerRight: {
+                    controller: new PlayerController("ArrowUp","ArrowDown"),
+                    name: "anon2",
+                },
+                maxScore: 3,
+                onGameEnd: (game) => {
+                    loadPage("main", "home");
+                }
+            });
+        }
     );
     buttonPlayVersus.classList.add('button-green');
     divButtons.appendChild(buttonPlayVersus);
@@ -88,10 +100,23 @@ function getSection2() {
         Path.img('AILogo.png'),
         'Play vs Bots',
         'Play against our AI',
-        () => { loadPage("main", "game", {
-            controllerLeft: new PlayerController("w", "s"),
-            controllerRight: new PongAI()
-        });});
+        () => {
+            loadPage("main", "game", {
+                playerLeft: {
+                    controller: new PlayerController("w", "s"),
+                    name: "anon1",
+                },
+                playerRight: {
+                    controller: new PongAI(),
+                    name: "AI",
+                },
+                maxScore: 3,
+                onGameEnd: (game) => {
+                    loadPage("main", "home");
+                }
+            });
+        }
+    );
     button.classList.add('button-green');
     button.id = 'button-play-ai';
     div.appendChild(button);

@@ -53,13 +53,12 @@ class Vector2D {
 
 }
 
-class movingObject
+class movingRectangle
 {
-    constructor(canvas) {
-        this.canvas = canvas;
-        this.ctx = this.canvas.getContext('2d');
+    constructor() {
         this.pos = new Vector2D();
         this.speed = new Vector2D();
+        this.size = new Vector2D();
     }
 
     update(dt) {
@@ -67,45 +66,46 @@ class movingObject
         this.pos.y = this.pos.y + this.speed.y * dt;
     }
 
-    draw() {
-        this.ctx.fillStyle = 'white';
-        this.ctx.fillRect(this.pos.x, this.pos.y, 1, 1);
+    draw(ctx) {
+        ctx.fillStyle = 'white';
+        ctx.fillRect(this.pos.x, this.pos.y, this.size.x, this.size.y);
     }
 
     print() {
-        console.log(`pos: [${this.pos.x}, ${this.pos.y}], speed: [${this.speed.x}, ${this.speed.y}]`);
+        console.log(
+            `pos: [${this.pos.x}, ${this.pos.y}], 
+            speed: [${this.speed.x}, ${this.speed.y}], 
+            size: [${this.size.x}, ${this.size.y}]`
+        );
     }
 }
 
-class Ball extends movingObject
+class Ball extends movingRectangle
 {
-    constructor(canvas) {
-        super(canvas);
-        this.size = 10;
-    }
-
-    draw() {
-        this.ctx.fillStyle = 'white';
-        this.ctx.fillRect(this.pos.x, this.pos.y, this.size, this.size);
+    constructor(size = 10) {
+        super();
+        this.size.x = size;
+        this.size.y = size;
     }
 }
 
-class Paddle extends movingObject
+class Paddle extends movingRectangle
 {
-    constructor(canvas) {
-        super(canvas);
-        this.width = 10;
-        this.height = 100;
-        this.moveSpeed = 200;
+    constructor(width = 10, height = 100, moveSpeed = 200) {
+        super();
+        this.size.x = width;
+        this.size.y = height;
+        this.direction = 0; // -1 for up, 1 for down, 0 for stop
+        this.moveSpeed = moveSpeed;
     }
 
-    move(direction) { // direction: -1 for up, 1 for down, 0 for stop
-        this.speed.y = Math.sign(direction) * this.moveSpeed;
+    move(direction) {
+        this.direction = Math.sign(direction);
     }
 
-    draw() {
-        this.ctx.fillStyle = 'white';
-        this.ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height);
+    update(dt) {
+        this.speed.y = this.direction * this.moveSpeed;
+        super.update(dt);
     }
 }
 
@@ -117,23 +117,29 @@ class Player {
     }
 }
 
+// configurable:
+// - playerLeft.controller
+// - playerRight.controller
+// - playerLeft.name
+// - playerRight.name
+// - maxScore
+// - onGoal
+// - onGameEnd
 export default class PongGame
 {
     constructor(canvas)
     {
         this.canvas = canvas;
+        this.canvas.pongInstance = this;
         this.ctx = this.canvas.getContext('2d');
 
-        this.ball = new Ball(canvas);
-        this.leftPaddle = new Paddle(canvas);
-        this.rightPaddle = new Paddle(canvas);
-
+        this.ball = new Ball(10);
+        this.paddleLeft = new Paddle(10, 100, 200);
+        this.paddleRight = new Paddle(10, 100, 200);
         this.playerLeft = new Player();
         this.playerRight = new Player();
-        this.playerLeft.score = 0;
-        this.playerRight.score = 0;
-        this.maxScore = 1;
-        
+
+        this.maxScore = 5;
         this.onGameEnd = null;
         this.onGoal = null;
         
@@ -146,16 +152,17 @@ export default class PongGame
     }
 
     #startPosition() {
-        this.leftPaddle.pos.x = 20;
-        this.rightPaddle.pos.x = this.canvas.width - 20 - this.rightPaddle.width;
-        this.rightPaddle.pos.y = this.canvas.height / 2 - this.rightPaddle.height / 2;
-        this.leftPaddle.pos.y = this.canvas.height / 2 - this.leftPaddle.height / 2;
+        const distanceFromWall = this.paddleLeft.size.x * 2;
+        this.paddleLeft.pos.x = distanceFromWall;
+        this.paddleLeft.pos.y = this.canvas.height / 2 - this.paddleLeft.size.y / 2;
+        this.paddleRight.pos.x = this.canvas.width - distanceFromWall - this.paddleRight.size.x;
+        this.paddleRight.pos.y = this.canvas.height / 2 - this.paddleRight.size.y / 2;
 
         const ratio = 0.2;
-        this.leftPaddle.height = ratio * this.canvas.height;
-        this.leftPaddle.moveSpeed = this.canvas.height;
-        this.rightPaddle.height = ratio * this.canvas.height;
-        this.rightPaddle.moveSpeed = this.canvas.height;
+        this.paddleLeft.size.y = ratio * this.canvas.height;
+        this.paddleLeft.moveSpeed = this.canvas.height;
+        this.paddleRight.size.y = ratio * this.canvas.height;
+        this.paddleRight.moveSpeed = this.canvas.height;
 
         this.ball.speed.setPolar(this.canvas.height, Math.PI / 4);
         this.ball.pos.x = this.canvas.width / 2;
@@ -167,7 +174,6 @@ export default class PongGame
         // If no method is found, it skips the update and the state change has to be done manually
         const methodName = `update${this.state}`;
         const methodInitName = methodName + "Init";
-
         if (this.lastState !== this.state) {
             this.lastState = this.state;
             if (typeof this[methodInitName] === "function")
@@ -180,20 +186,19 @@ export default class PongGame
 
     // Don't use outside of #update
     updatePlaying(dt) {
-
         if (this.playerLeft.controller)
-            this.leftPaddle.move(this.playerLeft.controller.getMove("left", this.getState()));
+            this.paddleLeft.move(this.playerLeft.controller.getMove("left", this.getState()));
         if (this.playerRight.controller)
-            this.rightPaddle.move(this.playerRight.controller.getMove("right", this.getState()));
+            this.paddleRight.move(this.playerRight.controller.getMove("right", this.getState()));
 
         this.ball.update(dt);
-        this.leftPaddle.update(dt);
-        this.rightPaddle.update(dt);
+        this.paddleLeft.update(dt);
+        this.paddleRight.update(dt);
         this.#checkCollisions();
         this.#draw();
 
         // Check goal
-        if (this.ball.pos.x + this.ball.size < 0) {
+        if (this.ball.pos.x + this.ball.size.x < 0) {
             this.playerRight.score++;
             if (this.onGoal)
                 this.onGoal(this);
@@ -212,29 +217,36 @@ export default class PongGame
     // Don't use outside of #update
     updateGoalInit() {
         this.goalTimer = performance.now() / 1000;
+        this.goalFlag = false;
     }
 
     // Don't use outside of #update
     updateGoal(dt) {
         const now = performance.now() / 1000;
 
-        if (this.playerLeft.controller)
-            this.leftPaddle.move(this.playerLeft.controller.getMove("left", this.getState()));
-        if (this.playerRight.controller)
-            this.rightPaddle.move(this.playerRight.controller.getMove("right", this.getState()));
-        this.leftPaddle.update(dt);
-        this.rightPaddle.update(dt);
-        this.#checkCollisions();
-        this.#draw();
-
         if (now - this.goalTimer > 1) {
             if (this.playerLeft.score >= this.maxScore || this.playerRight.score >= this.maxScore) {
                 this.state = "End";
                 return;
             }
-            this.#startPosition();
             this.state = "Playing";
+            return;
         }
+
+        if (!this.goalFlag && now - this.goalTimer > 0.5
+            && this.playerLeft.score < this.maxScore && this.playerRight.score < this.maxScore
+        ) {
+            this.#startPosition();
+            this.goalFlag = true;
+        }
+        if (this.playerLeft.controller)
+            this.paddleLeft.move(this.playerLeft.controller.getMove("left", this.getState()));
+        if (this.playerRight.controller)
+            this.paddleRight.move(this.playerRight.controller.getMove("right", this.getState()));
+        this.paddleLeft.update(dt);
+        this.paddleRight.update(dt);
+        this.#checkCollisions();
+        this.#draw();
     }
 
     // Don't use outside of #update
@@ -248,50 +260,49 @@ export default class PongGame
     {
         this.ctx.fillStyle = '#111111';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ball.draw();
-        this.leftPaddle.draw();
-        this.rightPaddle.draw();
+        this.ball.draw(this.ctx);
+        this.paddleLeft.draw(this.ctx);
+        this.paddleRight.draw(this.ctx);
     }
 
     #checkCollisions()
     {
-        if (this.ball.pos.y <= 0 || this.ball.pos.y + this.ball.size >= this.canvas.height) {
+        // Collision with top and bottom walls
+        if (this.ball.pos.y < 0 || this.ball.pos.y + this.ball.size.x > this.canvas.height) {
             this.ball.speed.y = -this.ball.speed.y;
-            this.ball.pos.y = this.ball.pos.y < 0 ? 0 : this.canvas.height - this.ball.size;
+            this.ball.pos.y = this.ball.pos.y < 0 ? 0 : this.canvas.height - this.ball.size.x;
         }
 
         // Colisión de la pelota con la paleta izquierda
         if (
-            this.ball.pos.x <= this.leftPaddle.pos.x + this.leftPaddle.width &&
-            this.ball.pos.y + this.ball.size >= this.leftPaddle.pos.y &&
-            this.ball.pos.y <= this.leftPaddle.pos.y + this.leftPaddle.height
+            this.ball.pos.x < this.paddleLeft.pos.x + this.paddleLeft.size.x &&
+            this.ball.pos.y + this.ball.size.x > this.paddleLeft.pos.y &&
+            this.ball.pos.y < this.paddleLeft.pos.y + this.paddleLeft.size.y
         ) {
-            this.ball.speed.x = -this.ball.speed.x; // Rebote en X
-            this.ball.pos.x = this.leftPaddle.pos.x + this.leftPaddle.width; // Corregir posición
+            this.ball.speed.x = -this.ball.speed.x;
+            this.ball.pos.x = this.paddleLeft.pos.x + this.paddleLeft.size.x;
         }
 
         // Colisión de la pelota con la paleta derecha
         if (
-            this.ball.pos.x + this.ball.size >= this.rightPaddle.pos.x &&
-            this.ball.pos.y + this.ball.size >= this.rightPaddle.pos.y &&
-            this.ball.pos.y <= this.rightPaddle.pos.y + this.rightPaddle.height
+            this.ball.pos.x + this.ball.size.x > this.paddleRight.pos.x &&
+            this.ball.pos.y + this.ball.size.x > this.paddleRight.pos.y &&
+            this.ball.pos.y < this.paddleRight.pos.y + this.paddleRight.size.y
         ) {
             this.ball.speed.x = -this.ball.speed.x; // Rebote en X
-            this.ball.pos.x = this.rightPaddle.pos.x - this.ball.size; // Corregir posición
+            this.ball.pos.x = this.paddleRight.pos.x - this.ball.size.x; // Corregir posición
         }
 
         // Check paddles collision with walls
-        if (this.leftPaddle.pos.y <= 0) {
-            this.leftPaddle.pos.y = 0;
-        } else if (this.leftPaddle.pos.y + this.leftPaddle.height >= this.canvas.height) {
-            this.leftPaddle.pos.y = this.canvas.height - this.leftPaddle.height;
-        }
+        if (this.paddleLeft.pos.y < 0)
+            this.paddleLeft.pos.y = 0;
+        else if (this.paddleLeft.pos.y + this.paddleLeft.size.y > this.canvas.height)
+            this.paddleLeft.pos.y = this.canvas.height - this.paddleLeft.size.y;
 
-        if (this.rightPaddle.pos.y <= 0) {
-            this.rightPaddle.pos.y = 0;
-        } else if (this.rightPaddle.pos.y + this.rightPaddle.height >= this.canvas.height) {
-            this.rightPaddle.pos.y = this.canvas.height - this.rightPaddle.height;
-        }
+        if (this.paddleRight.pos.y < 0)
+            this.paddleRight.pos.y = 0;
+        else if (this.paddleRight.pos.y + this.paddleRight.size.y > this.canvas.height)
+            this.paddleRight.pos.y = this.canvas.height - this.paddleRight.size.y;
     }
 
     start()
@@ -343,19 +354,19 @@ export default class PongGame
             ball: {
                 pos: this.ball.pos,
                 speed: this.ball.speed,
-                size: this.ball.size
+                size: this.ball.size.x
             },
             leftPaddle: {
-                pos: this.leftPaddle.pos,
-                speed: this.leftPaddle.speed,
-                moveSpeed: this.leftPaddle.moveSpeed,
-                height: this.leftPaddle.height
+                pos: this.paddleLeft.pos,
+                speed: this.paddleLeft.speed,
+                moveSpeed: this.paddleLeft.moveSpeed,
+                height: this.paddleLeft.size.y
             },
             rightPaddle: {
-                pos: this.rightPaddle.pos,
-                speed: this.rightPaddle.speed,
-                moveSpeed: this.rightPaddle.moveSpeed,
-                height: this.rightPaddle.height
+                pos: this.paddleRight.pos,
+                speed: this.paddleRight.speed,
+                moveSpeed: this.paddleRight.moveSpeed,
+                height: this.paddleRight.size.y
             },
             canvas: {
                 width: this.canvas.width,

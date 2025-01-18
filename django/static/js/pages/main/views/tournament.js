@@ -249,12 +249,19 @@ function loadMatchesView(component) {
 function loadGameView(component) {
     const gameContainer = document.createElement('div');
     const players = tournament.getMatchPlayers();
-    const game = createPongGameComponent({
-        controllerLeft: new PlayerController("w", "s"),
-        controllerRight: new PlayerController("ArrowUp", "ArrowDown"),
+    const [game, pong] = createPongGameComponent({
+        playerLeftController: new PlayerController("w", "s"),
+        playerRightController: new PlayerController("ArrowUp", "ArrowDown"),
         playerLeft: players[0],
         playerRight: players[1],
-        scoreLimit: 1,
+        maxScore: 3,
+        onGameEnd: (game) => {
+            const winner = game.playerLeft.score > game.playerRight.score ? 0 : 1;
+            tournament.setMatchResult(winner);
+            pong = null;
+            component.innerHTML = '';
+            loadMatchesView(component);
+        },
     });
 
     gameContainer.appendChild(game);

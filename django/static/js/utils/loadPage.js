@@ -1,6 +1,5 @@
 import Path from '/static/js/utils/Path.js';
 import * as css from '/static/js/utils/css.js';
-import Storage from '/static/js/utils/Storage.js';
 
 const current = {
     name: null,
@@ -24,12 +23,9 @@ export default async function loadPage(pageName, view = null, data = null) {
         const clearDiv = (isSamePage ? document.getElementById('view') : divApp);
         if (clearDiv)
             clearDiv.innerHTML = '';
-        if (!isSamePage) {
+        if (!isSamePage)
             css.deletePageCss();
-            Storage.deletePageData();
-        }
         css.deleteViewCss();
-        Storage.deleteViewData();
         
         // Replace the page frame if needed
         const pageFile = isSamePage ? current.pageFile : await import(Path.page(pageName, 'index.js'));
