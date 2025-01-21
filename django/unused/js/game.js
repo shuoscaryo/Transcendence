@@ -71,16 +71,6 @@ function paddleTiltFunction(h) {
 	return (h - paddleHeight/2)/(paddleHeight/2) * 0.26; // max 15 degrees tilt on edges
 }
 
-function reflectVector(incident, normal) {
-	const dot = incident.x * normal.x + incident.y * normal.y;
-	
-	// Calcula el vector reflejado usando la fórmula
-	return {
-	  x: incident.x - 2 * dot * normal.x,
-	  y: incident.y - 2 * dot * normal.y
-	};
-}
-
 // Function to update ball position and check for collisions
 function updateBall() {
 	ballX += ballSpeedX;

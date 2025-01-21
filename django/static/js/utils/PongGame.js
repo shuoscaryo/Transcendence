@@ -11,7 +11,7 @@ class Vector2D {
     }
 
     // Returns the legnth of the vector
-    getMagnitude() {
+    module() {
         return Math.sqrt(this.x ** 2 + this.y ** 2);
     }
 
@@ -27,8 +27,8 @@ class Vector2D {
     }
 
     // Returns a new vector with the same direction but with a magnitude of 1
-    getUnitaryVector() {
-        const magnitude = this.getMagnitude();
+    unitary() {
+        const magnitude = this.module();
         if (magnitude === 0) return new Vector2D(0, 0); // Avoid division by zero
         return new Vector2D(this.x / magnitude, this.y / magnitude);
     }
@@ -51,6 +51,15 @@ class Vector2D {
         console.log(`[${this.x}, ${this.y}]`);
     }
 
+}
+
+function reflectVector(incident, normal) {
+	const dot = incident.x * normal.x + incident.y * normal.y;
+	
+	return new Vector2D (
+	  incident.x - 2 * dot * normal.x,
+	  incident.y - 2 * dot * normal.y
+    );
 }
 
 class Object
@@ -85,6 +94,12 @@ class Ball extends Object{
         super();
         this.size.x = size;
         this.size.y = size;
+    }
+
+    increaseSpeed(amount) {
+        let L = this.speed.module();
+        this.speed.x = this.speed.x / L * (L + amount);
+        this.speed.y = this.speed.y / L * (L + amount);
     }
 }
 
@@ -138,6 +153,9 @@ export default class PongGame
         this.playerLeft = new Player();
         this.playerRight = new Player();
 
+        this.ballSpeedIncrease = 0;
+        this.ballMaxAngle = 45; // Maximum angle the ball can have when moving (from the horizontal)
+
         this.maxScore = 5;
         this.onGameEnd = null;
         this.onGoal = null;
@@ -190,10 +208,9 @@ export default class PongGame
         if (this.playerRight.controller)
             this.paddleRight.move(this.playerRight.controller.getMove("right", this.getState()));
 
-        this.paddleLeft.update(dt);
-        this.paddleRight.update(dt);
-        this.ball.update(dt, [this.paddleLeft, this.paddleRight]);
-        this.#checkCollisions();
+        this.#updatePaddle(this.paddleLeft, dt);
+        this.#updatePaddle(this.paddleRight, dt);
+        this.#updateBall(this.ball, dt);
         this.#draw();
 
         // Check goal
@@ -242,9 +259,9 @@ export default class PongGame
             this.paddleLeft.move(this.playerLeft.controller.getMove("left", this.getState()));
         if (this.playerRight.controller)
             this.paddleRight.move(this.playerRight.controller.getMove("right", this.getState()));
-        this.paddleLeft.update(dt);
-        this.paddleRight.update(dt);
-        this.#checkCollisions();
+
+        this.#updatePaddle(this.paddleLeft, dt);
+        this.#updatePaddle(this.paddleRight, dt);
         this.#draw();
     }
 
@@ -264,44 +281,73 @@ export default class PongGame
         this.paddleRight.draw(this.ctx);
     }
 
-    #checkCollisions()
-    {
+    #updateBall(ball, dt) {
+        const ignorePaddles = ball.pos.x < this.paddleLeft.pos.x + this.paddleLeft.size.x
+            || ball.pos.x + ball.size.x > this.paddleRight.pos.x;
+
+        ball.update(dt);
+
         // Collision with top and bottom walls
-        if (this.ball.pos.y < 0 || this.ball.pos.y + this.ball.size.x > this.canvas.height) {
-            this.ball.speed.y = -this.ball.speed.y;
-            this.ball.pos.y = this.ball.pos.y < 0 ? 0 : this.canvas.height - this.ball.size.x;
+        if (ball.pos.y < 0 || ball.pos.y + ball.size.y > this.canvas.height)
+            ball.speed.y = ball.pos.y < 0 ? Math.abs(ball.speed.y) : -Math.abs(ball.speed.y);
+
+        if (ignorePaddles)
+            return;
+
+        // Maximum angle the ball can have when moving (80º from the horizontal)
+        const angleLimit = this.ballMaxAngle / 180 * Math.PI;
+        // Function to calculate normal vector of the paddle based on the y position
+        const paddleNormalVector = (y, paddle, isPositiveX) => {
+            return new Vector2D(
+                isPositiveX ? 1: -1, // X
+                (y - paddle.pos.y - paddle.size.y / 2) / (paddle.size.y / 2) * 0.26 // Y
+            ).unitary();
+        }
+        // Check for collision with left paddle
+        if (ball.pos.x < this.paddleLeft.pos.x + this.paddleLeft.size.x
+            && ball.pos.y + ball.size.y / 2 > this.paddleLeft.pos.y
+            && ball.pos.y - ball.size.y / 2 < this.paddleLeft.pos.y + this.paddleLeft.size.y
+        ) {
+            const N = paddleNormalVector(ball.pos.y + ball.size.y / 2, this.paddleLeft, true);
+            const V = reflectVector(ball.speed, N);
+            if (V.x < 0 || Math.abs(V.y / V.x) > Math.tan(angleLimit)) // if bounces back or too vertical
+            {
+                const mod = V.module();
+                V.x = Math.cos(angleLimit) * mod;
+                V.y = Math.sin(angleLimit) * mod * (V.y > 0 ? 1 : -1);
+            }
+            ball.speed = V;
+            ball.pos.x = this.paddleLeft.pos.x + this.paddleLeft.size.x;  // Push the ball outside of the paddle
+            ball.increaseSpeed(this.ballSpeedIncrease);  // Increase the ball speed on paddle hit
         }
 
-        // Colisión de la pelota con la paleta izquierda
-        if (
-            this.ball.pos.x < this.paddleLeft.pos.x + this.paddleLeft.size.x &&
-            this.ball.pos.y + this.ball.size.x > this.paddleLeft.pos.y &&
-            this.ball.pos.y < this.paddleLeft.pos.y + this.paddleLeft.size.y
+        // Check for collision with right paddle
+        if (ball.pos.x + ball.size.x > this.paddleRight.pos.x
+            && ball.pos.y + ball.size.y / 2 > this.paddleRight.pos.y
+            && ball.pos.y - ball.size.y / 2 < this.paddleRight.pos.y + this.paddleRight.size.y
         ) {
-            this.ball.speed.x = -this.ball.speed.x;
-            this.ball.pos.x = this.paddleLeft.pos.x + this.paddleLeft.size.x;
+            const N = paddleNormalVector(ball.pos.y + ball.size.y / 2, this.paddleRight, false);
+            const V = reflectVector(ball.speed, N);
+            if (V.x > 0 || Math.abs(V.y / V.x) > Math.tan(angleLimit)) // if bounces back or too vertical
+            {
+                const mod = V.module();
+                V.x = -Math.cos(angleLimit) * mod;
+                V.y = Math.sin(angleLimit) * mod * (V.y > 0 ? 1 : -1);
+            }
+            ball.speed = V;
+            ball.pos.x = this.paddleRight.pos.x - ball.size.x;  // Push the ball outside of the paddle
+            ball.increaseSpeed(this.ballSpeedIncrease);  // Increase the ball speed on paddle hit
         }
+    }
 
-        // Colisión de la pelota con la paleta derecha
-        if (
-            this.ball.pos.x + this.ball.size.x > this.paddleRight.pos.x &&
-            this.ball.pos.y + this.ball.size.x > this.paddleRight.pos.y &&
-            this.ball.pos.y < this.paddleRight.pos.y + this.paddleRight.size.y
-        ) {
-            this.ball.speed.x = -this.ball.speed.x; // Rebote en X
-            this.ball.pos.x = this.paddleRight.pos.x - this.ball.size.x; // Corregir posición
-        }
+    #updatePaddle(paddle, dt) {
+        paddle.update(dt);
 
         // Check paddles collision with walls
-        if (this.paddleLeft.pos.y < 0)
-            this.paddleLeft.pos.y = 0;
-        else if (this.paddleLeft.pos.y + this.paddleLeft.size.y > this.canvas.height)
-            this.paddleLeft.pos.y = this.canvas.height - this.paddleLeft.size.y;
-
-        if (this.paddleRight.pos.y < 0)
-            this.paddleRight.pos.y = 0;
-        else if (this.paddleRight.pos.y + this.paddleRight.size.y > this.canvas.height)
-            this.paddleRight.pos.y = this.canvas.height - this.paddleRight.size.y;
+        if (paddle.pos.y < 0)
+            paddle.pos.y = 0;
+        else if (paddle.pos.y + paddle.size.y > this.canvas.height)
+            paddle.pos.y = this.canvas.height - paddle.size.y;
     }
 
     start()
