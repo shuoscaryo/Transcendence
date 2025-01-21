@@ -80,6 +80,14 @@ class Object
     }
 }
 
+class Ball extends Object{
+    constructor(size = 10) {
+        super();
+        this.size.x = size;
+        this.size.y = size;
+    }
+}
+
 class Paddle extends Object
 {
     constructor(width = 10, height = 100, moveSpeed = 200) {
