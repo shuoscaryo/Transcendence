@@ -53,7 +53,7 @@ class Vector2D {
 
 }
 
-class movingRectangle
+class Object
 {
     constructor() {
         this.pos = new Vector2D();
@@ -80,16 +80,7 @@ class movingRectangle
     }
 }
 
-class Ball extends movingRectangle
-{
-    constructor(size = 10) {
-        super();
-        this.size.x = size;
-        this.size.y = size;
-    }
-}
-
-class Paddle extends movingRectangle
+class Paddle extends Object
 {
     constructor(width = 10, height = 100, moveSpeed = 200) {
         super();
@@ -191,9 +182,9 @@ export default class PongGame
         if (this.playerRight.controller)
             this.paddleRight.move(this.playerRight.controller.getMove("right", this.getState()));
 
-        this.ball.update(dt);
         this.paddleLeft.update(dt);
         this.paddleRight.update(dt);
+        this.ball.update(dt, [this.paddleLeft, this.paddleRight]);
         this.#checkCollisions();
         this.#draw();
 
