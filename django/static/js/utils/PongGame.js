@@ -310,15 +310,15 @@ export default class PongGame
         ) {
             const N = paddleNormalVector(ball.pos.y + ball.size.y / 2, this.paddleLeft, true);
             const V = reflectVector(ball.speed, N);
-            if (V.x < 0 || Math.abs(V.y / V.x) > Math.tan(angleLimit)) // if bounces back or too vertical
+            if (V.x < 0 || Math.abs(V.y / V.x) > Math.tan(angleLimit))
             {
                 const mod = V.module();
                 V.x = Math.cos(angleLimit) * mod;
                 V.y = Math.sin(angleLimit) * mod * (V.y > 0 ? 1 : -1);
             }
             ball.speed = V;
-            ball.pos.x = this.paddleLeft.pos.x + this.paddleLeft.size.x;  // Push the ball outside of the paddle
-            ball.increaseSpeed(this.ballSpeedIncrease);  // Increase the ball speed on paddle hit
+            ball.pos.x = this.paddleLeft.pos.x + this.paddleLeft.size.x;
+            ball.increaseSpeed(this.ballSpeedIncrease);
         }
 
         // Check for collision with right paddle
@@ -328,15 +328,15 @@ export default class PongGame
         ) {
             const N = paddleNormalVector(ball.pos.y + ball.size.y / 2, this.paddleRight, false);
             const V = reflectVector(ball.speed, N);
-            if (V.x > 0 || Math.abs(V.y / V.x) > Math.tan(angleLimit)) // if bounces back or too vertical
+            if (V.x > 0 || Math.abs(V.y / V.x) > Math.tan(angleLimit))
             {
                 const mod = V.module();
                 V.x = -Math.cos(angleLimit) * mod;
                 V.y = Math.sin(angleLimit) * mod * (V.y > 0 ? 1 : -1);
             }
             ball.speed = V;
-            ball.pos.x = this.paddleRight.pos.x - ball.size.x;  // Push the ball outside of the paddle
-            ball.increaseSpeed(this.ballSpeedIncrease);  // Increase the ball speed on paddle hit
+            ball.pos.x = this.paddleRight.pos.x - ball.size.x;
+            ball.increaseSpeed(this.ballSpeedIncrease);
         }
     }
 
