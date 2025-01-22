@@ -13,7 +13,8 @@
     flex-grow: 1;
     overflow-y: auto;
     background-color: #333333;
-    align-items: center
+    align-items: center;
+    padding-top: 10px;
 }
 
 #content footer

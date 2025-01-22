@@ -1,0 +1,58 @@
+.pong-game {
+    border-radius: 20px;
+    background-color: #222222;
+    padding: 24px;
+}
+
+.pong-game .div-game {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #111111;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.pong-game .div-game .div-stats {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 48px; /*left right, top botton*/
+    background-color: #111111;
+    border-bottom: 2px solid #ffffff;
+}
+
+.pong-game .div-game .div-stats div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.pong-game .div-game .div-stats .div-score {
+    font-size: 48px;
+    font-weight: bold;
+}
+
+.pong-game .div-game .div-buttons {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    background-color: #111111;
+    border-top: 2px solid #ffffff;
+}
+
+.pong-game .div-game .div-buttons button {
+    font-weight: bold;
+    font-size: 24px;
+    flex: 1;
+    padding: 12px;
+
+}
+
+.pong-game .div-game .div-buttons button:hover {
+    font-weight: bold;
+    font-size: 24px;
+    background-color: #ffffff22;
+}

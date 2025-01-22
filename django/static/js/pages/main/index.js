@@ -3,7 +3,7 @@ import getSidebar from './sidebar.js';
 
 export default async function getPage(component, loadCssFunction) {
     await loadCssFunction([
-        Path.css('main/main.css'),
+        Path.css('main/index.css'),
         Path.css('main/sidebar.css'),
     ]);
 

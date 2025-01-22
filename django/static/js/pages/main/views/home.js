@@ -140,7 +140,7 @@ function getFooter() {
 
 export default async function getView(component, loadCssFunction) {
     await loadCssFunction([
-        Path.css('main/mainView.css'),
+        Path.css('main/home.css'),
     ]);
 
     const divSections = document.createElement('div');
