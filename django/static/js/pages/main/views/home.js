@@ -5,7 +5,6 @@ import Path from '/static/js/utils/Path.js';
 import loadPage from '/static/js/utils/loadPage.js';
 import { PlayerController, PongAI } from '/static/js/utils/Controller.js';
 
-let demoPong = null;
 function getSection1() {
     const section = document.createElement('section');
     section.id = 'section-1';
