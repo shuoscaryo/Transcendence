@@ -139,12 +139,13 @@ class Player {
 // - maxScore
 // - onGoal
 // - onGameEnd
+let counter = 0;
 export default class PongGame
 {
     constructor(canvas)
     {
+        this.id = counter++;
         this.canvas = canvas;
-        this.canvas.pongInstance = this;
         this.ctx = this.canvas.getContext('2d');
 
         this.ball = new Ball(10);
@@ -162,10 +163,6 @@ export default class PongGame
         
         this.#startPosition();
         this.#draw();
-    }
-
-    destructor() {
-        this.stop();
     }
 
     #startPosition() {
@@ -360,6 +357,11 @@ export default class PongGame
             this.state = "Playing";
         this.lastTime = undefined;
         const gameLoop = (timestamp) => {
+            if (!document.body.contains(this.canvas)) {
+                this.stop();
+                return;
+            }
+
             if (!this.lastTime)
                 this.lastTime = timestamp;
 

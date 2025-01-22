@@ -17,12 +17,12 @@ function getSection1() {
     canvas.id = 'demo-gameplay';
     canvas.width = 600;
     canvas.height = 400;
+    divCanvas.appendChild(canvas);
     const pong = new PongGame(canvas);
     pong.playerLeft.controller = new DemoAI();
     pong.playerRight.controller = new DemoAI();
     pong.onGameEnd = (game) => {game.start();};
     pong.start();
-    divCanvas.appendChild(canvas);
 
     const divIntro = document.createElement('div');
     divIntro.id = 'div-intro';
