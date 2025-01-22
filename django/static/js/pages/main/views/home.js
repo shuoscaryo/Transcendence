@@ -52,7 +52,7 @@ function getSection1() {
                     name: "anon2",
                 },
                 maxScore: 3,
-                onGameEnd: (game) => {
+                onContinueButton: (game) => {
                     loadPage("main", "home");
                 }
             });
@@ -112,6 +112,27 @@ function getSection2() {
                 },
                 maxScore: 3,
                 onGameEnd: (game) => {
+                    if (game.playerRight.score > game.playerLeft.score) {
+                        const component = document.getElementById('view');
+                        // ID del video de YouTube
+                        const videoId = "qS0HlqjQHnk";
+
+                        // Crea el iframe del video con autoplay activado
+                        const iframe = document.createElement("iframe");
+                        iframe.width = "560"; // Ancho del video
+                        iframe.height = "315"; // Alto del video
+                        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&modestbranding=1&showinfo=0&rel=0`; // autoplay agregado aquí
+                        iframe.title = "YouTube video player";
+                        iframe.frameBorder = "0";
+                        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+                        iframe.allowFullscreen = true;
+                        iframe.allow = "autoplay"; // Asegura que el autoplay esté permitido en algunos navegadores
+
+                        // Limpia el contenido del componente y añade el iframe
+                        component.appendChild(iframe);
+                    }
+                },
+                onContinueButton: (game) => {
                     loadPage("main", "home");
                 }
             });

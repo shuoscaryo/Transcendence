@@ -1,4 +1,5 @@
 import PongGame from "/static/js/utils/PongGame.js";
+import loadPage from '/static/js/utils/loadPage.js';
 
 export default function createPongGameComponent(data) {
     // Create the container for the component
@@ -47,7 +48,16 @@ export default function createPongGameComponent(data) {
         if (data.onGoal)
             data.onGoal(game);
     };
-    pong.onGameEnd = data.onGameEnd;
+    pong.onGameEnd = (game) => {
+        if (game.playerLeft.score > game.playerRight.score)
+            scoreDiv.textContent = `${game.playerLeft.name} wins!`;
+        else
+            scoreDiv.textContent = `${game.playerRight.name} wins!`;
+        buttonsDiv.innerHTML = '';
+        buttonsDiv.appendChild(resetButton);
+        if (data.onGameEnd)
+            data.onGameEnd(game);
+    }
     pong.maxScore = data.maxScore || pong.maxScore;
 
     // Create control buttons
@@ -57,18 +67,29 @@ export default function createPongGameComponent(data) {
     
     const startButton = document.createElement('button');
     startButton.textContent = 'Start';
-    startButton.addEventListener('click', () => pong.start());
+    startButton.addEventListener('click', () => {
+        buttonsDiv.removeChild(startButton);
+        buttonsDiv.appendChild(stopButton);
+        pong.start();
+    });
     buttonsDiv.appendChild(startButton);
     
     const stopButton = document.createElement('button');
-    stopButton.textContent = 'Stop';
-    stopButton.addEventListener('click', () => pong.stop());
-    buttonsDiv.appendChild(stopButton);
+    stopButton.textContent = 'Pause';
+    stopButton.addEventListener('click', () => {
+        buttonsDiv.removeChild(stopButton);
+        buttonsDiv.appendChild(startButton);
+        pong.stop();
+    });
     
     const resetButton = document.createElement('button');
-    resetButton.textContent = 'Reset';
-    resetButton.addEventListener('click', () => pong.reset());
-    buttonsDiv.appendChild(resetButton);
+    resetButton.textContent = 'Continue';
+    resetButton.addEventListener('click', () => {
+        if (data.onContinueButton)
+            data.onContinueButton(pong)
+        else
+            loadPage("main", "home");
+    });
 
     return [component, pong];
 }

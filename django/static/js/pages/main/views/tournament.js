@@ -249,13 +249,17 @@ function loadMatchesView(component) {
 function loadGameView(component) {
     const gameContainer = document.createElement('div');
     const players = tournament.getMatchPlayers();
-    const [game, pong] = createPongGameComponent({
-        playerLeftController: new PlayerController("w", "s"),
-        playerRightController: new PlayerController("ArrowUp", "ArrowDown"),
-        playerLeft: players[0],
-        playerRight: players[1],
+    let [game, pong] = createPongGameComponent({
+        playerLeft: {
+            name: players[0],
+            controller: new PlayerController("w", "s"),
+        },
+        playerRight: {
+            name: players[1],
+            controller: new PlayerController("ArrowUp", "ArrowDown"),
+        },
         maxScore: 3,
-        onGameEnd: (game) => {
+        onContinueButton: (game) => {
             const winner = game.playerLeft.score > game.playerRight.score ? 0 : 1;
             tournament.setMatchResult(winner);
             pong = null;
@@ -272,6 +276,7 @@ export default async function getView(component, cssLoadFunction) {
     // Carga el CSS
     cssLoadFunction([
         Path.css("main/tournament.css"),
+        Path.css("components/game.css"),
     ]);
 
     // Crea el formulario

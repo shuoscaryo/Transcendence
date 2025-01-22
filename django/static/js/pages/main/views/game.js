@@ -7,9 +7,5 @@ export default async function getView(component, loadCssFunction, data) {
         Path.css("components/game.css"),
     ]);
     const [game, pong] = createPongGameComponent(data);
-    data.onGameEnd = (game) => {
-        if (data.onGameEnd)
-            data.onGameEnd(game);
-    };
     component.appendChild(game);
 }
