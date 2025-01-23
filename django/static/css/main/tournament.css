@@ -1,3 +1,129 @@
+#view {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#div-form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    background-color: #242424;
+    border-radius: 12px;
+    overflow: hidden;
+    padding: 20px;
+
+}
+
+#div-form-container .div-title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+#div-form-container .div-input {
+    border-radius: 5px;
+    overflow: hidden;
+    width: 100%;
+}
+#div-form-container .div-input input {
+        height: 40px;
+        padding: 10px;
+        border: 2px solid #555555;
+        background-color: #444444;
+}
+    
+#div-form-container .div-input input:hover {
+        border: 2px solid #777777;
+}
+
+#div-form-container .div-input input:focus  {
+    outline: none;
+    border: 2px solid #777777;
+    box-shadow: 0 0 5px #777777;
+}
+
+#div-form-container .div-input button {
+    height: 100%;
+    padding: 10px;
+    background-color: #333333;
+}
+
+#div-form-container .div-input button:hover {
+    background-color: #444444;
+}
+
+#div-form-container #button-next {
+    height: 80px;
+    width: 80%;
+    border-radius: 15px;
+    overflow: hidden;
+    font-size: 24px;
+    font-weight: bold;
+    padding: 10px;
+}
+
+#div-form-container .div-players {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #333333;
+    width: 100%;
+}
+
+#div-form-container .div-players .div-header {
+    display: flex;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    width: 100%;
+    border-bottom: 1px solid white;
+    padding: 10px;
+}
+#div-form-container .div-players ul {
+    width: 100%;
+    padding: 10px;
+    list-style: disc;
+
+}
+#div-form-container .div-players ul li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    list-style-position: inside;
+}
+#div-form-container .div-players ul li:not(:last-child) {
+    border-bottom: 1px solid #444444;
+}
+
+
+.button-red {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 20px;
+    width: 20px;
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: #ca1e1e;
+    color: white;
+    border: none;
+    font-weight: 900;
+}
+
+.button-red:hover {
+    background-color: #e76e6e;
+}
+
 .tournament {
     display: flex;
     flex-direction: column;

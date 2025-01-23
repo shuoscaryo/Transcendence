@@ -176,18 +176,49 @@ function loadFormView(component) {
         
         players.add(playerName);
         const listItem = document.createElement('li');
-        listItem.textContent = playerName;
         playerList.appendChild(listItem);
+        
+        const listText = document.createElement('p');
+        listText.textContent = playerName;
+        listItem.appendChild(listText);
+
+        const removeButton = document.createElement('button');
+        removeButton.classList.add('button-red');
+        removeButton.textContent = 'X';
+        removeButton.addEventListener('click', () => {
+            players.delete(playerName);
+            listItem.remove();
+        });
+        listItem.appendChild(removeButton);
         
         input.value = '';
     }
 
+    const containerDiv = document.createElement('div');
+    containerDiv.id = 'div-form-container';
+    component.appendChild(containerDiv);
+
+    const titleDiv = document.createElement('div');
+    titleDiv.classList.add('div-title');
+    containerDiv.appendChild(titleDiv);
+
+    const title = document.createElement('h1');
+    title.textContent = 'Tournament';
+    titleDiv.appendChild(title);
+
+    const description = document.createElement('p');
+    description.textContent = 'Enter the names of the players.';
+    titleDiv.appendChild(description);
+
     const inputDiv = document.createElement('div');
-    component.appendChild(inputDiv);
+    inputDiv.classList.add('div-input');
+    containerDiv.appendChild(inputDiv);
     
     const input = document.createElement('input');
     input.placeholder = 'PlayerName';
     input.addEventListener('keydown', (event) => {
+        if (input.value.trim() === '')
+            return;
         if (event.key === 'Enter') {
             addPlayerToForm();
         }
@@ -195,25 +226,36 @@ function loadFormView(component) {
     inputDiv.appendChild(input);
     
     const button = document.createElement('button');
-    button.textContent = 'Añadir jugador';
+    button.textContent = 'Add Player';
     button.addEventListener('click', addPlayerToForm);
     inputDiv.appendChild(button);
     
     const buttonNext = document.createElement('button');
-    buttonNext.textContent = 'Next';
+    buttonNext.id = "button-next";
+    buttonNext.classList.add('button-green');
+    buttonNext.textContent = 'Start Tournament';
     buttonNext.addEventListener('click', () => {
         if (players.size < 2) {
-            alert('Debes añadir al menos 2 jugadores.');
+            alert('Minimum 2 Players required.');
             return;
         }
         tournament.init(players);
         component.innerHTML = '';
         loadMatchesView(component);
     });
-    inputDiv.appendChild(buttonNext);
+    containerDiv.appendChild(buttonNext);
     
+    const playersDiv = document.createElement('div');
+    playersDiv.classList.add('div-players');
+    containerDiv.appendChild(playersDiv);
+
+    const headerDiv = document.createElement('div');
+    headerDiv.classList.add('div-header');
+    headerDiv.textContent = 'Players';
+    playersDiv.appendChild(headerDiv);
+
     const playerList = document.createElement('ul');    
-    component.appendChild(playerList);
+    playersDiv.appendChild(playerList);
 }
 
 
