@@ -1,5 +1,5 @@
 import Path from '/static/js/utils/Path.js';
-import getSidebar from './sidebar.js';
+import getSidebar from '/static/js/components/sidebar.js';
 
 export default async function getPage(component, loadCssFunction) {
     await loadCssFunction([

@@ -1,4 +1,4 @@
-import getSectionButton from '../sectionButton.js';
+import getSectionButton from '/static/js/components/sectionButton.js';
 import PongGame from '/static/js/utils/PongGame.js';
 import { DemoAI } from '/static/js/utils/Controller.js';
 import Path from '/static/js/utils/Path.js';

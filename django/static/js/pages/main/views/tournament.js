@@ -151,48 +151,54 @@ class Tournament {
     }
 };
 
-const tournament = new Tournament();
+let tournament = null;
 
 function loadFormView(component) {
-    const inputDiv = document.createElement('div');
-    const input = document.createElement('input');
-    const button = document.createElement('button');
-    const playerList = document.createElement('ul');
-
-    input.placeholder = 'Escribe el nombre del jugador';
-    button.textContent = 'Añadir jugador';
-
     const MAX_PLAYERS = 8;
     const players = new Set();
-
     function addPlayerToForm() {
         const playerName = input.value.trim();
-
+        
         if (!playerName) {
-            alert('El nombre no puede estar vacío.');
+            alert('No empty names allowed.');
             return;
         }
-
+        
         if (players.has(playerName)) {
-            alert('Este jugador ya está en la lista.');
+            alert('Player already added.');
             return;
         }
-
+        
         if (players.size >= MAX_PLAYERS) {
-            alert('No puedes añadir más de 8 jugadores.');
+            alert('Max players reached.');
             return;
         }
-
+        
         players.add(playerName);
         const listItem = document.createElement('li');
         listItem.textContent = playerName;
         playerList.appendChild(listItem);
-
+        
         input.value = '';
     }
 
+    const inputDiv = document.createElement('div');
+    component.appendChild(inputDiv);
+    
+    const input = document.createElement('input');
+    input.placeholder = 'PlayerName';
+    input.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            addPlayerToForm();
+        }
+    });
+    inputDiv.appendChild(input);
+    
+    const button = document.createElement('button');
+    button.textContent = 'Añadir jugador';
     button.addEventListener('click', addPlayerToForm);
-
+    inputDiv.appendChild(button);
+    
     const buttonNext = document.createElement('button');
     buttonNext.textContent = 'Next';
     buttonNext.addEventListener('click', () => {
@@ -204,11 +210,9 @@ function loadFormView(component) {
         component.innerHTML = '';
         loadMatchesView(component);
     });
-    
-    inputDiv.appendChild(input);
-    inputDiv.appendChild(button);
     inputDiv.appendChild(buttonNext);
-    component.appendChild(inputDiv);
+    
+    const playerList = document.createElement('ul');    
     component.appendChild(playerList);
 }
 
@@ -279,6 +283,7 @@ export default async function getView(component, cssLoadFunction) {
         Path.css("components/game.css"),
     ]);
 
+    tournament = new Tournament();
     // Crea el formulario
     loadFormView(component);
 }

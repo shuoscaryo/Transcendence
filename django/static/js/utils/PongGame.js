@@ -427,7 +427,9 @@ export default class PongGame
             playerRight: {
                 name: this.playerRight.name,
                 score: this.playerRight.score
-            }
+            },
+            lastState: this.lastState,
+            state: this.state,
         }
     }
 }
