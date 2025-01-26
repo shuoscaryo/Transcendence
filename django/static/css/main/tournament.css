@@ -6,7 +6,7 @@
     height: 100vh;
 }
 
-#div-form-container {
+#div-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -16,10 +16,9 @@
     border-radius: 12px;
     overflow: hidden;
     padding: 20px;
-
 }
 
-#div-form-container .div-title {
+#div-container .div-title {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -27,39 +26,39 @@
     gap: 10px;
 }
 
-#div-form-container .div-input {
+#div-container .div-input {
     border-radius: 5px;
     overflow: hidden;
     width: 100%;
 }
-#div-form-container .div-input input {
+#div-container .div-input input {
         height: 40px;
         padding: 10px;
         border: 2px solid #555555;
         background-color: #444444;
 }
     
-#div-form-container .div-input input:hover {
+#div-container .div-input input:hover {
         border: 2px solid #777777;
 }
 
-#div-form-container .div-input input:focus  {
+#div-container .div-input input:focus  {
     outline: none;
     border: 2px solid #777777;
     box-shadow: 0 0 5px #777777;
 }
 
-#div-form-container .div-input button {
+#div-container .div-input button {
     height: 100%;
     padding: 10px;
     background-color: #333333;
 }
 
-#div-form-container .div-input button:hover {
+#div-container .div-input button:hover {
     background-color: #444444;
 }
 
-#div-form-container #button-next {
+#div-container #button-next {
     height: 80px;
     width: 80%;
     border-radius: 15px;
@@ -69,7 +68,7 @@
     padding: 10px;
 }
 
-#div-form-container .div-players {
+#div-container .div-players {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -79,7 +78,7 @@
     width: 100%;
 }
 
-#div-form-container .div-players .div-header {
+#div-container .div-players .div-header {
     display: flex;
     justify-content: center;
     font-size: 24px;
@@ -88,22 +87,21 @@
     border-bottom: 1px solid white;
     padding: 10px;
 }
-#div-form-container .div-players ul {
+#div-container .div-players ul {
     width: 100%;
     padding: 10px;
     list-style: disc;
 
 }
-#div-form-container .div-players ul li {
+#div-container .div-players ul li {
     display: flex;
     justify-content: space-between;
     padding: 10px;
     list-style-position: inside;
 }
-#div-form-container .div-players ul li:not(:last-child) {
+#div-container .div-players ul li:not(:last-child) {
     border-bottom: 1px solid #444444;
 }
-
 
 .button-red {
     display: flex;
@@ -123,6 +121,7 @@
 .button-red:hover {
     background-color: #e76e6e;
 }
+
 
 .tournament {
     display: flex;
@@ -151,6 +150,7 @@
     border-radius: 5px;
     min-width: 100px;
     height: 100px;
+    background-color: #222222;
 }
 
 .tournament .round .match-box.active-match {

@@ -17,7 +17,7 @@ export default function createPongGameComponent(data) {
     gameDiv.appendChild(statsDiv);
 
     const playerLeftDiv = document.createElement('div');
-    playerLeftDiv.classList.add('div-player');
+    playerLeftDiv.classList.add('div-player', 'player-left');
     playerLeftDiv.textContent = data.playerLeft.name;
     statsDiv.appendChild(playerLeftDiv);
     
@@ -27,7 +27,7 @@ export default function createPongGameComponent(data) {
     statsDiv.appendChild(scoreDiv);
 
     const playerRightDiv = document.createElement('div');
-    playerRightDiv.classList.add('div-player');
+    playerRightDiv.classList.add('div-player', 'player-right');
     playerRightDiv.textContent = data.playerRight.name;
     statsDiv.appendChild(playerRightDiv);
 
@@ -49,6 +49,9 @@ export default function createPongGameComponent(data) {
             data.onGoal(game);
     };
     pong.onGameEnd = (game) => {
+        playerLeftDiv.style.display = 'none';
+        playerRightDiv.style.display = 'none';
+        statsDiv.classList.add('end');
         if (game.playerLeft.score > game.playerRight.score)
             scoreDiv.textContent = `${game.playerLeft.name} wins!`;
         else

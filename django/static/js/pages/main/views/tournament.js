@@ -157,10 +157,20 @@ function loadFormView(component) {
     const MAX_PLAYERS = 8;
     const players = new Set();
     function addPlayerToForm() {
-        const playerName = input.value.trim();
+        const playerName = input.value;
         
+        if (players.size >= MAX_PLAYERS) {
+            alert('Max players reached.');
+            return;
+        }
+
         if (!playerName) {
             alert('No empty names allowed.');
+            return;
+        }
+
+        if (!/^[a-zA-Z0-9_]+$/.test(playerName)) {
+            alert('Only letters, numbers and underscores allowed.');
             return;
         }
         
@@ -169,8 +179,8 @@ function loadFormView(component) {
             return;
         }
         
-        if (players.size >= MAX_PLAYERS) {
-            alert('Max players reached.');
+        if (playerName.length > 20) {
+            alert('Player name too long.');
             return;
         }
         
@@ -195,7 +205,7 @@ function loadFormView(component) {
     }
 
     const containerDiv = document.createElement('div');
-    containerDiv.id = 'div-form-container';
+    containerDiv.id = 'div-container';
     component.appendChild(containerDiv);
 
     const titleDiv = document.createElement('div');
@@ -261,6 +271,7 @@ function loadFormView(component) {
 
 function loadMatchesView(component) {
     const matchesContainer = document.createElement('div');
+    matchesContainer.id = 'div-container';
     component.appendChild(matchesContainer);
 
     const matchesList = tournament.getComponent();

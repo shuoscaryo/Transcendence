@@ -23,14 +23,30 @@
     background-color: #111111;
     border-bottom: 2px solid #ffffff;
 }
+.pong-game .div-game .div-stats.end {
+    justify-content: center;
+}
 
-.pong-game .div-game .div-stats div {
+.pong-game .div-game .div-stats .div-player {
+    flex: 1;
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
+.pong-game .div-game .div-stats .div-player.player-lef {
+    justify-content: flex-start;
+
+}
+.pong-game .div-game .div-stats .div-player.player-right {
+    justify-content: flex-end;
+}    
+
 .pong-game .div-game .div-stats .div-score {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
     font-size: 48px;
     font-weight: bold;
 }
