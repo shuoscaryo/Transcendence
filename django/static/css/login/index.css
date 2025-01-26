@@ -31,3 +31,154 @@
     height: 100%;
     object-fit: scale-down;
 }
+
+/* ########### */
+/* View styles */
+/* ########### */
+#view {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 20px;
+    width: 100%;
+}
+
+#view #div-upper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    padding: 40px;
+    padding-bottom: 20px;
+    width: 100%;
+}
+
+#view #div-upper #div-normal-login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    gap: 20px;
+    width: 100%;
+    color: #d4d4d4;
+}
+
+#view #div-upper #div-normal-login h1 {
+    text-align: center;
+}
+
+#div-form {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    gap: 20px;
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+#button-forgot-password {
+    background-color: transparent;
+    text-decoration: underline;
+    cursor: pointer;
+    color: #aaaaaa;
+}
+
+#view #div-upper form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+}
+
+#view #div-upper form input {
+    width: 100%;    
+    height: 40px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 2px solid #555555;
+    background-color: #444444;
+}
+
+#view #div-upper form input:hover {
+    border: 2px solid #777777;
+}
+
+#view #div-upper form input:focus  {
+    outline: none;
+    border: 2px solid #777777;
+    box-shadow: 0 0 5px #777777;
+}
+
+#view #div-upper #button-login {
+    width: 100%;
+    height: 60px; /* modificable */
+    font-size: 24px; /* modificable */
+}
+
+#view #div-upper #div-other-login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 20px;
+}
+
+#view #div-other-login .button-other-login {
+    width: 100%;
+    height: 60px; /* modificable */
+    border-radius: 4px; /* modificable */
+}
+
+#view #div-other-login .button-other-login .button-content {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+}
+
+#view #div-other-login .button-other-login img{
+    max-width: 25%; /* modificable */
+    height: 100%;
+    object-fit: scale-down;
+}
+
+#view #div-upper #div-other-login #div-text {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+    text-align: center; /* modificable */
+    padding-right: 10px; /* modificable */
+    font-weight: normal;
+}
+
+#view #div-lower {
+    background-color: #1a1a1a;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#div-lower button {
+    width: 100%;
+    padding: 20px;
+    color: #aaaaaa;
+}
+
+#div-separator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    color: #aaaaaa; /* Color de las líneas */
+}
+#div-separator::before,
+#div-separator::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid #555555; /* Color de las líneas */
+    margin: 0 10px; /* Espacio alrededor del texto */
+}

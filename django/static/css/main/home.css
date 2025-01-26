@@ -61,44 +61,31 @@ main section {
 /* ############### */
 /* Section buttons */
 /* ############### */
-  
-  .section-button {
-    display: flex;
-    align-items: left;
-    width: 100%;
-    height: 80px; /* modificable */
-    border-radius: 15px; /* modificable */
+  .button-default {
+	height: 80px;
   }
-  
-  .section-button .section-button-left {
+
+  .button-default .button-content {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    justify-content: left;
+    gap: 12px; /* modificable */
+    overflow: hidden;
+    height: 100%;
+  }
+
+  .button-default img {
     max-width: 25%; /* modificable */
-    padding: 10px; /* modificable */
-  }
-  
-  .section-button .section-button-left img {
-    width: 100%;
     height: 100%;
     object-fit: scale-down;
   }
-  
-  .section-button .section-button-right {
-    display: flex;
-    flex-direction: column;  
-    justify-content: center;
-    flex-grow: 1;
-    gap: 5px; /* modificable */
-    text-align: left; /* modificable */
-    padding-right: 10px; /* modificable */
-  }
-  
-  .section-button .section-button-right h2 {
-    font-size: 24px; /* modificable */
-  }
-  
 
+  .button-default .button-content .button-text {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 5px; /* modificable */
+	text-align: left; /* modificable */
+  }
 
 /* ######### */
 /* Section 2 */

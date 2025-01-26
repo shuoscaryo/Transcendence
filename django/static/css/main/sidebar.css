@@ -44,37 +44,24 @@
     object-fit: scale-down;
 }
 
-/* ########### */
-/* home-button */
-/* ########### */
+.sidebar .home-button {
+    height: 120px; /* same as .sidebar width */
+    padding: 10px;
+}
 
-    .sidebar .home-button {
-        height: 120px; /* same as .sidebar width */
-        padding: 10px;
-    }
-  
 /* ########## */
 /* lower-half */
 /* ########## */
-    .sidebar .lower-half {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        padding-bottom: 20px;
-        padding-left: 10px;
-        padding-right: 10px;
-    }
+.sidebar .lower-half {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-bottom: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
 
-    .sidebar .button-login {
-        border-radius: 5px;
-        height: 40px;
-        font-weight: bold;
-    }
-
-    .sidebar .button-gray {
-        background-color: #444444;
-    }
-
-    .sidebar .button-gray:hover {
-        background-color: #555555;
-    }
+.sidebar .button-login {
+    border-radius: 4px ;
+    height: 40px;
+}

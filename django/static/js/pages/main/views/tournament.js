@@ -1,6 +1,8 @@
 import createPongGameComponent from '/static/js/components/game.js';
 import { PlayerController } from '/static/js/utils/Controller.js';
 import Path from '/static/js/utils/Path.js';
+import loadPage from '/static/js/utils/loadPage.js';
+import getDefaultButton from '/static/js/components/defaultButton.js';
 
 class Tournament {
     constructor() {
@@ -149,6 +151,14 @@ class Tournament {
 
         return component;
     }
+
+    getWinner() {
+        if (!this.over)
+            return null;
+        if (this.matchBoxes[this.matchBoxes.length - 1][0] != null)
+            return this.matchBoxes[this.matchBoxes.length - 1][0];
+        return this.matchBoxes[this.matchBoxes.length - 1][1];
+    }
 };
 
 let tournament = null;
@@ -192,13 +202,15 @@ function loadFormView(component) {
         listText.textContent = playerName;
         listItem.appendChild(listText);
 
-        const removeButton = document.createElement('button');
-        removeButton.classList.add('button-red');
-        removeButton.textContent = 'X';
-        removeButton.addEventListener('click', () => {
-            players.delete(playerName);
-            listItem.remove();
+        const removeButton = getDefaultButton({
+            bgColor: 'var(--color-red)',
+            content: 'X',
+            onClick: () => {
+                players.delete(playerName);
+                listItem.remove();
+            },
         });
+        removeButton.classList.add('button-delete');
         listItem.appendChild(removeButton);
         
         input.value = '';
@@ -240,19 +252,21 @@ function loadFormView(component) {
     button.addEventListener('click', addPlayerToForm);
     inputDiv.appendChild(button);
     
-    const buttonNext = document.createElement('button');
-    buttonNext.id = "button-next";
-    buttonNext.classList.add('button-green');
-    buttonNext.textContent = 'Start Tournament';
-    buttonNext.addEventListener('click', () => {
-        if (players.size < 2) {
-            alert('Minimum 2 Players required.');
-            return;
-        }
-        tournament.init(players);
-        component.innerHTML = '';
-        loadMatchesView(component);
+
+    const buttonNext = getDefaultButton({
+        bgColor: 'var(--color-lime)',
+        content: 'Start Tournament',
+        onClick: () => {
+            if (players.size < 2) {
+                alert('Minimum 2 Players required.');
+                return;
+            }
+            tournament.init(players);
+            component.innerHTML = '';
+            loadMatchesView(component);
+        },
     });
+    buttonNext.id = "button-next";
     containerDiv.appendChild(buttonNext);
     
     const playersDiv = document.createElement('div');
@@ -270,37 +284,79 @@ function loadFormView(component) {
 
 
 function loadMatchesView(component) {
-    const matchesContainer = document.createElement('div');
-    matchesContainer.id = 'div-container';
-    component.appendChild(matchesContainer);
+    const containerDiv = document.createElement('div');
+    containerDiv.id = 'div-container';
+    component.appendChild(containerDiv);
+    
+    if( tournament.over ) {
+        const winnerDiv = document.createElement('div');
+        winnerDiv.id = 'winner';
+        containerDiv.appendChild(winnerDiv);
+
+        const winnerText = document.createElement('h1');
+        winnerText.textContent = `${tournament.getWinner()} Wins the Tournament!`;
+        winnerDiv.appendChild(winnerText);
+    }
 
     const matchesList = tournament.getComponent();
     matchesList.id = "tournament";
-    matchesContainer.appendChild(matchesList);
+    containerDiv.appendChild(matchesList);
 
-    const buttonNext = document.createElement('button');
-    buttonNext.textContent = 'Start tournament';
-    buttonNext.addEventListener('click', () => {
-        component.innerHTML = '';
-        loadGameView(component);
-    });
-    component.appendChild(buttonNext);
+    const buttonsDiv = document.createElement('div');
+    buttonsDiv.id = 'buttons-div';
+    containerDiv.appendChild(buttonsDiv);
 
-    const buttonTest0 = document.createElement('button');
-    buttonTest0.textContent = 'Test 0';
-    buttonTest0.addEventListener('click', () => {
-        tournament.setMatchResult(0);
-        matchesContainer.replaceChildren(tournament.getComponent());
-    });
-    component.appendChild(buttonTest0);
+    if (!tournament.over) {
+        const buttonTest0 = getDefaultButton({
+            bgColor: 'var(--color-gray)',
+            content: 'Left Player Auto Win',
+            onClick: () => {
+                tournament.setMatchResult(0);
+                if (!tournament.over)
+                    matchesList.replaceChildren(tournament.getComponent());
+                else {
+                    component.innerHTML = '';
+                    loadMatchesView(component);
+                }
+            },
+        });
+        buttonsDiv.appendChild(buttonTest0);
+        
+        const buttonNext = getDefaultButton({
+            bgColor: 'var(--color-lime)',
+            content: 'Start Match',
+            onClick: () => {
+                component.innerHTML = '';
+                loadGameView(component);
+            },
+        });
+        buttonsDiv.appendChild(buttonNext);
 
-    const buttonTest1 = document.createElement('button');
-    buttonTest1.textContent = 'Test 1';
-    buttonTest1.addEventListener('click', () => {
-        tournament.setMatchResult(1);
-        matchesContainer.replaceChildren(tournament.getComponent());
-    });
-    component.appendChild(buttonTest1);
+        const buttonTest1 = getDefaultButton({
+            bgColor: 'var(--color-gray)',
+            content: 'Right Player Auto Win',
+            onClick: () => {
+                tournament.setMatchResult(1);
+                if (!tournament.over)
+                    matchesList.replaceChildren(tournament.getComponent());
+                else {
+                    component.innerHTML = '';
+                    loadMatchesView(component);
+                }
+            },
+        });
+        buttonsDiv.appendChild(buttonTest1);
+    }
+    else {
+        const buttonHome = getDefaultButton({
+            bgColor: 'var(--color-lime)',
+            content: 'Go Back to Home',
+            onClick: () => {
+                loadPage('main','home');
+            },
+        });
+        buttonsDiv.appendChild(buttonHome);
+    }
 }
 
 function loadGameView(component) {

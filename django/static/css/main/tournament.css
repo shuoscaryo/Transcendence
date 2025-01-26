@@ -61,11 +61,8 @@
 #div-container #button-next {
     height: 80px;
     width: 80%;
-    border-radius: 15px;
-    overflow: hidden;
     font-size: 24px;
     font-weight: bold;
-    padding: 10px;
 }
 
 #div-container .div-players {
@@ -103,32 +100,22 @@
     border-bottom: 1px solid #444444;
 }
 
-.button-red {
+.button-default.button-delete {
     display: flex;
     align-items: center;
     justify-content: center;
-
     height: 20px;
     width: 20px;
-    border-radius: 5px;
-    overflow: hidden;
-    background-color: #ca1e1e;
-    color: white;
-    border: none;
+    border-radius: 4px;
+    padding: 8px;
     font-weight: 900;
 }
-
-.button-red:hover {
-    background-color: #e76e6e;
-}
-
 
 .tournament {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 50px;
     gap: 50px;
 }
 
@@ -150,7 +137,7 @@
     border-radius: 5px;
     min-width: 100px;
     height: 100px;
-    background-color: #222222;
+    background-color: #333333;
 }
 
 .tournament .round .match-box.active-match {
@@ -162,4 +149,15 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+#buttons-div {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-around;
+    gap: 24px;
+}
+
+#buttons-div button {
+    flex: 1;
 }

@@ -1,6 +1,7 @@
 import Path from '/static/js/utils/Path.js';
 import loadPage from '/static/js/utils/loadPage.js';
 import getHomeButton from '/static/js/components/homeButton.js';
+import getDefaultButton from '/static/js/components/defaultButton.js';
 
 function getUpperHalf()
 {
@@ -46,20 +47,23 @@ function getLowerHalf()
     const component = document.createElement('div');
     component.className = 'lower-half';
 
-    const registerButton = document.createElement('button');
-    registerButton.classList.add('button-login', 'button-green');
-    registerButton.textContent = 'Sign Up';
-    registerButton.addEventListener('click', () => {
-        loadPage('login','register');
+
+    const registerButton = getDefaultButton({
+        bgColor: 'var(--color-lime)',
+        textColor: null,
+        content: 'Sign Up',
+        onClick: () => {loadPage('login','register');}
     });
+    registerButton.classList.add('button-login');
     component.appendChild(registerButton);
     
-    const loginButton = document.createElement('button');
-    loginButton.classList.add('button-login', 'button-gray');
-    loginButton.textContent = 'Log In';
-    loginButton.addEventListener('click', () => {
-        loadPage('login','login');
+    const loginButton = getDefaultButton({
+        bgColor: '#444444',
+        textColor: null,
+        content: 'Log In',
+        onClick: () => {loadPage('login','login');}
     });
+    loginButton.classList.add('button-login');
     component.appendChild(loginButton);
 
     return component;

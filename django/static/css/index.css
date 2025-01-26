@@ -1,13 +1,24 @@
+:root {
+    --color-lime: #7eb848; /* modificable */
+    --color-lime-hover: #8ecf5a; /* modificable */
+    --color-gray: #444444; /* modificable */
+    --color-white: #f0f0f0; /* modificable */
+    --color-button-fortito: #1d1d1d; /* modificable */
+    --color-button-fortito-hover: #1a1a1a; /* modificable */
+    --color-red: #ca1e1e; /* modificable */
+}
+
 * {
     /* Text options */
     font-family: Arial, sans-serif;
-    color: #f0f0f0;
+    color: var(--color-white);
 
     /* div options */
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
+
 
 button {
     cursor: pointer;
@@ -17,7 +28,7 @@ button {
 
 p {
     font-size: 16px; /* modificable */
-    color: #d4d4d4; /* modificable */
+    color: var(--color-white); /* modificable */
 }
 
 #app {
@@ -27,25 +38,16 @@ p {
     background-color: #333333;
 }
 
-/* ############ */
-/* button-green */
-/* ############ */
-
-.button-green {
-    background-color: #7eb848; /* modificable */
-  }
-  
-  .button-green:hover {
-    background-color: #8ecf5a; /* modificable */
-    color: white; /* modificable */
-    box-shadow: 0 0 5px #8ecf5a;
-  }
-
-  .button-green:hover p {
-    color: white; /* modificable */
-  }
-
-
+.button-default {
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: box-shadow 0.1s ease-in, background-color 0.1s ease-in;
+}
 
 /* style for showing borders erase it when page is finished*/
 /*div, section, article, aside, header, footer, main, nav, canvas, button {

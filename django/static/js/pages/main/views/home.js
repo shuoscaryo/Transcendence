@@ -1,9 +1,58 @@
-import getSectionButton from '/static/js/components/sectionButton.js';
+import getDefaultButton from '/static/js/components/defaultButton.js';
 import PongGame from '/static/js/utils/PongGame.js';
 import { DemoAI } from '/static/js/utils/Controller.js';
 import Path from '/static/js/utils/Path.js';
 import loadPage from '/static/js/utils/loadPage.js';
 import { PlayerController, PongAI } from '/static/js/utils/Controller.js';
+
+function getButtonWithImage({imgSrc, text, description, bgColor, bgHoverColor, textColor, onClick}) {
+    const buttonContent = document.createElement('div');
+    buttonContent.classList.add('button-content');
+
+    const img = document.createElement('img');
+    img.src = imgSrc;
+    buttonContent.appendChild(img);
+
+    const divText = document.createElement('div');
+    divText.classList.add('button-text');
+    buttonContent.appendChild(divText);
+
+    const h2 = document.createElement('h2');
+    h2.textContent = text;
+    divText.appendChild(h2);
+
+    const p = document.createElement('p');
+    p.textContent = description;
+    divText.appendChild(p);
+
+    return getDefaultButton({
+        bgColor: bgColor,
+        bgHoverColor: bgHoverColor,
+        textColor: textColor,
+        content: buttonContent,
+        onClick: onClick
+    });
+}
+
+function addRatonMiltonVideo() {
+    const component = document.getElementById('view');
+    // ID del video de YouTube
+    const videoId = "qS0HlqjQHnk";
+
+    // Crea el iframe del video con autoplay activado
+    const iframe = document.createElement("iframe");
+    iframe.width = "560"; // Ancho del video
+    iframe.height = "315"; // Alto del video
+    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&modestbranding=1&showinfo=0&rel=0`; // autoplay agregado aquí
+    iframe.title = "YouTube video player";
+    iframe.frameBorder = "0";
+    iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+    iframe.allowFullscreen = true;
+    iframe.allow = "autoplay"; // Asegura que el autoplay esté permitido en algunos navegadores
+
+    // Limpia el contenido del componente y añade el iframe
+    component.appendChild(iframe);
+}
 
 function getSection1() {
     const section = document.createElement('section');
@@ -36,18 +85,19 @@ function getSection1() {
     divButtons.id = 'div-buttons';
     divIntro.appendChild(divButtons);
 
-    const buttonPlayVersus = getSectionButton(
-        Path.img('playLogo.png'),
-        'Versus Mode',
-        'Play against a friend',
-        () => {
+    const buttonPlayVersus = getButtonWithImage({
+        imgSrc: Path.img('playLogo.png'),
+        text: 'Versus Mode',
+        description: 'Play against a friend',
+        bgColor: 'var(--color-lime)',
+        onClick: () => {
             loadPage("main", "game", {
                 playerLeft: { 
                     controller: new PlayerController("w", "s"),
                     name: "anon1",
                 },
                 playerRight: {
-                    controller: new PlayerController("ArrowUp","ArrowDown"),
+                    controller: new PlayerController("ArrowUp", "ArrowDown"),
                     name: "anon2",
                 },
                 maxScore: 3,
@@ -56,15 +106,16 @@ function getSection1() {
                 }
             });
         }
-    );
-    buttonPlayVersus.classList.add('button-green');
+    });
     divButtons.appendChild(buttonPlayVersus);
 
-    const buttonPlayTournament = getSectionButton(
-        Path.img('tournamentLogo.png'),
-        'Tournament',
-        'Create a tournament to play with friends',
-        () => {loadPage("main", "tournament");});
+    const buttonPlayTournament = getButtonWithImage({
+        imgSrc: Path.img('tournamentLogo.png'),
+        bgColor: 'var(--color-gray)',
+        text: 'Tournament',
+        description: 'Create a tournament to play with friends',
+        onClick: () => {loadPage("main", "tournament");}
+    });
     buttonPlayTournament.id = 'button-play-tournament';
     divButtons.appendChild(buttonPlayTournament);
 
@@ -95,11 +146,12 @@ function getSection2() {
     using the time since the last call and the last move decision.<br>`;
     divText.appendChild(p);
 
-    const button = getSectionButton(
-        Path.img('AILogo.png'),
-        'Play vs Bots',
-        'Play against our AI',
-        () => {
+    const button = getButtonWithImage({
+        imgSrc: Path.img('AILogo.png'),
+        text: 'Play vs Bots',
+        description: 'Play against our AI',
+        bgColor: 'var(--color-lime)',
+        onClick: () => {
             loadPage("main", "game", {
                 playerLeft: {
                     controller: new PlayerController("w", "s"),
@@ -111,32 +163,15 @@ function getSection2() {
                 },
                 maxScore: 3,
                 onGameEnd: (game) => {
-                    if (game.playerRight.score > game.playerLeft.score) {
-                        const component = document.getElementById('view');
-                        // ID del video de YouTube
-                        const videoId = "qS0HlqjQHnk";
-
-                        // Crea el iframe del video con autoplay activado
-                        const iframe = document.createElement("iframe");
-                        iframe.width = "560"; // Ancho del video
-                        iframe.height = "315"; // Alto del video
-                        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&modestbranding=1&showinfo=0&rel=0`; // autoplay agregado aquí
-                        iframe.title = "YouTube video player";
-                        iframe.frameBorder = "0";
-                        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-                        iframe.allowFullscreen = true;
-                        iframe.allow = "autoplay"; // Asegura que el autoplay esté permitido en algunos navegadores
-
-                        // Limpia el contenido del componente y añade el iframe
-                        component.appendChild(iframe);
-                    }
+                    if (game.playerRight.score > game.playerLeft.score)
+                        addRatonMiltonVideo();
                 },
                 onContinueButton: (game) => {
                     loadPage("main", "home");
                 }
             });
         }
-    );
+    });
     button.classList.add('button-green');
     button.id = 'button-play-ai';
     div.appendChild(button);

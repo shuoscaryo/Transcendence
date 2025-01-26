@@ -1,6 +1,6 @@
-import * as css from '/static/js/utils/css.js';
 import Path from '/static/js/utils/Path.js';
 import loadPage from '/static/js/utils/loadPage.js';
+import getDefaultButton from '/static/js/components/defaultButton.js';
 
 function getOtherLogin() {
     const component = document.createElement('div');
@@ -10,25 +10,26 @@ function getOtherLogin() {
     separatorDiv.textContent = 'OR';
     component.appendChild(separatorDiv);
 
-    const fortitoButton = document.createElement('button');
-    fortitoButton.id = 'button-fortito';
-    fortitoButton.addEventListener('click', () => {
-        loadPage('main','home');
-    });
-    component.appendChild(fortitoButton);
-
-    const imgDiv = document.createElement('div');
-    imgDiv.id = 'div-img';
-    fortitoButton.appendChild(imgDiv);
-
+    const buttonContent = document.createElement('div');
+    buttonContent.classList.add('button-content');
+    
     const img = document.createElement('img');
     img.src = Path.img('42Logo.png');
-    imgDiv.appendChild(img);
+    buttonContent.appendChild(img);
 
     const textDiv = document.createElement('div');
     textDiv.id = 'div-text';
     textDiv.textContent = 'Log in with 42';
-    fortitoButton.appendChild(textDiv);
+    buttonContent.appendChild(textDiv);
+
+    const fortitoButton = getDefaultButton({
+        bgColor: 'var(--color-button-fortito)',
+        bgHoverColor: 'var(--color-button-fortito-hover)',
+        content: buttonContent,
+        onClick: () => {loadPage('main','home');},
+    });
+    fortitoButton.classList.add('button-other-login');
+    component.appendChild(fortitoButton);
 
     return component;
 }
@@ -72,14 +73,16 @@ function getUpperHalf() {
         loadPage('forgotPassword');
     });
     divForm.appendChild(forgotPassword);
+
     
-    const loginButton = document.createElement('button');
-    loginButton.classList.add('button-green');
-    loginButton.id = 'button-login';
-    loginButton.textContent = 'Log In';
-    loginButton.addEventListener('click', () => {
-        loadPage('main','home');
+    const loginButton = getDefaultButton({
+        bgColor: 'var(--color-lime)',
+        bgHoverColor: 'var(--color-lime-hover)',
+        textColor: null,
+        content: 'Log In',
+        onClick: () => {loadPage('main','home');},
     });
+    loginButton.id = 'button-login';
     divNormalLogin.appendChild(loginButton);
 
     const divOtherLogin = getOtherLogin();
@@ -91,7 +94,6 @@ function getUpperHalf() {
 
 export default async function getView(component, loadCssFunction) {
     await loadCssFunction([
-        Path.css("login/login.css"),
     ]);
 
     const divUpper = getUpperHalf();
