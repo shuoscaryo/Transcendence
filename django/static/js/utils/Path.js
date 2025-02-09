@@ -8,7 +8,7 @@ export default class Path {
         throw new Error('Path is a static class and cannot be instantiated.');
     }
 
-    static url() {
+    static url() { //XXX maybe unnecessary
         // Get the current URL
         const currentURL = new URL(window.location.href);
 

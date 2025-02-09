@@ -22,5 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
     path('favicon.ico', views.favicon, name='favicon'),
+    path('pages/<path:extra>', views.index, name='index'),
+    path('pages/', views.index, name='index'),
 	path('', views.index, name='index'),
 ]
