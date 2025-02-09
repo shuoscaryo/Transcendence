@@ -34,10 +34,10 @@ export default async function loadPage(pageName, view = null, data = null, updat
             const divView = document.getElementById('view');
             if (divView) {
                 viewFile = current.view == view
-                ? current.viewFile
-                : await import(Path.join(
-                    '/', Path.page(pageName), 'views', `${view}.js`));
-                    
+                    ? current.viewFile
+                    : await import(Path.join(
+                        '/', Path.page(pageName), 'views', `${view}.js`));
+
                     await viewFile.default(divView, css.loadViewCss, data);
                 }
         }
@@ -50,9 +50,16 @@ export default async function loadPage(pageName, view = null, data = null, updat
             history.pushState({}, '', Path.join('/pages', pageName, view));
     } catch (error) {
         console.error(error);
-        if (current.name != pageName && current.pageFile)
+        if (current.name != pageName && current.pageFile) {
+            divApp.innerHTML = '';
             await current.pageFile.default(divApp, css.loadPageCss, current.data); //TODO: 404 page
-        if (current.view != view && current.viewFile && view)
-            await current.viewFile.default(document.getElementById('view'), css.loadViewCss, current.data); //TODO: 404 view
+        }
+        if (current.view != view && current.viewFile && view) {
+            const divView = document.getElementById('view');
+            if (divView) {
+                divView.innerHTML = '';
+                await current.viewFile.default(document.getElementById('view'), css.loadViewCss, current.data); //TODO: 404 view
+            }
+        }
     };
 }
