@@ -10,7 +10,7 @@ const current = {
 };
 
 export default async function loadPage(pageName, view = null, data = null, updateURL = true) {
-    if (!pageName || !view)
+    if (!pageName)
         throw new Error('loadPage: The pageName and view parameters are required.');
 
     const divApp = document.getElementById('app');
@@ -47,7 +47,7 @@ export default async function loadPage(pageName, view = null, data = null, updat
 
         // Update the URL
         if (updateURL)
-            history.pushState(data, '', Path.join('/pages', pageName, view));
+            history.pushState({}, '', Path.join('/pages', pageName, view));
     } catch (error) {
         console.error(error);
         if (current.name != pageName && current.pageFile)
