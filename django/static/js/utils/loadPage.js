@@ -2,30 +2,33 @@ import Path from '/static/js/utils/Path.js';
 import * as css from '/static/js/utils/css.js';
 
 const current = {
-    name: null,
+    page: null,
     view: null,
     data: null,
     pageFile: null,
     viewFile: null
 };
 
-export default async function loadPage(pageName, view = null, data = null, updateURL = true) {
-    if (!pageName)
-        throw new Error('loadPage: The pageName and view parameters are required.');
+export default async function loadPage(path, data = null, pushUrl = true) {
+    const [prefix, page, view] = path.split('/');
+    if (prefix != 'pages' || !page)
+        throw new Error(`Invalid path ${path}`);
 
     const divApp = document.getElementById('app');
-    const isSamePage = current.name == pageName;
+    const isSamePage = current.page == page;
     try {
-        // If is the same page clear the page, otherwise only the view
-        const clearDiv = (isSamePage ? document.getElementById('view') : divApp);
-        if (clearDiv)
-            clearDiv.innerHTML = '';
+        // If last page has destructor call it
+        if (current.pageFile?.destroy)
+            current.pageFile.destroy();
+
+        // If is the same page clear the view, otherwise clear the page
+        (isSamePage ? document.getElementById('view') : divApp)?.innerHTML = '';
         if (!isSamePage)
             css.deletePageCss();
         css.deleteViewCss();
         
         // Replace the page frame if needed
-        const pageFile = isSamePage ? current.pageFile : await import(Path.page(pageName, 'index.js'));
+        const pageFile = isSamePage ? current.pageFile : await import(Path.page(page, 'index.js'));
         if (!isSamePage)
             await pageFile.default(divApp, css.loadPageCss, data);
         // Replace the view if needed
@@ -36,21 +39,21 @@ export default async function loadPage(pageName, view = null, data = null, updat
                 viewFile = current.view == view
                     ? current.viewFile
                     : await import(Path.join(
-                        '/', Path.page(pageName), 'views', `${view}.js`));
+                        '/', Path.page(page), 'views', `${view}.js`));
 
-                    await viewFile.default(divView, css.loadViewCss, data);
-                }
+                await viewFile.default(divView, css.loadViewCss, data);
+            }
         }
 
         // Update the current page
-        Object.assign(current, { name: pageName, view: view, data: data, pageFile: pageFile, viewFile: viewFile });
+        Object.assign(current, { page: page, view: view, data: data, pageFile: pageFile, viewFile: viewFile });
 
         // Update the URL
-        if (updateURL)
-            history.pushState({}, '', Path.join('/pages', pageName, view));
+        if (pushUrl)
+            history.pushState({}, '', Path.join('/pages', page, view));
     } catch (error) {
         console.error(error);
-        if (current.name != pageName && current.pageFile) {
+        if (current.page != page && current.pageFile) {
             divApp.innerHTML = '';
             await current.pageFile.default(divApp, css.loadPageCss, current.data); //TODO: 404 page
         }
