@@ -21,6 +21,10 @@ export default async function loadPage(path, data = null, pushUrl = true) {
         if (current.pageFile?.destroy)
             current.pageFile.destroy();
 
+        // If last view has destructor call it
+        if (current.viewFile?.destroy)
+            current.viewFile.destroy();
+
         // If is the same page clear the view, otherwise clear the page
         (isSamePage ? document.getElementById('view') : divApp)?.innerHTML = '';
         if (!isSamePage)
