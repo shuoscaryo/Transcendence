@@ -2,7 +2,7 @@
 
 export function getLoginForm()
 {
-	return fetch('/accounts/login/formulario')
+	return fetch('/api/login_form')
 		.then(response => response.text())
 		.then(html => {
 			const tempContainer = document.createElement('div');
@@ -13,7 +13,7 @@ export function getLoginForm()
 
 export function getRegisterForm()
 {
-	return fetch('/accounts/register/formulario')
+	return fetch('/api/register_form')
 		.then(response => response.text())
 		.then(html => {
 			const tempContainer = document.createElement('div');
