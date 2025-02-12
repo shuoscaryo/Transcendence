@@ -52,7 +52,7 @@ function getLowerHalf()
         bgColor: 'var(--color-lime)',
         textColor: null,
         content: 'Sign Up',
-        onClick: () => {loadPage('login','register');}
+        onClick: () => {loadPage("/pages/login/register");}
     });
     registerButton.classList.add('button-login');
     component.appendChild(registerButton);
@@ -61,7 +61,7 @@ function getLowerHalf()
         bgColor: '#444444',
         textColor: null,
         content: 'Log In',
-        onClick: () => {loadPage('login','login');}
+        onClick: () => {loadPage("/pages/login/login");}
     });
     loginButton.classList.add('button-login');
     component.appendChild(loginButton);

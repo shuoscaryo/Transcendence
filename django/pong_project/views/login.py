@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login
 import json
 
 @csrf_exempt
-def APIlogin(request):
+def apiLogin(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)

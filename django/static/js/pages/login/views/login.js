@@ -26,7 +26,7 @@ function getOtherLogin() {
         bgColor: 'var(--color-button-fortito)',
         bgHoverColor: 'var(--color-button-fortito-hover)',
         content: buttonContent,
-        onClick: () => {loadPage('main','home');},
+        onClick: () => {loadPage('/pages/main/home');},
     });
     fortitoButton.classList.add('button-other-login');
     component.appendChild(fortitoButton);
@@ -70,7 +70,7 @@ function getUpperHalf() {
     forgotPassword.id = 'button-forgot-password';
     forgotPassword.textContent = 'Forgot Password?';
     forgotPassword.addEventListener('click', () => {
-        loadPage('forgotPassword');
+        loadPage('pages/forgotPassword');
     });
     divForm.appendChild(forgotPassword);
 
@@ -80,7 +80,7 @@ function getUpperHalf() {
         bgHoverColor: 'var(--color-lime-hover)',
         textColor: null,
         content: 'Log In',
-        onClick: () => {loadPage('main','home');},
+        onClick: () => {loadPage('/pages/main/home');},
     });
     loginButton.id = 'button-login';
     divNormalLogin.appendChild(loginButton);
@@ -108,7 +108,7 @@ export default async function getView(component, loadCssFunction) {
     const registerButton = document.createElement('button');
     registerButton.id = 'button-register';
     registerButton.addEventListener('click', () => {
-        loadPage('login','register');
+        loadPage('/pages/login/register');
     });
     registerButton.textContent = 'New? Sign up - and start playing pong!';
     divLower.appendChild(registerButton);

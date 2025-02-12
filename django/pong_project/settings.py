@@ -135,8 +135,6 @@ STATIC_ROOT = '/staticfiles'
 
 # List of all apps in the project (extended from the default INSTALLED_APPS)
 INSTALLED_APPS += [
-	'game',
-    'accounts',
 ]
 
 # This is the path to the static files in the project

@@ -352,7 +352,7 @@ function loadMatchesView(component) {
             bgColor: 'var(--color-lime)',
             content: 'Go Back to Home',
             onClick: () => {
-                loadPage('main','home');
+                loadPage('/pages/main/home');
             },
         });
         buttonsDiv.appendChild(buttonHome);

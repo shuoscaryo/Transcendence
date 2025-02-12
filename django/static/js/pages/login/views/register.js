@@ -26,7 +26,7 @@ function getOtherLogin() {
         bgColor: 'var(--color-button-fortito)',
         bgHoverColor: 'var(--color-button-fortito-hover)',
         content: buttonContent,
-        onClick: () => {loadPage('main','home');},
+        onClick: () => {loadPage('/pages/main/home');},
     });
     fortitoButton.classList.add('button-other-login');
     component.appendChild(fortitoButton);
@@ -87,7 +87,7 @@ function getUpperHalf() {
         bgHoverColor: 'var(--color-lime-hover)',
         textColor: null,
         content: 'Sign Up',
-        onClick: () => {loadPage('main','home');},
+        onClick: () => {loadPage('/pages/main/home');},
     });
     loginButton.id = 'button-login';
     divNormalLogin.appendChild(loginButton);
@@ -115,7 +115,7 @@ export default async function getView(component, loadCssFunction) {
     const registerButton = document.createElement('button');
     registerButton.id = 'button-register';
     registerButton.addEventListener('click', () => {
-        loadPage('login','login');
+        loadPage('pages/login/login');
     });
     registerButton.textContent = 'Already have an account? Log in';
     divLower.appendChild(registerButton);

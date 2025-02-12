@@ -63,5 +63,5 @@ export function handleBackToMain() {
 }
 
 export function handleRegister() {
-    loadPage('register');
+    loadPage('pages/register');
 }

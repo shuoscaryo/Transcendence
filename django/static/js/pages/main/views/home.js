@@ -91,7 +91,7 @@ function getSection1() {
         description: 'Play against a friend',
         bgColor: 'var(--color-lime)',
         onClick: () => {
-            loadPage("main", "game", {
+            loadPage('/pages/main/game', {
                 playerLeft: { 
                     controller: new PlayerController("w", "s"),
                     name: "anon1",
@@ -102,7 +102,7 @@ function getSection1() {
                 },
                 maxScore: 3,
                 onContinueButton: (game) => {
-                    loadPage("main", "home");
+                    loadPage('/pages/main/home');
                 }
             });
         }
@@ -114,7 +114,7 @@ function getSection1() {
         bgColor: 'var(--color-gray)',
         text: 'Tournament',
         description: 'Create a tournament to play with friends',
-        onClick: () => {loadPage("main", "tournament");}
+        onClick: () => {loadPage('/pages/main/tournament');}
     });
     buttonPlayTournament.id = 'button-play-tournament';
     divButtons.appendChild(buttonPlayTournament);
@@ -152,7 +152,7 @@ function getSection2() {
         description: 'Play against our AI',
         bgColor: 'var(--color-lime)',
         onClick: () => {
-            loadPage("main", "game", {
+            loadPage('/pages/main/game', {
                 playerLeft: {
                     controller: new PlayerController("w", "s"),
                     name: "anon1",
@@ -167,7 +167,7 @@ function getSection2() {
                         addRatonMiltonVideo();
                 },
                 onContinueButton: (game) => {
-                    loadPage("main", "home");
+                    loadPage('/pages/main/home');
                 }
             });
         }

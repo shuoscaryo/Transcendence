@@ -10,6 +10,8 @@ const current = {
 };
 
 export default async function loadPage(path, data = null, pushUrl = true) {
+    if (path.startsWith('/'))
+        path = path.substring(1);
     const [prefix, page, view] = path.split('/');
     if (prefix != 'pages' || !page)
         throw new Error(`Invalid path ${path}`);
@@ -26,7 +28,9 @@ export default async function loadPage(path, data = null, pushUrl = true) {
             current.viewFile.destroy();
 
         // If is the same page clear the view, otherwise clear the page
-        (isSamePage ? document.getElementById('view') : divApp)?.innerHTML = '';
+        const clearView = isSamePage ? document.getElementById('view') : divApp;
+        if (clearView)
+            clearView.innerHTML = '';
         if (!isSamePage)
             css.deletePageCss();
         css.deleteViewCss();
@@ -54,7 +58,7 @@ export default async function loadPage(path, data = null, pushUrl = true) {
 
         // Update the URL
         if (pushUrl)
-            history.pushState({}, '', Path.join('/pages', page, view));
+            history.pushState({}, '', Path.join(`/${path}`));
     } catch (error) {
         console.error(error);
         if (current.page != page && current.pageFile) {

@@ -8,7 +8,7 @@ function router() {
     if (currentURL.pathname == '/'
         || currentURL.pathname == '/pages/'
     ) {
-        loadPage('main', 'home');
+        loadPage('/pages/main/home');
         return;
     }
 
@@ -25,7 +25,7 @@ function router() {
         else if (page == "login")
             view = "login";
     }        
-    loadPage(page, view);
+    loadPage(`pages/${page}/${view}`);
 }
 
 window.addEventListener('popstate', router);

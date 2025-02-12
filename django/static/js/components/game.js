@@ -91,7 +91,7 @@ export default function createPongGameComponent(data) {
         if (data.onContinueButton)
             data.onContinueButton(pong)
         else
-            loadPage("main", "home");
+            loadPage("/pages/main/home");
     });
 
     return [component, pong];

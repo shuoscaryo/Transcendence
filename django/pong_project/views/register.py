@@ -1,11 +1,10 @@
-from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 import json
 
 @csrf_exempt
-def APIregister(request):
+def apiRegister(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
