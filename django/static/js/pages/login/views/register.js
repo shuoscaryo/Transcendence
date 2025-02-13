@@ -34,32 +34,27 @@ function getOtherLogin() {
     return component;
 }
 
+function getInput(name, type, placeholder) {
+    const component = document.createElement('div');
+
+    const input = document.createElement('input');
+    input.name = name;
+    input.type = type;
+    input.placeholder = placeholder;
+    component.appendChild(input);
+
+    const error = document.createElement('p');
+    error.style.display = 'none';
+    component.appendChild(error);
+    return input;
+}
+
 function getForm() {
     const component = document.createElement('form');
-
-    const inputEmail = document.createElement('input');
-    inputEmail.id = 'input-email';
-    inputEmail.type = 'email';
-    inputEmail.placeholder = 'Email';
-    component.appendChild(inputEmail);
-
-    const username = document.createElement('input');
-    username.id = 'input-username';
-    username.type = 'text';
-    username.placeholder = 'Username';
-    component.appendChild(username);
-
-    const inputPassword = document.createElement('input');
-    inputPassword.id = 'input-password';
-    inputPassword.type = 'password';
-    inputPassword.placeholder = 'Password';
-    component.appendChild(inputPassword);
-
-    const repeatPassword = document.createElement('input');
-    repeatPassword.id = 'input-repeat-password';
-    repeatPassword.type = 'password';
-    repeatPassword.placeholder = 'Repeat Password';
-    component.appendChild(repeatPassword);
+    component.appendChild(getInput('email', 'email', 'Email'));
+    component.appendChild(getInput('username', 'text', 'Username'));
+    component.appendChild(getInput('password', 'password', 'Password'));
+    component.appendChild(getInput('repeat-password', 'password', 'Repeat Password'));
 
     return component;
 }
@@ -87,7 +82,37 @@ function getUpperHalf() {
         bgHoverColor: 'var(--color-lime-hover)',
         textColor: null,
         content: 'Sign Up',
-        onClick: () => {loadPage('/pages/main/home');},
+        onClick: async () => {
+            const formData = new FormData(form);
+            const jsonData = {
+                email: formData.get('email'),
+                username: formData.get('username'),
+                password: formData.get('password'),
+            };
+
+            if (formData.get('password') !== formData.get('repeat-password')) {
+                alert('Passwords do not match');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(jsonData)
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    alert('Account created successfully');
+                    loadPage('/pages/main/home');
+                } else {
+                    alert(result.error);
+                }
+            } catch (error) {
+                console.log('Request failed:', error);
+            }
+        },
     });
     loginButton.id = 'button-login';
     divNormalLogin.appendChild(loginButton);
@@ -119,4 +144,15 @@ export default async function getView(component, loadCssFunction) {
     });
     registerButton.textContent = 'Already have an account? Log in';
     divLower.appendChild(registerButton);
+
+    const TMP = getDefaultButton({
+        bgColor: 'var(--color-button-fortito)',
+        content: 'Toggle popups',
+        onClick: () => {
+            const popups = document.querySelectorAll('.popup');
+            popups.forEach((popup) => {
+                popup.classList.toggle('hidden');
+            });
+        },
+    });
 }

@@ -34,20 +34,26 @@ function getOtherLogin() {
     return component;
 }
 
+function getInput(name, type, placeholder) {
+    const component = document.createElement('div');
+
+    const input = document.createElement('input');
+    input.name = name;
+    input.type = type;
+    input.placeholder = placeholder;
+    component.appendChild(input);
+
+    const error = document.createElement('p');
+    error.style.display = 'none';
+    component.appendChild(error);
+    return component;
+}
+
 function getForm() {
     const component = document.createElement('form');
 
-    const inputEmail = document.createElement('input');
-    inputEmail.id = 'input-email';
-    inputEmail.type = 'email';
-    inputEmail.placeholder = 'Email';
-    component.appendChild(inputEmail);
-
-    const inputPassword = document.createElement('input');
-    inputPassword.id = 'input-password';
-    inputPassword.type = 'password';
-    inputPassword.placeholder = 'Password';
-    component.appendChild(inputPassword);
+    component.appendChild(getInput('username', 'text', 'Username'));
+    component.appendChild(getInput('password', 'password', 'Password'));
 
     return component;
 }
@@ -80,7 +86,30 @@ function getUpperHalf() {
         bgHoverColor: 'var(--color-lime-hover)',
         textColor: null,
         content: 'Log In',
-        onClick: () => {loadPage('/pages/main/home');},
+        onClick: async () => {
+            const formData = new FormData(form);
+            const jsonData = {
+                username: formData.get('username'),
+                password: formData.get('password')
+            };
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(jsonData)
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    loadPage('/pages/main/home');
+                } else {
+                    alert(result.error);
+                }
+            } catch (error) {
+                console('Request failed:', error);
+            }
+        },
     });
     loginButton.id = 'button-login';
     divNormalLogin.appendChild(loginButton);
