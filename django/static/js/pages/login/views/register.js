@@ -49,6 +49,21 @@ function getInput(name, type, placeholder) {
     return component;
 }
 
+function usernameOk(username) {
+    return username !== '' && /^[a-zA-Z0-9_]{3,20}$/.test(username);
+}
+
+function emailOk(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function pwOk(pw) {
+    return pw.length >= 8
+        && /[A-Z]/.test(pw)
+        && /[a-z]/.test(pw)
+        && /[^a-zA-Z0-9]/.test(pw);
+}
+
 function getForm() {
     const component = document.createElement('form');
     const emailDiv = getInput('email', 'email', 'Email');
@@ -56,15 +71,13 @@ function getForm() {
     emailInput.addEventListener("blur", () => {
         const value = emailInput.value;
         const errorMsg = emailDiv.querySelector('p');
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        if (!emailOk(value)) {
             errorMsg.textContent = 'Invalid email address';
             errorMsg.style.display = 'block';
-        } else {
+        } else
             errorMsg.style.display = 'none';
-        }
-        if (value === '') {
+        if (value === '')
             errorMsg.style.display = 'none';
-        }
     });
     component.appendChild(emailDiv);
     
@@ -74,49 +87,44 @@ function getForm() {
     usernameInput.addEventListener("blur", () => {
         const value = usernameInput.value;
         const errorMsg = usernameDiv.querySelector('p');
-        if (/[^a-zA-Z0-9_]/.test(value)) {
-            errorMsg.textContent = 'Username contains invalid characters';
+        if (!usernameOk(value)) {
+            errorMsg.textContent = 'Username must be between 3 and 20 characters long and contain only letters, numbers, and underscores';
             errorMsg.style.display = 'block';
         }
-        else if (value.length < 3) {
-            errorMsg.textContent = 'Username must be at least 3 characters long';
-            errorMsg.style.display = 'block';
-        }
-        else if (value.length > 20) {
-            errorMsg.textContent = 'Username must be at most 20 characters long';
-            errorMsg.style.display = 'block';
-        }
-        else {
+        else
             errorMsg.style.display = 'none';
-        }
-        if (value === '') {
+        if (value === '')
             errorMsg.style.display = 'none';
-        }
     });
     component.appendChild(usernameDiv);
 
     const pwDiv = getInput('password', 'password', 'Password');
     const pwInput = pwDiv.querySelector('input');
+    component.appendChild(pwDiv);
+    
+    const repPwDiv = getInput('repeat-password', 'password', 'Repeat Password');
+    const repPwInput = repPwDiv.querySelector('input');
+    component.appendChild(repPwDiv);
+
     pwInput.addEventListener("input", () => {
         const value = pwInput.value;
         const errorMsg = pwDiv.querySelector('p');
-        if (value.length < 8 || !/[A-Z]/.test(value) || !/[a-z]/.test(value) || !/[^a-zA-Z0-9]/.test(value)) {
+        if (!pwOk(value)) {
             errorMsg.textContent = 'Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one special character';
             errorMsg.style.display = 'block';
-        } else {
+        } else
             errorMsg.style.display = 'none';
+        if (value != repPwInput.value && repPwInput.value !== '') {
+            repPwDiv.querySelector('p').textContent = 'Passwords do not match';
+            repPwDiv.querySelector('p').style.display = 'block';
         }
+        else
+            repPwDiv.querySelector('p').style.display = 'none';
     });
     pwInput.addEventListener("blur", () => {
-        const value = pwInput.value;
-        if( value === '') {
+        if(pwInput.value === '')
             pwDiv.querySelector('p').style.display = 'none';
-        }
     });
-    component.appendChild(pwDiv);
-
-    const repPwDiv = getInput('repeat-password', 'password', 'Repeat Password');
-    const repPwInput = repPwDiv.querySelector('input');
     repPwInput.addEventListener("input", () => {
         const value = repPwInput.value;
         const errorMsg = repPwDiv.querySelector('p');
@@ -127,9 +135,33 @@ function getForm() {
             errorMsg.style.display = 'none';
         }
     });
-    component.appendChild(repPwDiv);
 
     return component;
+}
+
+function disableButtonOnEvent(button, form) {
+    const checkInputs = () => {
+        const formData = new FormData(form);
+        const jsonData = {
+            email: formData.get('email'),
+            username: formData.get('username'),
+            pw: formData.get('password'),
+            repPw: formData.get('repeat-password'),
+        };
+        let disable = false;
+        if (!emailOk(jsonData.email)
+            || !usernameOk(jsonData.username)
+            || !pwOk(jsonData.pw)
+            || jsonData.pw !== jsonData.repPw)
+            disable = true;
+        button.disabled = disable;
+    };
+    const inputs = form.querySelectorAll('input');
+    inputs.forEach((input) => {
+        input.addEventListener('input', checkInputs);
+        input.addEventListener('blur', checkInputs);
+
+    });
 }
 
 function getUpperHalf() {
@@ -149,20 +181,22 @@ function getUpperHalf() {
 
     const form = getForm();
     divForm.appendChild(form);
-    
+
     const loginButton = getDefaultButton({
         bgColor: 'var(--color-lime)',
         bgHoverColor: 'var(--color-lime-hover)',
         textColor: null,
         content: 'Sign Up',
         onClick: async () => {
+            if (loginButton.disabled)
+                return;
             const formData = new FormData(form);
             const jsonData = {
                 email: formData.get('email'),
                 username: formData.get('username'),
                 password: formData.get('password'),
             };
-
+            console.log(jsonData);
             if (formData.get('password') !== formData.get('repeat-password')) {
                 alert('Passwords do not match');
                 return;
@@ -187,8 +221,10 @@ function getUpperHalf() {
             }
         },
     });
+    loginButton.disabled = true;
     loginButton.id = 'button-login';
     divNormalLogin.appendChild(loginButton);
+    disableButtonOnEvent(loginButton, form);
 
     const divOtherLogin = getOtherLogin();
     divOtherLogin.id = 'div-other-login';

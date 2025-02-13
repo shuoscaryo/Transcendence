@@ -122,6 +122,17 @@
     font-size: 24px; /* modificable */
 }
 
+#button-login:disabled {
+    background-color: var(--color-dark-green) !important;
+    color:#444444;
+    cursor: default;
+    box-shadow: none !important;
+}
+
+#button-login:disabled:hover {
+    background-color: var(--color-dark-green) !important;
+}
+
 #view #div-upper #div-other-login {
     display: flex;
     flex-direction: column;

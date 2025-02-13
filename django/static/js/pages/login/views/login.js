@@ -52,12 +52,30 @@ function getInput(name, type, placeholder) {
 function getForm() {
     const component = document.createElement('form');
 
-    const usernameInput = getInput('username', 'text', 'Username');
-
-
+    component.appendChild(getInput('username', 'text', 'Username'));
     component.appendChild(getInput('password', 'password', 'Password'));
 
     return component;
+}
+
+function disableButtonOnEvent(button, form) {
+    const checkInputs = () => {
+        const formData = new FormData(form);
+        const jsonData = {
+            username: formData.get('username'),
+            pw: formData.get('password'),
+        };
+        let disable = false;
+        if (!jsonData.username || !jsonData.pw)
+            disable = true;
+        button.disabled = disable;
+    };
+    const inputs = form.querySelectorAll('input');
+    inputs.forEach((input) => {
+        input.addEventListener('input', checkInputs);
+        input.addEventListener('blur', checkInputs);
+
+    });
 }
 
 function getUpperHalf() {
@@ -89,6 +107,8 @@ function getUpperHalf() {
         textColor: null,
         content: 'Log In',
         onClick: async () => {
+            if(loginButton.disabled)
+                return;
             const formData = new FormData(form);
             const jsonData = {
                 username: formData.get('username'),
@@ -113,8 +133,10 @@ function getUpperHalf() {
             }
         },
     });
+    loginButton.disabled = true;
     loginButton.id = 'button-login';
     divNormalLogin.appendChild(loginButton);
+    disableButtonOnEvent(loginButton, form);
 
     const divOtherLogin = getOtherLogin();
     divOtherLogin.id = 'div-other-login';
