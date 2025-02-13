@@ -93,6 +93,10 @@
     width: 100%;
 }
 
+#div-form p {
+    color: var(--color-red);
+    font-size: 14px;
+}
 
 #div-form input {
     width: 100%;    
@@ -101,6 +105,10 @@
     border-radius: 5px;
     border: 2px solid #555555;
     background-color: #444444;
+}
+
+#div-form input.error-input {
+    border: 2px solid var(--color-red);
 }
 
 #div-form input:hover {

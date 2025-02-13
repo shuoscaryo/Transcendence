@@ -68,33 +68,51 @@ function getForm() {
     const component = document.createElement('form');
     const emailDiv = getInput('email', 'email', 'Email');
     const emailInput = emailDiv.querySelector('input');
+    emailInput.addEventListener("focus", () => {
+        emailDiv.querySelector('p').style.display = 'none';
+        emailInput.classList.remove('error-input');
+    });
     emailInput.addEventListener("blur", () => {
         const value = emailInput.value;
         const errorMsg = emailDiv.querySelector('p');
         if (!emailOk(value)) {
             errorMsg.textContent = 'Invalid email address';
             errorMsg.style.display = 'block';
-        } else
+            emailInput.classList.add('error-input');
+        } else {
             errorMsg.style.display = 'none';
-        if (value === '')
+            emailInput.classList.remove('error-input');
+        }
+        if (value === '') {
             errorMsg.style.display = 'none';
+            emailInput.classList.remove('error-input');
+        }
     });
     component.appendChild(emailDiv);
     
 
     const usernameDiv = getInput('username', 'text', 'Username');
     const usernameInput = usernameDiv.querySelector('input');
+    usernameInput.addEventListener("focus", () => {
+        usernameDiv.querySelector('p').style.display = 'none';
+        usernameInput.classList.remove('error-input');
+    });
     usernameInput.addEventListener("blur", () => {
         const value = usernameInput.value;
         const errorMsg = usernameDiv.querySelector('p');
         if (!usernameOk(value)) {
             errorMsg.textContent = 'Username must be between 3 and 20 characters long and contain only letters, numbers, and underscores';
             errorMsg.style.display = 'block';
+            usernameInput.classList.add('error-input');
         }
-        else
+        else {
             errorMsg.style.display = 'none';
-        if (value === '')
+            usernameInput.classList.remove('error-input');
+        }
+        if (value === '') {
             errorMsg.style.display = 'none';
+            usernameInput.classList.remove('error-input');
+        }
     });
     component.appendChild(usernameDiv);
 
@@ -112,18 +130,26 @@ function getForm() {
         if (!pwOk(value)) {
             errorMsg.textContent = 'Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one special character';
             errorMsg.style.display = 'block';
-        } else
+            pwInput.classList.add('error-input');
+        } else {
             errorMsg.style.display = 'none';
+            pwInput.classList.remove('error-input');
+        }
         if (value != repPwInput.value && repPwInput.value !== '') {
             repPwDiv.querySelector('p').textContent = 'Passwords do not match';
             repPwDiv.querySelector('p').style.display = 'block';
+            repPwInput.classList.add('error-input');
         }
-        else
+        else {
             repPwDiv.querySelector('p').style.display = 'none';
+            repPwInput.classList.remove('error-input');
+        }
     });
     pwInput.addEventListener("blur", () => {
-        if(pwInput.value === '')
+        if(pwInput.value === '') {
             pwDiv.querySelector('p').style.display = 'none';
+            pwInput.classList.remove('error-input');
+        }
     });
     repPwInput.addEventListener("input", () => {
         const value = repPwInput.value;
@@ -131,8 +157,10 @@ function getForm() {
         if (value !== pwInput.value) {
             errorMsg.textContent = 'Passwords do not match';
             errorMsg.style.display = 'block';
+            repPwInput.classList.add('error-input');
         } else {
             errorMsg.style.display = 'none';
+            repPwInput.classList.remove('error-input');
         }
     });
 
