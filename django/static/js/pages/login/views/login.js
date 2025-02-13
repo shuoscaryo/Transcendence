@@ -52,7 +52,9 @@ function getInput(name, type, placeholder) {
 function getForm() {
     const component = document.createElement('form');
 
-    component.appendChild(getInput('username', 'text', 'Username'));
+    const usernameInput = getInput('username', 'text', 'Username');
+
+
     component.appendChild(getInput('password', 'password', 'Password'));
 
     return component;

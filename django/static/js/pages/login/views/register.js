@@ -46,15 +46,88 @@ function getInput(name, type, placeholder) {
     const error = document.createElement('p');
     error.style.display = 'none';
     component.appendChild(error);
-    return input;
+    return component;
 }
 
 function getForm() {
     const component = document.createElement('form');
-    component.appendChild(getInput('email', 'email', 'Email'));
-    component.appendChild(getInput('username', 'text', 'Username'));
-    component.appendChild(getInput('password', 'password', 'Password'));
-    component.appendChild(getInput('repeat-password', 'password', 'Repeat Password'));
+    const emailDiv = getInput('email', 'email', 'Email');
+    const emailInput = emailDiv.querySelector('input');
+    emailInput.addEventListener("blur", () => {
+        const value = emailInput.value;
+        const errorMsg = emailDiv.querySelector('p');
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+            errorMsg.textContent = 'Invalid email address';
+            errorMsg.style.display = 'block';
+        } else {
+            errorMsg.style.display = 'none';
+        }
+        if (value === '') {
+            errorMsg.style.display = 'none';
+        }
+    });
+    component.appendChild(emailDiv);
+    
+
+    const usernameDiv = getInput('username', 'text', 'Username');
+    const usernameInput = usernameDiv.querySelector('input');
+    usernameInput.addEventListener("blur", () => {
+        const value = usernameInput.value;
+        const errorMsg = usernameDiv.querySelector('p');
+        if (/[^a-zA-Z0-9_]/.test(value)) {
+            errorMsg.textContent = 'Username contains invalid characters';
+            errorMsg.style.display = 'block';
+        }
+        else if (value.length < 3) {
+            errorMsg.textContent = 'Username must be at least 3 characters long';
+            errorMsg.style.display = 'block';
+        }
+        else if (value.length > 20) {
+            errorMsg.textContent = 'Username must be at most 20 characters long';
+            errorMsg.style.display = 'block';
+        }
+        else {
+            errorMsg.style.display = 'none';
+        }
+        if (value === '') {
+            errorMsg.style.display = 'none';
+        }
+    });
+    component.appendChild(usernameDiv);
+
+    const pwDiv = getInput('password', 'password', 'Password');
+    const pwInput = pwDiv.querySelector('input');
+    pwInput.addEventListener("input", () => {
+        const value = pwInput.value;
+        const errorMsg = pwDiv.querySelector('p');
+        if (value.length < 8 || !/[A-Z]/.test(value) || !/[a-z]/.test(value) || !/[^a-zA-Z0-9]/.test(value)) {
+            errorMsg.textContent = 'Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one special character';
+            errorMsg.style.display = 'block';
+        } else {
+            errorMsg.style.display = 'none';
+        }
+    });
+    pwInput.addEventListener("blur", () => {
+        const value = pwInput.value;
+        if( value === '') {
+            pwDiv.querySelector('p').style.display = 'none';
+        }
+    });
+    component.appendChild(pwDiv);
+
+    const repPwDiv = getInput('repeat-password', 'password', 'Repeat Password');
+    const repPwInput = repPwDiv.querySelector('input');
+    repPwInput.addEventListener("input", () => {
+        const value = repPwInput.value;
+        const errorMsg = repPwDiv.querySelector('p');
+        if (value !== pwInput.value) {
+            errorMsg.textContent = 'Passwords do not match';
+            errorMsg.style.display = 'block';
+        } else {
+            errorMsg.style.display = 'none';
+        }
+    });
+    component.appendChild(repPwDiv);
 
     return component;
 }
