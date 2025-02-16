@@ -1,6 +1,7 @@
 import Path from '/static/js/utils/Path.js';
 import loadPage from '/static/js/utils/loadPage.js';
 import getDefaultButton from '/static/js/components/defaultButton.js';
+import apiIsLogged from '/static/js/utils/apiIsLogged.js';
 
 function getOtherLogin() {
     const component = document.createElement('div');
@@ -118,18 +119,23 @@ function getUpperHalf() {
             try {
                 const response = await fetch('/api/login', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify(jsonData)
                 });
 
                 const result = await response.json();
                 if (response.ok) {
+                    if (await apiIsLogged())
+                        console.log('Logged in');
+                    else
+                        console.log('Not logged in');
                     loadPage('/pages/main/home');
                 } else {
                     alert(result.error);
                 }
             } catch (error) {
-                console('Request failed:', error);
+                console.log('Request failed:', error);
             }
         },
     });

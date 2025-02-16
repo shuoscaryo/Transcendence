@@ -21,6 +21,7 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('favicon.ico', views.favicon, name='favicon'),
+    path('api/is-logged', views.apiIsLogged),
     path('api/login', views.apiLogin),
     path('api/register', views.apiRegister),
     path('api/logout', views.apiLogout),
