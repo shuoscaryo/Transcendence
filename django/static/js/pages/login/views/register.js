@@ -224,7 +224,7 @@ function getUpperHalf() {
                 username: formData.get('username'),
                 password: formData.get('password'),
             };
-            console.log(jsonData);
+
             if (formData.get('password') !== formData.get('repeat-password')) {
                 alert('Passwords do not match');
                 return;
