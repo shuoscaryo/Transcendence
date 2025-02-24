@@ -1,5 +1,5 @@
 import PongGame from "/static/js/utils/PongGame.js";
-import loadPage from '/static/js/utils/loadPage.js';
+import { navigate } from '/static/js/utils/router.js';
 
 export default function createPongGameComponent(data) {
     // Create the container for the component
@@ -91,7 +91,7 @@ export default function createPongGameComponent(data) {
         if (data.onContinueButton)
             data.onContinueButton(pong)
         else
-            loadPage("/pages/main/home");
+            navigate("/pages/main/home");
     });
 
     return [component, pong];

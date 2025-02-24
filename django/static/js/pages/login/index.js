@@ -1,10 +1,11 @@
 import Path from '/static/js/utils/Path.js';
 import getHomeButton from '/static/js/components/homeButton.js';
 
-export default async function getPage(component, loadCssFunction) {
+export default async function getPage(component, loadCssFunction, isLogged, data) {
     await loadCssFunction([
         Path.css("login/index.css"),
     ]);
+
     const page = document.createElement('div');
     page.id = 'page';
     page.style.backgroundImage = `url("${Path.img('loginBackGround.png')}")`;

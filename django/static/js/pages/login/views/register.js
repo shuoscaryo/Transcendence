@@ -1,5 +1,5 @@
 import Path from '/static/js/utils/Path.js';
-import loadPage from '/static/js/utils/loadPage.js';
+import { navigate } from '/static/js/utils/router.js';
 import getDefaultButton from '/static/js/components/defaultButton.js';
 
 function getOtherLogin() {
@@ -26,7 +26,7 @@ function getOtherLogin() {
         bgColor: 'var(--color-button-fortito)',
         bgHoverColor: 'var(--color-button-fortito-hover)',
         content: buttonContent,
-        onClick: () => {loadPage('/pages/main/home');},
+        onClick: () => {navigate('/pages/main/home');},
     });
     fortitoButton.classList.add('button-other-login');
     component.appendChild(fortitoButton);
@@ -240,7 +240,7 @@ function getUpperHalf() {
                 const result = await response.json();
                 if (response.ok) {
                     alert('Account created successfully');
-                    loadPage('/pages/main/home');
+                    navigate('/pages/main/home');
                 } else {
                     alert(result.error);
                 }
@@ -261,7 +261,7 @@ function getUpperHalf() {
     return component;
 }
 
-export default async function getView(component, loadCssFunction) {
+export default async function getView(component, loadCssFunction, isLogged, data) {
     await loadCssFunction([
     ]);
 
@@ -277,7 +277,7 @@ export default async function getView(component, loadCssFunction) {
     const registerButton = document.createElement('button');
     registerButton.id = 'button-register';
     registerButton.addEventListener('click', () => {
-        loadPage('pages/login/login');
+        navigate('pages/login/login');
     });
     registerButton.textContent = 'Already have an account? Log in';
     divLower.appendChild(registerButton);

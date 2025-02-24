@@ -1,5 +1,5 @@
 import Path from '/static/js/utils/Path.js';
-import loadPage from '/static/js/utils/loadPage.js';
+import { navigate } from '/static/js/utils/router.js';
 import getHomeButton from '/static/js/components/homeButton.js';
 import getDefaultButton from '/static/js/components/defaultButton.js';
 
@@ -52,7 +52,7 @@ function getLowerHalf()
         bgColor: 'var(--color-lime)',
         textColor: null,
         content: 'Sign Up',
-        onClick: () => {loadPage("/pages/login/register");}
+        onClick: () => {navigate("/pages/login/register");}
     });
     registerButton.classList.add('button-login');
     component.appendChild(registerButton);
@@ -61,7 +61,7 @@ function getLowerHalf()
         bgColor: '#444444',
         textColor: null,
         content: 'Log In',
-        onClick: () => {loadPage("/pages/login/login");}
+        onClick: () => {navigate("/pages/login/login");}
     });
     loginButton.classList.add('button-login');
     component.appendChild(loginButton);

@@ -1,7 +1,6 @@
 import Path from '/static/js/utils/Path.js';
-import loadPage from '/static/js/utils/loadPage.js';
+import { navigate } from '/static/js/utils/router.js';
 import getDefaultButton from '/static/js/components/defaultButton.js';
-import apiIsLogged from '/static/js/utils/apiIsLogged.js';
 
 function getOtherLogin() {
     const component = document.createElement('div');
@@ -27,7 +26,7 @@ function getOtherLogin() {
         bgColor: 'var(--color-button-fortito)',
         bgHoverColor: 'var(--color-button-fortito-hover)',
         content: buttonContent,
-        onClick: () => {loadPage('/pages/main/home');},
+        onClick: () => {navigate('/pages/main/home');},
     });
     fortitoButton.classList.add('button-other-login');
     component.appendChild(fortitoButton);
@@ -97,7 +96,7 @@ function getUpperHalf() {
     forgotPassword.id = 'button-forgot-password';
     forgotPassword.textContent = 'Forgot Password?';
     forgotPassword.addEventListener('click', () => {
-        loadPage('pages/forgotPassword');
+        navigate('pages/forgotPassword');
     });
     divForm.appendChild(forgotPassword);
 
@@ -130,7 +129,7 @@ function getUpperHalf() {
                         console.log('Logged in');
                     else
                         console.log('Not logged in');
-                    loadPage('/pages/main/home');
+                    navigate('/pages/main/home');
                 } else {
                     alert(result.error);
                 }
@@ -151,7 +150,7 @@ function getUpperHalf() {
     return component;
 }
 
-export default async function getView(component, loadCssFunction) {
+export default async function getView(component, loadCssFunction, isLogged, data) {
     await loadCssFunction([
     ]);
 
@@ -167,7 +166,7 @@ export default async function getView(component, loadCssFunction) {
     const registerButton = document.createElement('button');
     registerButton.id = 'button-register';
     registerButton.addEventListener('click', () => {
-        loadPage('/pages/login/register');
+        navigate('/pages/login/register');
     });
     registerButton.textContent = 'New? Sign up - and start playing pong!';
     divLower.appendChild(registerButton);

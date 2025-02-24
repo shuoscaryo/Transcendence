@@ -1,7 +1,7 @@
 import createPongGameComponent from '/static/js/components/game.js';
 import { PlayerController } from '/static/js/utils/Controller.js';
 import Path from '/static/js/utils/Path.js';
-import loadPage from '/static/js/utils/loadPage.js';
+import { navigate } from '/static/js/utils/router.js';
 import getDefaultButton from '/static/js/components/defaultButton.js';
 
 class Tournament {
@@ -352,7 +352,7 @@ function loadMatchesView(component) {
             bgColor: 'var(--color-lime)',
             content: 'Go Back to Home',
             onClick: () => {
-                loadPage('/pages/main/home');
+                navigate('/pages/main/home');
             },
         });
         buttonsDiv.appendChild(buttonHome);
@@ -385,14 +385,12 @@ function loadGameView(component) {
     component.appendChild(gameContainer);
 }
 
-export default async function getView(component, cssLoadFunction) {
-    // Carga el CSS
-    cssLoadFunction([
+export default async function getView(component, loadCssFunction, isLogged, data) {
+    await loadCssFunction([
         Path.css("main/tournament.css"),
         Path.css("components/game.css"),
     ]);
 
     tournament = new Tournament();
-    // Crea el formulario
     loadFormView(component);
 }

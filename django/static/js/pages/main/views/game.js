@@ -1,11 +1,12 @@
 import Path from "/static/js/utils/Path.js";
 import createPongGameComponent from "/static/js/components/game.js";
 
-export default async function getView(component, loadCssFunction, data) {
+export default async function getView(component, loadCssFunction, isLogged, data) {
     await loadCssFunction([
         Path.css("main/game.css"),
         Path.css("components/game.css"),
     ]);
+
     const [game, pong] = createPongGameComponent(data);
     component.appendChild(game);
 }

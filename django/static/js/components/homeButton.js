@@ -1,5 +1,5 @@
 import Path from '/static/js/utils/Path.js';
-import loadPage from '/static/js/utils/loadPage.js';
+import { navigate } from '/static/js/utils/router.js';
 
 export default function getHomeButton()
 {
@@ -12,7 +12,7 @@ export default function getHomeButton()
     component.appendChild(image);
 
     component.addEventListener('click', () => {
-        loadPage("/pages/main/home");
+        navigate("/pages/main/home");
     });
 
     return component;

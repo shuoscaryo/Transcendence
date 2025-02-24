@@ -2,7 +2,7 @@ import getDefaultButton from '/static/js/components/defaultButton.js';
 import PongGame from '/static/js/utils/PongGame.js';
 import { DemoAI } from '/static/js/utils/Controller.js';
 import Path from '/static/js/utils/Path.js';
-import loadPage from '/static/js/utils/loadPage.js';
+import { navigate } from '/static/js/utils/router.js';
 import { PlayerController, PongAI } from '/static/js/utils/Controller.js';
 
 function getButtonWithImage({imgSrc, text, description, bgColor, bgHoverColor, textColor, onClick}) {
@@ -91,7 +91,7 @@ function getSection1() {
         description: 'Play against a friend',
         bgColor: 'var(--color-lime)',
         onClick: () => {
-            loadPage('/pages/main/game', {
+            navigate('/pages/main/game', {
                 playerLeft: { 
                     controller: new PlayerController("w", "s"),
                     name: "anon1",
@@ -102,7 +102,7 @@ function getSection1() {
                 },
                 maxScore: 3,
                 onContinueButton: (game) => {
-                    loadPage('/pages/main/home');
+                    navigate('/pages/main/home');
                 }
             });
         }
@@ -114,7 +114,7 @@ function getSection1() {
         bgColor: 'var(--color-gray)',
         text: 'Tournament',
         description: 'Create a tournament to play with friends',
-        onClick: () => {loadPage('/pages/main/tournament');}
+        onClick: () => {navigate('/pages/main/tournament');}
     });
     buttonPlayTournament.id = 'button-play-tournament';
     divButtons.appendChild(buttonPlayTournament);
@@ -152,7 +152,7 @@ function getSection2() {
         description: 'Play against our AI',
         bgColor: 'var(--color-lime)',
         onClick: () => {
-            loadPage('/pages/main/game', {
+            navigate('/pages/main/game', {
                 playerLeft: {
                     controller: new PlayerController("w", "s"),
                     name: "anon1",
@@ -167,7 +167,7 @@ function getSection2() {
                         addRatonMiltonVideo();
                 },
                 onContinueButton: (game) => {
-                    loadPage('/pages/main/home');
+                    navigate('/pages/main/home');
                 }
             });
         }
@@ -193,7 +193,7 @@ function getFooter() {
     return component;
 }
 
-export default async function getView(component, loadCssFunction) {
+export default async function getView(component, loadCssFunction, isLogged, data) {
     await loadCssFunction([
         Path.css('main/home.css'),
     ]);

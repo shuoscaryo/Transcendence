@@ -1,7 +1,7 @@
 import Path from '/static/js/utils/Path.js';
 import getSidebar from '/static/js/components/sidebar.js';
 
-export default async function getPage(component, loadCssFunction) {
+export default async function getPage(component, loadCssFunction, isLogged, data) {
     await loadCssFunction([
         Path.css('main/index.css'),
         Path.css('main/sidebar.css'),

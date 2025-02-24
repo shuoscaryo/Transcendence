@@ -1,4 +1,4 @@
-import loadPage from "/static/js/loadPage.js";
+import { navigate } from '/static/js/utils/router.js';
 
 export async function handleLoginSubmit(event, form) {
     event.preventDefault();
@@ -63,5 +63,5 @@ export function handleBackToMain() {
 }
 
 export function handleRegister() {
-    loadPage('pages/register');
+    navigate('pages/register');
 }
