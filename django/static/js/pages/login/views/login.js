@@ -1,6 +1,7 @@
 import Path from '/static/js/utils/Path.js';
 import { navigate } from '/static/js/utils/router.js';
 import getDefaultButton from '/static/js/components/defaultButton.js';
+import apiIsLogged from '/static/js/utils/api/apiIsLogged.js';
 
 function getOtherLogin() {
     const component = document.createElement('div');

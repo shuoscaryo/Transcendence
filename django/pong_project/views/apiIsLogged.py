@@ -2,6 +2,6 @@ from django.http import JsonResponse
 
 def apiIsLogged(request):
     if request.user.is_authenticated:
-        return JsonResponse({'authenticated': True})
+        return JsonResponse({'isLogged': True})
     else:
-        return JsonResponse({'authenticated': False})
+        return JsonResponse({'isLogged': False})
