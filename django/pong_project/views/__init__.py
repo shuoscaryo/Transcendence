@@ -4,3 +4,4 @@ from .register import apiRegister
 from .apiIsLogged import apiIsLogged
 from .favicon import favicon
 from .index import index
+from .tournaments import tournaments

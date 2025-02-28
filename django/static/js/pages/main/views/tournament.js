@@ -283,7 +283,7 @@ function loadFormView(component) {
 }
 
 
-function loadMatchesView(component) {
+async function loadMatchesView(component) {
     const containerDiv = document.createElement('div');
     containerDiv.id = 'div-container';
     component.appendChild(containerDiv);
@@ -296,6 +296,16 @@ function loadMatchesView(component) {
         const winnerText = document.createElement('h1');
         winnerText.textContent = `${tournament.getWinner()} Wins the Tournament!`;
         winnerDiv.appendChild(winnerText);
+
+		const dataToServer = {
+			"winner": tournament.getWinner(),
+			"players": ["paco", "oscar", "nacho"],
+		};
+		const response = await fetch('/api/tournaments', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(dataToServer),
+		});
     }
 
     const matchesList = tournament.getComponent();

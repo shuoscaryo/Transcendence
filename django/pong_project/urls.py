@@ -25,6 +25,7 @@ urlpatterns = [
     path('api/login', views.apiLogin),
     path('api/register', views.apiRegister),
     path('api/logout', views.apiLogout),
+	path('api/tournaments', views.tournaments),
 	path('', views.index),
 	path('<path:path>', views.index),
 ]
