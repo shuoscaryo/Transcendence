@@ -24,7 +24,7 @@ export default async function getPage(component, loadCssFunction, isLogged, path
     await loadCssFunction([
         Path.css("login/index.css"),
     ]);
-    console.log(path);
+
     const page = document.createElement('div');
     page.id = 'page';
     page.style.backgroundImage = `url("${Path.img('loginBackGround.png')}")`;

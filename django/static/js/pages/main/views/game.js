@@ -54,7 +54,7 @@ export default async function getView(component, loadCssFunction, isLogged, path
         };
     }
     else 
-        return {status: 404, data: null};
+        return {status: 404};
     const [game, pong] = createPongGameComponent(data);
     component.appendChild(game);
 }

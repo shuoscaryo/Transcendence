@@ -28,7 +28,6 @@ async function checkFileExists(url) {
 }
 
 async function loadPage(path, isLogged) {
-    console.log(path);
     path = parsePath(path);
     if (path.prefix !== 'pages')
         return {status: 404};
@@ -95,7 +94,7 @@ export async function router(data) {
     const isLogged = await apiIsLogged();
 
     let path = window.location.pathname;
-    if (path === '/' || path === '/home')
+    if (path === '/' || path === '/home' || path === '/pages/main')
         path = '/pages/main/home';
     else if (path === '/login')
         path = '/pages/login/login';
@@ -114,7 +113,7 @@ export async function router(data) {
     if (result.status === 200)
         return;
     if (result.status === 300)
-        return redirect(result.data);
+        return redirect(result.redirect);
     result = await loadPage(`/pages/error/${result.status}`);
     if (result.status !== 200) {
         const divApp = document.getElementById('app');

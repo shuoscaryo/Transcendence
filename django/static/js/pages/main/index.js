@@ -1,12 +1,15 @@
 import Path from '/static/js/utils/Path.js';
 import getSidebar from '/static/js/components/sidebar.js';
 
-export default async function getPage(component, loadCssFunction, isLogged, data) {
+export default async function getPage(component, loadCssFunction, isLogged, path) {
     await loadCssFunction([
         Path.css('main/index.css'),
         Path.css('main/sidebar.css'),
     ]);
 
+    if (path.subPath != '/') {
+        return {status: 300, redirect: '/home'};
+    }
     const page = document.createElement('div');
     page.id = 'page';
     component.appendChild(page);

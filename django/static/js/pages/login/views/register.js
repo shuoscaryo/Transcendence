@@ -277,7 +277,7 @@ export default async function getView(component, loadCssFunction, isLogged) {
     const registerButton = document.createElement('button');
     registerButton.id = 'button-register';
     registerButton.addEventListener('click', () => {
-        navigate('pages/login/login');
+        navigate('/pages/login/login');
     });
     registerButton.textContent = 'Already have an account? Log in';
     divLower.appendChild(registerButton);
