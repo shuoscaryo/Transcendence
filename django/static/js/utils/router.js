@@ -7,21 +7,33 @@ const current = {
     isLogged: null,
 };
 
-async function loadPage(path, isLogged, data = null) {
-    // Get the page and view
+function parsePath(path) {
+    // The path is expected to be in the format /pages/page/view/restOfPath?query#hash
     if (path.startsWith('/'))
         path = path.substring(1);
-    const [prefix, page, view] = path.split('/');
-    if (prefix != 'pages' || !page)
-        throw new Error(`Invalid path ${path}`);
+    const parts = path.split('/');
 
+    // Get the important parts
+    const prefix = parts[0];
+    const page = parts[1];
+    const view = parts[2];
+    const subPath = '/' + parts.slice(3).join('/');
+
+    return { prefix, page, view, subPath };
+}
+
+async function loadPage(path, isLogged, data = null) {
+    path = parsePath(path);
+    if (path.prefix !== 'pages')
+        return {status: 404};
     // Load the page
     let pageFile;
-    if (current.page !== page || current.isLogged !== isLogged) {
+    if (current.page !== path.page || current.isLogged !== isLogged) {
         try {
-            pageFile = await import(Path.page(page, 'index.js'));
+            pageFile = await import(Path.page(path.page, 'index.js'));
         } catch (error) {
-            return error.code === 'MODULE_NOT_FOUND' ? 404 : 500;
+            console.log(error);
+            return { status: error.message.includes('404') ? 404 : 500 };
         }
         const divApp = document.getElementById('app');
         if (!divApp)
@@ -29,7 +41,9 @@ async function loadPage(path, isLogged, data = null) {
         divApp.innerHTML = '';
         css.deletePageCss();
         css.deleteViewCss();
-        await pageFile.default(divApp, css.loadPageCss, isLogged, data); // throws if fails, dont catch
+        const result = await pageFile.default(divApp, css.loadPageCss, isLogged, data, path); // throws if fails, dont catch
+        if (result && typeof result.status !== "undefined" && result.status !== 200)
+            return result;
     }
     
     // Get the view
@@ -37,20 +51,28 @@ async function loadPage(path, isLogged, data = null) {
     let viewFile;
     if (divView) {
         try {
-            viewFile = await import(Path.page(page, 'views', `${view}.js`));
+            viewFile = await import(Path.page(path.page, 'views', `${path.view}.js`));
         } catch (error) {
-            return error.code === 'MODULE_NOT_FOUND' ? 404 : 500;
+            console.log(error);
+            return {status: error.code === 'MODULE_NOT_FOUND' ? 404 : 500};
         }
         divView.innerHTML = '';
         css.deleteViewCss();
-        await viewFile.default(divView, css.loadViewCss, isLogged, data); // throws if fails, dont catch
+        const result = await viewFile.default(divView, css.loadViewCss, isLogged, data, path); // throws if fails, dont catch
+        if (result && typeof result.status !== "undefined" && result.status !== 200)
+            return result;
     }
     
     // Update the current data
-    current.page = page;
+    current.page = path.page;
     current.isLogged = isLogged;
 
-    return 200;
+    return {status: 200};
+}
+
+function isErrorPage(path) {
+    const number = parseInt(path.substring(1), 10);
+    return !isNaN(number) && number >= 400 && number <= 599;
 }
 
 export async function router(data) {
@@ -63,6 +85,8 @@ export async function router(data) {
         path = '/pages/login/login';
     else if (path === '/register')
         path = '/pages/login/register';
+    else if (isErrorPage(path))
+        path = `/pages/error${path}`;
 
     if (isLogged && path.startsWith("/pages/login"))
         return redirect('/home');
@@ -70,10 +94,12 @@ export async function router(data) {
         return redirect('/login');
 
     const result = await loadPage(path, isLogged, data);
-
-    if (result === 404 && path !== '/404')
+    
+    if (result.status === 300)
+        return redirect(result.data);
+    if (result.status === 404 && path !== '/404')
         return redirect('/404');
-    else if (result === 500 && path !== '/500')
+    else if (result.status === 500 && path !== '/500')
         return redirect('/500');
 }
 

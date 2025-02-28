@@ -1,7 +1,25 @@
 import PongGame from "/static/js/utils/PongGame.js";
 import { navigate } from '/static/js/utils/router.js';
 
+function checkData(data){
+    if (!data.playerLeft)
+        throw new Error('playerLeft is required');
+    if (!data.playerRight)
+        throw new Error('playerRight is required');
+    if (!data.playerLeft.controller)
+        throw new Error('playerLeft.controller is required');
+    if (!data.playerRight.controller)
+        throw new Error('playerRight.controller is required');
+    if (!data.playerLeft.name)
+        throw new Error('playerLeft.name is required');
+    if (!data.playerRight.name)
+        throw new Error('playerRight.name is required');
+}
+
 export default function createPongGameComponent(data) {
+    // Check if the minimum data is present
+    checkData(data);
+
     // Create the container for the component
     const component = document.createElement('div');
     component.classList.add('pong-game');
@@ -91,7 +109,7 @@ export default function createPongGameComponent(data) {
         if (data.onContinueButton)
             data.onContinueButton(pong)
         else
-            navigate("/pages/main/home");
+            navigate("/");
     });
 
     return [component, pong];
