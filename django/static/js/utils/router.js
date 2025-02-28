@@ -22,18 +22,29 @@ function parsePath(path) {
     return { prefix, page, view, subPath };
 }
 
-async function loadPage(path, isLogged, data = null) {
+async function checkFileExists(url) {
+    const response = await fetch(url, { method: 'HEAD', credentials: 'include' });
+    return response.status;
+}
+
+async function loadPage(path, isLogged) {
+    console.log(path);
     path = parsePath(path);
     if (path.prefix !== 'pages')
         return {status: 404};
     // Load the page
     let pageFile;
     if (current.page !== path.page || current.isLogged !== isLogged) {
+        const pageUrl = Path.page(path.page, 'index.js');
+        const status = await checkFileExists(pageUrl);
+        if (status !== 200) {
+            return {status};
+        }
         try {
-            pageFile = await import(Path.page(path.page, 'index.js'));
+            pageFile = await import(pageUrl);
         } catch (error) {
-            console.log(error);
-            return { status: error.message.includes('404') ? 404 : 500 };
+            console.error(error);
+            return {status: 500};
         }
         const divApp = document.getElementById('app');
         if (!divApp)
@@ -41,7 +52,7 @@ async function loadPage(path, isLogged, data = null) {
         divApp.innerHTML = '';
         css.deletePageCss();
         css.deleteViewCss();
-        const result = await pageFile.default(divApp, css.loadPageCss, isLogged, data, path); // throws if fails, dont catch
+        const result = await pageFile.default(divApp, css.loadPageCss, isLogged, path); // throws if fails, dont catch
         if (result && typeof result.status !== "undefined" && result.status !== 200)
             return result;
     }
@@ -50,15 +61,20 @@ async function loadPage(path, isLogged, data = null) {
     const divView = document.getElementById('view');
     let viewFile;
     if (divView) {
+        if (!path.view)
+            return {status: 404};
+        const viewUrl = Path.page(path.page, 'views', `${path.view}.js`);
+        const status = await checkFileExists(viewUrl);
+        if (status !== 200)
+            return {status};
         try {
             viewFile = await import(Path.page(path.page, 'views', `${path.view}.js`));
         } catch (error) {
-            console.log(error);
-            return {status: error.code === 'MODULE_NOT_FOUND' ? 404 : 500};
+            return {status: 500};
         }
         divView.innerHTML = '';
         css.deleteViewCss();
-        const result = await viewFile.default(divView, css.loadViewCss, isLogged, data, path); // throws if fails, dont catch
+        const result = await viewFile.default(divView, css.loadViewCss, isLogged, path); // throws if fails, dont catch
         if (result && typeof result.status !== "undefined" && result.status !== 200)
             return result;
     }
@@ -92,25 +108,29 @@ export async function router(data) {
         return redirect('/home');
     else if (!isLogged && path.startsWith("/pages/user/"))
         return redirect('/login');
-
-    const result = await loadPage(path, isLogged, data);
     
+    let result = await loadPage(path, isLogged);
+    
+    if (result.status === 200)
+        return;
     if (result.status === 300)
         return redirect(result.data);
-    if (result.status === 404 && path !== '/404')
-        return redirect('/404');
-    else if (result.status === 500 && path !== '/500')
-        return redirect('/500');
+    result = await loadPage(`/pages/error/${result.status}`);
+    if (result.status !== 200) {
+        const divApp = document.getElementById('app');
+        divApp.innerHTML = '';
+        divApp.textContent = `Error ${result.status}`;
+    }
 }
 
-export function navigate(path, data = null) {
+export function navigate(path) {
     window.history.pushState({}, '', path);
-    router(data);
+    router();
 }
 
-export function redirect(path, data = null) {
+export function redirect(path) {
     window.history.replaceState({}, '', path);
-    router(data);
+    router();
 }
 
 export function goBack() {

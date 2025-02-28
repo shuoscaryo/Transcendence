@@ -23,13 +23,13 @@ function addRatonMiltonVideo() {
     component.appendChild(iframe);
 }
 
-export default async function getView(component, loadCssFunction, isLogged, data, path) {
+export default async function getView(component, loadCssFunction, isLogged, path) {
     await loadCssFunction([
         Path.css("main/game.css"),
         Path.css("components/game.css"),
     ]);
-    console.log
-    data = {
+
+    const data = {
         playerLeft: {
             name: "Player 1",
             controller: new PlayerController("w", "s"),

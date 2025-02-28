@@ -395,7 +395,7 @@ function loadGameView(component) {
     component.appendChild(gameContainer);
 }
 
-export default async function getView(component, loadCssFunction, isLogged, data) {
+export default async function getView(component, loadCssFunction, isLogged) {
     await loadCssFunction([
         Path.css("main/tournament.css"),
         Path.css("components/game.css"),

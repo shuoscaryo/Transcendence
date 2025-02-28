@@ -170,7 +170,7 @@ function getFooter() {
     return component;
 }
 
-export default async function getView(component, loadCssFunction, isLogged, data) {
+export default async function getView(component, loadCssFunction, isLogged) {
     await loadCssFunction([
         Path.css('main/home.css'),
     ]);

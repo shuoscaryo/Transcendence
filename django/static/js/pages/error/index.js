@@ -3,7 +3,7 @@ import getHomeButton from '/static/js/components/homeButton.js';
 
 function getDefaultView(code) {
     const component = document.createElement('div');
-    component.id = 'default-view';
+    component.id = 'error-view';
     
     const h1 = document.createElement('h1');
     h1.textContent = code;
@@ -20,11 +20,11 @@ function getDefaultView(code) {
     return component;
 }
 
-export default async function getPage(component, loadCssFunction, isLogged, data, path) {
+export default async function getPage(component, loadCssFunction, isLogged, path) {
     await loadCssFunction([
         Path.css("login/index.css"),
     ]);
-
+    console.log(path);
     const page = document.createElement('div');
     page.id = 'page';
     page.style.backgroundImage = `url("${Path.img('loginBackGround.png')}")`;

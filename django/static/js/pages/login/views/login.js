@@ -151,7 +151,7 @@ function getUpperHalf() {
     return component;
 }
 
-export default async function getView(component, loadCssFunction, isLogged, data) {
+export default async function getView(component, loadCssFunction, isLogged) {
     await loadCssFunction([
     ]);
 
