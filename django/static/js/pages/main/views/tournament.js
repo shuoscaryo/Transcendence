@@ -301,7 +301,7 @@ async function loadMatchesView(component) {
 			"winner": tournament.getWinner(),
 			"players": ["paco", "oscar", "nacho"],
 		};
-		const response = await fetch('/api/tournaments', {
+		const response = fetch('/api/tournaments', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(dataToServer),
