@@ -3,6 +3,8 @@ import createPongGameComponent from "/static/js/components/game.js";
 import { PongAI, PlayerController } from "/static/js/utils/Controller.js";
 import { navigate } from '/static/js/utils/router.js';
 
+let g_pong = null;
+
 function addRatonMiltonVideo() {
     const component = document.getElementById('view');
     // ID del video de YouTube
@@ -23,11 +25,12 @@ function addRatonMiltonVideo() {
     component.appendChild(iframe);
 }
 
-export default async function getView(component, loadCssFunction, isLogged, path) {
-    await loadCssFunction([
+export default async function getView(isLogged, path) {
+    const css = [
         Path.css("main/game.css"),
         Path.css("components/game.css"),
-    ]);
+    ];
+    const component = document.createElement("div");
 
     const data = {
         playerLeft: {
@@ -56,5 +59,14 @@ export default async function getView(component, loadCssFunction, isLogged, path
     else 
         return {status: 404};
     const [game, pong] = createPongGameComponent(data);
+    g_pong = pong;
     component.appendChild(game);
+
+    return {status: 200, component, css};
+}
+
+export function destroy() {
+    if (g_pong)
+        g_pong.stop();
+    g_pong = null;
 }

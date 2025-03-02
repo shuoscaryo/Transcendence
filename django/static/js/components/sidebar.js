@@ -42,34 +42,44 @@ function getUpperHalf()
     return component;
 }
 
-function getLowerHalf()
+function getLowerHalf(isLogged)
 {
     const component = document.createElement('div');
     component.className = 'lower-half';
 
-
-    const registerButton = getDefaultButton({
-        bgColor: 'var(--color-lime)',
-        textColor: null,
-        content: 'Sign Up',
-        onClick: () => {navigate("/pages/login/register");}
-    });
-    registerButton.classList.add('button-login');
-    component.appendChild(registerButton);
-    
-    const loginButton = getDefaultButton({
-        bgColor: '#444444',
-        textColor: null,
-        content: 'Log In',
-        onClick: () => {navigate("/pages/login/login");}
-    });
-    loginButton.classList.add('button-login');
-    component.appendChild(loginButton);
-
+    if (!isLogged) {
+        const registerButton = getDefaultButton({
+            bgColor: 'var(--color-lime)',
+            textColor: null,
+            content: 'Sign Up',
+            onClick: () => {navigate("/pages/login/register");}
+        });
+        registerButton.classList.add('button-login');
+        component.appendChild(registerButton);
+        
+        const loginButton = getDefaultButton({
+            bgColor: '#444444',
+            textColor: null,
+            content: 'Log In',
+            onClick: () => {navigate("/pages/login/login");}
+        });
+        loginButton.classList.add('button-login');
+        component.appendChild(loginButton);
+    }
+    else {
+        const contractButton = getDefaultButton({
+            bgColor: 'var(--color-lime)',
+            textColor: null,
+            content: 'logout',
+            onClick: () => {navigate("/");}
+        });
+        contractButton.classList.add('button-login');
+        component.appendChild(contractButton);
+    }
     return component;
 }
 
-export default function getSidebar()
+export default function getSidebar(isLogged)
 {
     const component = document.createElement('div');
     component.className = 'sidebar';

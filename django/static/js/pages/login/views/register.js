@@ -261,9 +261,10 @@ function getUpperHalf() {
     return component;
 }
 
-export default async function getView(component, loadCssFunction, isLogged) {
-    await loadCssFunction([
-    ]);
+export default async function getView(isLogged) {
+    const css = [
+    ];
+    const component = document.createElement('div');
 
     const divUpper = getUpperHalf();
     divUpper.id = 'div-upper';
@@ -292,4 +293,6 @@ export default async function getView(component, loadCssFunction, isLogged) {
             });
         },
     });
+
+    return {status: 200, component, css};
 }

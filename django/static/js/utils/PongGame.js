@@ -357,11 +357,6 @@ export default class PongGame
             this.state = "Playing";
         this.lastTime = undefined;
         const gameLoop = (timestamp) => {
-            if (!document.body.contains(this.canvas)) {
-                this.stop();
-                return;
-            }
-
             if (!this.lastTime)
                 this.lastTime = timestamp;
 
@@ -372,6 +367,12 @@ export default class PongGame
             // If the loop hasn't been stopped, request another frame
             if (this.animationFrameId)
                 this.animationFrameId = requestAnimationFrame(gameLoop);
+
+            // XXX TMP STUFF DELETE
+            if (!this.printTime || timestamp - this.printTime > 1000) {
+                this.printTime = timestamp;
+                console.log(`Pong ${this.id} still here ${timestamp}`);
+            }
         };
 
         this.animationFrameId = requestAnimationFrame(gameLoop);

@@ -20,10 +20,11 @@ function getDefaultView(code) {
     return component;
 }
 
-export default async function getPage(component, loadCssFunction, isLogged, path) {
-    await loadCssFunction([
+export default async function getPage(isLogged, path) {
+    const css = [
         Path.css("login/index.css"),
-    ]);
+    ];
+    const component = document.createElement("div");
 
     const page = document.createElement('div');
     page.id = 'page';
@@ -49,4 +50,6 @@ export default async function getPage(component, loadCssFunction, isLogged, path
     else {
         content.appendChild(getDefaultView(path.view));
     }
+
+    return {status: 200, component, css};
 }
