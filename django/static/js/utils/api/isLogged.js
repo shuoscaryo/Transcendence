@@ -1,4 +1,4 @@
-export default async function apiIsLogged() {
+export default async function isLogged() {
     try {
         const response = await fetch('/api/is-logged', { credentials: 'include' });
         const data = await response.json();

@@ -1,6 +1,6 @@
 import Path from '/static/js/utils/Path.js';
 import * as css from '/static/js/utils/css.js';
-import apiIsLogged from '/static/js/utils/api/apiIsLogged.js';
+import apiIsLogged from '/static/js/utils/api/isLogged.js';
 
 const current = {
     page: null,

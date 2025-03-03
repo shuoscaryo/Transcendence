@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 import json
 
 @csrf_exempt
-def apiRegister(request):
+def register(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
