@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 import json
+from django.contrib.auth import login as django_login
 
 @csrf_exempt
 def register(request):
@@ -23,6 +24,8 @@ def register(request):
 
         try:
             user = User.objects.create_user(username=username, password=password, email=email)
+            django_login(request, user)
+            request.session.save()
             return JsonResponse({'message': 'User registered successfully'}, status=201)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
