@@ -407,13 +407,9 @@ export default async function getView(isLogged, path) {
     g_tournament = new Tournament();
     loadFormView(component);
 
-    return {status: 200, component, css};
-}
-
-export function destroy() {
-    if (g_pong)
-        g_pong.stop();
-    g_pong = null;
-    if (g_tournament)
-        g_tournament = null;
+    const onDestroy = () => {
+        if (g_pong)
+            g_pong.stop();
+    };
+    return {status: 200, component, css, onDestroy};
 }

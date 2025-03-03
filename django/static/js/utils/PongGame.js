@@ -139,12 +139,10 @@ class Player {
 // - maxScore
 // - onGoal
 // - onGameEnd
-let counter = 0;
 export default class PongGame
 {
     constructor(canvas)
     {
-        this.id = counter++;
         this.canvas = canvas;
         this.ctx = this.canvas.getContext('2d');
 
@@ -367,12 +365,6 @@ export default class PongGame
             // If the loop hasn't been stopped, request another frame
             if (this.animationFrameId)
                 this.animationFrameId = requestAnimationFrame(gameLoop);
-
-            // XXX TMP STUFF DELETE
-            if (!this.printTime || timestamp - this.printTime > 1000) {
-                this.printTime = timestamp;
-                console.log(`Pong ${this.id} still here ${timestamp}`);
-            }
         };
 
         this.animationFrameId = requestAnimationFrame(gameLoop);
