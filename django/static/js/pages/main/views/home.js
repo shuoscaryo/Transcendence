@@ -173,7 +173,13 @@ export default async function getView(isLogged, path) {
     divSections.appendChild(getSection1());
     divSections.appendChild(getSection2());
     component.appendChild(getFooter());
-    return {status: 200, component, css};
+    
+    const pongInstance = g_pong;
+    const onDestroy = () => {
+        if (pongInstance)
+            pongInstance.stop();
+    };
+    return {status: 200, component, css, onDestroy};
 }
 
 export function destroy() {

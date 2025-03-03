@@ -5,8 +5,8 @@ import apiIsLogged from '/static/js/utils/api/apiIsLogged.js';
 const current = {
     page: null,
     view: null,
-    pageFile: null,
-    viewFile: null,
+    pageOnDestroy: null,
+    viewOnDestroy: null,
     isLogged: null,
 };
 
@@ -25,7 +25,7 @@ function parsePath(path) {
     return { prefix, page, view, subPath };
 }
 
-// returns {file, status, component, css} on success, {status + extras (like redirect with 300)} if error
+// returns {status, component, css, [onDestroy]} on success, {status + extras (like redirect with 300)} if error
 async function getComponentFromUrl(url, isLogged, path) {
     // Import the file
     let file = null;
@@ -40,14 +40,19 @@ async function getComponentFromUrl(url, isLogged, path) {
         return {status: 500, msg: `Error importing file ${url} - ${error}`};
     }
 
-    // Execute the main function of the file (returns {status, component, css} or {status + extras} if error)
+    // Execute the main function of the file (returns {status, component, css, [onDestroy]} or {status + extras} if error)
     const result = await file.default(isLogged, path); // let it throw if it fails, dont catch
     if (!result || !result.status)
         return {status: 500, msg: `No result or no result.status returned from file ${url}`};
     if (result.status !== 200)
         return result;
 
-    return {file, status: 200, component: result.component, css: result.css};
+    return {
+        status: 200,
+        component: result.component,
+        css: result.css,
+        onDestroy: result.onDestroy
+    };
 }
 
 async function loadPage(path, isLogged) {
@@ -101,10 +106,10 @@ async function loadPage(path, isLogged) {
         await css.loadViewCss(viewImport.css);
     }
     // - Call destroy on the current view
-    if (current.viewFile && current.viewFile.destroy)
-        current.viewFile.destroy();
-    if (current.pageFile && current.pageFile.destroy)
-        current.pageFile.destroy();
+    if (current.viewOnDestroy)
+        current.viewOnDestroy();
+    if (current.pageOnDestroy)
+        current.pageOnDestroy();
 
     // - Replace the app with the new component
     divApp.replaceWith(pageImport.component);
@@ -114,8 +119,8 @@ async function loadPage(path, isLogged) {
     current.page = path.page;
     current.isLogged = isLogged;
     current.view = path.view;
-    current.pageFile = pageImport.file;
-    current.viewFile = viewImport ? viewImport.file : null;
+    current.pageOnDestroy = pageImport.onDestroy ? pageImport.onDestroy : null;
+    current.viewOnDestroy = viewImport.onDestroy ? viewImport.onDestroy : null;
 
     return {status: 200};
 }
