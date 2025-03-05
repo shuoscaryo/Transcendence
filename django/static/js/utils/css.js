@@ -1,4 +1,8 @@
 function loadCSS(filePaths, className) {
+    if (!Array.isArray(filePaths) || filePaths.length === 0) {
+        return Promise.resolve(); // No hacer nada si filePaths es inválido o vacío
+    }
+
     return Promise.all(
         filePaths.map(filePath => {
             return new Promise((resolve, reject) => {
@@ -7,7 +11,6 @@ function loadCSS(filePaths, className) {
                 link.className = className;
                 link.href = filePath;
 
-                // Resolver cuando el archivo CSS haya terminado de cargarse
                 link.onload = () => resolve();
                 link.onerror = () => reject(`Error loading CSS file: ${filePath}`);
 
@@ -37,9 +40,4 @@ export function deletePageCss() {
     while (pageStyles.length > 0) {
         pageStyles[0].remove();
     }
-}
-
-export function deleteCss() {
-    deleteViewCss();
-    deletePageCss();
 }

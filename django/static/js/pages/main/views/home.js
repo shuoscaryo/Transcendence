@@ -5,6 +5,8 @@ import Path from '/static/js/utils/Path.js';
 import { navigate } from '/static/js/utils/router.js';
 import { PlayerController, PongAI } from '/static/js/utils/Controller.js';
 
+let g_pong = null;
+
 function getButtonWithImage({imgSrc, text, description, bgColor, bgHoverColor, textColor, onClick}) {
     const buttonContent = document.createElement('div');
     buttonContent.classList.add('button-content');
@@ -47,11 +49,11 @@ function getSection1() {
     canvas.width = 600;
     canvas.height = 400;
     divCanvas.appendChild(canvas);
-    const pong = new PongGame(canvas);
-    pong.playerLeft.controller = new DemoAI();
-    pong.playerRight.controller = new DemoAI();
-    pong.onGameEnd = (game) => {game.start();};
-    pong.start();
+    g_pong = new PongGame(canvas);
+    g_pong.playerLeft.controller = new DemoAI();
+    g_pong.playerRight.controller = new DemoAI();
+    g_pong.onGameEnd = (game) => {game.start();};
+    g_pong.start();
 
     const divIntro = document.createElement('div');
     divIntro.id = 'div-intro';
@@ -70,22 +72,7 @@ function getSection1() {
         text: 'Versus Mode',
         description: 'Play against a friend',
         bgColor: 'var(--color-lime)',
-        onClick: () => {
-            navigate('/pages/main/game/local', {
-                playerLeft: { 
-                    controller: new PlayerController("w", "s"),
-                    name: "anon1",
-                },
-                playerRight: {
-                    controller: new PlayerController("ArrowUp", "ArrowDown"),
-                    name: "anon2",
-                },
-                maxScore: 3,
-                onContinueButton: (game) => {
-                    navigate('/pages/main/home');
-                }
-            });
-        }
+        onClick: () => {navigate('/pages/main/game/local');}
     });
     divButtons.appendChild(buttonPlayVersus);
 
@@ -170,10 +157,15 @@ function getFooter() {
     return component;
 }
 
-export default async function getView(component, loadCssFunction, isLogged, data) {
-    await loadCssFunction([
+export default async function getView(isLogged, path) {
+    if (path.subPath != '/') {
+        return {status: 300, redirect: '/home'};
+    }
+
+    const css = [
         Path.css('main/home.css'),
-    ]);
+    ];
+    const component = document.createElement('div');
 
     const divSections = document.createElement('div');
     divSections.id = 'div-sections';
@@ -181,4 +173,17 @@ export default async function getView(component, loadCssFunction, isLogged, data
     divSections.appendChild(getSection1());
     divSections.appendChild(getSection2());
     component.appendChild(getFooter());
+    
+    const pongInstance = g_pong;
+    const onDestroy = () => {
+        if (pongInstance)
+            pongInstance.stop();
+    };
+    return {status: 200, component, css, onDestroy};
+}
+
+export function destroy() {
+    if (g_pong)
+        g_pong.stop();
+    g_pong = null;
 }

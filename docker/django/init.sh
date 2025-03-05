@@ -1,4 +1,5 @@
 #!/bin/bash
+pip install web3
 
 pip install web3
 

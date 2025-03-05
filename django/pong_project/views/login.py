@@ -1,10 +1,11 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate
+from django.contrib.auth import login as django_login
 import json
 
 @csrf_exempt
-def apiLogin(request):
+def login(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
@@ -15,7 +16,7 @@ def apiLogin(request):
         password = data.get('password')
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, user)
+            django_login(request, user)
             return JsonResponse({'message': 'succesful login'})
         else:
             return JsonResponse({'error': 'invalid credentials'}, status=401)

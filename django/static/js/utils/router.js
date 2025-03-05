@@ -1,9 +1,12 @@
 import Path from '/static/js/utils/Path.js';
 import * as css from '/static/js/utils/css.js';
-import apiIsLogged from '/static/js/utils/api/apiIsLogged.js';
+import apiIsLogged from '/static/js/utils/api/isLogged.js';
 
 const current = {
     page: null,
+    view: null,
+    pageOnDestroy: null,
+    viewOnDestroy: null,
     isLogged: null,
 };
 
@@ -22,50 +25,102 @@ function parsePath(path) {
     return { prefix, page, view, subPath };
 }
 
-async function loadPage(path, isLogged, data = null) {
+// returns {status, component, css, [onDestroy]} on success, {status + extras (like redirect with 300)} if error
+async function getComponentFromUrl(url, isLogged, path) {
+    // Import the file
+    let file = null;
+    try {
+        // Check if the file exists
+        const response = await fetch(url, { method: 'HEAD', credentials: 'include' });
+        if (!response.ok)
+            return {status: response.status, msg: `Error fetching HEAD of file ${url}`};
+        // Import the file
+        file = await import(url);
+    } catch (error) {
+        return {status: 500, msg: `Error importing file ${url} - ${error}`};
+    }
+
+    // Execute the main function of the file (returns {status, component, css, [onDestroy]} or {status + extras} if error)
+    const result = await file.default(isLogged, path); // let it throw if it fails, dont catch
+    if (!result || !result.status)
+        return {status: 500, msg: `No result or no result.status returned from file ${url}`};
+    if (result.status !== 200)
+        return result;
+
+    return {
+        status: 200,
+        component: result.component,
+        css: result.css,
+        onDestroy: result.onDestroy
+    };
+}
+
+async function loadPage(path, isLogged) {
+    // Split the path into parts
     path = parsePath(path);
     if (path.prefix !== 'pages')
         return {status: 404};
+    
     // Load the page
-    let pageFile;
-    if (current.page !== path.page || current.isLogged !== isLogged) {
-        try {
-            pageFile = await import(Path.page(path.page, 'index.js'));
-        } catch (error) {
-            console.log(error);
-            return { status: error.message.includes('404') ? 404 : 500 };
-        }
-        const divApp = document.getElementById('app');
-        if (!divApp)
-            throw new Error('Element #app not found')
-        divApp.innerHTML = '';
+    const pagePath = Path.page(path.page, 'index.js');
+    const pageImport = await getComponentFromUrl(pagePath, isLogged, path);
+    if (pageImport.status !== 200)
+        return pageImport;
+    
+    // Get the view and add it to the page component (if #view exists in the page)
+    const divView = pageImport.component.querySelector('#view');
+    let viewImport = null;
+    if (divView) {
+        if (!path.view)
+            return {status: 404};
+        const viewPath = Path.page(path.page, 'views', `${path.view}.js`);
+        viewImport = await getComponentFromUrl(viewPath, isLogged, path);
+        if (viewImport.status !== 200)
+            return viewImport;
+        viewImport.component.id = 'view';
+        divView.replaceWith(viewImport.component);
+    }
+
+    // replace the elements
+    // - Get the div App or create it
+    const divApp = document.getElementById('app');
+    if (!divApp) {
+        divApp = document.createElement('div');
+        divApp.id = 'app';
+        document.body.appendChild(divApp);
+    }
+    divApp.innerHTML = '';
+
+    // - Load the css
+    if (current.page !== path.page) {
         css.deletePageCss();
         css.deleteViewCss();
-        const result = await pageFile.default(divApp, css.loadPageCss, isLogged, data, path); // throws if fails, dont catch
-        if (result && typeof result.status !== "undefined" && result.status !== 200)
-            return result;
+        // Load view and page css at the same time
+        await Promise.all([
+            css.loadPageCss(pageImport.css),
+            viewImport ? css.loadViewCss(viewImport.css) : Promise.resolve()
+        ]);
     }
-    
-    // Get the view
-    const divView = document.getElementById('view');
-    let viewFile;
-    if (divView) {
-        try {
-            viewFile = await import(Path.page(path.page, 'views', `${path.view}.js`));
-        } catch (error) {
-            console.log(error);
-            return {status: error.code === 'MODULE_NOT_FOUND' ? 404 : 500};
-        }
-        divView.innerHTML = '';
+    else if (current.view !== path.view) {
         css.deleteViewCss();
-        const result = await viewFile.default(divView, css.loadViewCss, isLogged, data, path); // throws if fails, dont catch
-        if (result && typeof result.status !== "undefined" && result.status !== 200)
-            return result;
+        await css.loadViewCss(viewImport.css);
     }
-    
+    // - Call destroy on the current view
+    if (current.viewOnDestroy)
+        current.viewOnDestroy();
+    if (current.pageOnDestroy)
+        current.pageOnDestroy();
+
+    // - Replace the app with the new component
+    divApp.replaceWith(pageImport.component);
+    pageImport.component.id = 'app';
+
     // Update the current data
     current.page = path.page;
     current.isLogged = isLogged;
+    current.view = path.view;
+    current.pageOnDestroy = pageImport.onDestroy ? pageImport.onDestroy : null;
+    current.viewOnDestroy = viewImport.onDestroy ? viewImport.onDestroy : null;
 
     return {status: 200};
 }
@@ -75,11 +130,11 @@ function isErrorPage(path) {
     return !isNaN(number) && number >= 400 && number <= 599;
 }
 
-export async function router(data) {
+export async function router(reload=false) {
     const isLogged = await apiIsLogged();
 
     let path = window.location.pathname;
-    if (path === '/' || path === '/home')
+    if (path === '/' || path === '/home' || path === '/pages/main')
         path = '/pages/main/home';
     else if (path === '/login')
         path = '/pages/login/login';
@@ -89,28 +144,39 @@ export async function router(data) {
         path = `/pages/error${path}`;
 
     if (isLogged && path.startsWith("/pages/login"))
-        return redirect('/home');
+        return navigate('/home', true);
     else if (!isLogged && path.startsWith("/pages/user/"))
-        return redirect('/login');
-
-    const result = await loadPage(path, isLogged, data);
+        return navigate('/login', true);
     
+    let result = await loadPage(path, isLogged, reload);
+    
+    if (result.status === 200)
+        return;
     if (result.status === 300)
-        return redirect(result.data);
-    if (result.status === 404 && path !== '/404')
-        return redirect('/404');
-    else if (result.status === 500 && path !== '/500')
-        return redirect('/500');
+        return navigate(result.redirect, true);
+    if (result.msg)
+        console.error(`[ROUTER] ${result.msg}`);
+    result = await loadPage(`/pages/error/${result.status}`, isLogged);
+    if (result.status !== 200) {
+        const divApp = document.getElementById('app');
+        if (!divApp) {
+            divApp = document.createElement('div');
+            divApp.id = 'app';
+            document.body.appendChild(divApp);
+        }
+        divApp.innerHTML = '';
+        divApp.textContent = `Error ${result.status}`;
+    }
 }
 
-export function navigate(path, data = null) {
-    window.history.pushState({}, '', path);
-    router(data);
-}
-
-export function redirect(path, data = null) {
-    window.history.replaceState({}, '', path);
-    router(data);
+export function navigate(path = null, redirect=false) {
+    if (path != null){
+        if (redirect)
+            window.history.replaceState({}, '', path);
+        else
+            window.history.pushState({}, '', path);
+    }
+    router();
 }
 
 export function goBack() {

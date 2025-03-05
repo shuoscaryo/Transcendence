@@ -23,13 +23,14 @@ function addRatonMiltonVideo() {
     component.appendChild(iframe);
 }
 
-export default async function getView(component, loadCssFunction, isLogged, data, path) {
-    await loadCssFunction([
+export default async function getView(isLogged, path) {
+    const css = [
         Path.css("main/game.css"),
         Path.css("components/game.css"),
-    ]);
-    console.log
-    data = {
+    ];
+    const component = document.createElement("div");
+
+    const data = {
         playerLeft: {
             name: "Player 1",
             controller: new PlayerController("w", "s"),
@@ -54,7 +55,13 @@ export default async function getView(component, loadCssFunction, isLogged, data
         };
     }
     else 
-        return {status: 404, data: null};
+        return {status: 404};
     const [game, pong] = createPongGameComponent(data);
     component.appendChild(game);
+
+    const onDestroy = () => {
+        if (pong)
+            pong.stop();
+    }
+    return {status: 200, component, css, onDestroy};
 }

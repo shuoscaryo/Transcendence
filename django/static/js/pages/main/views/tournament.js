@@ -161,7 +161,8 @@ class Tournament {
     }
 };
 
-let tournament = null;
+let g_pong = null;
+let g_tournament = null;
 
 function loadFormView(component) {
     const MAX_PLAYERS = 8;
@@ -261,7 +262,7 @@ function loadFormView(component) {
                 alert('Minimum 2 Players required.');
                 return;
             }
-            tournament.init(players);
+            g_tournament.init(players);
             component.innerHTML = '';
             loadMatchesView(component);
         },
@@ -288,27 +289,27 @@ async function loadMatchesView(component) {
     containerDiv.id = 'div-container';
     component.appendChild(containerDiv);
     
-    if( tournament.over ) {
+    if( g_tournament.over ) {
         const winnerDiv = document.createElement('div');
         winnerDiv.id = 'winner';
         containerDiv.appendChild(winnerDiv);
 
         const winnerText = document.createElement('h1');
-        winnerText.textContent = `${tournament.getWinner()} Wins the Tournament!`;
+        winnerText.textContent = `${g_tournament.getWinner()} Wins the Tournament!`;
         winnerDiv.appendChild(winnerText);
 
 		const dataToServer = {
-			"winner": tournament.getWinner(),
+			"winner": g_tournament.getWinner(),
 			"players": ["paco", "oscar", "nacho"],
 		};
-		const response = await fetch('/api/tournaments', {
+		const response = fetch('/api/tournaments', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(dataToServer),
 		});
     }
 
-    const matchesList = tournament.getComponent();
+    const matchesList = g_tournament.getComponent();
     matchesList.id = "tournament";
     containerDiv.appendChild(matchesList);
 
@@ -316,14 +317,14 @@ async function loadMatchesView(component) {
     buttonsDiv.id = 'buttons-div';
     containerDiv.appendChild(buttonsDiv);
 
-    if (!tournament.over) {
+    if (!g_tournament.over) {
         const buttonTest0 = getDefaultButton({
             bgColor: 'var(--color-gray)',
             content: 'Left Player Auto Win',
             onClick: () => {
-                tournament.setMatchResult(0);
-                if (!tournament.over)
-                    matchesList.replaceChildren(tournament.getComponent());
+                g_tournament.setMatchResult(0);
+                if (!g_tournament.over)
+                    matchesList.replaceChildren(g_tournament.getComponent());
                 else {
                     component.innerHTML = '';
                     loadMatchesView(component);
@@ -346,9 +347,9 @@ async function loadMatchesView(component) {
             bgColor: 'var(--color-gray)',
             content: 'Right Player Auto Win',
             onClick: () => {
-                tournament.setMatchResult(1);
-                if (!tournament.over)
-                    matchesList.replaceChildren(tournament.getComponent());
+                g_tournament.setMatchResult(1);
+                if (!g_tournament.over)
+                    matchesList.replaceChildren(g_tournament.getComponent());
                 else {
                     component.innerHTML = '';
                     loadMatchesView(component);
@@ -371,7 +372,7 @@ async function loadMatchesView(component) {
 
 function loadGameView(component) {
     const gameContainer = document.createElement('div');
-    const players = tournament.getMatchPlayers();
+    const players = g_tournament.getMatchPlayers();
     let [game, pong] = createPongGameComponent({
         playerLeft: {
             name: players[0],
@@ -384,23 +385,31 @@ function loadGameView(component) {
         maxScore: 3,
         onContinueButton: (game) => {
             const winner = game.playerLeft.score > game.playerRight.score ? 0 : 1;
-            tournament.setMatchResult(winner);
+            g_tournament.setMatchResult(winner);
             pong = null;
             component.innerHTML = '';
             loadMatchesView(component);
         },
     });
+    g_pong = pong;
 
     gameContainer.appendChild(game);
     component.appendChild(gameContainer);
 }
 
-export default async function getView(component, loadCssFunction, isLogged, data) {
-    await loadCssFunction([
+export default async function getView(isLogged, path) {
+    const css = [
         Path.css("main/tournament.css"),
         Path.css("components/game.css"),
-    ]);
+    ];
+    const component = document.createElement('div');
 
-    tournament = new Tournament();
+    g_tournament = new Tournament();
     loadFormView(component);
+
+    const onDestroy = () => {
+        if (g_pong)
+            g_pong.stop();
+    };
+    return {status: 200, component, css, onDestroy};
 }

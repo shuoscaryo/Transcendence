@@ -261,9 +261,10 @@ function getUpperHalf() {
     return component;
 }
 
-export default async function getView(component, loadCssFunction, isLogged, data) {
-    await loadCssFunction([
-    ]);
+export default async function getView(isLogged) {
+    const css = [
+    ];
+    const component = document.createElement('div');
 
     const divUpper = getUpperHalf();
     divUpper.id = 'div-upper';
@@ -277,7 +278,7 @@ export default async function getView(component, loadCssFunction, isLogged, data
     const registerButton = document.createElement('button');
     registerButton.id = 'button-register';
     registerButton.addEventListener('click', () => {
-        navigate('pages/login/login');
+        navigate('/pages/login/login');
     });
     registerButton.textContent = 'Already have an account? Log in';
     divLower.appendChild(registerButton);
@@ -292,4 +293,6 @@ export default async function getView(component, loadCssFunction, isLogged, data
             });
         },
     });
+
+    return {status: 200, component, css};
 }

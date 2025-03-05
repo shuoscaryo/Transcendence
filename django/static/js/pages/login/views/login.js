@@ -1,7 +1,6 @@
 import Path from '/static/js/utils/Path.js';
 import { navigate } from '/static/js/utils/router.js';
 import getDefaultButton from '/static/js/components/defaultButton.js';
-import apiIsLogged from '/static/js/utils/api/apiIsLogged.js';
 
 function getOtherLogin() {
     const component = document.createElement('div');
@@ -126,10 +125,6 @@ function getUpperHalf() {
 
                 const result = await response.json();
                 if (response.ok) {
-                    if (await apiIsLogged())
-                        console.log('Logged in');
-                    else
-                        console.log('Not logged in');
                     navigate('/pages/main/home');
                 } else {
                     alert(result.error);
@@ -151,9 +146,10 @@ function getUpperHalf() {
     return component;
 }
 
-export default async function getView(component, loadCssFunction, isLogged, data) {
-    await loadCssFunction([
-    ]);
+export default async function getView(isLogged) {
+    const css = [
+    ];
+    const component = document.createElement('div');
 
     const divUpper = getUpperHalf();
     divUpper.id = 'div-upper';
@@ -171,4 +167,6 @@ export default async function getView(component, loadCssFunction, isLogged, data
     });
     registerButton.textContent = 'New? Sign up - and start playing pong!';
     divLower.appendChild(registerButton);
+
+    return {status: 200, component, css};
 }

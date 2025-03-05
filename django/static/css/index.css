@@ -35,6 +35,8 @@ p {
 #app {
     display: block;
     background-color: #333333;
+    min-width: 100vw;
+    min-height: 100vh;
 }
 
 .button-default {
@@ -48,6 +50,12 @@ p {
     transition: box-shadow 0.1s ease-in, background-color 0.1s ease-in;
 }
 
+#error-view {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 /* style for showing borders erase it when page is finished*/
 /*div, section, article, aside, header, footer, main, nav, canvas, button {
     box-shadow: 0 0 0 1px red;

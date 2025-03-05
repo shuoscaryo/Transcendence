@@ -3,7 +3,7 @@ import getHomeButton from '/static/js/components/homeButton.js';
 
 function getDefaultView(code) {
     const component = document.createElement('div');
-    component.id = 'default-view';
+    component.id = 'error-view';
     
     const h1 = document.createElement('h1');
     h1.textContent = code;
@@ -20,10 +20,11 @@ function getDefaultView(code) {
     return component;
 }
 
-export default async function getPage(component, loadCssFunction, isLogged, data, path) {
-    await loadCssFunction([
+export default async function getPage(isLogged, path) {
+    const css = [
         Path.css("login/index.css"),
-    ]);
+    ];
+    const component = document.createElement("div");
 
     const page = document.createElement('div');
     page.id = 'page';
@@ -49,4 +50,6 @@ export default async function getPage(component, loadCssFunction, isLogged, data
     else {
         content.appendChild(getDefaultView(path.view));
     }
+
+    return {status: 200, component, css};
 }
