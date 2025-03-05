@@ -1,5 +1,7 @@
 #!/bin/bash
 
+pip install web3
+
 # Check if required environment variables are set
 if [ -z "$POSTGRES_DB" ] || [ -z "$POSTGRES_USER" ] || [ -z "$POSTGRES_PASSWORD" ]; then
 	echo "Missing required environment variables"
