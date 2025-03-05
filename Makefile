@@ -1,7 +1,7 @@
 PROJECT := transcendence
-CONTAINERS := django postgresql
+CONTAINERS := django postgresql ganache-hardhat
 YML_PATH = ./docker/docker-compose.yml
-VOLUMES := ./postgresql-data
+VOLUMES := ./postgresql-data ./ganache-data
 ENV_FILE := .env
 
 DOCKER_COMPOSE := sudo ENV_FILE=$(ENV_FILE) docker compose --env-file $(ENV_FILE) -f $(YML_PATH) -p $(PROJECT)

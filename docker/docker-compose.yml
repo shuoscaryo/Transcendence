@@ -23,11 +23,28 @@ services:
       - "8000:8000"
     volumes: 
       - django:/app
+      - ganache_data:/app/blockchain_data  # Connect Django with Ganache
     networks:
       - app-network
     restart: on-failure
     depends_on:
       - postgresql
+      - ganache-hardhat
+
+  ganache-hardhat:
+    build:
+      context: ..
+      dockerfile: ./docker/ganache/Dockerfile-ganache
+    image: ganache-hardhat
+    container_name: ganache-hardhat
+    ports:
+      - "7545:7545"
+    volumes:
+      - ganache_data:/app/blockchain_data  # Shared volume for Django
+      - ganache_ref:/ganache_ref
+    networks:
+      - app-network
+    restart: unless-stopped
 
 volumes:
   postgresql:
@@ -43,6 +60,20 @@ volumes:
     driver_opts:
       type: none
       device: ../django
+      o: bind
+  ganache_data:
+    name: Transcendence_ganache
+    driver: local
+    driver_opts:
+      type: none
+      device: ../ganache-data
+      o: bind
+  ganache_ref:
+    name: Transcendence_ganache_ref
+    driver: local
+    driver_opts:
+      type: none
+      device: ../ganache-ref
       o: bind
 
 networks:
