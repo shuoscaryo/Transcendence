@@ -19,7 +19,7 @@ def tournaments(request):
         matches = [[player if player is not None else "" for player in round] for round in none_matches]
 
         # Connect to local Ganache
-        w3 = Web3(Web3.HTTPProvider("http://192.168.1.53:7545"))
+        w3 = Web3(Web3.HTTPProvider("http://ganache-hardhat:7545"))
 
         # Verify connection
         if w3.is_connected():

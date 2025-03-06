@@ -135,9 +135,13 @@ STATIC_ROOT = '/staticfiles'
 
 # List of all apps in the project (extended from the default INSTALLED_APPS)
 INSTALLED_APPS += [
+    'pong_project',
 ]
 
 # This is the path to the static files in the project
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+
+# This is for the custom user content in the DB, it is used in the models.py file
+AUTH_USER_MODEL = 'pong_project.CustomUser'

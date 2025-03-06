@@ -19,8 +19,6 @@ services:
       - ../.env
     image: django
     container_name: django
-    ports:
-      - "8000:8000"
     volumes: 
       - django:/app
       - ganache_data:/app/blockchain_data  # Connect Django with Ganache
@@ -30,6 +28,23 @@ services:
     depends_on:
       - postgresql
       - ganache-hardhat
+
+  nginx:
+    build: ./nginx
+    image: nginx
+    container_name: nginx
+    ports:
+      - "443:443"
+      - "80:80"
+    env_file:
+      - ../.env
+    volumes: 
+      - django:/app
+    networks:
+      - app-network
+    restart: on-failure
+    depends_on:
+      - django
 
   ganache-hardhat:
     build:

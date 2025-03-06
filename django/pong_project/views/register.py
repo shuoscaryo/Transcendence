@@ -1,8 +1,9 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model, login as django_login
 import json
-from django.contrib.auth import login as django_login
+
+CustomUser = get_user_model()
 
 @csrf_exempt
 def register(request):
@@ -19,11 +20,11 @@ def register(request):
         if not username or not password or not email:
             return JsonResponse({'error': 'Username, password, and email are required'}, status=400)
 
-        if User.objects.filter(username=username).exists():
+        if CustomUser.objects.filter(username=username).exists():
             return JsonResponse({'error': 'Username already taken'}, status=409)
 
         try:
-            user = User.objects.create_user(username=username, password=password, email=email)
+            user = CustomUser.objects.create_user(username=username, password=password, email=email)
             django_login(request, user)
             request.session.save()
             return JsonResponse({'message': 'User registered successfully'}, status=201)
