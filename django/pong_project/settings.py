@@ -143,4 +143,5 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
+# This is for the custom user content in the DB, it is used in the models.py file
 AUTH_USER_MODEL = 'pong_project.CustomUser'
