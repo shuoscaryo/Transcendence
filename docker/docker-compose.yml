@@ -52,8 +52,6 @@ services:
       dockerfile: ./docker/ganache/Dockerfile-ganache
     image: ganache-hardhat
     container_name: ganache-hardhat
-    ports:
-      - "7545:7545"
     volumes:
       - ganache_data:/app/blockchain_data  # Shared volume for Django
       - ganache_ref:/ganache_ref

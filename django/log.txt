@@ -2,3 +2,7 @@ Could not connect to Ganache
 Could not connect to Ganache
 Connected to Ganache
 Connected to Ganache
+Connected to Ganache
+None
+[['1', '2'], ['1', None]]
+Connected to Ganache

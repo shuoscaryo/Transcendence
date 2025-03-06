@@ -7,7 +7,7 @@ ganache --host 0.0.0.0 --port 7545 --mnemonic "cube same payment father quiz eth
 
 # Wait for Ganache to be ready
 echo "⏳ Waiting for Ganache to start..."
-until curl -s http://192.168.1.53:7545 > /dev/null; do
+until curl -s http://127.0.0.1:7545 > /dev/null; do
   sleep 1
 done
 echo "✅ Ganache is running with the predefined mnemonic!"
