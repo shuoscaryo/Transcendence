@@ -6,7 +6,7 @@ contract Tournaments {
     struct Tournament {
         uint256 id;             // Unique ID of the tournament
 		uint256 rounds;		    // Number of rounds in the tournament
-        string[] players;       // List of player names
+        string[][] matches;       // List of player names
         string winner;          // Winner of the tournament (name)
         uint256 date;           // Completion timestamp
     }
@@ -18,24 +18,24 @@ contract Tournaments {
     uint256 public tournamentCount;
 
     // Event to notify when a tournament is created
-    event TournamentCreated(uint256 id, string[] players);
+    event TournamentCreated(uint256 id, string[][] matches);
 
     // Function to create a new tournament
-    function createTournament(string[] memory _players, string memory _winner) public {
+    function createTournament(string[][] memory _matches, string memory _winner) public {
         // Increment the tournament counter
         tournamentCount++;
 
         // Create and store the tournament
         tournaments[tournamentCount] = Tournament({
             id: tournamentCount,
-			rounds: _players.length - 1,
-            players: _players,
+			rounds: _matches.length - 1,
+            matches: _matches,
             winner: _winner, // Initially no winner
             date: block.timestamp // Not completed yet
         });
 
         // Emit event
-        emit TournamentCreated(tournamentCount, _players);
+        emit TournamentCreated(tournamentCount, _matches);
     }
 
     // Function to retrieve a tournament by ID
@@ -45,13 +45,13 @@ contract Tournaments {
 		returns (
 			uint256 id,
 			uint256 rounds,
-			string[] memory players,
+			string[][] memory matches,
 			string memory winner,
 			uint256 date
 		)
 	{
 		require(_id > 0 && _id <= tournamentCount, "Tournament not found");
 		Tournament memory t = tournaments[_id];
-		return (t.id, t.rounds, t.players, t.winner, t.date);
+		return (t.id, t.rounds, t.matches, t.winner, t.date);
 	}
 }

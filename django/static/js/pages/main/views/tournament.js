@@ -9,6 +9,7 @@ class Tournament {
     }
 
     init(players) {
+		this.players = players;
         const shuffledPlayers = this.#shuffle(players);
         this.#createMatchBoxes(shuffledPlayers.length);
         this.match = 0;
@@ -300,7 +301,7 @@ async function loadMatchesView(component) {
 
 		const dataToServer = {
 			"winner": g_tournament.getWinner(),
-			"players": ["paco", "oscar", "nacho"],
+			"matches" : g_tournament.matchBoxes,
 		};
 		const response = fetch('/api/tournaments', {
 			method: 'POST',

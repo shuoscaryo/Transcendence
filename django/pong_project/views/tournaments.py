@@ -13,7 +13,10 @@ def tournaments(request):
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
         winner = data.get('winner')
-        players = data.get('players')
+        none_matches = data.get('matches')
+        
+		# None types are not allowed in the matches array
+        matches = [[player if player is not None else "" for player in round] for round in none_matches]
 
         # Connect to local Ganache
         w3 = Web3(Web3.HTTPProvider("http://192.168.1.53:7545"))
@@ -45,7 +48,7 @@ def tournaments(request):
         # 1. Create a tournament
         print("Creating a tournament...")
         nonce = w3.eth.get_transaction_count(sender_address)
-        create_tx = tournaments.functions.createTournament(players, winner).build_transaction({
+        create_tx = tournaments.functions.createTournament(matches, winner).build_transaction({
             'from': sender_address,
             'nonce': nonce,
             'gas': 2000000,
@@ -62,7 +65,7 @@ def tournaments(request):
         for event in events:
             event_entry = {
                 'id': str(event['args']['id']),
-                'players': event['args']['players']
+                'matches': event['args']['matches']
             }
             event_data.append(event_entry)
             
@@ -76,7 +79,7 @@ def tournaments(request):
         tournament_data = {
             'id': str(tournament[0]),
             'rounds': str(tournament[1]),
-            'players': tournament[2],
+            'matches': tournament[2],
             'winner': tournament[3],
             'date': datetime.fromtimestamp(tournament[4]).strftime('%Y-%m-%d %H:%M:%S') if tournament[4] > 0 else "Not set"
         }
