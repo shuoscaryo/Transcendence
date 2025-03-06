@@ -16,7 +16,7 @@ def tournaments(request):
         players = data.get('players')
 
         # Connect to local Ganache
-        w3 = Web3(Web3.HTTPProvider("http://192.168.1.53:7545"))
+        w3 = Web3(Web3.HTTPProvider("http://ganache-hardhat:7545"))
 
         # Verify connection
         if w3.is_connected():
