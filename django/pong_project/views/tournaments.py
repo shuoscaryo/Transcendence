@@ -12,11 +12,13 @@ def tournaments(request):
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
+        matches = data.get('matches')
         winner = data.get('winner')
-        none_matches = data.get('matches')
-        
 		# None types are not allowed in the matches array
-        matches = [[player if player is not None else "" for player in round] for round in none_matches]
+        for i in range(len(matches)):
+            for j in range(len(matches[i])):
+                if matches[i][j] is None:
+                    matches[i][j] = ""
 
         # Connect to local Ganache
         w3 = Web3(Web3.HTTPProvider("http://ganache-hardhat:7545"))
