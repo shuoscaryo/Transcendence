@@ -14,6 +14,7 @@ if [ ! -f "/app/manage.py" ]; then
     echo "Django project not found. Creating a new Django project..."
     django-admin startproject pong_project /app
 fi
+mkdir -p /app/media/profile_photos
 
 # Wait for database
 echo "Connecting to database..."

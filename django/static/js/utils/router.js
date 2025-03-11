@@ -119,8 +119,8 @@ async function loadPage(path, isLogged) {
     current.page = path.page;
     current.isLogged = isLogged;
     current.view = path.view;
-    current.pageOnDestroy = pageImport.onDestroy ? pageImport.onDestroy : null;
-    current.viewOnDestroy = viewImport.onDestroy ? viewImport.onDestroy : null;
+    current.pageOnDestroy = pageImport?.onDestroy ? pageImport.onDestroy : null;
+    current.viewOnDestroy = viewImport?.onDestroy ? viewImport.onDestroy : null;
 
     return {status: 200};
 }

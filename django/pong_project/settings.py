@@ -44,7 +44,8 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # NOTE ESTO HAY QUE ENCENDERLO LUEGO
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -145,3 +146,6 @@ STATICFILES_DIRS = [
 
 # This is for the custom user content in the DB, it is used in the models.py file
 AUTH_USER_MODEL = 'pong_project.CustomUser'
+
+MEDIA_ROOT = '/app/media/'
+MEDIA_URL = '/media/'

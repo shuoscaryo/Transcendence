@@ -181,9 +181,3 @@ export default async function getView(isLogged, path) {
     };
     return {status: 200, component, css, onDestroy};
 }
-
-export function destroy() {
-    if (g_pong)
-        g_pong.stop();
-    g_pong = null;
-}
