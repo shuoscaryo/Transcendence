@@ -120,6 +120,7 @@ function getMatchHistory(profile, matchHistory) {
     // Crear el encabezado de la tabla
     const thead = document.createElement('thead');
     const headerRow = document.createElement('tr');
+    headerRow.id = 'table-header';
 
     const headers = ['Img', 'Player 1', 'Player 2', 'Score', 'Duration', 'Start Time'];
     headers.forEach(headerText => {
@@ -135,6 +136,7 @@ function getMatchHistory(profile, matchHistory) {
     const tbody = document.createElement('tbody');
 
     matchHistory.forEach(match => {
+        //const component = createMatchRow(profile, match);
         const row = document.createElement('tr');
         row.classList.add('match');
         addWinLoseClass(row, profile.username, match);
@@ -142,7 +144,8 @@ function getMatchHistory(profile, matchHistory) {
         // Imagen del tipo de partida
         const imgTd = document.createElement('td');
         const matchTypeImg = document.createElement('img');
-        matchTypeImg.src = `/static/img/${match.match_type}.png`;
+        console.log(match.match_type);
+        matchTypeImg.src = Path.img(`${match.match_type}_match.png`);
         matchTypeImg.alt = match.match_type;
         imgTd.appendChild(matchTypeImg);
         row.appendChild(imgTd);
