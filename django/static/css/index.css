@@ -2,11 +2,14 @@
     --color-lime: #7eb848; /* modificable */
     --color-dark-green: #242e1c; /* modificable */
     --color-lime-hover: #8ecf5a; /* modificable */
+    --color-section-background: #242424; /* modificable */
     --color-gray: #444444; /* modificable */
     --color-white: #f0f0f0; /* modificable */
     --color-button-fortito: #1d1d1d; /* modificable */
     --color-button-fortito-hover: #1a1a1a; /* modificable */
     --color-red: #ca1e1e; /* modificable */
+    --color-blue-match: #395a7c; /* modificable */
+    --color-red-match: #973434; /* modificable */
 }
 
 * {
@@ -19,7 +22,6 @@
     margin: 0;
     padding: 0;
 }
-
 
 button {
     cursor: pointer;
@@ -47,6 +49,7 @@ p {
     font-weight: bold;
     border-radius: 12px;
     overflow: hidden;
+    min-width: fit-content;
     transition: box-shadow 0.1s ease-in, background-color 0.1s ease-in;
 }
 
@@ -55,6 +58,35 @@ p {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.section-block {
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: var(--color-section-background);
+}
+
+input {
+    width: 100%;
+    height: 40px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 2px solid #555555;
+    background-color: #444444;
+}
+
+input.error-input {
+    border: 2px solid var(--color-red);
+}
+
+input:hover {
+    border: 2px solid #777777;
+}
+
+input:focus  {
+    outline: none;
+    border: 2px solid #777777;
+    box-shadow: 0 0 5px #777777;
 }
 /* style for showing borders erase it when page is finished*/
 /*div, section, article, aside, header, footer, main, nav, canvas, button {

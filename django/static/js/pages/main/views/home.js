@@ -91,6 +91,7 @@ function getSection1() {
 
 function getSection2() {
     const container = document.createElement('section');
+    container.classList.add('section-block');
     container.id = 'section-2';
 
     const div = document.createElement('div');

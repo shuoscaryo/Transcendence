@@ -22,6 +22,7 @@ export default function createPongGameComponent(data) {
 
     // Create the container for the component
     const component = document.createElement('div');
+    component.classList.add('section-block');
     component.classList.add('pong-game');
 
     // Create another container that has the game and the buttons

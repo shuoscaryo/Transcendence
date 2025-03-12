@@ -14,10 +14,7 @@
 }
 
 #div-square-container {
-    border-radius: 20px;
-    overflow: hidden;
-    background-color: #242424;
-    width: 400px;
+    min-width: 400px;
 }
 
 .home-button {
@@ -41,7 +38,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
+    width: 24rem; /* modificable */
 }
 
 #view #div-upper {
@@ -98,28 +95,6 @@
     font-size: 14px;
 }
 
-#div-form input {
-    width: 100%;    
-    height: 40px;
-    padding: 10px;
-    border-radius: 5px;
-    border: 2px solid #555555;
-    background-color: #444444;
-}
-
-#div-form input.error-input {
-    border: 2px solid var(--color-red);
-}
-
-#div-form input:hover {
-    border: 2px solid #777777;
-}
-
-#div-form input:focus  {
-    outline: none;
-    border: 2px solid #777777;
-    box-shadow: 0 0 5px #777777;
-}
 #div-form div {
     width: 100%;
 }

@@ -24,6 +24,7 @@ export default async function getPage(isLogged, data) {
 
     const divSquare = document.createElement('div');
     divSquare.id = 'div-square-container';
+    divSquare.classList.add('section-block');
     content.appendChild(divSquare);
 
     const main = document.createElement('main');
