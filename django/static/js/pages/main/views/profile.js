@@ -94,7 +94,17 @@ function getStats(profile) {
     return component;
 }
 
-function getMatchHistory(matchHistory) {
+function addWinLoseClass(row, username, match) {
+    if (username !== match.playerLeft__username
+        && username !== match.playerRight__username)
+        return;
+
+    const userIsLeft = match.playerLeft__username === username;
+    const leftWon = match.scoreLeft > match.scoreRight;
+    row.classList.add(userIsLeft == leftWon? 'won-match': 'lost-match');
+}
+
+function getMatchHistory(profile, matchHistory) {
     const component = document.createElement('div');
     component.id = 'match-history';
     component.classList.add('section-block');
@@ -127,11 +137,7 @@ function getMatchHistory(matchHistory) {
     matchHistory.forEach(match => {
         const row = document.createElement('tr');
         row.classList.add('match');
-        if (match.scoreLeft > match.scoreRight) {
-            row.classList.add('won-match');
-        } else if (match.scoreLeft < match.scoreRight) {
-            row.classList.add('lost-match');
-        }
+        addWinLoseClass(row, profile.username, match);
 
         // Imagen del tipo de partida
         const imgTd = document.createElement('td');
@@ -318,12 +324,11 @@ export default async function getView(isLogged, path) {
         return profileData; // Maneja redirecciones o errores
     }
     const { profile, match_history } = profileData;
-    console.log(profile, match_history); // XXX DEBUG
     // Construir la página
     component.appendChild(getProfileHeader(profile));
     component.appendChild(createAddMatchForm());
     component.appendChild(getStats(profile));
-    component.appendChild(getMatchHistory(match_history));
+    component.appendChild(getMatchHistory(profile, match_history));
 
     return { status: 200, component, css };
 }
