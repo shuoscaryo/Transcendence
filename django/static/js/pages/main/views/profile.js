@@ -152,7 +152,7 @@ function getMatchHistory(profile, matchHistory) {
         // Imagen del tipo de partida
         const imgTd = document.createElement('td');
         const matchTypeImg = document.createElement('img');
-        matchTypeImg.src = Path.img(`${match.match_type}_match.png`);
+        matchTypeImg.src = Path.img(`match_${match.match_type}.png`);
         matchTypeImg.alt = match.match_type;
         imgTd.appendChild(matchTypeImg);
         row.appendChild(imgTd);
