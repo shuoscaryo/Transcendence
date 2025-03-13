@@ -167,6 +167,12 @@ function getMatchHistory(profile, matchHistory) {
         player2Td.textContent = match.playerRight__username;
         row.appendChild(player2Td);
 
+        if (match.playerLeft__username === profile.username) {
+            player1Td.style.fontWeight = 'bold';
+        }
+        if (match.playerRight__username === profile.username) {
+            player2Td.style.fontWeight = 'bold';
+        }
         // Resultado
         const scoreTd = document.createElement('td');
         scoreTd.textContent = `${match.scoreLeft} - ${match.scoreRight}`;
