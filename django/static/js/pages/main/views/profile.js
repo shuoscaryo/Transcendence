@@ -114,6 +114,14 @@ function getMatchHistory(profile, matchHistory) {
     title.textContent = 'Match History';
     component.appendChild(title);
 
+    if (matchHistory.length === 0) {
+        const noMatches = document.createElement('p');
+        noMatches.id = 'no-matches';
+        noMatches.textContent = 'No matches yet';
+        component.appendChild(noMatches);
+        return component;
+    }
+
     const table = document.createElement('table');
     component.appendChild(table);
 
@@ -144,7 +152,6 @@ function getMatchHistory(profile, matchHistory) {
         // Imagen del tipo de partida
         const imgTd = document.createElement('td');
         const matchTypeImg = document.createElement('img');
-        console.log(match.match_type);
         matchTypeImg.src = Path.img(`${match.match_type}_match.png`);
         matchTypeImg.alt = match.match_type;
         imgTd.appendChild(matchTypeImg);

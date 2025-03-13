@@ -96,6 +96,8 @@
 table {
     width: 100%;
     border-spacing: 0 0.25rem; /* 10px de espacio entre filas */
+    border-collapse: separate;
+    overflow-x: auto;
 }
 #table-header {
     background-color: #2a2a2a;
@@ -109,6 +111,11 @@ table {
     vertical-align: middle; /* Centra verticalmente */
     height: 4rem;
     padding: 0.5rem;
+}
+.match td img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 .match td:last-child tr {
     border-spacing: 0 45rem;
