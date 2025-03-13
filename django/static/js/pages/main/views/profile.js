@@ -47,11 +47,11 @@ function getProfileHeader(profile) {
                 userInfo.appendChild(randomData);
 
                     const joined = document.createElement('p');
-                    joined.textContent = `Joined: ${profile.date_joined}`;
+                    joined.innerHTML = `<b>Joined:</b> ${profile.date_joined}`;
                     randomData.appendChild(joined);
 
                     const lastOnline = document.createElement('p');
-                    lastOnline.textContent = `Last online: ${profile.last_online}`;
+                    lastOnline.innerHTML = `<b>Last online:</b> ${profile.last_online}`;
                     randomData.appendChild(lastOnline);
 
         const searchAnotherUser = document.createElement('div');
@@ -92,6 +92,14 @@ function getStats(profile) {
     component.classList.add('section-block');
 
     return component;
+}
+
+function secondsToHMS(seconds) {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+    
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
 }
 
 function addWinLoseClass(row, username, match) {
@@ -159,21 +167,27 @@ function getMatchHistory(profile, matchHistory) {
 
         // Jugador 1
         const player1Td = document.createElement('td');
-        player1Td.textContent = match.playerLeft__username;
-        player1Td.addEventListener('click', () => {
+        row.appendChild(player1Td);
+
+        const player1Link = document.createElement('a');
+        player1Link.classList.add('player-link');
+        player1Link.textContent = match.playerLeft__username;
+        player1Link.addEventListener('click', () => {
             navigate(`/pages/main/profile/${match.playerLeft__username}`);
         });
-        player1Td.style.cursor = 'pointer';
-        row.appendChild(player1Td);
+        player1Td.appendChild(player1Link);
 
         // Jugador 2
         const player2Td = document.createElement('td');
-        player2Td.textContent = match.playerRight__username;
-        player2Td.addEventListener('click', () => {
+        row.appendChild(player2Td);
+
+        const player2Link = document.createElement('a');
+        player2Link.classList.add('player-link');
+        player2Link.textContent = match.playerRight__username;
+        player2Link.addEventListener('click', () => {
             navigate(`/pages/main/profile/${match.playerRight__username}`);
         });
-        player2Td.style.cursor = 'pointer';
-        row.appendChild(player2Td);
+        player2Td.appendChild(player2Link);
 
         if (match.playerLeft__username === profile.username) {
             player1Td.style.fontWeight = 'bold';
@@ -188,7 +202,7 @@ function getMatchHistory(profile, matchHistory) {
 
         // Duración
         const durationTd = document.createElement('td');
-        durationTd.textContent = `${match.duration} seconds`;
+        durationTd.textContent = `${secondsToHMS(match.duration)}`;
         row.appendChild(durationTd);
 
         // Hora de inicio

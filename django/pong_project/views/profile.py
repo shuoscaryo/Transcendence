@@ -17,7 +17,7 @@ def get_profile_data(username, request):
             'losses': user.losses,
             'profile_photo': user.profile_photo.url if user.profile_photo else '',
             'friends': list(user.friends.values_list('username', flat=True)),
-            'date_joined': user.date_joined.strftime('%Y-%m-%d')
+            'date_joined': user.date_joined.strftime('%Y-%m-%d %H:%M:%S')
         }
         # Obtener parámetros de paginación
         offset = int(request.GET.get('offset', 0))

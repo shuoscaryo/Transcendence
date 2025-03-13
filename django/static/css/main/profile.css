@@ -128,3 +128,13 @@ table {
 .match.lost-match {
     background-color: var(--color-red-match);
 }
+
+.player-link {
+    text-decoration: none;
+    color: var(--color-white);
+}
+
+.player-link:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
