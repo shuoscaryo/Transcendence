@@ -160,11 +160,19 @@ function getMatchHistory(profile, matchHistory) {
         // Jugador 1
         const player1Td = document.createElement('td');
         player1Td.textContent = match.playerLeft__username;
+        player1Td.addEventListener('click', () => {
+            navigate(`/pages/main/profile/${match.playerLeft__username}`);
+        });
+        player1Td.style.cursor = 'pointer';
         row.appendChild(player1Td);
 
         // Jugador 2
         const player2Td = document.createElement('td');
         player2Td.textContent = match.playerRight__username;
+        player2Td.addEventListener('click', () => {
+            navigate(`/pages/main/profile/${match.playerRight__username}`);
+        });
+        player2Td.style.cursor = 'pointer';
         row.appendChild(player2Td);
 
         if (match.playerLeft__username === profile.username) {
