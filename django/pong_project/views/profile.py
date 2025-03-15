@@ -27,7 +27,7 @@ def get_profile_data(username, request):
             Q(playerLeft=user) | Q(playerRight=user)
         ).order_by('-start_date').values(
             'id', 'playerLeft__username', 'playerRight__username',
-            'scoreLeft', 'scoreRight', 'start_date', 'duration', 'match_type'
+            'scoreLeft', 'scoreRight', 'start_date', 'duration', 'matchType'
         )[offset:offset + limit]
 
         formatted_matches = []

@@ -15,4 +15,4 @@ class MatchHistory(models.Model):
     scoreRight = models.IntegerField()
     start_date = models.DateTimeField(auto_now_add=True)
     duration = models.IntegerField()
-    match_type = models.CharField(max_length=20, choices=[('local','Local'), ('AI', 'AI'), ('online','online'), ('tournament','Tournament')], default='local')
+    matchType = models.CharField(max_length=20, choices=[('local','Local'), ('AI', 'AI'), ('online','online'), ('tournament','Tournament')], default='local')

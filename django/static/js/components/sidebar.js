@@ -14,7 +14,7 @@ function getUpperHalf(isLogged)
     component.appendChild(homeButton);
 
     const headerButtonsDict = {
-        'play':{ label: 'Play', image: Path.img('playLogo.png'), action: null},
+        'play':{ label: 'Play', image: Path.img('playLogo.png'), action: () => {navigate("/pages/main/game/local");}},
         'friends':{ label: 'Friends', image: Path.img('friendsLogo.png'), action: null},
         'chat':{ label: 'Chat', image: Path.img('chatLogo.png'), action: null},
         'profile':{ label: 'Profile', image: Path.img('profileLogo.png'), action: () => {navigate("/pages/main/profile");}},

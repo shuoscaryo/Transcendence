@@ -8,7 +8,6 @@ CustomUser = get_user_model()
 
 @require_POST
 def add_match(request):
-    """Añade un MatchHistory con jugadores, scores y tipo personalizados."""
     try:
         data = json.loads(request.body)
         # Obtener o crear jugadores
@@ -28,11 +27,11 @@ def add_match(request):
         score_left = int(data.get('scoreLeft'))
         score_right = int(data.get('scoreRight'))
         duration = int(data.get('duration', 120))  # Default 120 segundos si no se especifica
-        match_type = data.get('match_type', 'local')  # Default 'local' si no se especifica
+        matchType = data.get('matchType', 'local')  # Default 'local' si no se especifica
 
-        # Validar que el match_type sea válido
-        if match_type not in dict(MatchHistory._meta.get_field('match_type').choices):
-            return JsonResponse({'error': 'Invalid match_type'}, status=400)
+        # Validar que el matchType sea válido
+        if matchType not in dict(MatchHistory._meta.get_field('matchType').choices):
+            return JsonResponse({'error': 'Invalid matchType'}, status=400)
 
         # Crear el match
         match = MatchHistory.objects.create(
@@ -41,7 +40,7 @@ def add_match(request):
             scoreLeft=score_left,
             scoreRight=score_right,
             duration=duration,
-            match_type=match_type
+            matchType=matchType
         )
 
         # Actualizar wins/losses (simplificado)

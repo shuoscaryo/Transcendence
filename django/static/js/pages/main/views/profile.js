@@ -26,62 +26,62 @@ function getProfileHeader(profile) {
     component.id = 'header';
     component.classList.add('section-block');
 
-        const userDiv = document.createElement('div');
-        userDiv.id = 'user';
-        component.appendChild(userDiv);
+    const userDiv = document.createElement('div');
+    userDiv.id = 'user';
+    component.appendChild(userDiv);
 
-            const profileImage = document.createElement('img');
-            profileImage.src = profile.profile_photo;
-            userDiv.appendChild(profileImage);
+    const profileImage = document.createElement('img');
+    profileImage.src = profile.profile_photo;
+    userDiv.appendChild(profileImage);
 
-            const userInfo = document.createElement('div');
-            userInfo.id = 'user-info';
-            userDiv.appendChild(userInfo);
+    const userInfo = document.createElement('div');
+    userInfo.id = 'user-info';
+    userDiv.appendChild(userInfo);
 
-                const username = document.createElement('h1');
-                username.textContent = profile.username;
-                userInfo.appendChild(username);
+    const username = document.createElement('h1');
+    username.textContent = profile.username;
+    userInfo.appendChild(username);
 
-                const randomData = document.createElement('div');
-                randomData.id = 'random-data';
-                userInfo.appendChild(randomData);
+    const randomData = document.createElement('div');
+    randomData.id = 'random-data';
+    userInfo.appendChild(randomData);
 
-                    const joined = document.createElement('p');
-                    joined.innerHTML = `<b>Joined:</b> ${profile.date_joined}`;
-                    randomData.appendChild(joined);
+    const joined = document.createElement('p');
+    joined.innerHTML = `<b>Joined:</b> ${profile.date_joined}`;
+    randomData.appendChild(joined);
 
-                    const lastOnline = document.createElement('p');
-                    lastOnline.innerHTML = `<b>Last online:</b> ${profile.last_online}`;
-                    randomData.appendChild(lastOnline);
+    const lastOnline = document.createElement('p');
+    lastOnline.innerHTML = `<b>Last online:</b> ${profile.last_online}`;
+    randomData.appendChild(lastOnline);
 
-        const searchAnotherUser = document.createElement('div');
-        searchAnotherUser.id = 'search-another-user';
-        component.appendChild(searchAnotherUser);
+    const searchAnotherUser = document.createElement('div');
+    searchAnotherUser.id = 'search-another-user';
+    component.appendChild(searchAnotherUser);
 
-            const searchText = document.createElement('p');
-            searchText.textContent = 'Search another user';
-            searchAnotherUser.appendChild(searchText);
+    const searchText = document.createElement('p');
+    searchText.textContent = 'Search another user';
+    searchAnotherUser.appendChild(searchText);
 
-            const inputDiv = document.createElement('div');
-            inputDiv.id = 'search-input-div';
-            searchAnotherUser.appendChild(inputDiv);
+    const inputDiv = document.createElement('div');
+    inputDiv.id = 'search-input-div';
+    searchAnotherUser.appendChild(inputDiv);
 
-            const searchInput = document.createElement('input');
-            searchInput.type = 'text';
-            searchInput.placeholder = 'Username';
-            inputDiv.appendChild(searchInput);
+    const searchInput = document.createElement('input');
+    searchInput.type = 'text';
+    searchInput.placeholder = 'Username';
+    inputDiv.appendChild(searchInput);
 
-            const searchButton = getDefaultButton({
-                bgColor: 'var(--color-lime)',
-                content: 'Search',
-                onClick: () => {
-                    if (searchInput.value === '')
-                        return;
-                    navigate(`/pages/main/profile/${searchInput.value}`);
-                }
-            })
-            searchButton.id = 'search-button';
-            inputDiv.appendChild(searchButton);
+    const searchButton = getDefaultButton({
+        bgColor: 'var(--color-lime)',
+        content: 'Search',
+        onClick: () => {
+            if (searchInput.value === '')
+                return;
+            navigate(`/pages/main/profile/${searchInput.value}`);
+        }
+    })
+    searchButton.id = 'search-button';
+    inputDiv.appendChild(searchButton);
 
     return component;
 }
@@ -112,10 +112,20 @@ function addWinLoseClass(row, username, match) {
     row.classList.add(userIsLeft == leftWon? 'won-match': 'lost-match');
 }
 
-function getMatchHistory(profile, matchHistory) {
+function getCreateMatch(profile) {
+    const component = document.createElement('div');
+    
+
+}
+
+function getMatchHistorySection(profile, matchHistory) {
     const component = document.createElement('div');
     component.id = 'match-history';
     component.classList.add('section-block');
+
+    const addNewMatchDiv = getCreateMatch(profile);
+    addNewMatchDiv.id = 'add-new-match-div';
+    component.appendChild(addNewMatchDiv);
 
     const title = document.createElement('div');
     title.id = 'title';
@@ -138,7 +148,7 @@ function getMatchHistory(profile, matchHistory) {
     const headerRow = document.createElement('tr');
     headerRow.id = 'table-header';
 
-    const headers = ['Img', 'Player 1', 'Player 2', 'Score', 'Duration', 'Start Time'];
+    const headers = ['Type', 'Players', 'Score', 'Duration', 'Start Time'];
     headers.forEach(headerText => {
         const th = document.createElement('th');
         th.textContent = headerText;
@@ -160,8 +170,8 @@ function getMatchHistory(profile, matchHistory) {
         // Imagen del tipo de partida
         const imgTd = document.createElement('td');
         const matchTypeImg = document.createElement('img');
-        matchTypeImg.src = Path.img(`match_${match.match_type}.png`);
-        matchTypeImg.alt = match.match_type;
+        matchTypeImg.src = Path.img(`match_${match.matchType}.png`);
+        matchTypeImg.alt = match.matchType;
         imgTd.appendChild(matchTypeImg);
         row.appendChild(imgTd);
 
@@ -287,12 +297,12 @@ function createAddMatchForm() {
     durationDiv.append(durationLabel, durationInput);
     form.appendChild(durationDiv);
 
-    // Campo match_type
+    // Campo matchType
     const matchTypeDiv = document.createElement('div');
     const matchTypeLabel = document.createElement('label');
     matchTypeLabel.textContent = 'Match Type: ';
     const matchTypeSelect = document.createElement('select');
-    matchTypeSelect.name = 'match_type';
+    matchTypeSelect.name = 'matchType';
     const types = ['local', 'AI', 'online', 'tournament'];
     types.forEach(type => {
         const option = document.createElement('option');
@@ -320,7 +330,7 @@ function createAddMatchForm() {
             scoreLeft: parseInt(formData.get('scoreLeft')),
             scoreRight: parseInt(formData.get('scoreRight')),
             duration: parseInt(formData.get('duration')),
-            match_type: formData.get('match_type')
+            matchType: formData.get('matchType')
         };
 
         try {
@@ -366,7 +376,7 @@ export default async function getView(isLogged, path) {
     component.appendChild(getProfileHeader(profile));
     component.appendChild(createAddMatchForm());
     component.appendChild(getStats(profile));
-    component.appendChild(getMatchHistory(profile, match_history));
+    component.appendChild(getMatchHistorySection(profile, match_history));
 
     return { status: 200, component, css };
 }
