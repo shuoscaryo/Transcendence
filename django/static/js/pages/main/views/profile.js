@@ -246,11 +246,11 @@ function getMatchHistoryRow(profile, match) {
     component.appendChild(img);
 
     const playersDiv = document.createElement('div');
-    playersDiv.classList.add('players-div');
+    playersDiv.classList.add('players-div', 'match-div');
     component.appendChild(playersDiv);
 
     const scoreDiv = document.createElement('div');
-    scoreDiv.classList.add('score');
+    scoreDiv.classList.add('score', 'match-div');
     component.appendChild(scoreDiv);
 
     if (match.matchType === 'local') {
@@ -307,11 +307,12 @@ function getMatchHistoryRow(profile, match) {
     }
 
     const durationDiv = document.createElement('div');
+    durationDiv.classList.add('duration', 'match-div');
     durationDiv.textContent = secondsToMS(match.duration);
     component.appendChild(durationDiv);
 
     const startTimeDiv = document.createElement('div');
-    startTimeDiv.classList.add('start-time');
+    startTimeDiv.classList.add('start-time', 'match-div');
     const date = match.start_date.split(' ');
     startTimeDiv.innerHTML = `${date[0]}<br>${date[1]}`;
     component.appendChild(startTimeDiv);
@@ -369,6 +370,22 @@ export default async function getView(isLogged, path) {
     }
 
     const { profile, match_history } = profileData;
+    // XXX DELETE THIS ITS FOR TESTING
+    match_history.push({
+        players: ['12345678901234567890', 'player2', 'player3', 'player4', '12345678901234567890', 'player6', 'player7', 'player8'],
+        matchType: 'tournament-online',
+        winner: 'player1',
+        duration: 124,
+        start_date: '2021-10-10 12:12:12',
+    })
+    match_history.push({
+        players: ['player1', 'player2', 'player3', 'player4', 'player5'],
+        matchType: 'tournament-local',
+        winner: 'player1',
+        duration: 124,
+        start_date: '2021-10-10 12:12:12',
+    })
+    // XXX
 
     component.appendChild(getProfileHeader(profile));
     component.appendChild(getStats(profile));
