@@ -293,7 +293,7 @@ function getCreateELementsDiv(profile) {
     
     // component header
     const headerTitle = newElement('div', {parent: header, classList: ['subsection-title']});
-    headerTitle.textContent = 'Create Matches & Tournaments';
+    headerTitle.textContent = 'Manually Create Matches & Tournaments';
     const headerButton = getDefaultButton({
         bgColor: 'var(--color-lime)',
         content: 'Show forms',
