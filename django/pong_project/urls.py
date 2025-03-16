@@ -27,6 +27,8 @@ urlpatterns = [
     path('api/logout', views.logout),
     path('api/profile/', views.profile),
     path('api/profile/<str:username>', views.profile_by_username),
+    path('api/match-history/', views.match_history),
+    path('api/match-history/<str:username>', views.match_history_by_username),
     path('api/add-match', views.add_match),
 	path('api/tournaments', views.tournaments),
 	path('', views.index),

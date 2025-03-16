@@ -4,6 +4,7 @@ import getDefaultButton from '/static/js/components/defaultButton.js';
 import { usernameOk } from '/static/js/utils/validators.js';
 import newElement from '/static/js/utils/newElement.js';
 import fetchProfileData from '/static/js/utils/api/fetchProfileData.js';
+import fetchMatchHistory from '/static/js/utils/api/fetchMatchHistory.js';
 
 function getProfileHeader(profile) {
     const component = document.createElement('section');
@@ -444,20 +445,25 @@ function getMatchHistorySection(profile, matchHistory, path) {
     });
 
     let offset = 10;
+    const matchesPerFetch = 5;
     const getMoreButton = getDefaultButton({
         bgColor: 'var(--color-dark-gray)',
         content: 'Get more matches',
         onClick: async () => {
             getMoreButton.disabled = true;
-            const profileData = await fetchProfileData(path, offset, 5);
-            if (profileData.status && profileData.status !== 200) {
+            const matchHistoryData = await fetchMatchHistory(path.subPath, offset, matchesPerFetch);
+            if (matchHistoryData.status && matchHistoryData.status !== 200) {
+                getMoreButton.disabled = false;
                 return;
             }
-            const { profile, match_history } = profileData;
-            match_history.forEach(match => {
+            const matchHistory = matchHistoryData.data.matches;
+            let maxMatches = matchHistoryData.data.total_matches;
+            matchHistory.forEach(match => {
                 matchHistoryRows.append(getMatchHistoryRow(profile, match));
             });
-            offset += 5;
+            offset += matchesPerFetch;
+            if (offset >= maxMatches)
+                offset = maxMatches;
             getMoreButton.disabled = false;
         }
     });
@@ -477,15 +483,20 @@ export default async function getView(isLogged, path) {
     ];
     const component = document.createElement('div');
 
- const profileData = await fetchProfileData(path);
-    if (profileData.status && profileData.status !== 200) {
-        return profileData;
-    }
-    const { profile, match_history } = profileData;   
+    const [profileData, matchHistoryData] = await Promise.all([
+        fetchProfileData(path.subPath),
+        fetchMatchHistory(path.subPath, 0, 10)
+    ]);
+    if (profileData.status && profileData.status !== 200)
+        return {status: profileData.status, msg: profileData.msg};
+    if (matchHistoryData.status && matchHistoryData.status !== 200)
+        return {status: matchHistoryData.status, msg: matchHistoryData.msg};
+    const profile = profileData.data;
+    const matchHistory = matchHistoryData.data.matches;
 
     component.append(getProfileHeader(profile));
     component.append(getStats(profile));
-    component.append(getMatchHistorySection(profile, match_history, path));
+    component.append(getMatchHistorySection(profile, matchHistory, path));
 
     return { status: 200, component, css };
 }
