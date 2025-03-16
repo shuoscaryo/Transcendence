@@ -370,23 +370,7 @@ export default async function getView(isLogged, path) {
     }
 
     const { profile, match_history } = profileData;
-    // XXX DELETE THIS ITS FOR TESTING
-    match_history.push({
-        players: ['12345678901234567890', 'player2', 'player3', 'player4', '12345678901234567890', 'player6', 'player7', 'player8'],
-        matchType: 'tournament-online',
-        winner: 'player1',
-        duration: 124,
-        start_date: '2021-10-10 12:12:12',
-    })
-    match_history.push({
-        players: ['player1', 'player2', 'player3', 'player4', 'player5'],
-        matchType: 'tournament-local',
-        winner: 'player1',
-        duration: 124,
-        start_date: '2021-10-10 12:12:12',
-    })
-    // XXX
-
+    
     component.appendChild(getProfileHeader(profile));
     component.appendChild(getStats(profile));
     component.appendChild(getMatchHistorySection(profile, match_history));
