@@ -1,26 +1,9 @@
 import Path from '/static/js/utils/Path.js';
 import { navigate } from '/static/js/utils/router.js';
 import getDefaultButton from '/static/js/components/defaultButton.js';
-import { usernameOk } from '../../../utils/validators.js';
-
-async function fetchProfileData(isLogged, path, offset = 0, limit = 10) {
-    let url;
-    if (path.subPath === '/') {
-        url = `/api/profile/?offset=${offset}&limit=${limit}`;
-    } else {
-        const username = path.subPath.split('/')[1];
-        url = `/api/profile/${username}?offset=${offset}&limit=${limit}`;
-    }
-
-    const response = await fetch(url, {
-        method: 'GET',
-        credentials: 'include'
-    });
-    if (!response.ok) {
-        return { status: response.status, error: await response.json() };
-    }
-    return response.json();
-}
+import { usernameOk } from '/static/js/utils/validators.js';
+import newElement from '/static/js/utils/newElement.js';
+import fetchProfileData from '/static/js/utils/api/fetchProfileData.js';
 
 function getProfileHeader(profile) {
     const component = document.createElement('section');
@@ -110,61 +93,57 @@ function isUintValid(score) {
 }
 
 function getInputRow(label, type, name, value, required = true) {
-    const component = document.createElement('div');
-    component.classList.add('input-row');
-    const labelElement = document.createElement('label');
+    const component = newElement('div', {classList: ['input-row']});
+    
+    // component
+    const labelElement = newElement('label', {parent: component});
     labelElement.textContent = label;
-    const input = document.createElement('input');
+    const input = newElement('input', {parent: component});
     input.type = type;
     input.name = name;
     input.value = value;
     input.required = required;
-    component.append(labelElement, input);
+    
     return component;
 }
 
 function getNewMatchForm(profile) {
     const component = document.createElement('div');
 
-    const title = document.createElement('div');
-    title.classList.add('subsection-title');
+    // component
+    const title = newElement('div', {parent: component, classList: ['subsection-title']});
     title.textContent = 'Create Match';
-    component.append(title);
-
-    const form = document.createElement('form');
+    const form = newElement('form', {parent: component});
     form.method = "POST";
-    component.append(form);
     
-    const inputDiv = document.createElement('div');
-    inputDiv.classList.add('input-div');
-    form.append(inputDiv);
+    // component form
+    const inputDiv = newElement('div', {parent: form, classList: ['input-div']});
 
-    const playerLeftDiv = getInputRow('Player Left:', 'text', 'playerLeft', profile.username, true);
-    const playerRightDiv = getInputRow('Player Right:', 'text', 'playerRight', 'player2', false);
-    const scoreLeftDiv = getInputRow('Score Left:', 'number', 'scoreLeft', 10, true);
-    const scoreRightDiv = getInputRow('Score Right:', 'number', 'scoreRight', 5, true);
-    const durationDiv = getInputRow('Duration (s):', 'number', 'duration', 120, true);
-    
-    const matchTypeDiv = document.createElement('div');
-    matchTypeDiv.classList.add('input-row');
-    const matchTypeLabel = document.createElement('label');
+    // component form inputDiv
+    inputDiv.append(getInputRow('Player Left:', 'text', 'playerLeft', profile.username, true));
+    inputDiv.append(getInputRow('Player Right:', 'text', 'playerRight', 'player2', false));
+    inputDiv.append(getInputRow('Score Left:', 'number', 'scoreLeft', 10, true));
+    inputDiv.append(getInputRow('Score Right:', 'number', 'scoreRight', 5, true));
+    inputDiv.append(getInputRow('Duration (s):', 'number', 'duration', 120, true));
+    const matchTypeDiv = newElement('div', {parent: inputDiv, classList: ['input-row']});
+
+    // component form inputDiv matchTypeDiv
+    const matchTypeLabel = newElement('label', {parent: matchTypeDiv});
     matchTypeLabel.textContent = 'Match Type:';
-    const matchTypeSelect = document.createElement('select');
+    const matchTypeSelect = newElement('select', {parent: matchTypeDiv});
     matchTypeSelect.name = 'matchType';
+
+    // component form inputDiv matchTypeDiv matchTypeSelect
     const types = ['local', 'AI', 'online'];
     types.forEach(type => {
-        const option = document.createElement('option');
+        const option = newElement('option', {parent: matchTypeSelect});
         option.value = type;
         option.textContent = type;
-        if (type === 'local') option.selected = true;
-        matchTypeSelect.append(option);
+        if (type === 'local')
+            option.selected = true;
     });
-    matchTypeDiv.append(matchTypeLabel, matchTypeSelect);
 
-    inputDiv.append( playerLeftDiv, playerRightDiv, scoreLeftDiv,
-        scoreRightDiv, durationDiv, matchTypeDiv
-    );
-
+    // component form
     const submitButton = getDefaultButton({
         bgColor: 'var(--color-lime)',
         content: 'Create Match',
@@ -219,53 +198,44 @@ function getNewMatchForm(profile) {
 function getNewTournamentForm(profile) {
     const component = document.createElement('div');
     
-    const title = document.createElement('div');
-    title.classList.add('subsection-title');
+    // component
+    const title = newElement('div', {parent: component, classList: ['subsection-title']});
     title.textContent = 'Create Tournament';
-    component.append(title);
 
-    const form = document.createElement('form');
+    const form = newElement('form', {parent: component});
     form.method = "POST";
-    component.append(form);
 
-    const inputDiv = document.createElement('div');
-    inputDiv.classList.add('input-div');
-    form.append(inputDiv);
+    // component form
+    const inputDiv = newElement('div', {parent: form, classList: ['input-div']});
 
-    const playerListDiv = getInputRow('Player List:', 'text', 'playerList',
-        `${profile.username}, player2, player3`, true
-    );
-    inputDiv.append(playerListDiv);
-
-
-    const winnerDiv = getInputRow('Winner:', 'text', 'winner', profile.username, true);
-    inputDiv.append(winnerDiv);
-
-    const durationDiv = getInputRow('Duration (s):', 'number', 'duration', 1200, true);
-    inputDiv.append(durationDiv);
+    // component form inputDiv
+    inputDiv.append(getInputRow('Player List:', 'text', 'playerList',
+        `${profile.username}, player2, player3`, true));
+    inputDiv.append(getInputRow('Winner:', 'text', 'winner', profile.username, true));
+    inputDiv.append(getInputRow('Duration (s):', 'number', 'duration', 1200, true));
+    const matchTypeDiv = newElement('div', {parent: inputDiv, classList: ['input-row']});
     
-    const matchTypeDiv = document.createElement('div');
-    matchTypeDiv.classList.add('input-row');
-    const matchTypeLabel = document.createElement('label');
+    // component form inputDiv matchTypeDiv
+    const matchTypeLabel = newElement('label', {parent: matchTypeDiv});
     matchTypeLabel.textContent = 'Match Type:';
-    const matchTypeSelect = document.createElement('select');
+    const matchTypeSelect = newElement('select', {parent: matchTypeDiv});
     matchTypeSelect.name = 'matchType';
+    
+    // component form inputDiv matchTypeDiv matchTypeSelect
     const types = ['tournament-local', 'tournament-online'];
     types.forEach(type => {
-        const option = document.createElement('option');
+        const option = newElement('option', {parent: matchTypeSelect});
         option.value = type;
         option.textContent = type;
-        if (type === 'tournament-local') option.selected = true;
-        matchTypeSelect.append(option);
+        if (type === 'tournament-local')
+            option.selected = true;
     });
-    matchTypeDiv.append(matchTypeLabel, matchTypeSelect);
-    inputDiv.append(matchTypeDiv);
 
-    const submitButton = getDefaultButton({
+    // component form
+    form.append(getDefaultButton({
         bgColor: 'var(--color-lime)',
         content: 'Create Tournament',
-    });
-    form.append(submitButton);
+    }));
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
     
@@ -315,9 +285,48 @@ function getNewTournamentForm(profile) {
     return component;
 }
 
+function getCreateELementsDiv(profile) {
+    const component = newElement('div', {id: 'create-elements-subsection'});
+
+    // component
+    const header = newElement('div', {parent: component, classList: ['subsection-header']});
+    
+    // component header
+    const headerTitle = newElement('div', {parent: header, classList: ['subsection-title']});
+    headerTitle.textContent = 'Create Matches & Tournaments';
+    const headerButton = getDefaultButton({
+        bgColor: 'var(--color-lime)',
+        content: 'Show forms',
+        onClick: () => {
+            if (createElementsDiv.style.display === 'none') {
+                createElementsDiv.style.display = 'flex';
+                headerButton.textContent = 'Hide forms';
+            } else {
+                createElementsDiv.style.display = 'none';
+                headerButton.textContent = 'Show forms';
+            }
+        }
+    });
+    header.append(headerButton);
+
+    // component
+    const createElementsDiv = newElement('div', {id: 'create-elements-form-container', parent: component});
+    createElementsDiv.style.display = 'none';
+
+    // component createElementsDiv
+    const addNewMatchDiv = getNewMatchForm(profile);
+    addNewMatchDiv.classList.add('new-element-form');
+    createElementsDiv.append(addNewMatchDiv);
+
+    const addNewTournamentDiv = getNewTournamentForm(profile);
+    addNewTournamentDiv.classList.add('new-element-form');
+    createElementsDiv.append(addNewTournamentDiv);
+
+    return component;
+}
+
 function getPlayerLink(username, profile, realUser = true) {
-    const component = document.createElement('a');
-    component.classList.add('player-link');
+    const component = newElement('a', {classList: ['player-link']});
     component.textContent = username;
     if (!realUser || username === profile.username)
         component.classList.add('no-link');
@@ -334,27 +343,21 @@ function getPlayerLink(username, profile, realUser = true) {
 }
 
 function getMatchHistoryRow(profile, match) {
-    const component = document.createElement('div');
+    const component = newElement('div', {classList: ['match']});
     if (match.matchType.startsWith('tournament'))
         component.classList.add('tournament');
-    component.classList.add('match');
 
-    const img = document.createElement('img');
+    // component
+    const img = newElement('img', {parent: component});
     if (match.matchType.startsWith('tournament'))
         img.src = Path.img('match_tournament.png');
     else
         img.src = Path.img(`match_${match.matchType}.png`);
     img.alt = match.matchType;
-    component.append(img);
+    const playersDiv = newElement('div', {parent: component, classList: ['players-div', 'match-div']});
+    const scoreDiv = newElement('div', {parent: component, classList: ['score', 'match-div']});
 
-    const playersDiv = document.createElement('div');
-    playersDiv.classList.add('players-div', 'match-div');
-    component.append(playersDiv);
-
-    const scoreDiv = document.createElement('div');
-    scoreDiv.classList.add('score', 'match-div');
-    component.append(scoreDiv);
-
+    // component (playersDiv && scoreDiv)
     if (match.matchType === 'local') {
         playersDiv.classList.add('players-local');
         playersDiv.textContent = 'Local match';
@@ -389,11 +392,8 @@ function getMatchHistoryRow(profile, match) {
         const rowLength = 4;
         let playersColumnDiv;
         for (let i = 0; i < match.players.length; i++) {
-            if (i % rowLength === 0) {
-                playersColumnDiv = document.createElement('div');
-                playersColumnDiv.classList.add('players-column-div');
-                playersDiv.append(playersColumnDiv);
-            }
+            if (i % rowLength === 0)
+                playersColumnDiv = newElement('div', {parent: playersDiv, classList: ['players-column-div']});
             const player = getPlayerLink(
                 match.players[i],
                 profile,
@@ -408,57 +408,36 @@ function getMatchHistoryRow(profile, match) {
             component.classList.add('lost-match');
     }
 
-    const durationDiv = document.createElement('div');
-    durationDiv.classList.add('duration', 'match-div');
+    // component
+    const durationDiv = newElement('div', {parent: component, classList: ['duration', 'match-div']});
     durationDiv.textContent = secondsToMS(match.duration);
-    component.append(durationDiv);
-
-    const startTimeDiv = document.createElement('div');
-    startTimeDiv.classList.add('start-time', 'match-div');
+    const startTimeDiv = newElement('div', {parent: component, classList: ['start-time', 'match-div']});
     const date = match.start_date.split(' ');
     startTimeDiv.innerHTML = `${date[0]}<br>${date[1]}`;
-    component.append(startTimeDiv);
 
     return component;
 }
 
 function getMatchHistorySection(profile, matchHistory) {
-    const component = document.createElement('section');
-    component.id = 'match-history-section';
-    component.classList.add('section-block');
+    const component = newElement('section', {id: 'match-history-section', classList: ['section-block']});
 
-    const createHistoryElementsDiv = document.createElement('div');
-    createHistoryElementsDiv.id = 'create-history-elements';
-    component.append(createHistoryElementsDiv);
+    //component
+    const createElementsDiv = getCreateELementsDiv(profile);
+    component.append(createElementsDiv);
+    const matchHistoryDiv = newElement('div', {id: 'match-history-div', parent: component});
 
-    const addNewMatchDiv = getNewMatchForm(profile);
-    addNewMatchDiv.classList.add('new-element-form');
-    createHistoryElementsDiv.append(addNewMatchDiv);
-
-    const addNewTournamentDiv = getNewTournamentForm(profile);
-    addNewTournamentDiv.classList.add('new-element-form');
-    createHistoryElementsDiv.append(addNewTournamentDiv);
-
-    const matchHistoryDiv = document.createElement('div');
-    matchHistoryDiv.id = 'match-history-div';
-    component.append(matchHistoryDiv);
-
-    const title = document.createElement('div');
-    title.classList = 'subsection-title';
+    // component matchHistoryDiv
+    const title = newElement('div', {classList: ['subsection-title'], parent: matchHistoryDiv});
     title.textContent = 'Match History';
-    matchHistoryDiv.append(title);
 
     if (matchHistory.length === 0) {
-        const noMatches = document.createElement('p');
-        noMatches.id = 'no-matches';
+        const noMatches = newElement('p', {id: 'no-matches', parent: matchHistoryDiv});
         noMatches.textContent = 'No matches yet';
-        matchHistoryDiv.append(noMatches);
         return component;
     }
     
     matchHistory.forEach(match => {
-        const row = getMatchHistoryRow(profile, match);
-        matchHistoryDiv.append(row);
+        matchHistoryDiv.append(getMatchHistoryRow(profile, match));
     });
 
     return component;
@@ -474,11 +453,10 @@ export default async function getView(isLogged, path) {
     ];
     const component = document.createElement('div');
 
-    const profileData = await fetchProfileData(isLogged, path);
+    const profileData = await fetchProfileData(path);
     if (profileData.status && profileData.status !== 200) {
         return profileData;
     }
-
     const { profile, match_history } = profileData;
 
     component.append(getProfileHeader(profile));

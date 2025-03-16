@@ -95,15 +95,48 @@
         gap: 1rem; /* modificable */
     }
 
+    .subsection-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem;
+        font-size: 1.5rem;
+        width: 100%;
+        background-color: #2a2a2a;
+    }
+
     /* Create element subsection */
-    #create-history-elements {
+    #create-elements-subsection {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        gap: 1rem; /* modificable */
+    }
+    #create-elements-subsection .subsection-header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 1rem; /* modificable */
+        width: 100%;
+    }
+
+    #create-elements-subsection .subsection-header .subsection-title {
+        flex: 5;
+        border-radius: 0.5rem;
+        overflow: hidden;
+    }
+
+    #create-elements-subsection .subsection-header button {
+        flex: 1;
+    }
+    #create-elements-form-container {
         display: flex;
         flex-direction: row;
         align-items: space-between;
         gap: 1rem; /* modificable */
         width: 100%;
     }
-
     .new-element-form {
         display: flex;
         flex-direction: column;
@@ -112,24 +145,47 @@
         width: 100%;
         background-color: #2a2a2a;
         padding: 1rem;
+        padding-top: 0.5rem;
         border-radius: 0.5rem;
         overflow: hidden;
     }
-
+    .new-element-form .subsection-title {
+        padding: 0;
+    }
+    
     .new-element-form form {
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
         gap: 0.5rem; /* modificable */
+        width: 100%;
+        height: 100%;
+    }
+
+    .new-element-form .input-div {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem; /* modificable */
         width: 100%;
     }
 
-    #create-history-elements .input-row {
+    .new-element-form .input-row {
         width: 100%;
         display: flex;
         flex-direction: row;
         gap: 0.5rem; /* modificable */
         justify-content: center;
         align-items: center;
+    }
+
+    .input-row label {
+        flex: 1;
+        overflow: hidden;
+    }
+
+    .input-row input,
+    .input-row select {
+        flex: 3;
     }
 
     .new-element-form select {
@@ -152,15 +208,6 @@
         overflow: hidden;
     }
 
-    .subsection-title {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0.5rem;
-        font-size: 1.5rem;
-        width: 100%;
-        background-color: #2a2a2a;
-    }
 
     .match {
         display: flex;
