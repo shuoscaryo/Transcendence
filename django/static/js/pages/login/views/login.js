@@ -8,19 +8,19 @@ function getOtherLogin() {
     const separatorDiv = document.createElement('div');
     separatorDiv.id = 'div-separator';
     separatorDiv.textContent = 'OR';
-    component.appendChild(separatorDiv);
+    component.append(separatorDiv);
 
     const buttonContent = document.createElement('div');
     buttonContent.classList.add('button-content');
     
     const img = document.createElement('img');
     img.src = Path.img('42Logo.png');
-    buttonContent.appendChild(img);
+    buttonContent.append(img);
 
     const textDiv = document.createElement('div');
     textDiv.id = 'div-text';
     textDiv.textContent = 'Log in with 42';
-    buttonContent.appendChild(textDiv);
+    buttonContent.append(textDiv);
 
     const fortitoButton = getDefaultButton({
         bgColor: 'var(--color-button-fortito)',
@@ -29,7 +29,7 @@ function getOtherLogin() {
         onClick: () => {navigate('/pages/main/home');},
     });
     fortitoButton.classList.add('button-other-login');
-    component.appendChild(fortitoButton);
+    component.append(fortitoButton);
 
     return component;
 }
@@ -41,19 +41,19 @@ function getInput(name, type, placeholder) {
     input.name = name;
     input.type = type;
     input.placeholder = placeholder;
-    component.appendChild(input);
+    component.append(input);
 
     const error = document.createElement('p');
     error.style.display = 'none';
-    component.appendChild(error);
+    component.append(error);
     return component;
 }
 
 function getForm() {
     const component = document.createElement('form');
 
-    component.appendChild(getInput('username', 'text', 'Username'));
-    component.appendChild(getInput('password', 'password', 'Password'));
+    component.append(getInput('username', 'text', 'Username'));
+    component.append(getInput('password', 'password', 'Password'));
 
     return component;
 }
@@ -83,14 +83,14 @@ function getUpperHalf() {
 
     const divNormalLogin = document.createElement('div');
     divNormalLogin.id = 'div-normal-login';
-    component.appendChild(divNormalLogin);
+    component.append(divNormalLogin);
 
     const divForm = document.createElement('div');
     divForm.id = 'div-form';
-    divNormalLogin.appendChild(divForm);
+    divNormalLogin.append(divForm);
 
     const form = getForm();
-    divForm.appendChild(form);
+    divForm.append(form);
 
     const forgotPassword = document.createElement('button');
     forgotPassword.id = 'button-forgot-password';
@@ -98,7 +98,7 @@ function getUpperHalf() {
     forgotPassword.addEventListener('click', () => {
         navigate('pages/forgotPassword');
     });
-    divForm.appendChild(forgotPassword);
+    divForm.append(forgotPassword);
 
     
     const loginButton = getDefaultButton({
@@ -136,12 +136,12 @@ function getUpperHalf() {
     });
     loginButton.disabled = true;
     loginButton.id = 'button-login';
-    divNormalLogin.appendChild(loginButton);
+    divNormalLogin.append(loginButton);
     disableButtonOnEvent(loginButton, form);
 
     const divOtherLogin = getOtherLogin();
     divOtherLogin.id = 'div-other-login';
-    component.appendChild(divOtherLogin);
+    component.append(divOtherLogin);
     
     return component;
 }
@@ -153,12 +153,12 @@ export default async function getView(isLogged) {
 
     const divUpper = getUpperHalf();
     divUpper.id = 'div-upper';
-    component.appendChild(divUpper);
+    component.append(divUpper);
 
     /* The text for register */
     const divLower = document.createElement('div');
     divLower.id = 'div-lower';
-    component.appendChild(divLower);
+    component.append(divLower);
 
     const registerButton = document.createElement('button');
     registerButton.id = 'button-register';
@@ -166,7 +166,7 @@ export default async function getView(isLogged) {
         navigate('/pages/login/register');
     });
     registerButton.textContent = 'New? Sign up - and start playing pong!';
-    divLower.appendChild(registerButton);
+    divLower.append(registerButton);
 
     return {status: 200, component, css};
 }

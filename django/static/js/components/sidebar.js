@@ -11,7 +11,7 @@ function getUpperHalf(isLogged)
 
     const homeButton = getHomeButton();
     homeButton.classList.add('header-button');
-    component.appendChild(homeButton);
+    component.append(homeButton);
 
     const headerButtonsDict = {
         'play':{ label: 'Play', image: Path.img('playLogo.png'), action: () => {navigate("/pages/main/game/local");}},
@@ -39,20 +39,20 @@ function getUpperHalf(isLogged)
         button.className = 'header-button';
 
         const div1 = document.createElement('div');
-        button.appendChild(div1);
+        button.append(div1);
         const image = document.createElement('img');
         image.src = buttonData.image;
-        div1.appendChild(image);
+        div1.append(image);
 
         const div2 = document.createElement('div');
-        button.appendChild(div2);
+        button.append(div2);
         const p = document.createElement('p');
         p.textContent = buttonData.label;
-        div2.appendChild(p);
+        div2.append(p);
 
         button.addEventListener('click', buttonData.action);
 
-        component.appendChild(button);
+        component.append(button);
     });
     return component;
 }
@@ -70,7 +70,7 @@ function getLowerHalf(isLogged)
             onClick: () => {navigate("/pages/login/register");}
         });
         registerButton.classList.add('button-login');
-        component.appendChild(registerButton);
+        component.append(registerButton);
         
         const loginButton = getDefaultButton({
             bgColor: '#444444',
@@ -79,7 +79,7 @@ function getLowerHalf(isLogged)
             onClick: () => {navigate("/pages/login/login");}
         });
         loginButton.classList.add('button-login');
-        component.appendChild(loginButton);
+        component.append(loginButton);
     }
     else {
         const contractButton = getDefaultButton({
@@ -92,7 +92,7 @@ function getLowerHalf(isLogged)
             }
         });
         contractButton.classList.add('button-login');
-        component.appendChild(contractButton);
+        component.append(contractButton);
     }
     return component;
 }
@@ -103,10 +103,10 @@ export default function getSidebar(isLogged)
     component.className = 'sidebar';
 
     // contains home button and move to other pages
-    component.appendChild(getUpperHalf(isLogged));
+    component.append(getUpperHalf(isLogged));
 
     // contains login and contract sidebar button
-    component.appendChild(getLowerHalf(isLogged));
+    component.append(getLowerHalf(isLogged));
 
     return component;
 }

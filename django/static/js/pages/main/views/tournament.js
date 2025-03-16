@@ -101,38 +101,38 @@ class Tournament {
 
         const roundDiv = document.createElement('div');
         roundDiv.classList.add('round');
-        component.appendChild(roundDiv);
+        component.append(roundDiv);
 
         const winnerDiv = document.createElement('div');
         winnerDiv.id = 'winner';
-        roundDiv.appendChild(winnerDiv);
+        roundDiv.append(winnerDiv);
 
         const crownImg = document.createElement('img');
         crownImg.src = Path.img('crown.png');
         crownImg.alt = 'Winner';
-        winnerDiv.appendChild(crownImg);
+        winnerDiv.append(crownImg);
 
         const matchBox = document.createElement('div');
         matchBox.classList.add('match-box');
         if (this.round == this.matchBoxes.length - 1)
             matchBox.classList.add('active-match');
-        winnerDiv.appendChild(matchBox);
+        winnerDiv.append(matchBox);
         
         const matchBoxContent = document.createElement('p');
         matchBoxContent.textContent = this.matchBoxes[this.matchBoxes.length - 1][0] || this.matchBoxes[this.matchBoxes.length - 1][1] || '-';
-        matchBox.appendChild(matchBoxContent);
+        matchBox.append(matchBoxContent);
 
         for (let i = this.matchBoxes.length - 2; i >= 0;  i--) {
             const roundDiv = document.createElement('div');
             roundDiv.classList.add('round');
-            component.appendChild(roundDiv);
+            component.append(roundDiv);
 
             for (let j = 0; j < this.matchBoxes[i].length; j += 2) {
                 const matchBox = document.createElement('div');
                 matchBox.classList.add('match-box');
                 if (i == this.round && j == this.match)
                     matchBox.classList.add('active-match');
-                roundDiv.appendChild(matchBox);
+                roundDiv.append(matchBox);
 
                 const matchBoxContent = document.createElement('p');
                 const p1 = this.matchBoxes[i][j];
@@ -146,7 +146,7 @@ class Tournament {
                 else
                     matchBoxContent.textContent = '-';
 
-                matchBox.appendChild(matchBoxContent);
+                matchBox.append(matchBoxContent);
             }
         }
 
@@ -198,11 +198,11 @@ function loadFormView(component) {
         
         players.add(playerName);
         const listItem = document.createElement('li');
-        playerList.appendChild(listItem);
+        playerList.append(listItem);
         
         const listText = document.createElement('p');
         listText.textContent = playerName;
-        listItem.appendChild(listText);
+        listItem.append(listText);
 
         const removeButton = getDefaultButton({
             bgColor: 'var(--color-red)',
@@ -213,30 +213,30 @@ function loadFormView(component) {
             },
         });
         removeButton.classList.add('button-delete');
-        listItem.appendChild(removeButton);
+        listItem.append(removeButton);
         
         input.value = '';
     }
 
     const containerDiv = document.createElement('div');
     containerDiv.id = 'div-container';
-    component.appendChild(containerDiv);
+    component.append(containerDiv);
 
     const titleDiv = document.createElement('div');
     titleDiv.classList.add('div-title');
-    containerDiv.appendChild(titleDiv);
+    containerDiv.append(titleDiv);
 
     const title = document.createElement('h1');
     title.textContent = 'Tournament';
-    titleDiv.appendChild(title);
+    titleDiv.append(title);
 
     const description = document.createElement('p');
     description.textContent = 'Enter the names of the players.';
-    titleDiv.appendChild(description);
+    titleDiv.append(description);
 
     const inputDiv = document.createElement('div');
     inputDiv.classList.add('div-input');
-    containerDiv.appendChild(inputDiv);
+    containerDiv.append(inputDiv);
     
     const input = document.createElement('input');
     input.placeholder = 'PlayerName';
@@ -247,12 +247,12 @@ function loadFormView(component) {
             addPlayerToForm();
         }
     });
-    inputDiv.appendChild(input);
+    inputDiv.append(input);
     
     const button = document.createElement('button');
     button.textContent = 'Add Player';
     button.addEventListener('click', addPlayerToForm);
-    inputDiv.appendChild(button);
+    inputDiv.append(button);
     
 
     const buttonNext = getDefaultButton({
@@ -269,35 +269,35 @@ function loadFormView(component) {
         },
     });
     buttonNext.id = "button-next";
-    containerDiv.appendChild(buttonNext);
+    containerDiv.append(buttonNext);
     
     const playersDiv = document.createElement('div');
     playersDiv.classList.add('div-players');
-    containerDiv.appendChild(playersDiv);
+    containerDiv.append(playersDiv);
 
     const headerDiv = document.createElement('div');
     headerDiv.classList.add('div-header');
     headerDiv.textContent = 'Players';
-    playersDiv.appendChild(headerDiv);
+    playersDiv.append(headerDiv);
 
     const playerList = document.createElement('ul');    
-    playersDiv.appendChild(playerList);
+    playersDiv.append(playerList);
 }
 
 
 async function loadMatchesView(component) {
     const containerDiv = document.createElement('div');
     containerDiv.id = 'div-container';
-    component.appendChild(containerDiv);
+    component.append(containerDiv);
     
     if( g_tournament.over ) {
         const winnerDiv = document.createElement('div');
         winnerDiv.id = 'winner';
-        containerDiv.appendChild(winnerDiv);
+        containerDiv.append(winnerDiv);
 
         const winnerText = document.createElement('h1');
         winnerText.textContent = `${g_tournament.getWinner()} Wins the Tournament!`;
-        winnerDiv.appendChild(winnerText);
+        winnerDiv.append(winnerText);
 
 		const dataToServer = {
 			"winner": g_tournament.getWinner(),
@@ -312,11 +312,11 @@ async function loadMatchesView(component) {
 
     const matchesList = g_tournament.getComponent();
     matchesList.id = "tournament";
-    containerDiv.appendChild(matchesList);
+    containerDiv.append(matchesList);
 
     const buttonsDiv = document.createElement('div');
     buttonsDiv.id = 'buttons-div';
-    containerDiv.appendChild(buttonsDiv);
+    containerDiv.append(buttonsDiv);
 
     if (!g_tournament.over) {
         const buttonTest0 = getDefaultButton({
@@ -332,7 +332,7 @@ async function loadMatchesView(component) {
                 }
             },
         });
-        buttonsDiv.appendChild(buttonTest0);
+        buttonsDiv.append(buttonTest0);
         
         const buttonNext = getDefaultButton({
             bgColor: 'var(--color-lime)',
@@ -342,7 +342,7 @@ async function loadMatchesView(component) {
                 loadGameView(component);
             },
         });
-        buttonsDiv.appendChild(buttonNext);
+        buttonsDiv.append(buttonNext);
 
         const buttonTest1 = getDefaultButton({
             bgColor: 'var(--color-gray)',
@@ -357,7 +357,7 @@ async function loadMatchesView(component) {
                 }
             },
         });
-        buttonsDiv.appendChild(buttonTest1);
+        buttonsDiv.append(buttonTest1);
     }
     else {
         const buttonHome = getDefaultButton({
@@ -367,7 +367,7 @@ async function loadMatchesView(component) {
                 navigate('/pages/main/home');
             },
         });
-        buttonsDiv.appendChild(buttonHome);
+        buttonsDiv.append(buttonHome);
     }
 }
 
@@ -394,8 +394,8 @@ function loadGameView(component) {
     });
     g_pong = pong;
 
-    gameContainer.appendChild(game);
-    component.appendChild(gameContainer);
+    gameContainer.append(game);
+    component.append(gameContainer);
 }
 
 export default async function getView(isLogged, path) {

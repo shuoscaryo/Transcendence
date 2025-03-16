@@ -28,34 +28,34 @@ export default function createPongGameComponent(data) {
     // Create another container that has the game and the buttons
     const gameDiv = document.createElement('div');
     gameDiv.classList.add('div-game');
-    component.appendChild(gameDiv);
+    component.append(gameDiv);
 
     // Create the score display
     const statsDiv = document.createElement('div');
     statsDiv.classList.add('div-stats');
-    gameDiv.appendChild(statsDiv);
+    gameDiv.append(statsDiv);
 
     const playerLeftDiv = document.createElement('div');
     playerLeftDiv.classList.add('div-player', 'player-left');
     playerLeftDiv.textContent = data.playerLeft.name;
-    statsDiv.appendChild(playerLeftDiv);
+    statsDiv.append(playerLeftDiv);
     
     const scoreDiv = document.createElement('div');
     scoreDiv.classList.add('div-score');
     scoreDiv.textContent = '0 - 0';
-    statsDiv.appendChild(scoreDiv);
+    statsDiv.append(scoreDiv);
 
     const playerRightDiv = document.createElement('div');
     playerRightDiv.classList.add('div-player', 'player-right');
     playerRightDiv.textContent = data.playerRight.name;
-    statsDiv.appendChild(playerRightDiv);
+    statsDiv.append(playerRightDiv);
 
     // Create the canvas and the game
     const canvas = document.createElement('canvas');
     canvas.classList.add('canvas-game');
     canvas.width = 800;
     canvas.height = 600;
-    gameDiv.appendChild(canvas);
+    gameDiv.append(canvas);
     
     const pong = new PongGame(canvas);
     pong.playerLeft.controller = data.playerLeft.controller;
@@ -76,7 +76,7 @@ export default function createPongGameComponent(data) {
         else
             scoreDiv.textContent = `${game.playerRight.name} wins!`;
         buttonsDiv.innerHTML = '';
-        buttonsDiv.appendChild(resetButton);
+        buttonsDiv.append(resetButton);
         if (data.onGameEnd)
             data.onGameEnd(game);
     }
@@ -85,22 +85,22 @@ export default function createPongGameComponent(data) {
     // Create control buttons
     const buttonsDiv = document.createElement('div');
     buttonsDiv.classList.add('div-buttons');
-    gameDiv.appendChild(buttonsDiv);
+    gameDiv.append(buttonsDiv);
     
     const startButton = document.createElement('button');
     startButton.textContent = 'Start';
     startButton.addEventListener('click', () => {
         buttonsDiv.removeChild(startButton);
-        buttonsDiv.appendChild(stopButton);
+        buttonsDiv.append(stopButton);
         pong.start();
     });
-    buttonsDiv.appendChild(startButton);
+    buttonsDiv.append(startButton);
     
     const stopButton = document.createElement('button');
     stopButton.textContent = 'Pause';
     stopButton.addEventListener('click', () => {
         buttonsDiv.removeChild(stopButton);
-        buttonsDiv.appendChild(startButton);
+        buttonsDiv.append(startButton);
         pong.stop();
     });
     

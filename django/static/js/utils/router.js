@@ -87,7 +87,7 @@ async function loadPage(path, isLogged) {
     if (!divApp) {
         divApp = document.createElement('div');
         divApp.id = 'app';
-        document.body.appendChild(divApp);
+        document.body.append(divApp);
     }
     divApp.innerHTML = '';
 
@@ -162,7 +162,7 @@ export async function router(reload=false) {
         if (!divApp) {
             divApp = document.createElement('div');
             divApp.id = 'app';
-            document.body.appendChild(divApp);
+            document.body.append(divApp);
         }
         divApp.innerHTML = '';
         divApp.textContent = `Error ${result.status}`;

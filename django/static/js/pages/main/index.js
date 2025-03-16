@@ -10,17 +10,17 @@ export default async function getPage( isLogged, path) {
 
     const page = document.createElement('div');
     page.id = 'page';
-    component.appendChild(page);
+    component.append(page);
 
-    page.appendChild(getSidebar(isLogged));
+    page.append(getSidebar(isLogged));
 
     const content = document.createElement('div');
     content.id = 'content';
-    page.appendChild(content);
+    page.append(content);
 
     const main = document.createElement('main');
     main.id = 'view';
-    content.appendChild(main);
+    content.append(main);
 
     return {status: 200, component, css};
 }

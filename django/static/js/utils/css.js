@@ -17,7 +17,7 @@ function loadCSS(filePaths, className) {
                     resolve();
                 };
 
-                document.head.appendChild(link);
+                document.head.append(link);
             });
         })
     );

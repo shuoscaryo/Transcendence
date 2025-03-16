@@ -24,7 +24,7 @@ export default function createButton({ bgColor, bgHoverColor, textColor, content
     if (typeof content === 'string')
         component.textContent = content;
     else if (content instanceof HTMLElement)
-        component.appendChild(content);
+        component.append(content);
     else
         throw new Error('Content must be a string or a valid HTMLElement');
 
@@ -40,7 +40,7 @@ export default function createButton({ bgColor, bgHoverColor, textColor, content
 function toRGBA(color) {
     const tempElement = document.createElement('div');
     tempElement.style.backgroundColor = color; // Apply the color
-    document.body.appendChild(tempElement); // Add the element to the DOM
+    document.body.append(tempElement); // Add the element to the DOM
     const computedColor = getComputedStyle(tempElement).backgroundColor; // Get the computed color
     document.body.removeChild(tempElement); // Remove the element from the DOM
 

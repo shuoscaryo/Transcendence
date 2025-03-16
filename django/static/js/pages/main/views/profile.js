@@ -29,48 +29,48 @@ function getProfileHeader(profile) {
 
     const userDiv = document.createElement('div');
     userDiv.id = 'user';
-    component.appendChild(userDiv);
+    component.append(userDiv);
 
     const profileImage = document.createElement('img');
     profileImage.src = profile.profile_photo;
-    userDiv.appendChild(profileImage);
+    userDiv.append(profileImage);
 
     const userInfo = document.createElement('div');
     userInfo.id = 'user-info';
-    userDiv.appendChild(userInfo);
+    userDiv.append(userInfo);
 
     const username = document.createElement('h1');
     username.textContent = profile.username;
-    userInfo.appendChild(username);
+    userInfo.append(username);
 
     const randomData = document.createElement('div');
     randomData.id = 'random-data';
-    userInfo.appendChild(randomData);
+    userInfo.append(randomData);
 
     const joined = document.createElement('p');
     joined.innerHTML = `<b>Joined:</b> ${profile.date_joined}`;
-    randomData.appendChild(joined);
+    randomData.append(joined);
 
     const lastOnline = document.createElement('p');
     lastOnline.innerHTML = `<b>Last online:</b> ${profile.last_online}`;
-    randomData.appendChild(lastOnline);
+    randomData.append(lastOnline);
 
     const searchAnotherUser = document.createElement('div');
     searchAnotherUser.id = 'search-another-user';
-    component.appendChild(searchAnotherUser);
+    component.append(searchAnotherUser);
 
     const searchText = document.createElement('p');
     searchText.textContent = 'Search another user';
-    searchAnotherUser.appendChild(searchText);
+    searchAnotherUser.append(searchText);
 
     const inputDiv = document.createElement('div');
     inputDiv.id = 'search-input-div';
-    searchAnotherUser.appendChild(inputDiv);
+    searchAnotherUser.append(inputDiv);
 
     const searchInput = document.createElement('input');
     searchInput.type = 'text';
     searchInput.placeholder = 'Username';
-    inputDiv.appendChild(searchInput);
+    inputDiv.append(searchInput);
 
     const searchButton = getDefaultButton({
         bgColor: 'var(--color-lime)',
@@ -82,7 +82,7 @@ function getProfileHeader(profile) {
         }
     })
     searchButton.id = 'search-button';
-    inputDiv.appendChild(searchButton);
+    inputDiv.append(searchButton);
 
     return component;
 }
@@ -137,7 +137,7 @@ function getNewMatchForm(profile) {
     
     const inputDiv = document.createElement('div');
     inputDiv.classList.add('input-div');
-    form.appendChild(inputDiv);
+    form.append(inputDiv);
 
     const playerLeftDiv = getInputRow('Player Left:', 'text', 'playerLeft', profile.username, true);
     const playerRightDiv = getInputRow('Player Right:', 'text', 'playerRight', 'player2', false);
@@ -157,7 +157,7 @@ function getNewMatchForm(profile) {
         option.value = type;
         option.textContent = type;
         if (type === 'local') option.selected = true;
-        matchTypeSelect.appendChild(option);
+        matchTypeSelect.append(option);
     });
     matchTypeDiv.append(matchTypeLabel, matchTypeSelect);
 
@@ -169,7 +169,7 @@ function getNewMatchForm(profile) {
         bgColor: 'var(--color-lime)',
         content: 'Create Match',
     });
-    form.appendChild(submitButton);
+    form.append(submitButton);
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
     
@@ -222,27 +222,27 @@ function getNewTournamentForm(profile) {
     const title = document.createElement('div');
     title.classList.add('subsection-title');
     title.textContent = 'Create Tournament';
-    component.appendChild(title);
+    component.append(title);
 
     const form = document.createElement('form');
     form.method = "POST";
-    component.appendChild(form);
+    component.append(form);
 
     const inputDiv = document.createElement('div');
     inputDiv.classList.add('input-div');
-    form.appendChild(inputDiv);
+    form.append(inputDiv);
 
     const playerListDiv = getInputRow('Player List:', 'text', 'playerList',
         `${profile.username}, player2, player3`, true
     );
-    inputDiv.appendChild(playerListDiv);
+    inputDiv.append(playerListDiv);
 
 
     const winnerDiv = getInputRow('Winner:', 'text', 'winner', profile.username, true);
-    inputDiv.appendChild(winnerDiv);
+    inputDiv.append(winnerDiv);
 
     const durationDiv = getInputRow('Duration (s):', 'number', 'duration', 1200, true);
-    inputDiv.appendChild(durationDiv);
+    inputDiv.append(durationDiv);
     
     const matchTypeDiv = document.createElement('div');
     matchTypeDiv.classList.add('input-row');
@@ -256,16 +256,16 @@ function getNewTournamentForm(profile) {
         option.value = type;
         option.textContent = type;
         if (type === 'tournament-local') option.selected = true;
-        matchTypeSelect.appendChild(option);
+        matchTypeSelect.append(option);
     });
     matchTypeDiv.append(matchTypeLabel, matchTypeSelect);
-    inputDiv.appendChild(matchTypeDiv);
+    inputDiv.append(matchTypeDiv);
 
     const submitButton = getDefaultButton({
         bgColor: 'var(--color-lime)',
         content: 'Create Tournament',
     });
-    form.appendChild(submitButton);
+    form.append(submitButton);
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
     
@@ -345,15 +345,15 @@ function getMatchHistoryRow(profile, match) {
     else
         img.src = Path.img(`match_${match.matchType}.png`);
     img.alt = match.matchType;
-    component.appendChild(img);
+    component.append(img);
 
     const playersDiv = document.createElement('div');
     playersDiv.classList.add('players-div', 'match-div');
-    component.appendChild(playersDiv);
+    component.append(playersDiv);
 
     const scoreDiv = document.createElement('div');
     scoreDiv.classList.add('score', 'match-div');
-    component.appendChild(scoreDiv);
+    component.append(scoreDiv);
 
     if (match.matchType === 'local') {
         playersDiv.classList.add('players-local');
@@ -392,14 +392,14 @@ function getMatchHistoryRow(profile, match) {
             if (i % rowLength === 0) {
                 playersColumnDiv = document.createElement('div');
                 playersColumnDiv.classList.add('players-column-div');
-                playersDiv.appendChild(playersColumnDiv);
+                playersDiv.append(playersColumnDiv);
             }
             const player = getPlayerLink(
                 match.players[i],
                 profile,
                 match.matchType === 'tournament-online'
             );
-            playersColumnDiv.appendChild(player);
+            playersColumnDiv.append(player);
         }
         scoreDiv.textContent = `${match.winner} won`;
         if (match.winner === profile.username)
@@ -411,13 +411,13 @@ function getMatchHistoryRow(profile, match) {
     const durationDiv = document.createElement('div');
     durationDiv.classList.add('duration', 'match-div');
     durationDiv.textContent = secondsToMS(match.duration);
-    component.appendChild(durationDiv);
+    component.append(durationDiv);
 
     const startTimeDiv = document.createElement('div');
     startTimeDiv.classList.add('start-time', 'match-div');
     const date = match.start_date.split(' ');
     startTimeDiv.innerHTML = `${date[0]}<br>${date[1]}`;
-    component.appendChild(startTimeDiv);
+    component.append(startTimeDiv);
 
     return component;
 }
@@ -429,36 +429,36 @@ function getMatchHistorySection(profile, matchHistory) {
 
     const createHistoryElementsDiv = document.createElement('div');
     createHistoryElementsDiv.id = 'create-history-elements';
-    component.appendChild(createHistoryElementsDiv);
+    component.append(createHistoryElementsDiv);
 
     const addNewMatchDiv = getNewMatchForm(profile);
     addNewMatchDiv.classList.add('new-element-form');
-    createHistoryElementsDiv.appendChild(addNewMatchDiv);
+    createHistoryElementsDiv.append(addNewMatchDiv);
 
     const addNewTournamentDiv = getNewTournamentForm(profile);
     addNewTournamentDiv.classList.add('new-element-form');
-    createHistoryElementsDiv.appendChild(addNewTournamentDiv);
+    createHistoryElementsDiv.append(addNewTournamentDiv);
 
     const matchHistoryDiv = document.createElement('div');
     matchHistoryDiv.id = 'match-history-div';
-    component.appendChild(matchHistoryDiv);
+    component.append(matchHistoryDiv);
 
     const title = document.createElement('div');
     title.classList = 'subsection-title';
     title.textContent = 'Match History';
-    matchHistoryDiv.appendChild(title);
+    matchHistoryDiv.append(title);
 
     if (matchHistory.length === 0) {
         const noMatches = document.createElement('p');
         noMatches.id = 'no-matches';
         noMatches.textContent = 'No matches yet';
-        matchHistoryDiv.appendChild(noMatches);
+        matchHistoryDiv.append(noMatches);
         return component;
     }
     
     matchHistory.forEach(match => {
         const row = getMatchHistoryRow(profile, match);
-        matchHistoryDiv.appendChild(row);
+        matchHistoryDiv.append(row);
     });
 
     return component;
@@ -481,9 +481,9 @@ export default async function getView(isLogged, path) {
 
     const { profile, match_history } = profileData;
 
-    component.appendChild(getProfileHeader(profile));
-    component.appendChild(getStats(profile));
-    component.appendChild(getMatchHistorySection(profile, match_history));
+    component.append(getProfileHeader(profile));
+    component.append(getStats(profile));
+    component.append(getMatchHistorySection(profile, match_history));
 
     return { status: 200, component, css };
 }

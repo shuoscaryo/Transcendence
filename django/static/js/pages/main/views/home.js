@@ -13,19 +13,19 @@ function getButtonWithImage({imgSrc, text, description, bgColor, bgHoverColor, t
 
     const img = document.createElement('img');
     img.src = imgSrc;
-    buttonContent.appendChild(img);
+    buttonContent.append(img);
 
     const divText = document.createElement('div');
     divText.classList.add('button-text');
-    buttonContent.appendChild(divText);
+    buttonContent.append(divText);
 
     const h2 = document.createElement('h2');
     h2.textContent = text;
-    divText.appendChild(h2);
+    divText.append(h2);
 
     const p = document.createElement('p');
     p.textContent = description;
-    divText.appendChild(p);
+    divText.append(p);
 
     return getDefaultButton({
         bgColor: bgColor,
@@ -42,13 +42,13 @@ function getSection1() {
 
     const divCanvas = document.createElement('div');
     divCanvas.id = 'div-canvas';
-    section.appendChild(divCanvas);
+    section.append(divCanvas);
 
     const canvas = document.createElement('canvas');
     canvas.id = 'demo-gameplay';
     canvas.width = 600;
     canvas.height = 400;
-    divCanvas.appendChild(canvas);
+    divCanvas.append(canvas);
     g_pong = new PongGame(canvas);
     g_pong.playerLeft.controller = new DemoAI();
     g_pong.playerRight.controller = new DemoAI();
@@ -57,15 +57,15 @@ function getSection1() {
 
     const divIntro = document.createElement('div');
     divIntro.id = 'div-intro';
-    section.appendChild(divIntro);
+    section.append(divIntro);
 
     const h1 = document.createElement('h1');
     h1.textContent = 'Play Pong online on the #1 site!';
-    divIntro.appendChild(h1);
+    divIntro.append(h1);
 
     const divButtons = document.createElement('div');
     divButtons.id = 'div-buttons';
-    divIntro.appendChild(divButtons);
+    divIntro.append(divButtons);
 
     const buttonPlayVersus = getButtonWithImage({
         imgSrc: Path.img('playLogo.png'),
@@ -74,7 +74,7 @@ function getSection1() {
         bgColor: 'var(--color-lime)',
         onClick: () => {navigate('/pages/main/game/local');}
     });
-    divButtons.appendChild(buttonPlayVersus);
+    divButtons.append(buttonPlayVersus);
 
     const buttonPlayTournament = getButtonWithImage({
         imgSrc: Path.img('tournamentLogo.png'),
@@ -84,7 +84,7 @@ function getSection1() {
         onClick: () => {navigate('/pages/main/tournament');}
     });
     buttonPlayTournament.id = 'button-play-tournament';
-    divButtons.appendChild(buttonPlayTournament);
+    divButtons.append(buttonPlayTournament);
 
     return section;
 }
@@ -96,14 +96,14 @@ function getSection2() {
 
     const div = document.createElement('div');
     div.id = 'div-section-2-left';
-    container.appendChild(div);
+    container.append(div);
     const divText = document.createElement('div');
     divText.id = 'div-section-2-left-text';
-    div.appendChild(divText);
+    div.append(divText);
 
     const h1 = document.createElement('h1');
     h1.textContent = 'Also check our major Module AI';
-    divText.appendChild(h1);
+    divText.append(h1);
 
     const p = document.createElement('p');
     p.innerHTML = `Our AI module is the best in the market,
@@ -112,7 +112,7 @@ function getSection2() {
     It only sees the map once a second and calculates where to move the paddle
     to bounce the ball.<br>It guesses where the paddle is by simulating the movement
     using the time since the last call and the last move decision.<br>`;
-    divText.appendChild(p);
+    divText.append(p);
 
     const button = getButtonWithImage({
         imgSrc: Path.img('AILogo.png'),
@@ -139,15 +139,15 @@ function getSection2() {
     });
     button.classList.add('button-green');
     button.id = 'button-play-ai';
-    div.appendChild(button);
+    div.append(button);
 
     const divImg = document.createElement('div');
     divImg.id = 'div-section-2-right';
-    container.appendChild(divImg);
+    container.append(divImg);
 
     const img = document.createElement('img');
     img.src = Path.img('AI.png');
-    divImg.appendChild(img);
+    divImg.append(img);
 
     return container;
 }
@@ -170,10 +170,10 @@ export default async function getView(isLogged, path) {
 
     const divSections = document.createElement('div');
     divSections.id = 'div-sections';
-    component.appendChild(divSections);
-    divSections.appendChild(getSection1());
-    divSections.appendChild(getSection2());
-    component.appendChild(getFooter());
+    component.append(divSections);
+    divSections.append(getSection1());
+    divSections.append(getSection2());
+    component.append(getFooter());
     
     const pongInstance = g_pong;
     const onDestroy = () => {

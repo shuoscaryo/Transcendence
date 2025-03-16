@@ -8,19 +8,19 @@ function getOtherLogin() {
     const separatorDiv = document.createElement('div');
     separatorDiv.id = 'div-separator';
     separatorDiv.textContent = 'OR';
-    component.appendChild(separatorDiv);
+    component.append(separatorDiv);
 
     const buttonContent = document.createElement('div');
     buttonContent.classList.add('button-content');
     
     const img = document.createElement('img');
     img.src = Path.img('42Logo.png');
-    buttonContent.appendChild(img);
+    buttonContent.append(img);
 
     const textDiv = document.createElement('div');
     textDiv.id = 'div-text';
     textDiv.textContent = 'Log in with 42';
-    buttonContent.appendChild(textDiv);
+    buttonContent.append(textDiv);
 
     const fortitoButton = getDefaultButton({
         bgColor: 'var(--color-button-fortito)',
@@ -29,7 +29,7 @@ function getOtherLogin() {
         onClick: () => {navigate('/pages/main/home');},
     });
     fortitoButton.classList.add('button-other-login');
-    component.appendChild(fortitoButton);
+    component.append(fortitoButton);
 
     return component;
 }
@@ -41,11 +41,11 @@ function getInput(name, type, placeholder) {
     input.name = name;
     input.type = type;
     input.placeholder = placeholder;
-    component.appendChild(input);
+    component.append(input);
 
     const error = document.createElement('p');
     error.style.display = 'none';
-    component.appendChild(error);
+    component.append(error);
     return component;
 }
 
@@ -73,7 +73,7 @@ function getForm() {
             emailInput.classList.remove('error-input');
         }
     });
-    component.appendChild(emailDiv);
+    component.append(emailDiv);
     
 
     const usernameDiv = getInput('username', 'text', 'Username');
@@ -99,15 +99,15 @@ function getForm() {
             usernameInput.classList.remove('error-input');
         }
     });
-    component.appendChild(usernameDiv);
+    component.append(usernameDiv);
 
     const pwDiv = getInput('password', 'password', 'Password');
     const pwInput = pwDiv.querySelector('input');
-    component.appendChild(pwDiv);
+    component.append(pwDiv);
     
     const repPwDiv = getInput('repeat-password', 'password', 'Repeat Password');
     const repPwInput = repPwDiv.querySelector('input');
-    component.appendChild(repPwDiv);
+    component.append(repPwDiv);
 
     pwInput.addEventListener("input", () => {
         const value = pwInput.value;
@@ -182,18 +182,18 @@ function getUpperHalf() {
 
     const divNormalLogin = document.createElement('div');
     divNormalLogin.id = 'div-normal-login';
-    component.appendChild(divNormalLogin);
+    component.append(divNormalLogin);
 
     const h1 = document.createElement('h1');
     h1.textContent = 'Create A New Account!';
-    divNormalLogin.appendChild(h1);
+    divNormalLogin.append(h1);
 
     const divForm = document.createElement('div');
     divForm.id = 'div-form';
-    divNormalLogin.appendChild(divForm);
+    divNormalLogin.append(divForm);
 
     const form = getForm();
-    divForm.appendChild(form);
+    divForm.append(form);
 
     const loginButton = getDefaultButton({
         bgColor: 'var(--color-lime)',
@@ -236,12 +236,12 @@ function getUpperHalf() {
     });
     loginButton.disabled = true;
     loginButton.id = 'button-login';
-    divNormalLogin.appendChild(loginButton);
+    divNormalLogin.append(loginButton);
     disableButtonOnEvent(loginButton, form);
 
     const divOtherLogin = getOtherLogin();
     divOtherLogin.id = 'div-other-login';
-    component.appendChild(divOtherLogin);
+    component.append(divOtherLogin);
     
     return component;
 }
@@ -253,12 +253,12 @@ export default async function getView(isLogged) {
 
     const divUpper = getUpperHalf();
     divUpper.id = 'div-upper';
-    component.appendChild(divUpper);
+    component.append(divUpper);
 
     /* The text for register */
     const divLower = document.createElement('div');
     divLower.id = 'div-lower';
-    component.appendChild(divLower);
+    component.append(divLower);
 
     const registerButton = document.createElement('button');
     registerButton.id = 'button-register';
@@ -266,7 +266,7 @@ export default async function getView(isLogged) {
         navigate('/pages/login/login');
     });
     registerButton.textContent = 'Already have an account? Log in';
-    divLower.appendChild(registerButton);
+    divLower.append(registerButton);
 
     const TMP = getDefaultButton({
         bgColor: 'var(--color-button-fortito)',

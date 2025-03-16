@@ -38,7 +38,7 @@ export default async function getView(isLogged, path) {
     else 
         return {status: 404};
     const [game, pong] = createPongGameComponent(data);
-    component.appendChild(game);
+    component.append(game);
 
     const onDestroy = () => {
         if (pong)

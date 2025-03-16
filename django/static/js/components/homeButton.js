@@ -9,7 +9,7 @@ export default function getHomeButton()
     const image = document.createElement('img');
     image.src = Path.img('homeLogo.png');
     image.alt = 'Home';
-    component.appendChild(image);
+    component.append(image);
 
     component.addEventListener('click', () => {
         navigate("/pages/main/home");

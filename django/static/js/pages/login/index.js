@@ -14,22 +14,22 @@ export default async function getPage(isLogged, data) {
     page.style.backgroundRepeat = "no-repeat"; // Evita que el patrón se repita
     page.style.backgroundPosition = "center";
     page.style.imageRendering = "pixelated";
-    component.appendChild(page);
+    component.append(page);
 
     const content = document.createElement('div');
     content.id = 'content';
-    page.appendChild(content);
+    page.append(content);
 
-    content.appendChild(getHomeButton());
+    content.append(getHomeButton());
 
     const divSquare = document.createElement('div');
     divSquare.id = 'div-square-container';
     divSquare.classList.add('section-block');
-    content.appendChild(divSquare);
+    content.append(divSquare);
 
     const main = document.createElement('main');
     main.id = 'view';
-    divSquare.appendChild(main);
+    divSquare.append(main);
 
     return {status: 200, component, css};
 }
