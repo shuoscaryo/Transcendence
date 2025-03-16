@@ -418,7 +418,7 @@ function getMatchHistoryRow(profile, match) {
     return component;
 }
 
-function getMatchHistorySection(profile, matchHistory) {
+function getMatchHistorySection(profile, matchHistory, path) {
     const component = newElement('section', {id: 'match-history-section', classList: ['section-block']});
 
     //component
@@ -435,10 +435,34 @@ function getMatchHistorySection(profile, matchHistory) {
         noMatches.textContent = 'No matches yet';
         return component;
     }
-    
+
+    const matchHistoryRows = newElement('div', {id: 'match-history-rows', parent: matchHistoryDiv});
+
+    // component matchHistoryDiv matchHistoryRows
     matchHistory.forEach(match => {
-        matchHistoryDiv.append(getMatchHistoryRow(profile, match));
+        matchHistoryRows.append(getMatchHistoryRow(profile, match));
     });
+
+    let offset = 10;
+    const getMoreButton = getDefaultButton({
+        bgColor: 'var(--color-dark-gray)',
+        content: 'Get more matches',
+        onClick: async () => {
+            getMoreButton.disabled = true;
+            const profileData = await fetchProfileData(path, offset, 5);
+            if (profileData.status && profileData.status !== 200) {
+                return;
+            }
+            const { profile, match_history } = profileData;
+            match_history.forEach(match => {
+                matchHistoryRows.append(getMatchHistoryRow(profile, match));
+            });
+            offset += 5;
+            getMoreButton.disabled = false;
+        }
+    });
+    getMoreButton.id = 'get-more-matches';
+    matchHistoryDiv.append(getMoreButton);
 
     return component;
 }
@@ -453,15 +477,15 @@ export default async function getView(isLogged, path) {
     ];
     const component = document.createElement('div');
 
-    const profileData = await fetchProfileData(path);
+ const profileData = await fetchProfileData(path);
     if (profileData.status && profileData.status !== 200) {
         return profileData;
     }
-    const { profile, match_history } = profileData;
+    const { profile, match_history } = profileData;   
 
     component.append(getProfileHeader(profile));
     component.append(getStats(profile));
-    component.append(getMatchHistorySection(profile, match_history));
+    component.append(getMatchHistorySection(profile, match_history, path));
 
     return { status: 200, component, css };
 }

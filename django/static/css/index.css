@@ -10,6 +10,7 @@
     --color-red: #ca1e1e; /* modificable */
     --color-blue-match: #263253; /* modificable */
     --color-red-match: #4F2C2F; /* modificable */
+    --color-dark-gray: #2a2a2a; /* modificable */
 }
 
 * {
