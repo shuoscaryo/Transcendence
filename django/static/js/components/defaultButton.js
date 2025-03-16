@@ -31,7 +31,7 @@ export default function createButton({ bgColor, bgHoverColor, textColor, content
     // Add click event
     if (onClick && typeof onClick === 'function')
         component.addEventListener('click', onClick);
-    else
+    else if (onClick)
         throw new Error('onClick must be a function');
 
     return component;

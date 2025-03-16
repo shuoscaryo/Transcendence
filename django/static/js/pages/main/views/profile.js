@@ -1,6 +1,7 @@
 import Path from '/static/js/utils/Path.js';
 import { navigate } from '/static/js/utils/router.js';
 import getDefaultButton from '/static/js/components/defaultButton.js';
+import { usernameOk } from '../../../utils/validators.js';
 
 async function fetchProfileData(isLogged, path, offset = 0, limit = 10) {
     let url;
@@ -22,7 +23,7 @@ async function fetchProfileData(isLogged, path, offset = 0, limit = 10) {
 }
 
 function getProfileHeader(profile) {
-    const component = document.createElement('div');
+    const component = document.createElement('section');
     component.id = 'header';
     component.classList.add('section-block');
 
@@ -94,245 +95,98 @@ function getStats(profile) {
     return component;
 }
 
-function secondsToHMS(seconds) {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
+function secondsToMS(seconds) {
+    const minutes = Math.floor(seconds / 60);
     const remainingSeconds = Math.floor(seconds % 60);
     
-    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
 }
 
-function addWinLoseClass(row, username, match) {
-    if (username !== match.playerLeft__username
-        && username !== match.playerRight__username)
-        return;
-
-    const userIsLeft = match.playerLeft__username === username;
-    const leftWon = match.scoreLeft > match.scoreRight;
-    row.classList.add(userIsLeft == leftWon? 'won-match': 'lost-match');
+function isScoreValid(score) {
+    for (let i = 0; i < score.length; i++) {
+        if (score[i] < '0' || score[i] > '9') return false;
+    }
+    return true;
 }
 
-function getCreateMatch(profile) {
-    const component = document.createElement('div');
-    
-
-}
-
-function getMatchHistorySection(profile, matchHistory) {
-    const component = document.createElement('div');
-    component.id = 'match-history';
-    component.classList.add('section-block');
-
-    const addNewMatchDiv = getCreateMatch(profile);
-    addNewMatchDiv.id = 'add-new-match-div';
-    component.appendChild(addNewMatchDiv);
-
-    const title = document.createElement('div');
-    title.id = 'title';
-    title.textContent = 'Match History';
-    component.appendChild(title);
-
-    if (matchHistory.length === 0) {
-        const noMatches = document.createElement('p');
-        noMatches.id = 'no-matches';
-        noMatches.textContent = 'No matches yet';
-        component.appendChild(noMatches);
+function getnewMatchForm(profile) {
+    function getInputRow(label, type, name, value, required = true) {
+        const component = document.createElement('div');
+        component.classList.add('input-row');
+        const labelElement = document.createElement('label');
+        labelElement.textContent = label;
+        const input = document.createElement('input');
+        input.type = type;
+        input.name = name;
+        input.value = value;
+        input.required = required;
+        component.append(labelElement, input);
         return component;
     }
 
-    const table = document.createElement('table');
-    component.appendChild(table);
+    const component = document.createElement('form');
+    component.method = "POST";
+    
+    const playerLeftDiv = getInputRow('Player Left:', 'text', 'playerLeft', profile.username, true);
+    component.appendChild(playerLeftDiv);
 
-    // Crear el encabezado de la tabla
-    const thead = document.createElement('thead');
-    const headerRow = document.createElement('tr');
-    headerRow.id = 'table-header';
+    const playerRightDiv = getInputRow('Player Right:', 'text', 'playerRight', 'player2', false);
+    component.appendChild(playerRightDiv);
 
-    const headers = ['Type', 'Players', 'Score', 'Duration', 'Start Time'];
-    headers.forEach(headerText => {
-        const th = document.createElement('th');
-        th.textContent = headerText;
-        headerRow.appendChild(th);
-    });
+    const scoreLeftDiv = getInputRow('Score Left:', 'number', 'scoreLeft', 10, true);
+    component.appendChild(scoreLeftDiv);
 
-    thead.appendChild(headerRow);
-    table.appendChild(thead);
+    const scoreRightDiv = getInputRow('Score Right:', 'number', 'scoreRight', 5, true);
+    component.appendChild(scoreRightDiv);
 
-    // Crear el cuerpo de la tabla
-    const tbody = document.createElement('tbody');
-
-    matchHistory.forEach(match => {
-        //const component = createMatchRow(profile, match);
-        const row = document.createElement('tr');
-        row.classList.add('match');
-        addWinLoseClass(row, profile.username, match);
-
-        // Imagen del tipo de partida
-        const imgTd = document.createElement('td');
-        const matchTypeImg = document.createElement('img');
-        matchTypeImg.src = Path.img(`match_${match.matchType}.png`);
-        matchTypeImg.alt = match.matchType;
-        imgTd.appendChild(matchTypeImg);
-        row.appendChild(imgTd);
-
-        // Jugador 1
-        const player1Td = document.createElement('td');
-        row.appendChild(player1Td);
-
-        const player1Link = document.createElement('a');
-        player1Link.classList.add('player-link');
-        player1Link.textContent = match.playerLeft__username;
-        player1Link.addEventListener('click', () => {
-            navigate(`/pages/main/profile/${match.playerLeft__username}`);
-        });
-        player1Td.appendChild(player1Link);
-
-        // Jugador 2
-        const player2Td = document.createElement('td');
-        row.appendChild(player2Td);
-
-        const player2Link = document.createElement('a');
-        player2Link.classList.add('player-link');
-        player2Link.textContent = match.playerRight__username;
-        player2Link.addEventListener('click', () => {
-            navigate(`/pages/main/profile/${match.playerRight__username}`);
-        });
-        player2Td.appendChild(player2Link);
-
-        if (match.playerLeft__username === profile.username) {
-            player1Td.style.fontWeight = 'bold';
-        }
-        if (match.playerRight__username === profile.username) {
-            player2Td.style.fontWeight = 'bold';
-        }
-        // Resultado
-        const scoreTd = document.createElement('td');
-        scoreTd.textContent = `${match.scoreLeft} - ${match.scoreRight}`;
-        row.appendChild(scoreTd);
-
-        // Duración
-        const durationTd = document.createElement('td');
-        durationTd.textContent = `${secondsToHMS(match.duration)}`;
-        row.appendChild(durationTd);
-
-        // Hora de inicio
-        const startTimeTd = document.createElement('td');
-        startTimeTd.textContent = match.start_date;
-        row.appendChild(startTimeTd);
-
-        tbody.appendChild(row);
-    });
-
-    table.appendChild(tbody);
-    return component;
-}
-
-function createAddMatchForm() {
-    const div = document.createElement('div');
-    div.classList.add('add-match-form');
-
-    // Formulario
-    const form = document.createElement('form');
-    form.style.padding = '20px';
-    form.style.backgroundColor = '#111511';
-    form.style.borderRadius = '10px';
-
-    // Campo playerLeft
-    const playerLeftDiv = document.createElement('div');
-    const playerLeftLabel = document.createElement('label');
-    playerLeftLabel.textContent = 'Player Left: ';
-    const playerLeftInput = document.createElement('input');
-    playerLeftInput.type = 'text';
-    playerLeftInput.name = 'playerLeft';
-    playerLeftInput.value = 'player1'; // Valor por defecto
-    playerLeftInput.required = true;
-    playerLeftDiv.append(playerLeftLabel, playerLeftInput);
-    form.appendChild(playerLeftDiv);
-
-    // Campo playerRight
-    const playerRightDiv = document.createElement('div');
-    const playerRightLabel = document.createElement('label');
-    playerRightLabel.textContent = 'Player Right: ';
-    const playerRightInput = document.createElement('input');
-    playerRightInput.type = 'text';
-    playerRightInput.name = 'playerRight';
-    playerRightInput.value = 'player2'; // Valor por defecto
-    playerRightInput.required = true;
-    playerRightDiv.append(playerRightLabel, playerRightInput);
-    form.appendChild(playerRightDiv);
-
-    // Campo scoreLeft
-    const scoreLeftDiv = document.createElement('div');
-    const scoreLeftLabel = document.createElement('label');
-    scoreLeftLabel.textContent = 'Score Left: ';
-    const scoreLeftInput = document.createElement('input');
-    scoreLeftInput.type = 'number';
-    scoreLeftInput.name = 'scoreLeft';
-    scoreLeftInput.value = 10; // Valor por defecto
-    scoreLeftInput.required = true;
-    scoreLeftDiv.append(scoreLeftLabel, scoreLeftInput);
-    form.appendChild(scoreLeftDiv);
-
-    // Campo scoreRight
-    const scoreRightDiv = document.createElement('div');
-    const scoreRightLabel = document.createElement('label');
-    scoreRightLabel.textContent = 'Score Right: ';
-    const scoreRightInput = document.createElement('input');
-    scoreRightInput.type = 'number';
-    scoreRightInput.name = 'scoreRight';
-    scoreRightInput.value = 5; // Valor por defecto
-    scoreRightInput.required = true;
-    scoreRightDiv.append(scoreRightLabel, scoreRightInput);
-    form.appendChild(scoreRightDiv);
-
-    // Campo duration
-    const durationDiv = document.createElement('div');
-    const durationLabel = document.createElement('label');
-    durationLabel.textContent = 'Duration (s): ';
-    const durationInput = document.createElement('input');
-    durationInput.type = 'number';
-    durationInput.name = 'duration';
-    durationInput.value = 120; // Valor por defecto
-    durationInput.required = true;
-    durationDiv.append(durationLabel, durationInput);
-    form.appendChild(durationDiv);
-
+    const durationDiv = getInputRow('Duration (s):', 'number', 'duration', 120, true);
+    component.appendChild(durationDiv);
+    
     // Campo matchType
     const matchTypeDiv = document.createElement('div');
+    matchTypeDiv.classList.add('input-row');
     const matchTypeLabel = document.createElement('label');
-    matchTypeLabel.textContent = 'Match Type: ';
+    matchTypeLabel.textContent = 'Match Type:';
     const matchTypeSelect = document.createElement('select');
     matchTypeSelect.name = 'matchType';
-    const types = ['local', 'AI', 'online', 'tournament'];
+    const types = ['local', 'AI', 'online'];
     types.forEach(type => {
         const option = document.createElement('option');
         option.value = type;
         option.textContent = type;
-        if (type === 'local') option.selected = true; // Valor por defecto
+        if (type === 'local') option.selected = true;
         matchTypeSelect.appendChild(option);
     });
     matchTypeDiv.append(matchTypeLabel, matchTypeSelect);
-    form.appendChild(matchTypeDiv);
+    component.appendChild(matchTypeDiv);
 
     // Botón de submit
-    const submitButton = document.createElement('button');
-    submitButton.type = 'submit';
-    submitButton.textContent = 'Add Match';
-    form.appendChild(submitButton);
-
-    // Manejar el submit
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const formData = new FormData(form);
-        const data = {
-            playerLeft: formData.get('playerLeft'),
-            playerRight: formData.get('playerRight'),
-            scoreLeft: parseInt(formData.get('scoreLeft')),
-            scoreRight: parseInt(formData.get('scoreRight')),
-            duration: parseInt(formData.get('duration')),
-            matchType: formData.get('matchType')
-        };
-
+    const submitButton = getDefaultButton({
+        bgColor: 'var(--color-lime)',
+        content: 'Create Match',
+    });
+    component.addEventListener('submit', async (event) => {
+        event.preventDefault(); // ❌ Evita que el formulario recargue la página
+    
+        const formData = new FormData(component);
+        const data = Object.fromEntries(formData.entries()); // Convierte a JSON
+    
+        if (!usernameOk(data.playerLeft)) {
+            alert('Invalid player left');
+            return;
+        }
+        if (data.matchType === 'online' && data.playerRight !== '' && !usernameOk(data.playerRight)) {
+            alert('Invalid player right');
+            return;
+        }
+        if (!isScoreValid(data.scoreLeft) || !isScoreValid(data.scoreRight)) {
+            alert('Invalid scores');
+            return;
+        }
+        if (!isScoreValid(data.duration)) {
+            alert('Invalid duration');
+            return;
+        }
         try {
             const response = await fetch('/api/add-match', {
                 method: 'POST',
@@ -341,9 +195,10 @@ function createAddMatchForm() {
                 body: JSON.stringify(data)
             });
             const result = await response.json();
+    
             if (response.ok) {
                 alert('Match added successfully!');
-                navigate(); // Redirige a home o donde quieras
+                navigate();
             } else {
                 alert(`Error: ${result.error}`);
             }
@@ -352,10 +207,152 @@ function createAddMatchForm() {
             alert('Failed to add match');
         }
     });
+    
+    component.appendChild(submitButton);
 
-    div.appendChild(form);
-    return div;
+    return component;
 }
+
+function getPlayerLink(username, profile, realUser = true) {
+    const component = document.createElement('a');
+    component.classList.add('player-link');
+    component.textContent = username;
+    if (!realUser || username === profile.username)
+        component.classList.add('no-link');
+    else {
+        component.addEventListener('click', () => {
+            navigate(`/pages/main/profile/${username}`);
+        });
+    }
+
+    if (username === profile.username)
+        component.style.fontWeight = 'bold';
+
+    return component;
+}
+
+function getMatchHistoryRow(profile, match) {
+    const component = document.createElement('div');
+    if (match.matchType.startsWith('tournament'))
+        component.classList.add('tournament');
+    component.classList.add('match');
+
+    const img = document.createElement('img');
+    if (match.matchType.startsWith('tournament'))
+        img.src = Path.img('match_tournament.png');
+    else
+        img.src = Path.img(`match_${match.matchType}.png`);
+    img.alt = match.matchType;
+    component.appendChild(img);
+
+    const playersDiv = document.createElement('div');
+    playersDiv.classList.add('players-div');
+    component.appendChild(playersDiv);
+
+    const scoreDiv = document.createElement('div');
+    scoreDiv.classList.add('score');
+    component.appendChild(scoreDiv);
+
+    if (match.matchType === 'local') {
+        playersDiv.classList.add('players-local');
+        playersDiv.textContent = 'Local match';
+        scoreDiv.textContent = `${match.scoreLeft} - ${match.scoreRight}`;
+    }
+    else if (match.matchType === 'AI') {
+        playersDiv.classList.add('players-normal');
+        const player1 = getPlayerLink(match.playerLeft__username, profile);
+        const player2 = getPlayerLink('AI', profile, false);
+        playersDiv.append(player1, player2);
+        scoreDiv.textContent = `${match.scoreLeft} - ${match.scoreRight}`;
+        if (match.scoreLeft > match.scoreRight)
+            component.classList.add('won-match');
+        else
+            component.classList.add('lost-match');
+    }
+    else if (match.matchType === 'online') {
+        playersDiv.classList.add('players-normal');
+        const player1 = getPlayerLink(match.playerLeft__username, profile);
+        const player2 = getPlayerLink(match.playerRight__username, profile);
+        playersDiv.append(player1, player2);
+        scoreDiv.textContent = `${match.scoreLeft} - ${match.scoreRight}`;
+        // username is left user XNOR left user won (if both conditions are same then its a win)
+        if ((profile.username === match.playerLeft__username)
+            === (match.scoreLeft > match.scoreRight))
+            component.classList.add('won-match');
+        else
+            component.classList.add('lost-match');
+    }
+    else if (match.matchType.startsWith('tournament')) {
+        playersDiv.classList.add('players-tournament');
+        const rowLength = 4;
+        let playersColumnDiv;
+        for (let i = 0; i < match.players.length; i++) {
+            if (i % rowLength === 0) {
+                playersColumnDiv = document.createElement('div');
+                playersColumnDiv.classList.add('players-column-div');
+                playersDiv.appendChild(playersColumnDiv);
+            }
+            const player = getPlayerLink(
+                match.players[i],
+                profile,
+                match.matchType === 'tournament-online'
+            );
+            playersColumnDiv.appendChild(player);
+        }
+        scoreDiv.textContent = `${match.winner} won`;
+        if (match.winner === profile.username)
+            component.classList.add('won-match');
+        else
+            component.classList.add('lost-match');
+    }
+
+    const durationDiv = document.createElement('div');
+    durationDiv.textContent = secondsToMS(match.duration);
+    component.appendChild(durationDiv);
+
+    const startTimeDiv = document.createElement('div');
+    startTimeDiv.classList.add('start-time');
+    const date = match.start_date.split(' ');
+    startTimeDiv.innerHTML = `${date[0]}<br>${date[1]}`;
+    component.appendChild(startTimeDiv);
+
+    return component;
+}
+
+function getMatchHistorySection(profile, matchHistory) {
+    const component = document.createElement('section');
+    component.id = 'match-history-section';
+    component.classList.add('section-block');
+
+    const addNewMatchDiv = getnewMatchForm(profile);
+    addNewMatchDiv.id = 'new-match-form';
+    component.appendChild(addNewMatchDiv);
+
+    const matchHistoryDiv = document.createElement('div');
+    matchHistoryDiv.id = 'match-history-div';
+    component.appendChild(matchHistoryDiv);
+
+    const title = document.createElement('div');
+    title.id = 'title';
+    title.textContent = 'Match History';
+    matchHistoryDiv.appendChild(title);
+
+    if (matchHistory.length === 0) {
+        const noMatches = document.createElement('p');
+        noMatches.id = 'no-matches';
+        noMatches.textContent = 'No matches yet';
+        matchHistoryDiv.appendChild(noMatches);
+        return component;
+    }
+    
+    matchHistory.forEach(match => {
+        const row = getMatchHistoryRow(profile, match);
+        matchHistoryDiv.appendChild(row);
+    });
+
+    return component;
+}
+
 export default async function getView(isLogged, path) {
     if (!isLogged && path.subPath === '/') {
         return { status: 300, redirect: "/pages/login/login" };
@@ -366,15 +363,14 @@ export default async function getView(isLogged, path) {
     ];
     const component = document.createElement('div');
 
-    // Obtener datos del perfil
     const profileData = await fetchProfileData(isLogged, path);
     if (profileData.status && profileData.status !== 200) {
-        return profileData; // Maneja redirecciones o errores
+        return profileData;
     }
+
     const { profile, match_history } = profileData;
-    // Construir la página
+
     component.appendChild(getProfileHeader(profile));
-    component.appendChild(createAddMatchForm());
     component.appendChild(getStats(profile));
     component.appendChild(getMatchHistorySection(profile, match_history));
 

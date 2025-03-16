@@ -30,7 +30,7 @@ button {
 }
 
 p {
-    font-size: 16px; /* modificable */
+    font-size: 1rem; /* modificable */
     color: var(--color-white); /* modificable */
 }
 
@@ -61,7 +61,7 @@ p {
 }
 
 .section-block {
-    border-radius: 12px;
+    border-radius: 0.5rem;
     overflow: hidden;
     background-color: var(--color-section-background);
 }

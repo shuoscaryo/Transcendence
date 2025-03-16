@@ -1,7 +1,7 @@
 import Path from '/static/js/utils/Path.js';
 import { navigate } from '/static/js/utils/router.js';
 import getDefaultButton from '/static/js/components/defaultButton.js';
-
+import { emailOk, usernameOk, pwOk } from '/static/js/utils/validators.js';
 function getOtherLogin() {
     const component = document.createElement('div');
 
@@ -47,21 +47,6 @@ function getInput(name, type, placeholder) {
     error.style.display = 'none';
     component.appendChild(error);
     return component;
-}
-
-function usernameOk(username) {
-    return username !== '' && /^[a-zA-Z0-9_]{3,20}$/.test(username);
-}
-
-function emailOk(email) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-function pwOk(pw) {
-    return pw.length >= 8
-        && /[A-Z]/.test(pw)
-        && /[a-z]/.test(pw)
-        && /[^a-zA-Z0-9]/.test(pw);
 }
 
 function getForm() {
