@@ -95,16 +95,35 @@
         gap: 1rem; /* modificable */
     }
 
-    /* Create match */
-    #new-match-form {
+    /* Create element subsection */
+    #create-history-elements {
+        display: flex;
+        flex-direction: row;
+        align-items: space-between;
+        gap: 1rem; /* modificable */
+        width: 100%;
+    }
+
+    .new-element-form {
         display: flex;
         flex-direction: column;
         align-items: center;
+        gap: 0.25rem; /* modificable */
+        width: 100%;
+        background-color: #2a2a2a;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        overflow: hidden;
+    }
+
+    .new-element-form form {
+        display: flex;
+        flex-direction: column;
         gap: 0.5rem; /* modificable */
         width: 100%;
     }
 
-    #new-match-form .input-row {
+    #create-history-elements .input-row {
         width: 100%;
         display: flex;
         flex-direction: row;
@@ -113,7 +132,7 @@
         align-items: center;
     }
 
-    #new-match-form select {
+    .new-element-form select {
         width: 100%;
         height: 2rem;
         padding: 0.5rem;
@@ -122,7 +141,7 @@
     }
 
 
-    /* Match history */
+    /* Match history subsection*/
     #match-history-div {
         display: flex;
         flex-direction: column;
@@ -133,7 +152,7 @@
         overflow: hidden;
     }
 
-    #title {
+    .subsection-title {
         display: flex;
         align-items: center;
         justify-content: center;

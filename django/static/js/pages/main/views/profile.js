@@ -102,47 +102,49 @@ function secondsToMS(seconds) {
     return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
 }
 
-function isScoreValid(score) {
+function isUintValid(score) {
     for (let i = 0; i < score.length; i++) {
         if (score[i] < '0' || score[i] > '9') return false;
     }
     return true;
 }
 
-function getnewMatchForm(profile) {
-    function getInputRow(label, type, name, value, required = true) {
-        const component = document.createElement('div');
-        component.classList.add('input-row');
-        const labelElement = document.createElement('label');
-        labelElement.textContent = label;
-        const input = document.createElement('input');
-        input.type = type;
-        input.name = name;
-        input.value = value;
-        input.required = required;
-        component.append(labelElement, input);
-        return component;
-    }
+function getInputRow(label, type, name, value, required = true) {
+    const component = document.createElement('div');
+    component.classList.add('input-row');
+    const labelElement = document.createElement('label');
+    labelElement.textContent = label;
+    const input = document.createElement('input');
+    input.type = type;
+    input.name = name;
+    input.value = value;
+    input.required = required;
+    component.append(labelElement, input);
+    return component;
+}
 
-    const component = document.createElement('form');
-    component.method = "POST";
+function getNewMatchForm(profile) {
+    const component = document.createElement('div');
+
+    const title = document.createElement('div');
+    title.classList.add('subsection-title');
+    title.textContent = 'Create Match';
+    component.append(title);
+
+    const form = document.createElement('form');
+    form.method = "POST";
+    component.append(form);
     
+    const inputDiv = document.createElement('div');
+    inputDiv.classList.add('input-div');
+    form.appendChild(inputDiv);
+
     const playerLeftDiv = getInputRow('Player Left:', 'text', 'playerLeft', profile.username, true);
-    component.appendChild(playerLeftDiv);
-
     const playerRightDiv = getInputRow('Player Right:', 'text', 'playerRight', 'player2', false);
-    component.appendChild(playerRightDiv);
-
     const scoreLeftDiv = getInputRow('Score Left:', 'number', 'scoreLeft', 10, true);
-    component.appendChild(scoreLeftDiv);
-
     const scoreRightDiv = getInputRow('Score Right:', 'number', 'scoreRight', 5, true);
-    component.appendChild(scoreRightDiv);
-
     const durationDiv = getInputRow('Duration (s):', 'number', 'duration', 120, true);
-    component.appendChild(durationDiv);
     
-    // Campo matchType
     const matchTypeDiv = document.createElement('div');
     matchTypeDiv.classList.add('input-row');
     const matchTypeLabel = document.createElement('label');
@@ -158,18 +160,21 @@ function getnewMatchForm(profile) {
         matchTypeSelect.appendChild(option);
     });
     matchTypeDiv.append(matchTypeLabel, matchTypeSelect);
-    component.appendChild(matchTypeDiv);
 
-    // Botón de submit
+    inputDiv.append( playerLeftDiv, playerRightDiv, scoreLeftDiv,
+        scoreRightDiv, durationDiv, matchTypeDiv
+    );
+
     const submitButton = getDefaultButton({
         bgColor: 'var(--color-lime)',
         content: 'Create Match',
     });
-    component.addEventListener('submit', async (event) => {
-        event.preventDefault(); // ❌ Evita que el formulario recargue la página
+    form.appendChild(submitButton);
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
     
-        const formData = new FormData(component);
-        const data = Object.fromEntries(formData.entries()); // Convierte a JSON
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
     
         if (!usernameOk(data.playerLeft)) {
             alert('Invalid player left');
@@ -179,11 +184,11 @@ function getnewMatchForm(profile) {
             alert('Invalid player right');
             return;
         }
-        if (!isScoreValid(data.scoreLeft) || !isScoreValid(data.scoreRight)) {
+        if (!isUintValid(data.scoreLeft) || !isUintValid(data.scoreRight)) {
             alert('Invalid scores');
             return;
         }
-        if (!isScoreValid(data.duration)) {
+        if (!isUintValid(data.duration)) {
             alert('Invalid duration');
             return;
         }
@@ -207,8 +212,105 @@ function getnewMatchForm(profile) {
             alert('Failed to add match');
         }
     });
+
+    return component;
+}
+
+function getNewTournamentForm(profile) {
+    const component = document.createElement('div');
     
-    component.appendChild(submitButton);
+    const title = document.createElement('div');
+    title.classList.add('subsection-title');
+    title.textContent = 'Create Tournament';
+    component.appendChild(title);
+
+    const form = document.createElement('form');
+    form.method = "POST";
+    component.appendChild(form);
+
+    const inputDiv = document.createElement('div');
+    inputDiv.classList.add('input-div');
+    form.appendChild(inputDiv);
+
+    const playerListDiv = getInputRow('Player List:', 'text', 'playerList',
+        `${profile.username}, player2, player3`, true
+    );
+    inputDiv.appendChild(playerListDiv);
+
+
+    const winnerDiv = getInputRow('Winner:', 'text', 'winner', profile.username, true);
+    inputDiv.appendChild(winnerDiv);
+
+    const durationDiv = getInputRow('Duration (s):', 'number', 'duration', 1200, true);
+    inputDiv.appendChild(durationDiv);
+    
+    const matchTypeDiv = document.createElement('div');
+    matchTypeDiv.classList.add('input-row');
+    const matchTypeLabel = document.createElement('label');
+    matchTypeLabel.textContent = 'Match Type:';
+    const matchTypeSelect = document.createElement('select');
+    matchTypeSelect.name = 'matchType';
+    const types = ['tournament-local', 'tournament-online'];
+    types.forEach(type => {
+        const option = document.createElement('option');
+        option.value = type;
+        option.textContent = type;
+        if (type === 'tournament-local') option.selected = true;
+        matchTypeSelect.appendChild(option);
+    });
+    matchTypeDiv.append(matchTypeLabel, matchTypeSelect);
+    inputDiv.appendChild(matchTypeDiv);
+
+    const submitButton = getDefaultButton({
+        bgColor: 'var(--color-lime)',
+        content: 'Create Tournament',
+    });
+    form.appendChild(submitButton);
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+    
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+    
+        data.playerList = data.playerList.split(',').map(p => p.trim());
+        if (!data.playerList.every(usernameOk)) {
+            alert('Invalid player list');
+            return;
+        }
+        if (data.playerList.length < 2 || data.playerList.length > 8) {
+            alert('players must be between 2 and 8');
+            return;
+        }
+        if (!data.winner || !data.playerList.includes(data.winner)) {
+            alert('Invalid winner');
+            return;
+        }
+        if (!isUintValid(data.duration)) {
+            alert('Invalid duration');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/add-tournament', {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();
+            
+            if (response.ok) {
+                alert('Tournament added successfully!');
+                navigate();
+            } else {
+                alert(`Error: ${result.error}`);
+            }
+        }
+        catch (error) {
+            console.error('Fetch error:', error);
+            alert('Failed to add tournament');
+        }
+    });
 
     return component;
 }
@@ -325,16 +427,24 @@ function getMatchHistorySection(profile, matchHistory) {
     component.id = 'match-history-section';
     component.classList.add('section-block');
 
-    const addNewMatchDiv = getnewMatchForm(profile);
-    addNewMatchDiv.id = 'new-match-form';
-    component.appendChild(addNewMatchDiv);
+    const createHistoryElementsDiv = document.createElement('div');
+    createHistoryElementsDiv.id = 'create-history-elements';
+    component.appendChild(createHistoryElementsDiv);
+
+    const addNewMatchDiv = getNewMatchForm(profile);
+    addNewMatchDiv.classList.add('new-element-form');
+    createHistoryElementsDiv.appendChild(addNewMatchDiv);
+
+    const addNewTournamentDiv = getNewTournamentForm(profile);
+    addNewTournamentDiv.classList.add('new-element-form');
+    createHistoryElementsDiv.appendChild(addNewTournamentDiv);
 
     const matchHistoryDiv = document.createElement('div');
     matchHistoryDiv.id = 'match-history-div';
     component.appendChild(matchHistoryDiv);
 
     const title = document.createElement('div');
-    title.id = 'title';
+    title.classList = 'subsection-title';
     title.textContent = 'Match History';
     matchHistoryDiv.appendChild(title);
 
@@ -370,7 +480,7 @@ export default async function getView(isLogged, path) {
     }
 
     const { profile, match_history } = profileData;
-    
+
     component.appendChild(getProfileHeader(profile));
     component.appendChild(getStats(profile));
     component.appendChild(getMatchHistorySection(profile, match_history));
