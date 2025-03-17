@@ -33,5 +33,6 @@ python manage.py migrate
 # TODO Collect static files (for production)
 # python manage.py collectstatic --noinput
 
-# Start server
-python manage.py runserver "0.0.0.0:8000"
+# ✅ Start Django with Daphne
+echo "Starting Django with Daphne..."
+daphne -b 0.0.0.0 -p 8000 pong_project.asgi:application
