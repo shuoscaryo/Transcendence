@@ -27,29 +27,22 @@
 }
 
 #div-container .div-input {
+    display: flex;
+    flex-direction: row;
     border-radius: 5px;
     overflow: hidden;
     width: 100%;
 }
-#div-container .div-input input {
-        height: 40px;
-        padding: 10px;
-        border: 2px solid #555555;
-        background-color: #444444;
-}
-    
-#div-container .div-input input:hover {
-        border: 2px solid #777777;
-}
 
-#div-container .div-input input:focus  {
-    outline: none;
-    border: 2px solid #777777;
-    box-shadow: 0 0 5px #777777;
+#div-container .div-input input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
 }
 
 #div-container .div-input button {
-    height: 100%;
+    white-space: nowrap;
+    height: 40px;
+    width: fit-content;
     padding: 10px;
     background-color: #333333;
 }

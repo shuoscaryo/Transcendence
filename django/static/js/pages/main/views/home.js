@@ -72,7 +72,7 @@ function getSection1() {
         text: 'Versus Mode',
         description: 'Play against a friend',
         bgColor: 'var(--color-lime)',
-        onClick: () => {navigate('/pages/main/game/local');}
+        onClick: () => {navigate('/pages/game/match/local');}
     });
     divButtons.append(buttonPlayVersus);
 
@@ -81,7 +81,7 @@ function getSection1() {
         bgColor: 'var(--color-gray)',
         text: 'Tournament',
         description: 'Create a tournament to play with friends',
-        onClick: () => {navigate('/pages/main/tournament');}
+        onClick: () => {navigate('/pages/game/tournament');}
     });
     buttonPlayTournament.id = 'button-play-tournament';
     divButtons.append(buttonPlayTournament);
@@ -120,7 +120,7 @@ function getSection2() {
         description: 'Play against our AI',
         bgColor: 'var(--color-lime)',
         onClick: () => {
-            navigate('/pages/main/game/AI', {
+            navigate('/pages/game/match/AI', {
                 playerLeft: {
                     controller: new PlayerController("w", "s"),
                     name: "anon1",
