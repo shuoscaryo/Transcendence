@@ -12,16 +12,16 @@ export default async function fetchMatchHistory(path, offset, limit) {
         if (!response.ok)
             return {
                 status: response.status,
-                data: null, msg:
+                data: null, error:
                 'Error fetching match history'
             };
         const data = await response.json();
         return {
             status: response.status,
             data,
-            msg: null
+            error: null
         }
     } catch (error) {
-        return { status: 500, data: null, msg: 'Network error' };
+        return { status: 500, data: null, error: 'Network error' };
     }
 }

@@ -5,7 +5,7 @@ import { navigate } from '/static/js/utils/router.js';
 
 export default async function getView(isLogged, path) {
     const css = [
-        Path.css("main/game.css"),
+        Path.css("game/match.css"),
         Path.css("components/game.css"),
     ];
     const component = document.createElement("div");
