@@ -152,12 +152,6 @@ function getSection2() {
     return container;
 }
 
-function getFooter() {
-    const component = document.createElement('footer');
-    component.textContent = 'Footer with github link and 42 link and stuff';
-    return component;
-}
-
 export default async function getView(isLogged, path) {
     if (path.subPath != '/') {
         return {status: 300, redirect: '/home'};
@@ -173,7 +167,6 @@ export default async function getView(isLogged, path) {
     component.append(divSections);
     divSections.append(getSection1());
     divSections.append(getSection2());
-    component.append(getFooter());
     
     const pongInstance = g_pong;
     const onDestroy = () => {

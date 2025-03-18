@@ -1,5 +1,6 @@
 import Path from '/static/js/utils/Path.js';
 import getSidebar from '/static/js/components/sidebar.js';
+import getFooter from '/static/js/components/getFooter.js';
 
 export default async function getPage( isLogged, path) {
     const css = [
@@ -21,6 +22,8 @@ export default async function getPage( isLogged, path) {
     const main = document.createElement('main');
     main.id = 'view';
     content.append(main);
+
+    content.append(getFooter());
 
     return {status: 200, component, css};
 }
