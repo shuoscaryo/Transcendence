@@ -38,7 +38,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+	'channels',
 ]
+
+ASGI_APPLICATION = 'pong_project.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}
+
+SECURE_SSL_REDIRECT = False  # Disable forced SSL redirect for local development
+CSRF_TRUSTED_ORIGINS = ["https://localhost"]  # Allow frontend
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
