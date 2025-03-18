@@ -25,7 +25,7 @@ export default function createButton({ bgColor, bgHoverColor, textColor, content
         component.textContent = content;
     else if (content instanceof HTMLElement)
         component.append(content);
-    else
+    else if (content !== undefined || content !== null)
         throw new Error('Content must be a string or a valid HTMLElement');
 
     // Add click event

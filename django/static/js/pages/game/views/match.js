@@ -34,6 +34,18 @@ export default async function getView(isLogged, path) {
             controller: new PlayerController("ArrowUp", "ArrowDown"),
         };
     }
+    else if (path.subPath === "/online") {
+        const outgoingSocket = new WebSocket('wss://example.com/pong/outgoing');
+        const incomingSocket = new WebSocket('wss://example.com/pong/incoming');
+        data.playerLeft = {
+            name: 'me',
+            controller: new RemoteControllerOutgoing(outgoingSocket, "ArrowUp", "ArrowDown"),
+        };
+        data.playerRight = {
+            name: 'friend',
+            controller: new RemoteControllerIncoming(incomingSocket),
+        };
+    }
     else 
         return {status: 404};
     const [game, pong] = createPongGameComponent(data);
