@@ -4,7 +4,6 @@ import Path from '/static/js/utils/Path.js';
 import { navigate } from '/static/js/utils/router.js';
 
 function fetchFriendList() {
-    console.log(Path.media('profile_photos/default.jpg'));
     return [
         {profile_photo: '/media/profile_photos/default.jpg', username: 'patroclo', display_name: 'pepe'},
         {profile_photo: Path.media('profile_photos/default.jpg'), username: 'pipo', display_name: 'papeclo'},
