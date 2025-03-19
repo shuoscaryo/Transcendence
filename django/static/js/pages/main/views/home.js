@@ -72,7 +72,7 @@ function getSection1() {
         text: 'Versus Mode',
         description: 'Play against a friend',
         bgColor: 'var(--color-lime)',
-        onClick: () => {navigate('/pages/main/game/local');}
+        onClick: () => {navigate('/pages/game/match/local');}
     });
     divButtons.append(buttonPlayVersus);
 
@@ -81,7 +81,7 @@ function getSection1() {
         bgColor: 'var(--color-gray)',
         text: 'Tournament',
         description: 'Create a tournament to play with friends',
-        onClick: () => {navigate('/pages/main/tournament');}
+        onClick: () => {navigate('/pages/game/tournament');}
     });
     buttonPlayTournament.id = 'button-play-tournament';
     divButtons.append(buttonPlayTournament);
@@ -120,7 +120,7 @@ function getSection2() {
         description: 'Play against our AI',
         bgColor: 'var(--color-lime)',
         onClick: () => {
-            navigate('/pages/main/game/AI', {
+            navigate('/pages/game/match/AI', {
                 playerLeft: {
                     controller: new PlayerController("w", "s"),
                     name: "anon1",
@@ -152,12 +152,6 @@ function getSection2() {
     return container;
 }
 
-function getFooter() {
-    const component = document.createElement('footer');
-    component.textContent = 'Footer with github link and 42 link and stuff';
-    return component;
-}
-
 export default async function getView(isLogged, path) {
     if (path.subPath != '/') {
         return {status: 300, redirect: '/home'};
@@ -173,7 +167,6 @@ export default async function getView(isLogged, path) {
     component.append(divSections);
     divSections.append(getSection1());
     divSections.append(getSection2());
-    component.append(getFooter());
     
     const pongInstance = g_pong;
     const onDestroy = () => {

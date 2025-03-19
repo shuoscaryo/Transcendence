@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.contrib.auth import get_user_model
 from django.views.decorators.http import require_POST
 import json
-from ..models import MatchHistory
+from pong_project.models import MatchHistory
 
 CustomUser = get_user_model()
 
@@ -10,55 +10,65 @@ CustomUser = get_user_model()
 def add_match(request):
     try:
         data = json.loads(request.body)
-        # Obtener o crear jugadores
-        player_left_username = data.get('playerLeft')
-        player_right_username = data.get('playerRight')
-        
-        player_left, created_left = CustomUser.objects.get_or_create(
-            username=player_left_username,
-            defaults={'email': f'{player_left_username}@example.com', 'password': 'defaultpass'}
-        )
-        player_right, created_right = CustomUser.objects.get_or_create(
-            username=player_right_username,
-            defaults={'email': f'{player_right_username}@example.com', 'password': 'defaultpass'}
-        )
 
-        # Obtener datos del match
-        score_left = int(data.get('scoreLeft'))
-        score_right = int(data.get('scoreRight'))
-        duration = int(data.get('duration', 120))  # Default 120 segundos si no se especifica
-        matchType = data.get('matchType', 'local')  # Default 'local' si no se especifica
+        if not all(k in data for k in ['playerLeft', 'scoreLeft', 'scoreRight', 'duration', 'matchType']):
+            return JsonResponse({'error': 'Missing required fields'}, status=400)
 
-        # Validar que el matchType sea válido
-        if matchType not in dict(MatchHistory._meta.get_field('matchType').choices):
+        try:
+            score_left = int(data['scoreLeft'])
+            score_right = int(data['scoreRight'])
+            duration = int(data['duration'])
+        except ValueError:
+            return JsonResponse({'error': 'Invalid numeric values'}, status=400)
+
+        match_type = data['matchType']
+        if match_type not in dict(MatchHistory._meta.get_field('matchType').choices):
             return JsonResponse({'error': 'Invalid matchType'}, status=400)
 
-        # Crear el match
+        try:
+            player_left = CustomUser.objects.get(username=data['playerLeft'])
+        except CustomUser.DoesNotExist:
+            return JsonResponse({'error': 'PlayerLeft does not exist'}, status=404)
+
+        player_right = None
+        if match_type == 'online':
+            if 'playerRight' not in data:
+                return JsonResponse({'error': 'Missing playerRight for online match'}, status=400)
+            try:
+                player_right = CustomUser.objects.get(username=data['playerRight'])
+            except CustomUser.DoesNotExist:
+                return JsonResponse({'error': 'PlayerRight does not exist'}, status=404)
+
+        # Crear el partido
         match = MatchHistory.objects.create(
             playerLeft=player_left,
             playerRight=player_right,
             scoreLeft=score_left,
             scoreRight=score_right,
             duration=duration,
-            matchType=matchType
+            matchType=match_type
         )
 
-        # Actualizar wins/losses (simplificado)
+        # Actualizar estadísticas
         if score_left > score_right:
             player_left.wins += 1
-            player_right.losses += 1
-        else:
+            if player_right:
+                player_right.losses += 1
+        elif score_left < score_right:
             player_left.losses += 1
-            player_right.wins += 1
+            if player_right:
+                player_right.wins += 1
         player_left.save()
-        player_right.save()
+        if player_right:
+            player_right.save()
 
         return JsonResponse({
             'message': 'Match added successfully',
             'match_id': match.id,
             'score': f"{score_left}-{score_right}"
         })
-    except ValueError as e:
-        return JsonResponse({'error': 'Invalid numeric values'}, status=400)
+    
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON format'}, status=400)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)

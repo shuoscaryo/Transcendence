@@ -400,7 +400,7 @@ function loadGameView(component) {
 
 export default async function getView(isLogged, path) {
     const css = [
-        Path.css("main/tournament.css"),
+        Path.css("game/tournament.css"),
         Path.css("components/game.css"),
     ];
     const component = document.createElement('div');

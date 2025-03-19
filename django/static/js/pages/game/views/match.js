@@ -5,7 +5,7 @@ import { navigate } from '/static/js/utils/router.js';
 
 export default async function getView(isLogged, path) {
     const css = [
-        Path.css("main/game.css"),
+        Path.css("game/match.css"),
         Path.css("components/game.css"),
     ];
     const component = document.createElement("div");
@@ -32,6 +32,18 @@ export default async function getView(isLogged, path) {
         data.playerRight = {
             name: "Random Chump",
             controller: new PlayerController("ArrowUp", "ArrowDown"),
+        };
+    }
+    else if (path.subPath === "/online") {
+        const outgoingSocket = new WebSocket('wss://example.com/pong/outgoing');
+        const incomingSocket = new WebSocket('wss://example.com/pong/incoming');
+        data.playerLeft = {
+            name: 'me',
+            controller: new RemoteControllerOutgoing(outgoingSocket, "ArrowUp", "ArrowDown"),
+        };
+        data.playerRight = {
+            name: 'friend',
+            controller: new RemoteControllerIncoming(incomingSocket),
         };
     }
     else 

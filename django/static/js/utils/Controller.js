@@ -3,6 +3,9 @@ import KeyStates from "/static/js/utils/KeyStates.js";
 
 class Controller {
     constructor() {
+		if (new.target === Controller) {
+            throw new Error("Cannot instantiate abstract class Controller directly");
+        }
     }
 
     getMove(paddleID, params) {
@@ -24,6 +27,118 @@ export class PlayerController extends Controller {
             return 1;
         else
             return 0;
+    }
+}
+export class RemoteControllerOutgoing extends Controller {
+    #socket; // Socket para enviar datos
+    #upKey;
+    #downKey;
+    #localMove = 0; // Movimiento local basado en teclas
+
+    constructor(socket, upKey, downKey) {
+        super();
+        if (!(socket instanceof WebSocket)) {
+            throw new Error("A valid WebSocket instance is required");
+        }
+        this.#socket = socket;
+        this.#upKey = upKey;
+        this.#downKey = downKey;
+        this.#setupKeyListeners();
+        this.#setupSocketListeners();
+    }
+
+    #setupSocketListeners() {
+        this.#socket.addEventListener('open', () => {
+            console.log('Outgoing WebSocket connection opened');
+        });
+        this.#socket.addEventListener('error', (error) => {
+            console.error('Outgoing WebSocket error:', error);
+        });
+        this.#socket.addEventListener('close', () => {
+            console.log('Outgoing WebSocket connection closed');
+        });
+    }
+
+    #setupKeyListeners() {
+        const updateMove = () => {
+            let move = 0;
+            if (KeyStates.get(this.#upKey)) {
+                move = -1;
+            } else if (KeyStates.get(this.#downKey)) {
+                move = 1;
+            }
+            this.#localMove = move; // Actualiza el movimiento local
+            this.#sendMove(move);   // Envía al servidor
+        };
+
+        document.addEventListener('keydown', updateMove);
+        document.addEventListener('keyup', updateMove);
+    }
+
+    #sendMove(move) {
+        if (this.#socket.readyState !== WebSocket.OPEN) {
+            console.warn('Outgoing WebSocket is not open. Cannot send move.');
+            return;
+        }
+
+        const message = {
+            move: move,
+            timestamp: Date.now()
+        };
+
+        try {
+            this.#socket.send(JSON.stringify(message));
+        } catch (error) {
+            console.error('Error sending move:', error);
+        }
+    }
+
+    getMove(paddleID, params) {
+        return this.#localMove; // Devuelve el movimiento local directamente
+    }
+}
+
+// Controlador para la paleta derecha (recibe datos a través de su propio socket)
+export class RemoteControllerIncoming extends Controller {
+    #socket; // Socket para recibir datos
+    #currentMove = 0; // Movimiento recibido del servidor
+
+    constructor(socket) {
+        super();
+        if (!(socket instanceof WebSocket)) {
+            throw new Error("A valid WebSocket instance is required");
+        }
+        this.#socket = socket;
+        this.#setupSocketListeners();
+    }
+
+    #setupSocketListeners() {
+        this.#socket.addEventListener('open', () => {
+            console.log('Incoming WebSocket connection opened');
+        });
+
+        this.#socket.addEventListener('message', (event) => {
+            try {
+                const data = JSON.parse(event.data);
+                if (data && 'move' in data) {
+                    this.#currentMove = data.move;
+                }
+            } catch (error) {
+                console.error('Error parsing incoming WebSocket message:', error);
+            }
+        });
+
+        this.#socket.addEventListener('error', (error) => {
+            console.error('Incoming WebSocket error:', error);
+        });
+
+        this.#socket.addEventListener('close', () => {
+            console.log('Incoming WebSocket connection closed');
+        });
+    }
+
+    getMove(paddleID, params) {
+        return this.#currentMove; // Devuelve el movimiento recibido del servidor
     }
 }
 

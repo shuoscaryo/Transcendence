@@ -17,16 +17,16 @@ export default async function fetchProfileData(path) {
             return {
                 status: response.status,
                 data: null,
-                msg: 'Error fetching profile'
+                error: 'Error fetching profile'
             };
 
         const data = await response.json();
         return {
             status: response.status,
             data,
-            msg: null
+            error: null
         };
     } catch (error) {
-        return { status: 500, data: null, msg: 'Network error' };
+        return { status: 500, data: null, error: 'Network error' };
     }
 }

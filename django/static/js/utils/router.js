@@ -33,17 +33,17 @@ async function getComponentFromUrl(url, isLogged, path) {
         // Check if the file exists
         const response = await fetch(url, { method: 'HEAD', credentials: 'include' });
         if (!response.ok)
-            return {status: response.status, msg: `Error fetching HEAD of file ${url}`};
+            return {status: response.status, error: `Error fetching HEAD of file ${url}`};
         // Import the file
         file = await import(url);
     } catch (error) {
-        return {status: 500, msg: `Error importing file ${url} - ${error}`};
+        return {status: 500, error: `Error importing file ${url} - ${error}`};
     }
 
     // Execute the main function of the file (returns {status, component, css, [onDestroy]} or {status + extras} if error)
     const result = await file.default(isLogged, path); // let it throw if it fails, dont catch
     if (!result || !result.status)
-        return {status: 500, msg: `No result or no result.status returned from file ${url}`};
+        return {status: 500, error: `No result or no result.status returned from file ${url}`};
     if (result.status !== 200)
         return result;
 
@@ -73,7 +73,7 @@ async function loadPage(path, isLogged) {
     if (divView) {
         if (!path.view)
             return {status: 404};
-        const viewPath = Path.page(path.page, 'views', `${path.view}.js`);
+        const viewPath = Path.page(path.page, 'views', `${path.view}`);
         viewImport = await getComponentFromUrl(viewPath, isLogged, path);
         if (viewImport.status !== 200)
             return viewImport;
@@ -154,8 +154,8 @@ export async function router(reload=false) {
         return;
     if (result.status === 300)
         return navigate(result.redirect, true);
-    if (result.msg)
-        console.error(`[ROUTER] ${result.msg}`);
+    if (result.error)
+        console.error(`[ROUTER] ${result.error}`);
     result = await loadPage(`/pages/error/${result.status}`, isLogged);
     if (result.status !== 200) {
         const divApp = document.getElementById('app');

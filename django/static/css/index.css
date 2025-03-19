@@ -61,6 +61,10 @@ p {
     align-items: center;
 }
 
+.bold {
+    font-weight: bold;
+}
+
 .section-block {
     border-radius: 0.5rem;
     overflow: hidden;
@@ -97,6 +101,29 @@ input:focus  {
     border: 2px solid #777777;
     box-shadow: 0 0 5px #777777;
 }
+
+/* FLOATING THINGIES ON HOVER */
+.tooltip-container {
+    position: relative; /* El contenedor es el punto de referencia */
+    display: inline-block; /* Para que no rompa el flujo */
+}
+  
+.tooltip {
+    position: absolute;
+    background-color: #1a1a1a;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    bottom: 125%; /* Aparece arriba */
+    left: 50%;
+    transform: translateX(-50%);
+    visibility: hidden; /* Oculto por defecto */
+}
+  
+.tooltip-container:hover .tooltip {
+    visibility: visible; /* Se muestra al hacer hover */
+}
+
 /* style for showing borders erase it when page is finished*/
 /*div, section, article, aside, header, footer, main, nav, canvas, button {
     box-shadow: 0 0 0 1px red;

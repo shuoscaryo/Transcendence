@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y postgresql-client
 COPY ./docker/django/requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 RUN rm requirements.txt
+RUN pip install daphne
 
 EXPOSE 8000
 
