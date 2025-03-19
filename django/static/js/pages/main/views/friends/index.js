@@ -52,7 +52,6 @@ function getFriendRow(friend) {
 
 function getAddFriendSection() {
     const component = newElement('section', {classList: ['section-block'], id: 'add-friend-section'});
-    component.textContent = "Add Friend";
 
     const form = newElement('form', {parent: component, id: 'add-friend-form'});
     const input = newElement('input', {parent: form, id: 'add-friend-input'});

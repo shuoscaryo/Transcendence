@@ -16,6 +16,19 @@
     padding: 1rem;
 }
 
+#add-friend-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+#add-friend-section form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
 #friend-list-section {
     display: flex;
     flex-direction: column;
