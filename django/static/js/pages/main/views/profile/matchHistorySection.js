@@ -2,7 +2,7 @@ import Path from '/static/js/utils/Path.js';
 import { navigate } from '/static/js/utils/router.js';
 import getDefaultButton from '/static/js/components/defaultButton.js';
 import newElement from '/static/js/utils/newElement.js';
-import fetchMatchHistory from '/static/js/utils/api/fetchMatchHistory.js';
+import fetchMatchHistory from './fetchMatchHistory.js';
 
 import getCreateELementsDiv from './manualCreateMatches.js';
 

@@ -1,6 +1,6 @@
 import Path from '/static/js/utils/Path.js';
 import * as css from '/static/js/utils/css.js';
-import apiIsLogged from '/static/js/utils/api/isLogged.js';
+import request from '/static/js/utils/request.js';
 
 const current = {
     page: null,
@@ -9,6 +9,11 @@ const current = {
     viewOnDestroy: null,
     isLogged: null,
 };
+
+async function apiIsLogged() {
+    const response = await request('GET', Path.API.IS_LOGGED);
+    return response.status === 200 && response.data.isLogged;
+}
 
 function parsePath(path) {
     // The path is expected to be in the format /pages/page/view/restOfPath?query#hash
@@ -80,7 +85,7 @@ async function loadPage(path, isLogged) {
         viewImport.component.id = 'view';
         divView.replaceWith(viewImport.component);
     }
-
+    
     // replace the elements
     // - Get the div App or create it
     const divApp = document.getElementById('app');
@@ -90,7 +95,7 @@ async function loadPage(path, isLogged) {
         document.body.append(divApp);
     }
     divApp.innerHTML = '';
-
+    
     // - Load the css
     if (current.page !== path.page) {
         css.deletePageCss();
@@ -110,7 +115,7 @@ async function loadPage(path, isLogged) {
         current.viewOnDestroy();
     if (current.pageOnDestroy)
         current.pageOnDestroy();
-
+    
     // - Replace the app with the new component
     divApp.replaceWith(pageImport.component);
     pageImport.component.id = 'app';
@@ -132,7 +137,7 @@ function isErrorPage(path) {
 
 export async function router(reload=false) {
     const isLogged = await apiIsLogged();
-
+    
     let path = window.location.pathname;
     if (path === '/' || path === '/home' || path === '/pages/main')
         path = '/pages/main/home';
@@ -142,7 +147,7 @@ export async function router(reload=false) {
         path = '/pages/login/register';
     else if (isErrorPage(path))
         path = `/pages/error${path}`;
-
+    
     if (isLogged && path.startsWith("/pages/login"))
         return navigate('/home', true);
     else if (!isLogged && path.startsWith("/pages/user/"))

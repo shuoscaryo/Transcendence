@@ -1,6 +1,6 @@
 import Path from '/static/js/utils/Path.js';
-import fetchProfileData from '/static/js/utils/api/fetchProfileData.js';
-import fetchMatchHistory from '/static/js/utils/api/fetchMatchHistory.js';
+import fetchProfileData from './fetchProfileData.js';
+import fetchMatchHistory from './fetchMatchHistory.js';
 
 import getProfileHeaderSection from './headerSection.js';
 import getMatchHistorySection from './matchHistorySection.js';
@@ -18,7 +18,7 @@ export default async function getView(isLogged, path) {
     ];
     const component = document.createElement('div');
 
-    // Fetch profile data and match history data from the API
+    // get profile data and match history data from the API
     const [profileData, matchHistoryData] = await Promise.all([
         fetchProfileData(path.subPath),
         fetchMatchHistory(path.subPath, 0, 10)

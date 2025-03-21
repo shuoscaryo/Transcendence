@@ -2,7 +2,7 @@ import Path from '/static/js/utils/Path.js';
 import { navigate } from '/static/js/utils/router.js';
 import getHomeButton from '/static/js/components/homeButton.js';
 import getDefaultButton from '/static/js/components/defaultButton.js';
-import apiLogout from '/static/js/utils/api/logout.js';
+import request from '/static/js/utils/request.js';
 
 function getUpperHalf(isLogged)
 {
@@ -87,7 +87,11 @@ function getLowerHalf(isLogged)
             textColor: null,
             content: 'logout',
             onClick: async () => {
-                await apiLogout();
+                const response = await request("POST", Path.API.LOGOUT);
+                if (response.status !== 200) {
+                    alert(`Couldn't log you out :(`);
+                    return;
+                }
                 navigate("/");
             }
         });

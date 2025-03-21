@@ -2,13 +2,7 @@ import getDefaultButton from '/static/js/components/defaultButton.js';
 import newElement from '/static/js/utils/newElement.js';
 import Path from '/static/js/utils/Path.js';
 import { navigate } from '/static/js/utils/router.js';
-
-function fetchFriendList() {
-    return [
-        {profile_photo: '/media/profile_photos/default.jpg', username: 'patroclo', display_name: 'pepe'},
-        {profile_photo: Path.media('profile_photos/default.jpg'), username: 'pipo', display_name: 'papeclo'},
-    ];
-}
+import request from '/static/js/utils/request.js';
 
 function getFriendRow(friend) {
     const component = newElement('div', {classList: ['friend-row']});
@@ -67,13 +61,7 @@ function getAddFriendSection() {
     button.addEventListener('click', async (event) => {
         event.preventDefault();
         const username = input.value;
-        const response = await fetch("/api/friends/add", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({username}),
-        });
+        const response = await request('POST', Path.API.SEND_FRIEND_REQUEST, {username});
         if (response.status == 200) {
             input.value = "";
             alert("Friend request sent!");
@@ -86,7 +74,7 @@ function getAddFriendSection() {
     return component;
 }
 
-function getFriendListSection() {
+async function getFriendListSection() {
     const component = newElement('section', {classList: ['section-block'], id: 'friend-list-section'});
     
     const inputSearchUser = newElement('input', {parent: component, id: 'search-friend'});
@@ -94,12 +82,25 @@ function getFriendListSection() {
     inputSearchUser.placeholder = "Search friend";
     
     const friendListDiv = newElement('div', {parent: component, id: 'friend-list-div'});
-    const friendList = fetchFriendList();
+    const response = await request('GET', Path.API.GET_FRIENDS_LIST);
     
-    friendList.forEach(friend => {
-        const friendRow = getFriendRow(friend);
-        friendListDiv.append(friendRow);
-    });
+    if (response.status == 200) {
+        const friendsList = response.data.friends;
+        if (!friendsList || friendsList.length == 0) {
+            const noFriends = newElement('div', {parent: friendListDiv, id: 'no-friends'});
+            noFriends.textContent = "No friends yet";
+        }
+        else {
+            friendsList.forEach(friend => {
+                const friendRow = getFriendRow(friend);
+                friendListDiv.append(friendRow);
+            });
+        }
+    }
+    else {
+        const error = newElement('div', {parent: friendListDiv, id: 'no-friends'});
+        error.textContent = "Error fetching friends";
+    }
     return component;
 }
 
@@ -116,7 +117,7 @@ export default async function getView(isLogged, path) {
     const title = newElement('h1', {parent: component, id: 'title'});
     title.textContent = "🤝Friends";
     component.append(getAddFriendSection());
-    component.append(getFriendListSection());
+    component.append(await getFriendListSection());
 
     return {status: 200, component, css};
 }
