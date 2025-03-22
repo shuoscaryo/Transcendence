@@ -27,8 +27,15 @@ function getFriendRow(friend) {
             label: 'Remove Friend', image: Path.img('friendsLogo.png'),
             action: async () => {
                 const response = await request('DELETE', Path.API.REMOVE_FRIEND, { username: friend.username });
-                if (response.status == 200)
+                if (response.status == 200){
                     component.remove();
+                    const friendListDiv = document.getElementById('friend-list-div');
+                    if (friendListDiv && friendListDiv.children.length == 0) {
+                        const noFriends = newElement('div', { id: 'no-friends' });
+                        noFriends.textContent = "No friends yet";
+                        friendListDiv.append(noFriends);
+                    }
+                }
                 else
                     alert(`Couldn't remove friend :( ${response.error}`);
             }
@@ -65,7 +72,7 @@ function getRequestRow(user, type) {
                 if (response.status == 200)
                     component.remove();
                 else
-                    alert(`Couldn't remove friend request :( ${response.error}`);
+                    alert(`Couldn't cancel friend request :( ${response.error}`);
             }
         },
         'accept': {
@@ -148,7 +155,7 @@ async function getRequestSection() {
         } else if (response.status == 404) {
             alert(`User ${username} not found`);
         } else {
-            alert(`Request failed with error: ${response.error}`);
+            alert(`${response.error ? response.error : "Error sending friend request"}`);
         }
     });
 

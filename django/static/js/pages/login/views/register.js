@@ -221,7 +221,7 @@ function getUpperHalf() {
                 alert('Account created successfully');
                 navigate('/pages/main/home');
             } else {
-                alert(result.error);
+                alert(response.error);
             }
         },
     });
