@@ -2,7 +2,7 @@ import Path from '/static/js/utils/Path.js';
 import { navigate } from '/static/js/utils/router.js';
 import getDefaultButton from '/static/js/components/defaultButton.js';
 import { emailOk, usernameOk, pwOk } from '/static/js/utils/validators.js';
-import request from '../../../utils/request';
+import request from '/static/js/utils/request.js';
 function getOtherLogin() {
     const component = document.createElement('div');
 
