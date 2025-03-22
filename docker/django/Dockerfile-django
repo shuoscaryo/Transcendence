@@ -9,6 +9,9 @@ RUN apt-get update && apt-get install -y postgresql-client
 COPY ./docker/django/requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 RUN rm requirements.txt
+RUN pip install web3
+RUN pip install pillow
+RUN pip install uvicorn
 
 EXPOSE 8000
 
