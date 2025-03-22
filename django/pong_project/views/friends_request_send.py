@@ -11,18 +11,18 @@ CustomUser = get_user_model()
 def friends_request_send(request):
     """
     Sends a friend request from the authenticated user to another user.
-    Expects a POST request with a JSON body containing 'to_username'.
+    Expects a POST request with a JSON body containing 'username'.
     """
     if request.method != 'POST':
         return JsonResponse({'error': 'Method not allowed'}, status=405)
 
     try:
         data = json.loads(request.body)
-        to_username = data.get('to_username')
-        if not to_username:
-            return JsonResponse({'error': 'to_username is required'}, status=400)
+        username = data.get('username')
+        if not username:
+            return JsonResponse({'error': 'username is required'}, status=400)
 
-        to_user = CustomUser.objects.get(username=to_username)
+        to_user = CustomUser.objects.get(username=username)
         from_user = request.user
 
         if from_user == to_user:
@@ -31,13 +31,18 @@ def friends_request_send(request):
         if to_user in from_user.friends.all():
             return JsonResponse({'error': 'User is already your friend'}, status=400)
 
-        # Check if a request already exists (all requests are implicitly pending)
+        # Check if a request already exists
         if FriendRequest.objects.filter(from_user=from_user, to_user=to_user).exists():
             return JsonResponse({'error': 'Friend request already sent'}, status=400)
 
         FriendRequest.objects.create(from_user=from_user, to_user=to_user)
-        return JsonResponse({'message': f'Friend request sent to {to_username}'})
+        
+        return JsonResponse({
+            'message': f'Friend request sent to {username}',
+            'username': to_user.username,
+            'profile_photo': to_user.profile_photo.url
+        })
     except CustomUser.DoesNotExist:
-        return JsonResponse({'error': f'User {to_username} not found'}, status=404)
+        return JsonResponse({'error': f'User {username} not found'}, status=404)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)

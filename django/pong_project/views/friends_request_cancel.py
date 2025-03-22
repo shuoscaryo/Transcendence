@@ -11,18 +11,18 @@ CustomUser = get_user_model()
 def friends_request_cancel(request):
     """
     Cancels a friend request sent by the authenticated user.
-    Expects a POST request with a JSON body containing 'to_username'.
+    Expects a POST request with a JSON body containing 'username'.
     """
-    if request.method != 'POST':
+    if request.method != 'DELETE':
         return JsonResponse({'error': 'Method not allowed'}, status=405)
 
     try:
         data = json.loads(request.body)
-        to_username = data.get('to_username')
-        if not to_username:
-            return JsonResponse({'error': 'to_username is required'}, status=400)
+        username = data.get('username')
+        if not username:
+            return JsonResponse({'error': 'username is required'}, status=400)
 
-        to_user = CustomUser.objects.get(username=to_username)
+        to_user = CustomUser.objects.get(username=username)
         from_user = request.user
 
         # Look for the friend request (all requests are implicitly pending)
@@ -35,8 +35,8 @@ def friends_request_cancel(request):
             return JsonResponse({'error': 'No friend request found'}, status=404)
 
         friend_request.delete()
-        return JsonResponse({'message': f'Friend request to {to_username} canceled'})
+        return JsonResponse({'message': f'Friend request to {username} canceled'})
     except CustomUser.DoesNotExist:
-        return JsonResponse({'error': f'User {to_username} not found'}, status=404)
+        return JsonResponse({'error': f'User {username} not found'}, status=404)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)

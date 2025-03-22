@@ -20,9 +20,9 @@ def friends_request_list(request):
         sent_requests = user.friend_requests_sent.all()
         sent_data = [
             {
-                'to_username': req.to_user.username,
-                'created_at': req.created_at.isoformat()
-                # Removed 'status' from the response
+                'username': req.to_user.username,
+                'profile_photo': req.to_user.profile_photo.url,
+                'date': req.created_at.isoformat()
             }
             for req in sent_requests
         ]
@@ -32,9 +32,9 @@ def friends_request_list(request):
         received_requests = user.friend_requests_received.all()
         received_data = [
             {
-                'from_username': req.from_user.username,
-                'created_at': req.created_at.isoformat()
-                # Removed 'status' from the response
+                'username': req.from_user.username,
+                'profile_photo': req.from_user.profile_photo.url,
+                'date': req.created_at.isoformat()
             }
             for req in received_requests
         ]

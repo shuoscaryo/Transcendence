@@ -51,7 +51,6 @@ CHANNEL_LAYERS = {
 SECURE_SSL_REDIRECT = False  # Disable forced SSL redirect for local development
 CSRF_TRUSTED_ORIGINS = ["https://localhost"]  # Allow frontend
 
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

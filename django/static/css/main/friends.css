@@ -35,20 +35,20 @@
     gap: 1rem;
 }
 
-#friend-list-div {
+.friends-list-div {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
     padding-top: 0.5rem;
     border-top: 1px solid var(--color-gray);
 }
+
 .friend-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
     height: 6rem;
-    padding: 0.5rem;
 }
 
 .friend-row:hover {
@@ -56,29 +56,25 @@
     transition: background-color 0.1s ease-in;
 }
 
-.friend-row .user-info {
+.user-info {
     height: 100%;
     display: flex;
     gap: 1rem;
     align-items: center;
+    padding: 0.5rem;
 }
 
-.friend-row .user-info img {
+.user-info img {
     height: 100%;
     object-fit: fill;
     border-radius: 0.5rem;
     overflow: hidden;
 }
 
-.friend-row .user-info .username-div {
+.user-info .username-div {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
-}
-
-.friend-row .user-info .username-div .display-name {
-    font-size: 0.8rem;
-    color: #b3b3b3;
 }
 
 .friend-row .interaction-buttons {
@@ -111,4 +107,20 @@
     height: 6rem;
     font-size: 1.5rem;
     color: #b3b3b3;
+}
+
+.request-buttons {
+    height: 100%;
+    display: flex;
+}
+
+.request-buttons .request-button {
+    height: 100%;
+    font-size: 0.8rem;
+    padding: 1rem;
+}
+
+.request-buttons .request-button:hover {
+    background-color: #4d4d4d;
+    transition: background-color 0.1s ease-in;
 }

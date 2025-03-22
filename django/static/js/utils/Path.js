@@ -27,9 +27,9 @@ export default class Path {
         SEND_FRIEND_REQUEST: Path.join('/', Path.#API_PATH, 'friends/request/send'),
         RESPOND_FRIEND_REQUEST: Path.join('/', Path.#API_PATH, 'friends/request/respond'),
         CANCEL_FRIEND_REQUEST: Path.join('/', Path.#API_PATH, 'friends/request/cancel'),
-        GET_FRIEND_REQUESTS_LIST: Path.join('/', Path.#API_PATH, 'friends/request/list'),
+        GET_FRIEND_REQUESTS: Path.join('/', Path.#API_PATH, 'friends/request/list'),
         REMOVE_FRIEND: Path.join('/', Path.#API_PATH, 'friends/remove'),
-        GET_FRIENDS_LIST: Path.join('/', Path.#API_PATH, 'friends/list'),
+        GET_FRIENDS: Path.join('/', Path.#API_PATH, 'friends/list'),
 
     };
 

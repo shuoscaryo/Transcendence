@@ -1,6 +1,7 @@
 #!/bin/bash
 pip install web3
 pip install pillow
+pip install uvicorn
 
 # Check if required environment variables are set
 if [ -z "$POSTGRES_DB" ] || [ -z "$POSTGRES_USER" ] || [ -z "$POSTGRES_PASSWORD" ]; then
@@ -34,5 +35,9 @@ python manage.py migrate
 # python manage.py collectstatic --noinput
 
 # ✅ Start Django with Daphne
-echo "Starting Django with Daphne..."
-daphne -b 0.0.0.0 -p 8000 pong_project.asgi:application
+#echo "Starting Django with Daphne..."
+#daphne -b 0.0.0.0 -p 8000 pong_project.asgi:application
+
+# ✅ Start Django with uvicorn
+echo "Starting Django with Uvicorn..."
+uvicorn pong_project.asgi:application --host 0.0.0.0 --port 8000 --reload

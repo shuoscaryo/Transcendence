@@ -11,7 +11,7 @@ CustomUser = get_user_model()
 def friends_request_respond(request):
     """
     Handles accepting or rejecting a friend request received by the authenticated user.
-    Expects a POST request with JSON body containing 'from_username' and 'action' ('accept' or 'reject').
+    Expects a POST request with JSON body containing 'username' and 'action' ('accept' or 'reject').
     Deletes the friend request after processing.
     """
     if request.method != 'POST':
@@ -19,16 +19,16 @@ def friends_request_respond(request):
 
     try:
         data = json.loads(request.body)
-        from_username = data.get('from_username')
+        username = data.get('username')
         action = data.get('action')
 
-        if not from_username or not action:
-            return JsonResponse({'error': 'from_username and action are required'}, status=400)
+        if not username or not action:
+            return JsonResponse({'error': 'username and action are required'}, status=400)
 
-        if action not in ['accept', 'reject']:
+        if action not in ['accept', 'decline']:
             return JsonResponse({'error': 'Invalid action'}, status=400)
 
-        from_user = CustomUser.objects.get(username=from_username)
+        from_user = CustomUser.objects.get(username=username)
         to_user = request.user
 
         friend_request = FriendRequest.objects.filter(
@@ -43,11 +43,11 @@ def friends_request_respond(request):
             from_user.friends.add(to_user)
             to_user.friends.add(from_user)
             friend_request.delete()
-            return JsonResponse({'message': f'Friend request from {from_username} accepted'})
+            return JsonResponse({'message': f'Friend request from {username} accepted'})
         else:
             friend_request.delete()
-            return JsonResponse({'message': f'Friend request from {from_username} rejected'})
+            return JsonResponse({'message': f'Friend request from {username} rejected'})
     except CustomUser.DoesNotExist:
-        return JsonResponse({'error': f'User {from_username} not found'}, status=404)
+        return JsonResponse({'error': f'User {username} not found'}, status=404)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
