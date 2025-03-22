@@ -1,6 +1,6 @@
 import Path from "/static/js/utils/Path.js";
 import createPongGameComponent from "/static/js/components/game.js";
-import { PongAI, PlayerController } from "/static/js/utils/Controller.js";
+import { PongAI, PlayerController, RemoteControllerOutgoing, RemoteControllerIncoming } from "/static/js/utils/Controller.js";
 import { navigate } from '/static/js/utils/router.js';
 
 export default async function getView(isLogged, path) {
@@ -35,15 +35,16 @@ export default async function getView(isLogged, path) {
         };
     }
     else if (path.subPath === "/online") {
-        const outgoingSocket = new WebSocket('wss://example.com/pong/outgoing');
-        const incomingSocket = new WebSocket('wss://example.com/pong/incoming');
+        const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
+		const gameSocket = new WebSocket(protocol + window.location.host + "/ws/game/");
+
         data.playerLeft = {
             name: 'me',
-            controller: new RemoteControllerOutgoing(outgoingSocket, "ArrowUp", "ArrowDown"),
+            controller: new RemoteControllerOutgoing(gameSocket, "w", "s"),
         };
         data.playerRight = {
             name: 'friend',
-            controller: new RemoteControllerIncoming(incomingSocket),
+            controller: new RemoteControllerIncoming(gameSocket),
         };
     }
     else 
