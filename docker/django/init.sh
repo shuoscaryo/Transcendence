@@ -1,7 +1,4 @@
 #!/bin/bash
-pip install web3
-pip install pillow
-pip install uvicorn
 
 # Check if required environment variables are set
 if [ -z "$POSTGRES_DB" ] || [ -z "$POSTGRES_USER" ] || [ -z "$POSTGRES_PASSWORD" ]; then
