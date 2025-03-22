@@ -3,6 +3,7 @@ import { PlayerController } from '/static/js/utils/Controller.js';
 import Path from '/static/js/utils/Path.js';
 import { navigate } from '/static/js/utils/router.js';
 import getDefaultButton from '/static/js/components/defaultButton.js';
+import request from '/static/js/utils/request.js';
 
 class Tournament {
     constructor() {
@@ -303,11 +304,7 @@ async function loadMatchesView(component) {
 			"winner": g_tournament.getWinner(),
 			"matches" : g_tournament.matchBoxes,
 		};
-		const response = fetch('/api/tournaments', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(dataToServer),
-		});
+        request('POST', Path.API.SEND_TOURNAMENT, dataToServer);
     }
 
     const matchesList = g_tournament.getComponent();

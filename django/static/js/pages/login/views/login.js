@@ -1,6 +1,7 @@
 import Path from '/static/js/utils/Path.js';
 import { navigate } from '/static/js/utils/router.js';
 import getDefaultButton from '/static/js/components/defaultButton.js';
+import request from '/static/js/utils/request.js';
 
 function getOtherLogin() {
     const component = document.createElement('div');
@@ -114,23 +115,11 @@ function getUpperHalf() {
                 username: formData.get('username'),
                 password: formData.get('password')
             };
-
-            try {
-                const response = await fetch('/api/login', {
-                    method: 'POST',
-                    credentials: 'include',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(jsonData)
-                });
-
-                const result = await response.json();
-                if (response.ok) {
-                    navigate('/pages/main/home');
-                } else {
-                    alert(result.error);
-                }
-            } catch (error) {
-                console.log('Request failed:', error);
+            const response = await request('POST', Path.API.LOGIN, jsonData);
+            if (response.status === 200) {
+                navigate('/pages/main/home');
+            } else {
+                alert(result.error);
             }
         },
     });

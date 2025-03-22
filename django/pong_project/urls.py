@@ -31,6 +31,12 @@ urlpatterns = [
     path('api/match-history/<str:username>', views.match_history_by_username),
     path('api/add-match', views.add_match),
 	path('api/tournaments', views.tournaments),
+    path('api/friends/list', views.friends_list),
+    path('api/friends/remove', views.friends_remove),
+    path('api/friends/request/cancel', views.friends_request_cancel),
+    path('api/friends/request/list', views.friends_request_list),
+    path('api/friends/request/respond', views.friends_request_respond),
+    path('api/friends/request/send', views.friends_request_send),
 	path('', views.index),
 	re_path(r'^(?!api/).*$', views.index),
 ]

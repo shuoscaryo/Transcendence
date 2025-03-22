@@ -2,6 +2,7 @@ import Path from '/static/js/utils/Path.js';
 import { navigate } from '/static/js/utils/router.js';
 import getDefaultButton from '/static/js/components/defaultButton.js';
 import { emailOk, usernameOk, pwOk } from '/static/js/utils/validators.js';
+import request from '/static/js/utils/request.js';
 function getOtherLogin() {
     const component = document.createElement('div');
 
@@ -215,22 +216,12 @@ function getUpperHalf() {
                 return;
             }
 
-            try {
-                const response = await fetch('/api/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(jsonData)
-                });
-
-                const result = await response.json();
-                if (response.ok) {
-                    alert('Account created successfully');
-                    navigate('/pages/main/home');
-                } else {
-                    alert(result.error);
-                }
-            } catch (error) {
-                console.log('Request failed:', error);
+            const response = await request('POST', Path.API.REGISTER, jsonData);
+            if (response.status === 200) {
+                alert('Account created successfully');
+                navigate('/pages/main/home');
+            } else {
+                alert(response.error);
             }
         },
     });

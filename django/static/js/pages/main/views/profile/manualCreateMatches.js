@@ -2,6 +2,7 @@ import { navigate } from '/static/js/utils/router.js';
 import getDefaultButton from '/static/js/components/defaultButton.js';
 import { usernameOk } from '/static/js/utils/validators.js';
 import newElement from '/static/js/utils/newElement.js';
+import request from '/static/js/utils/request.js';
 
 function isUintValid(score) {
     for (let i = 0; i < score.length; i++) {
@@ -89,24 +90,12 @@ function getNewMatchForm(profile) {
             alert('Invalid duration');
             return;
         }
-        try {
-            const response = await fetch('/api/add-match', {
-                method: 'POST',
-                credentials: 'include',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-            const result = await response.json();
-    
-            if (response.ok) {
-                alert('Match added successfully!');
-                navigate();
-            } else {
-                alert(`Error: ${result.error}`);
-            }
-        } catch (error) {
-            console.error('Fetch error:', error);
-            alert('Failed to add match');
+        const response = await request('POST', '/api/add-match', data);
+        if (response.status === 200) {
+            alert('Match added successfully!');
+            navigate();
+        } else {
+            alert(`Error: ${response.error}`);
         }
     });
 
@@ -177,26 +166,12 @@ function getNewTournamentForm(profile) {
             alert('Invalid duration');
             return;
         }
-
-        try {
-            const response = await fetch('/api/add-tournament', {
-                method: 'POST',
-                credentials: 'include',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-            const result = await response.json();
-            
-            if (response.ok) {
-                alert('Tournament added successfully!');
-                navigate();
-            } else {
-                alert(`Error: ${result.error}`);
-            }
-        }
-        catch (error) {
-            console.error('Fetch error:', error);
-            alert('Failed to add tournament');
+        const response = await request('POST', '/api/add-tournament', data);
+        if (response.status === 200) {
+            alert('Tournament added successfully!');
+            navigate();
+        } else {
+            alert(`Failed to add tournament (${response.error})`);
         }
     });
 
