@@ -12,50 +12,128 @@ export default async function getView(isLogged, path) {
     const component = document.createElement("div");
 
     const data = {
-        playerLeft: {
-            name: "Player 1",
-            controller: new PlayerController("w", "s"),
-        },
-        onContinueButton: () => {navigate("/");},
+        onContinueButton: () => { navigate("/"); },
         maxScore: 3,
         onGameEnd: (game) => {
             if (game.playerRight.score > game.playerLeft.score)
                 addRatonMiltonVideo();
         },
     };
-    if (path.subPath === "/AI") {
-        data.playerRight = {
-                name: "AI",
-                controller: new PongAI(),
-        };
-    }
-    else if (path.subPath === "/local") {
-        data.playerRight = {
-            name: "Random Chump",
-            controller: new PlayerController("ArrowUp", "ArrowDown"),
-        };
-    }
-    else if (path.subPath === "/online") {
-        const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
-		const gameSocket = new WebSocket(protocol + window.location.host + "/ws/game/");
 
-        data.playerLeft = {
-            name: 'me',
-            controller: new RemoteControllerOutgoing(gameSocket, "w", "s"),
+    let gameComponent;
+    let pongInstance;
+
+    if (path.subPath === "/AI") {
+        data.playerLeft = { name: "Player 1", controller: new PlayerController("w", "s") };
+        data.playerRight = { name: "AI", controller: new PongAI() };
+        const [game, pong] = createPongGameComponent(data);
+        gameComponent = game;
+        pongInstance = pong;
+    } else if (path.subPath === "/local") {
+        data.playerLeft = { name: "Player 1", controller: new PlayerController("w", "s") };
+        data.playerRight = { name: "Random Chump", controller: new PlayerController("ArrowUp", "ArrowDown") };
+        const [game, pong] = createPongGameComponent(data);
+        gameComponent = game;
+        pongInstance = pong;
+    } else if (path.subPath === "/online") {
+        const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
+        const gameSocket = new WebSocket(protocol + window.location.host + "/ws/game/");
+
+        let playerRole = null;
+        let gameStarted = false;
+
+        component.innerHTML = "<p>Esperando al segundo jugador...</p>";
+
+        gameSocket.onmessage = function(event) {
+            const message = JSON.parse(event.data);
+            console.log("Mensaje recibido:", message);
+
+            if (message.initial_status) {
+                playerRole = message.initial_status;
+                console.log(`Soy el jugador: ${playerRole}, conectados: ${message.players_connected}`);
+            }
+
+            if (message.start && !gameStarted) {
+                if (!playerRole) {
+                    console.error("Error: No se recibió initial_status antes de start");
+                    return;
+                }
+                console.log(message.message);
+                gameStarted = true;
+
+                if (playerRole === 'first') {
+                    data.playerLeft = {
+                        name: 'me',
+                        controller: new RemoteControllerOutgoing(gameSocket, "w", "s"),
+                    };
+                    data.playerRight = {
+                        name: 'friend',
+                        controller: new RemoteControllerIncoming(gameSocket),
+                    };
+                } else if (playerRole === 'second') {
+                    data.playerLeft = {
+                        name: 'friend',
+                        controller: new RemoteControllerIncoming(gameSocket),
+                    };
+                    data.playerRight = {
+                        name: 'me',
+                        controller: new RemoteControllerOutgoing(gameSocket, "w", "s"),
+                    };
+                }
+
+                const [game, pong] = createPongGameComponent(data);
+                gameComponent = game;
+                pongInstance = pong;
+                component.innerHTML = "";
+                component.append(gameComponent);
+                console.log("¡Juego iniciado!");
+            }
+
+            if (message.waiting) {
+                console.log(message.message);
+                gameStarted = false;
+                if (pongInstance) {
+                    pongInstance.stop();
+                }
+                delete data.playerLeft;
+                delete data.playerRight;
+                component.innerHTML = "<p>Esperando al segundo jugador...</p>";
+            }
+
+            if (message.move && gameStarted) {
+                console.log(`Movimiento recibido: ${message.move}`);
+            }
         };
-        data.playerRight = {
-            name: 'friend',
-            controller: new RemoteControllerIncoming(gameSocket),
+
+        gameSocket.onopen = function() {
+            console.log("Conexión WebSocket establecida");
+            playerRole = null; // Reiniciar el rol al abrir la conexión
         };
+
+        gameSocket.onerror = function(error) {
+            console.error("Error en WebSocket:", error);
+        };
+
+        gameSocket.onclose = function() {
+            console.log("Conexión WebSocket cerrada");
+            if (pongInstance) {
+                pongInstance.stop();
+            }
+            component.innerHTML = "<p>Conexión perdida. Por favor, recarga la página.</p>";
+        };
+    } else {
+        return { status: 404 };
     }
-    else 
-        return {status: 404};
-    const [game, pong] = createPongGameComponent(data);
-    component.append(game);
+
+    if (gameComponent) {
+        component.append(gameComponent);
+    }
 
     const onDestroy = () => {
-        if (pong)
-            pong.stop();
-    }
-    return {status: 200, component, css, onDestroy};
+        if (pongInstance) {
+            pongInstance.stop();
+        }
+    };
+
+    return { status: 200, component, css, onDestroy };
 }
