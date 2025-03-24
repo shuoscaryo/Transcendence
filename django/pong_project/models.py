@@ -7,6 +7,8 @@ class CustomUser(AbstractUser):
     losses = models.IntegerField(default=0)
     profile_photo = models.ImageField(upload_to='profile_photos/', default='profile_photos/default.jpg')
     friends = models.ManyToManyField('self', blank=True)
+    is_online = models.BooleanField(default=False)
+    last_activity = models.DateTimeField(null=True, blank=True)
 
 class MatchHistory(models.Model):
     playerLeft = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='match_history_as_player_left')

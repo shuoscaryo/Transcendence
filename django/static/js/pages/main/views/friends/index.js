@@ -11,6 +11,14 @@ function getUserInfoDiv(friend) {
     userImage.src = friend.profile_photo;
     const usernameDiv = newElement('div', { parent: component, classList: ['username-div'] });
     const username = newElement('span', { parent: usernameDiv, classList: ['username', 'bold'] });
+    const lastOnline = newElement('p', { parent: usernameDiv, classList: ['last-online'] });
+    const lastOnlineText = newElement('span', { parent: lastOnline });
+    lastOnlineText.textContent = "Last online: ";
+    const lastOnlineSpan = newElement('span', { parent: lastOnline, id: 'last-online-text' });
+    <p class="text-sm text-gray-500">
+        <span>Last online: </span>
+    <span id="last-online-text">Now</span>
+    </p>
     username.textContent = friend.username;
     return component;
 }

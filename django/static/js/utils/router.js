@@ -1,6 +1,7 @@
 import Path from '/static/js/utils/Path.js';
 import * as css from '/static/js/utils/css.js';
 import request from '/static/js/utils/request.js';
+import WebSocketService from '/static/js/utils/WebSocketService.js';
 
 const current = {
     page: null,
@@ -98,6 +99,7 @@ async function loadPage(path, isLogged) {
     
     // - Load the css
     if (current.page !== path.page) {
+        WebSocketService.clearPageListeners();
         css.deletePageCss();
         css.deleteViewCss();
         // Load view and page css at the same time
@@ -107,6 +109,7 @@ async function loadPage(path, isLogged) {
         ]);
     }
     else if (current.view !== path.view) {
+        WebSocketService.clearViewListeners();
         css.deleteViewCss();
         await css.loadViewCss(viewImport.css);
     }
@@ -115,7 +118,7 @@ async function loadPage(path, isLogged) {
         current.viewOnDestroy();
     if (current.pageOnDestroy)
         current.pageOnDestroy();
-    
+
     // - Replace the app with the new component
     divApp.replaceWith(pageImport.component);
     pageImport.component.id = 'app';
