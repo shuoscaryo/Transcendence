@@ -48,10 +48,26 @@ export default async function getView(isLogged, path) {
             const message = JSON.parse(event.data);
             console.log("Mensaje recibido:", message);
 
-            if (message.initial_status) {
+            if (message.type === "initial_status") {
                 playerRole = message.initial_status;
                 console.log(`Soy el jugador: ${playerRole}, conectados: ${message.players_connected}`);
             }
+
+			if (!gameStarted) {
+				// Mostrar botón "Start"
+				component.innerHTML = "";
+				const startButton = document.createElement("button");
+				startButton.textContent = "Start";
+				startButton.onclick = () => {
+					gameSocket.send(JSON.stringify({
+						type: "player_ready",
+						ready: true
+					}));
+					startButton.disabled = true;
+					startButton.textContent = "Esperando al otro jugador...";
+				};
+				component.append(startButton);
+			}
 
             if (message.start && !gameStarted) {
                 if (!playerRole) {

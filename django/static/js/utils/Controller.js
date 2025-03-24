@@ -82,6 +82,7 @@ export class RemoteControllerOutgoing extends Controller {
         }
 
         const message = {
+			type: 'move',
             move: move,
             timestamp: Date.now()
         };

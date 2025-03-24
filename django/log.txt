@@ -966,3 +966,635 @@
 2025-03-23 17:11:13 - Movimiento reenviado: 0
 2025-03-23 17:11:17 - Jugador desconectado: second, total: 1
 2025-03-23 17:11:17 - Jugador desconectado: first, total: 0
+2025-03-24 11:30:47 - Jugador conectado: first, total: 1
+2025-03-24 11:30:48 - Jugador conectado: second, total: 2
+2025-03-24 11:30:50 - Mensaje recibido: {'move': 1, 'timestamp': 1742815850084}
+2025-03-24 11:30:50 - Movimiento reenviado: 1
+2025-03-24 11:30:50 - Mensaje recibido: {'move': 0, 'timestamp': 1742815850570}
+2025-03-24 11:30:50 - Movimiento reenviado: 0
+2025-03-24 11:30:51 - Mensaje recibido: {'move': -1, 'timestamp': 1742815851249}
+2025-03-24 11:30:51 - Movimiento reenviado: -1
+2025-03-24 11:30:51 - Mensaje recibido: {'move': 0, 'timestamp': 1742815851590}
+2025-03-24 11:30:51 - Movimiento reenviado: 0
+2025-03-24 11:30:51 - Mensaje recibido: {'move': -1, 'timestamp': 1742815851814}
+2025-03-24 11:30:51 - Movimiento reenviado: -1
+2025-03-24 11:30:52 - Mensaje recibido: {'move': 0, 'timestamp': 1742815852312}
+2025-03-24 11:30:52 - Movimiento reenviado: 0
+2025-03-24 11:30:52 - Mensaje recibido: {'move': 1, 'timestamp': 1742815852546}
+2025-03-24 11:30:52 - Movimiento reenviado: 1
+2025-03-24 11:30:53 - Mensaje recibido: {'move': 1, 'timestamp': 1742815853057}
+2025-03-24 11:30:53 - Movimiento reenviado: 1
+2025-03-24 11:30:53 - Mensaje recibido: {'move': 1, 'timestamp': 1742815853089}
+2025-03-24 11:30:53 - Movimiento reenviado: 1
+2025-03-24 11:30:53 - Mensaje recibido: {'move': 1, 'timestamp': 1742815853121}
+2025-03-24 11:30:53 - Movimiento reenviado: 1
+2025-03-24 11:30:53 - Mensaje recibido: {'move': 1, 'timestamp': 1742815853151}
+2025-03-24 11:30:53 - Movimiento reenviado: 1
+2025-03-24 11:30:53 - Mensaje recibido: {'move': 0, 'timestamp': 1742815853178}
+2025-03-24 11:30:53 - Movimiento reenviado: 0
+2025-03-24 11:30:53 - Mensaje recibido: {'move': 1, 'timestamp': 1742815853388}
+2025-03-24 11:30:53 - Movimiento reenviado: 1
+2025-03-24 11:30:53 - Mensaje recibido: {'move': 0, 'timestamp': 1742815853848}
+2025-03-24 11:30:53 - Movimiento reenviado: 0
+2025-03-24 11:30:54 - Mensaje recibido: {'move': 1, 'timestamp': 1742815854494}
+2025-03-24 11:30:54 - Movimiento reenviado: 1
+2025-03-24 11:30:54 - Mensaje recibido: {'move': 0, 'timestamp': 1742815854765}
+2025-03-24 11:30:54 - Movimiento reenviado: 0
+2025-03-24 11:30:57 - Jugador desconectado: first, total: 1
+2025-03-24 11:30:57 - Reasignado rol 'first' a specific..inmemory!EYzPlIRtWRZW
+2025-03-24 11:30:57 - Jugador conectado: second, total: 2
+2025-03-24 11:30:58 - Jugador desconectado: first, total: 1
+2025-03-24 11:30:58 - Reasignado rol 'first' a specific..inmemory!AHXSeMeNydhF
+2025-03-24 11:30:59 - Jugador conectado: second, total: 2
+2025-03-24 11:31:00 - Mensaje recibido: {'move': -1, 'timestamp': 1742815860824}
+2025-03-24 11:31:00 - Movimiento reenviado: -1
+2025-03-24 11:31:01 - Mensaje recibido: {'move': 0, 'timestamp': 1742815861014}
+2025-03-24 11:31:01 - Movimiento reenviado: 0
+2025-03-24 11:31:03 - Mensaje recibido: {'move': 1, 'timestamp': 1742815863085}
+2025-03-24 11:31:03 - Movimiento reenviado: 1
+2025-03-24 11:31:03 - Mensaje recibido: {'move': 1, 'timestamp': 1742815863085}
+2025-03-24 11:31:03 - Movimiento reenviado: 1
+2025-03-24 11:31:03 - Mensaje recibido: {'move': 1, 'timestamp': 1742815863589}
+2025-03-24 11:31:03 - Mensaje recibido: {'move': 1, 'timestamp': 1742815863589}
+2025-03-24 11:31:03 - Movimiento reenviado: 1
+2025-03-24 11:31:03 - Movimiento reenviado: 1
+2025-03-24 11:31:03 - Mensaje recibido: {'move': 1, 'timestamp': 1742815863620}
+2025-03-24 11:31:03 - Mensaje recibido: {'move': 1, 'timestamp': 1742815863620}
+2025-03-24 11:31:03 - Movimiento reenviado: 1
+2025-03-24 11:31:03 - Movimiento reenviado: 1
+2025-03-24 11:31:03 - Mensaje recibido: {'move': 1, 'timestamp': 1742815863665}
+2025-03-24 11:31:03 - Mensaje recibido: {'move': 1, 'timestamp': 1742815863665}
+2025-03-24 11:31:03 - Movimiento reenviado: 1
+2025-03-24 11:31:03 - Movimiento reenviado: 1
+2025-03-24 11:31:03 - Mensaje recibido: {'move': 1, 'timestamp': 1742815863697}
+2025-03-24 11:31:03 - Mensaje recibido: {'move': 1, 'timestamp': 1742815863697}
+2025-03-24 11:31:03 - Movimiento reenviado: 1
+2025-03-24 11:31:03 - Movimiento reenviado: 1
+2025-03-24 11:31:03 - Mensaje recibido: {'move': 1, 'timestamp': 1742815863728}
+2025-03-24 11:31:03 - Mensaje recibido: {'move': 1, 'timestamp': 1742815863728}
+2025-03-24 11:31:03 - Movimiento reenviado: 1
+2025-03-24 11:31:03 - Movimiento reenviado: 1
+2025-03-24 11:31:03 - Mensaje recibido: {'move': 1, 'timestamp': 1742815863760}
+2025-03-24 11:31:03 - Mensaje recibido: {'move': 1, 'timestamp': 1742815863760}
+2025-03-24 11:31:03 - Movimiento reenviado: 1
+2025-03-24 11:31:03 - Movimiento reenviado: 1
+2025-03-24 11:31:03 - Mensaje recibido: {'move': 0, 'timestamp': 1742815863764}
+2025-03-24 11:31:03 - Mensaje recibido: {'move': 0, 'timestamp': 1742815863764}
+2025-03-24 11:31:03 - Movimiento reenviado: 0
+2025-03-24 11:31:03 - Movimiento reenviado: 0
+2025-03-24 11:31:04 - Mensaje recibido: {'move': -1, 'timestamp': 1742815864394}
+2025-03-24 11:31:04 - Mensaje recibido: {'move': -1, 'timestamp': 1742815864394}
+2025-03-24 11:31:04 - Movimiento reenviado: -1
+2025-03-24 11:31:04 - Movimiento reenviado: -1
+2025-03-24 11:31:04 - Mensaje recibido: {'move': 0, 'timestamp': 1742815864571}
+2025-03-24 11:31:04 - Mensaje recibido: {'move': 0, 'timestamp': 1742815864571}
+2025-03-24 11:31:04 - Movimiento reenviado: 0
+2025-03-24 11:31:04 - Movimiento reenviado: 0
+2025-03-24 11:31:04 - Mensaje recibido: {'move': 1, 'timestamp': 1742815864734}
+2025-03-24 11:31:04 - Mensaje recibido: {'move': 1, 'timestamp': 1742815864734}
+2025-03-24 11:31:04 - Movimiento reenviado: 1
+2025-03-24 11:31:04 - Movimiento reenviado: 1
+2025-03-24 11:31:05 - Mensaje recibido: {'move': 0, 'timestamp': 1742815865130}
+2025-03-24 11:31:05 - Movimiento reenviado: 0
+2025-03-24 11:31:05 - Mensaje recibido: {'move': 1, 'timestamp': 1742815865219}
+2025-03-24 11:31:05 - Movimiento reenviado: 1
+2025-03-24 11:31:05 - Mensaje recibido: {'move': 1, 'timestamp': 1742815865726}
+2025-03-24 11:31:05 - Movimiento reenviado: 1
+2025-03-24 11:31:05 - Mensaje recibido: {'move': 1, 'timestamp': 1742815865757}
+2025-03-24 11:31:05 - Movimiento reenviado: 1
+2025-03-24 11:31:05 - Mensaje recibido: {'move': 0, 'timestamp': 1742815865771}
+2025-03-24 11:31:05 - Movimiento reenviado: 0
+2025-03-24 11:31:05 - Mensaje recibido: {'move': -1, 'timestamp': 1742815865967}
+2025-03-24 11:31:05 - Movimiento reenviado: -1
+2025-03-24 11:31:06 - Mensaje recibido: {'move': 0, 'timestamp': 1742815866253}
+2025-03-24 11:31:06 - Movimiento reenviado: 0
+2025-03-24 11:31:06 - Mensaje recibido: {'move': 1, 'timestamp': 1742815866529}
+2025-03-24 11:31:06 - Movimiento reenviado: 1
+2025-03-24 11:31:06 - Mensaje recibido: {'move': 0, 'timestamp': 1742815866804}
+2025-03-24 11:31:06 - Movimiento reenviado: 0
+2025-03-24 11:31:07 - Mensaje recibido: {'move': 1, 'timestamp': 1742815867006}
+2025-03-24 11:31:07 - Mensaje recibido: {'move': 1, 'timestamp': 1742815867006}
+2025-03-24 11:31:07 - Movimiento reenviado: 1
+2025-03-24 11:31:07 - Movimiento reenviado: 1
+2025-03-24 11:31:07 - Mensaje recibido: {'move': 0, 'timestamp': 1742815867074}
+2025-03-24 11:31:07 - Mensaje recibido: {'move': 0, 'timestamp': 1742815867074}
+2025-03-24 11:31:07 - Movimiento reenviado: 0
+2025-03-24 11:31:07 - Movimiento reenviado: 0
+2025-03-24 11:31:07 - Mensaje recibido: {'move': -1, 'timestamp': 1742815867226}
+2025-03-24 11:31:07 - Mensaje recibido: {'move': -1, 'timestamp': 1742815867226}
+2025-03-24 11:31:07 - Movimiento reenviado: -1
+2025-03-24 11:31:07 - Movimiento reenviado: -1
+2025-03-24 11:31:07 - Mensaje recibido: {'move': 0, 'timestamp': 1742815867498}
+2025-03-24 11:31:07 - Mensaje recibido: {'move': 0, 'timestamp': 1742815867498}
+2025-03-24 11:31:07 - Movimiento reenviado: 0
+2025-03-24 11:31:07 - Movimiento reenviado: 0
+2025-03-24 11:31:08 - Mensaje recibido: {'move': 1, 'timestamp': 1742815868155}
+2025-03-24 11:31:08 - Movimiento reenviado: 1
+2025-03-24 11:31:08 - Mensaje recibido: {'move': 0, 'timestamp': 1742815868499}
+2025-03-24 11:31:08 - Movimiento reenviado: 0
+2025-03-24 11:31:08 - Mensaje recibido: {'move': -1, 'timestamp': 1742815868650}
+2025-03-24 11:31:08 - Movimiento reenviado: -1
+2025-03-24 11:31:08 - Mensaje recibido: {'move': 0, 'timestamp': 1742815868893}
+2025-03-24 11:31:08 - Movimiento reenviado: 0
+2025-03-24 11:31:09 - Mensaje recibido: {'move': 1, 'timestamp': 1742815869151}
+2025-03-24 11:31:09 - Movimiento reenviado: 1
+2025-03-24 11:31:09 - Mensaje recibido: {'move': 0, 'timestamp': 1742815869399}
+2025-03-24 11:31:09 - Movimiento reenviado: 0
+2025-03-24 11:31:10 - Mensaje recibido: {'move': 1, 'timestamp': 1742815870277}
+2025-03-24 11:31:10 - Movimiento reenviado: 1
+2025-03-24 11:31:10 - Mensaje recibido: {'move': 0, 'timestamp': 1742815870554}
+2025-03-24 11:31:10 - Mensaje recibido: {'move': 0, 'timestamp': 1742815870554}
+2025-03-24 11:31:10 - Movimiento reenviado: 0
+2025-03-24 11:31:10 - Movimiento reenviado: 0
+2025-03-24 11:31:10 - Mensaje recibido: {'move': 1, 'timestamp': 1742815870676}
+2025-03-24 11:31:10 - Mensaje recibido: {'move': 1, 'timestamp': 1742815870676}
+2025-03-24 11:31:10 - Movimiento reenviado: 1
+2025-03-24 11:31:10 - Movimiento reenviado: 1
+2025-03-24 11:31:11 - Mensaje recibido: {'move': 0, 'timestamp': 1742815871020}
+2025-03-24 11:31:11 - Mensaje recibido: {'move': 0, 'timestamp': 1742815871020}
+2025-03-24 11:31:11 - Movimiento reenviado: 0
+2025-03-24 11:31:11 - Movimiento reenviado: 0
+2025-03-24 11:31:16 - Jugador desconectado: first, total: 1
+2025-03-24 11:31:16 - Reasignado rol 'first' a specific..inmemory!klskHNWpKzZo
+2025-03-24 11:31:16 - Jugador conectado: second, total: 2
+2025-03-24 11:31:17 - Jugador desconectado: first, total: 1
+2025-03-24 11:31:17 - Reasignado rol 'first' a specific..inmemory!TmPvbsUdVwfA
+2025-03-24 11:31:17 - Jugador conectado: second, total: 2
+2025-03-24 11:31:19 - Jugador desconectado: first, total: 1
+2025-03-24 11:31:19 - Reasignado rol 'first' a specific..inmemory!bAMxtJSiNPhS
+2025-03-24 11:31:19 - Jugador conectado: second, total: 2
+2025-03-24 11:31:21 - Mensaje recibido: {'move': 1, 'timestamp': 1742815881927}
+2025-03-24 11:31:21 - Movimiento reenviado: 1
+2025-03-24 11:31:22 - Mensaje recibido: {'move': 1, 'timestamp': 1742815882431}
+2025-03-24 11:31:22 - Movimiento reenviado: 1
+2025-03-24 11:31:22 - Mensaje recibido: {'move': 1, 'timestamp': 1742815882473}
+2025-03-24 11:31:22 - Movimiento reenviado: 1
+2025-03-24 11:31:22 - Mensaje recibido: {'move': 0, 'timestamp': 1742815882481}
+2025-03-24 11:31:22 - Movimiento reenviado: 0
+2025-03-24 11:31:25 - Mensaje recibido: {'move': 1, 'timestamp': 1742815885817}
+2025-03-24 11:31:25 - Movimiento reenviado: 1
+2025-03-24 11:31:25 - Mensaje recibido: {'move': 1, 'timestamp': 1742815885817}
+2025-03-24 11:31:25 - Movimiento reenviado: 1
+2025-03-24 11:31:26 - Mensaje recibido: {'move': 1, 'timestamp': 1742815886327}
+2025-03-24 11:31:26 - Mensaje recibido: {'move': 1, 'timestamp': 1742815886327}
+2025-03-24 11:31:26 - Movimiento reenviado: 1
+2025-03-24 11:31:26 - Movimiento reenviado: 1
+2025-03-24 11:31:26 - Mensaje recibido: {'move': 0, 'timestamp': 1742815886340}
+2025-03-24 11:31:26 - Mensaje recibido: {'move': 0, 'timestamp': 1742815886340}
+2025-03-24 11:31:26 - Movimiento reenviado: 0
+2025-03-24 11:31:26 - Movimiento reenviado: 0
+2025-03-24 11:31:27 - Mensaje recibido: {'move': 1, 'timestamp': 1742815887665}
+2025-03-24 11:31:27 - Movimiento reenviado: 1
+2025-03-24 11:31:28 - Mensaje recibido: {'move': 1, 'timestamp': 1742815888173}
+2025-03-24 11:31:28 - Movimiento reenviado: 1
+2025-03-24 11:31:28 - Mensaje recibido: {'move': 1, 'timestamp': 1742815888205}
+2025-03-24 11:31:28 - Movimiento reenviado: 1
+2025-03-24 11:31:28 - Mensaje recibido: {'move': 1, 'timestamp': 1742815888234}
+2025-03-24 11:31:28 - Movimiento reenviado: 1
+2025-03-24 11:31:28 - Mensaje recibido: {'move': 1, 'timestamp': 1742815888265}
+2025-03-24 11:31:28 - Movimiento reenviado: 1
+2025-03-24 11:31:28 - Mensaje recibido: {'move': 1, 'timestamp': 1742815888311}
+2025-03-24 11:31:28 - Movimiento reenviado: 1
+2025-03-24 11:31:28 - Mensaje recibido: {'move': 1, 'timestamp': 1742815888342}
+2025-03-24 11:31:28 - Movimiento reenviado: 1
+2025-03-24 11:31:28 - Mensaje recibido: {'move': 1, 'timestamp': 1742815888374}
+2025-03-24 11:31:28 - Movimiento reenviado: 1
+2025-03-24 11:31:28 - Mensaje recibido: {'move': 0, 'timestamp': 1742815888387}
+2025-03-24 11:31:28 - Movimiento reenviado: 0
+2025-03-24 11:31:29 - Mensaje recibido: {'move': -1, 'timestamp': 1742815889438}
+2025-03-24 11:31:29 - Movimiento reenviado: -1
+2025-03-24 11:31:29 - Mensaje recibido: {'move': 0, 'timestamp': 1742815889636}
+2025-03-24 11:31:29 - Movimiento reenviado: 0
+2025-03-24 11:31:33 - Jugador desconectado: second, total: 1
+2025-03-24 11:31:33 - Jugador conectado: second, total: 2
+2025-03-24 11:32:13 - Jugador desconectado: second, total: 1
+2025-03-24 11:32:13 - Jugador conectado: second, total: 2
+2025-03-24 11:32:16 - Jugador desconectado: first, total: 1
+2025-03-24 11:32:16 - Reasignado rol 'first' a specific..inmemory!BDtsxavsSrdm
+2025-03-24 11:32:16 - Jugador conectado: second, total: 2
+2025-03-24 11:32:17 - Jugador desconectado: first, total: 1
+2025-03-24 11:32:17 - Reasignado rol 'first' a specific..inmemory!yHrssaCCFrGk
+2025-03-24 11:32:17 - Jugador conectado: second, total: 2
+2025-03-24 11:32:18 - Mensaje recibido: {'move': 1, 'timestamp': 1742815938977}
+2025-03-24 11:32:18 - Movimiento reenviado: 1
+2025-03-24 11:32:19 - Mensaje recibido: {'move': 0, 'timestamp': 1742815939369}
+2025-03-24 11:32:19 - Movimiento reenviado: 0
+2025-03-24 11:32:20 - Mensaje recibido: {'move': 1, 'timestamp': 1742815939998}
+2025-03-24 11:32:20 - Movimiento reenviado: 1
+2025-03-24 11:32:20 - Mensaje recibido: {'move': 1, 'timestamp': 1742815939998}
+2025-03-24 11:32:20 - Movimiento reenviado: 1
+2025-03-24 11:32:20 - Mensaje recibido: {'move': 0, 'timestamp': 1742815940362}
+2025-03-24 11:32:20 - Mensaje recibido: {'move': 0, 'timestamp': 1742815940362}
+2025-03-24 11:32:20 - Movimiento reenviado: 0
+2025-03-24 11:32:20 - Movimiento reenviado: 0
+2025-03-24 11:32:20 - Mensaje recibido: {'move': 1, 'timestamp': 1742815940643}
+2025-03-24 11:32:20 - Movimiento reenviado: 1
+2025-03-24 11:32:20 - Mensaje recibido: {'move': 0, 'timestamp': 1742815940763}
+2025-03-24 11:32:20 - Movimiento reenviado: 0
+2025-03-24 11:32:22 - Mensaje recibido: {'move': 1, 'timestamp': 1742815942240}
+2025-03-24 11:32:22 - Movimiento reenviado: 1
+2025-03-24 11:32:22 - Mensaje recibido: {'move': 1, 'timestamp': 1742815942742}
+2025-03-24 11:32:22 - Movimiento reenviado: 1
+2025-03-24 11:32:22 - Mensaje recibido: {'move': 0, 'timestamp': 1742815942748}
+2025-03-24 11:32:22 - Movimiento reenviado: 0
+2025-03-24 11:32:23 - Mensaje recibido: {'move': -1, 'timestamp': 1742815943395}
+2025-03-24 11:32:23 - Mensaje recibido: {'move': -1, 'timestamp': 1742815943395}
+2025-03-24 11:32:23 - Movimiento reenviado: -1
+2025-03-24 11:32:23 - Movimiento reenviado: -1
+2025-03-24 11:32:23 - Mensaje recibido: {'move': 0, 'timestamp': 1742815943727}
+2025-03-24 11:32:23 - Mensaje recibido: {'move': 0, 'timestamp': 1742815943727}
+2025-03-24 11:32:23 - Movimiento reenviado: 0
+2025-03-24 11:32:23 - Movimiento reenviado: 0
+2025-03-24 11:32:24 - Mensaje recibido: {'move': 1, 'timestamp': 1742815944352}
+2025-03-24 11:32:24 - Mensaje recibido: {'move': 1, 'timestamp': 1742815944352}
+2025-03-24 11:32:24 - Movimiento reenviado: 1
+2025-03-24 11:32:24 - Movimiento reenviado: 1
+2025-03-24 11:32:24 - Mensaje recibido: {'move': 0, 'timestamp': 1742815944762}
+2025-03-24 11:32:24 - Mensaje recibido: {'move': 0, 'timestamp': 1742815944762}
+2025-03-24 11:32:24 - Movimiento reenviado: 0
+2025-03-24 11:32:24 - Movimiento reenviado: 0
+2025-03-24 11:32:25 - Mensaje recibido: {'move': -1, 'timestamp': 1742815945531}
+2025-03-24 11:32:25 - Movimiento reenviado: -1
+2025-03-24 11:32:25 - Mensaje recibido: {'move': 0, 'timestamp': 1742815945688}
+2025-03-24 11:32:25 - Movimiento reenviado: 0
+2025-03-24 11:32:25 - Mensaje recibido: {'move': -1, 'timestamp': 1742815945799}
+2025-03-24 11:32:25 - Movimiento reenviado: -1
+2025-03-24 11:32:25 - Mensaje recibido: {'move': 0, 'timestamp': 1742815945906}
+2025-03-24 11:32:25 - Movimiento reenviado: 0
+2025-03-24 11:32:26 - Mensaje recibido: {'move': -1, 'timestamp': 1742815946027}
+2025-03-24 11:32:26 - Movimiento reenviado: -1
+2025-03-24 11:32:26 - Mensaje recibido: {'move': 0, 'timestamp': 1742815946160}
+2025-03-24 11:32:26 - Movimiento reenviado: 0
+2025-03-24 11:32:28 - Jugador desconectado: second, total: 1
+2025-03-24 11:32:28 - Jugador conectado: second, total: 2
+2025-03-24 11:33:05 - Jugador desconectado: first, total: 1
+2025-03-24 11:33:05 - Jugador desconectado: first, total: 0
+2025-03-24 11:37:17 - Jugador conectado: first, total: 1
+2025-03-24 11:37:18 - Jugador conectado: second, total: 2
+2025-03-24 11:37:20 - Mensaje recibido: {'move': 1, 'timestamp': 1742816240231}
+2025-03-24 11:37:20 - Movimiento reenviado: 1
+2025-03-24 11:37:20 - Mensaje recibido: {'move': 0, 'timestamp': 1742816240697}
+2025-03-24 11:37:20 - Movimiento reenviado: 0
+2025-03-24 11:37:20 - Mensaje recibido: {'move': -1, 'timestamp': 1742816240956}
+2025-03-24 11:37:20 - Movimiento reenviado: -1
+2025-03-24 11:37:21 - Mensaje recibido: {'move': 0, 'timestamp': 1742816241149}
+2025-03-24 11:37:21 - Movimiento reenviado: 0
+2025-03-24 11:37:21 - Mensaje recibido: {'move': -1, 'timestamp': 1742816241870}
+2025-03-24 11:37:21 - Movimiento reenviado: -1
+2025-03-24 11:37:22 - Mensaje recibido: {'move': 0, 'timestamp': 1742816242275}
+2025-03-24 11:37:22 - Movimiento reenviado: 0
+2025-03-24 11:37:22 - Mensaje recibido: {'move': 1, 'timestamp': 1742816242427}
+2025-03-24 11:37:22 - Movimiento reenviado: 1
+2025-03-24 11:37:22 - Mensaje recibido: {'move': 0, 'timestamp': 1742816242861}
+2025-03-24 11:37:22 - Movimiento reenviado: 0
+2025-03-24 11:37:24 - Jugador desconectado: second, total: 1
+2025-03-24 11:37:24 - Jugador conectado: second, total: 2
+2025-03-24 11:37:24 - Jugador desconectado: first, total: 1
+2025-03-24 11:37:24 - Reasignado rol 'first' a specific..inmemory!qmsdeuLZygUC
+2025-03-24 11:37:25 - Jugador conectado: second, total: 2
+2025-03-24 11:37:26 - Jugador desconectado: first, total: 1
+2025-03-24 11:37:26 - Reasignado rol 'first' a specific..inmemory!mxbEdzJXtLwX
+2025-03-24 11:37:26 - Jugador conectado: second, total: 2
+2025-03-24 11:37:46 - Jugador desconectado: first, total: 1
+2025-03-24 11:37:46 - Jugador desconectado: first, total: 0
+2025-03-24 11:42:15 - Jugador conectado: first, total: 1
+2025-03-24 11:42:17 - Jugador conectado: second, total: 2
+2025-03-24 11:42:21 - Jugador desconectado: second, total: 1
+2025-03-24 11:42:21 - Jugador conectado: second, total: 2
+2025-03-24 11:42:22 - Jugador desconectado: second, total: 1
+2025-03-24 11:42:22 - Jugador conectado: second, total: 2
+2025-03-24 11:42:23 - Jugador desconectado: second, total: 1
+2025-03-24 11:42:23 - Jugador conectado: second, total: 2
+2025-03-24 11:42:29 - Jugador desconectado: second, total: 1
+2025-03-24 11:42:29 - Jugador conectado: second, total: 2
+2025-03-24 11:42:34 - Jugador desconectado: second, total: 1
+2025-03-24 11:42:35 - Jugador conectado: second, total: 2
+2025-03-24 11:43:05 - Jugador desconectado: first, total: 1
+2025-03-24 11:43:05 - Jugador desconectado: first, total: 0
+2025-03-24 11:43:08 - Jugador conectado: first, total: 1
+2025-03-24 11:43:09 - Jugador conectado: second, total: 2
+2025-03-24 11:43:11 - Jugador desconectado: first, total: 1
+2025-03-24 11:43:11 - Reasignado rol 'first' a specific..inmemory!siNukJEqlkgS
+2025-03-24 11:43:11 - Jugador conectado: second, total: 2
+2025-03-24 11:43:14 - Mensaje recibido: {'ready': True}
+2025-03-24 11:43:16 - Mensaje recibido: {'ready': True}
+2025-03-24 11:43:19 - Mensaje recibido: {'move': 1, 'timestamp': 1742816599097}
+2025-03-24 11:43:19 - Movimiento reenviado: 1
+2025-03-24 11:43:19 - Mensaje recibido: {'move': 0, 'timestamp': 1742816599178}
+2025-03-24 11:43:19 - Movimiento reenviado: 0
+2025-03-24 11:43:19 - Mensaje recibido: {'move': -1, 'timestamp': 1742816599962}
+2025-03-24 11:43:19 - Movimiento reenviado: -1
+2025-03-24 11:43:20 - Mensaje recibido: {'move': 0, 'timestamp': 1742816600098}
+2025-03-24 11:43:20 - Movimiento reenviado: 0
+2025-03-24 11:43:20 - Mensaje recibido: {'move': 1, 'timestamp': 1742816600774}
+2025-03-24 11:43:20 - Movimiento reenviado: 1
+2025-03-24 11:43:21 - Mensaje recibido: {'move': 1, 'timestamp': 1742816601282}
+2025-03-24 11:43:21 - Movimiento reenviado: 1
+2025-03-24 11:43:21 - Mensaje recibido: {'move': 1, 'timestamp': 1742816601314}
+2025-03-24 11:43:21 - Movimiento reenviado: 1
+2025-03-24 11:43:21 - Mensaje recibido: {'move': 0, 'timestamp': 1742816601324}
+2025-03-24 11:43:21 - Movimiento reenviado: 0
+2025-03-24 11:43:21 - Mensaje recibido: {'ready': True}
+2025-03-24 11:43:22 - Mensaje recibido: {'move': -1, 'timestamp': 1742816602230}
+2025-03-24 11:43:22 - Movimiento reenviado: -1
+2025-03-24 11:43:22 - Mensaje recibido: {'move': 0, 'timestamp': 1742816602399}
+2025-03-24 11:43:22 - Movimiento reenviado: 0
+2025-03-24 11:44:17 - Jugador desconectado: second, total: 1
+2025-03-24 11:44:17 - Jugador conectado: second, total: 2
+2025-03-24 11:44:18 - Jugador desconectado: first, total: 1
+2025-03-24 11:44:18 - Reasignado rol 'first' a specific..inmemory!SsNFHaePtMpQ
+2025-03-24 11:44:19 - Jugador conectado: second, total: 2
+2025-03-24 11:44:20 - Jugador desconectado: first, total: 1
+2025-03-24 11:44:20 - Reasignado rol 'first' a specific..inmemory!kyQEPrJIKHaq
+2025-03-24 11:44:21 - Jugador conectado: second, total: 2
+2025-03-24 11:44:31 - Jugador desconectado: second, total: 1
+2025-03-24 11:44:32 - Jugador conectado: second, total: 2
+2025-03-24 11:44:32 - Jugador desconectado: first, total: 1
+2025-03-24 11:44:32 - Reasignado rol 'first' a specific..inmemory!BSKScteoBIjY
+2025-03-24 11:44:33 - Jugador conectado: second, total: 2
+2025-03-24 11:44:34 - Jugador desconectado: first, total: 1
+2025-03-24 11:44:34 - Reasignado rol 'first' a specific..inmemory!vRFHBAxMIIlU
+2025-03-24 11:44:34 - Jugador conectado: second, total: 2
+2025-03-24 11:44:36 - Mensaje recibido: {'ready': True}
+2025-03-24 11:44:37 - Mensaje recibido: {'ready': True}
+2025-03-24 11:45:15 - Jugador desconectado: second, total: 1
+2025-03-24 11:45:15 - Jugador conectado: second, total: 2
+2025-03-24 11:45:16 - Jugador desconectado: first, total: 1
+2025-03-24 11:45:16 - Reasignado rol 'first' a specific..inmemory!hMnLdQHCfawu
+2025-03-24 11:45:16 - Jugador conectado: second, total: 2
+2025-03-24 11:45:18 - Mensaje recibido: {'ready': True}
+2025-03-24 11:45:18 - Mensaje recibido: {'ready': True}
+2025-03-24 11:53:41 - Jugador desconectado: first, total: 1
+2025-03-24 11:53:41 - Jugador desconectado: first, total: 0
+2025-03-24 11:53:56 - Jugador conectado: first, total: 1
+2025-03-24 11:53:58 - Jugador conectado: second, total: 2
+2025-03-24 11:53:59 - Jugador desconectado: first, total: 1
+2025-03-24 11:53:59 - Reasignado rol 'first' a specific..inmemory!uGaCFxYUQVcu
+2025-03-24 11:53:59 - Jugador conectado: second, total: 2
+2025-03-24 11:54:00 - Mensaje recibido: {'ready': True}
+2025-03-24 11:54:01 - Mensaje recibido: {'ready': True}
+2025-03-24 11:54:45 - Jugador desconectado: first, total: 1
+2025-03-24 11:54:45 - Jugador desconectado: first, total: 0
+2025-03-24 12:00:00 - Jugador conectado: first, total: 1
+2025-03-24 12:00:00 - Jugador conectado: second, total: 2
+2025-03-24 12:00:01 - Jugador desconectado: first, total: 1
+2025-03-24 12:00:01 - Reasignado rol 'first' a specific..inmemory!DtlJsxvnBbEF
+2025-03-24 12:00:01 - Jugador conectado: second, total: 2
+2025-03-24 12:00:02 - Mensaje recibido: {'ready': True}
+2025-03-24 12:00:04 - Mensaje recibido: {'ready': True}
+2025-03-24 12:00:06 - Mensaje recibido: {'move': 1, 'timestamp': 1742817606872}
+2025-03-24 12:00:06 - Movimiento reenviado: 1
+2025-03-24 12:00:07 - Mensaje recibido: {'move': 0, 'timestamp': 1742817607279}
+2025-03-24 12:00:07 - Movimiento reenviado: 0
+2025-03-24 12:00:07 - Mensaje recibido: {'move': -1, 'timestamp': 1742817607714}
+2025-03-24 12:00:07 - Movimiento reenviado: -1
+2025-03-24 12:00:07 - Mensaje recibido: {'move': 0, 'timestamp': 1742817607930}
+2025-03-24 12:00:07 - Movimiento reenviado: 0
+2025-03-24 12:00:08 - Mensaje recibido: {'move': 1, 'timestamp': 1742817608862}
+2025-03-24 12:00:08 - Movimiento reenviado: 1
+2025-03-24 12:00:09 - Mensaje recibido: {'move': 1, 'timestamp': 1742817609369}
+2025-03-24 12:00:09 - Movimiento reenviado: 1
+2025-03-24 12:00:09 - Mensaje recibido: {'move': 1, 'timestamp': 1742817609398}
+2025-03-24 12:00:09 - Movimiento reenviado: 1
+2025-03-24 12:00:09 - Mensaje recibido: {'move': 1, 'timestamp': 1742817609429}
+2025-03-24 12:00:09 - Movimiento reenviado: 1
+2025-03-24 12:00:09 - Mensaje recibido: {'move': 1, 'timestamp': 1742817609460}
+2025-03-24 12:00:09 - Movimiento reenviado: 1
+2025-03-24 12:00:09 - Mensaje recibido: {'move': 0, 'timestamp': 1742817609483}
+2025-03-24 12:00:09 - Movimiento reenviado: 0
+2025-03-24 12:00:16 - Jugador desconectado: second, total: 1
+2025-03-24 12:00:16 - Jugador conectado: second, total: 2
+2025-03-24 12:00:18 - Mensaje recibido: {'ready': True}
+2025-03-24 12:00:19 - Mensaje recibido: {'ready': True}
+2025-03-24 12:00:21 - Mensaje recibido: {'move': 1, 'timestamp': 1742817621386}
+2025-03-24 12:00:21 - Mensaje recibido: {'move': 1, 'timestamp': 1742817621386}
+2025-03-24 12:00:21 - Movimiento reenviado: 1
+2025-03-24 12:00:21 - Movimiento reenviado: 1
+2025-03-24 12:00:21 - Mensaje recibido: {'move': 0, 'timestamp': 1742817621793}
+2025-03-24 12:00:21 - Mensaje recibido: {'move': 0, 'timestamp': 1742817621793}
+2025-03-24 12:00:21 - Movimiento reenviado: 0
+2025-03-24 12:00:21 - Movimiento reenviado: 0
+2025-03-24 12:01:22 - Jugador desconectado: second, total: 1
+2025-03-24 12:01:23 - Jugador conectado: second, total: 2
+2025-03-24 12:01:23 - Jugador desconectado: first, total: 1
+2025-03-24 12:01:23 - Reasignado rol 'first' a specific..inmemory!kXLbkRSxZAAj
+2025-03-24 12:01:24 - Jugador conectado: second, total: 2
+2025-03-24 12:01:24 - Jugador desconectado: first, total: 1
+2025-03-24 12:01:24 - Reasignado rol 'first' a specific..inmemory!TPvIJbWNrkLQ
+2025-03-24 12:01:25 - Jugador conectado: second, total: 2
+2025-03-24 12:01:25 - Mensaje recibido: {'ready': True}
+2025-03-24 12:01:26 - Mensaje recibido: {'ready': True}
+2025-03-24 12:01:28 - Mensaje recibido: {'move': 1, 'timestamp': 1742817688754}
+2025-03-24 12:01:28 - Movimiento reenviado: 1
+2025-03-24 12:01:28 - Mensaje recibido: {'move': 0, 'timestamp': 1742817688905}
+2025-03-24 12:01:28 - Movimiento reenviado: 0
+2025-03-24 12:01:29 - Mensaje recibido: {'move': 1, 'timestamp': 1742817689037}
+2025-03-24 12:01:29 - Movimiento reenviado: 1
+2025-03-24 12:01:29 - Mensaje recibido: {'move': 0, 'timestamp': 1742817689289}
+2025-03-24 12:01:29 - Movimiento reenviado: 0
+2025-03-24 12:01:30 - Mensaje recibido: {'move': 1, 'timestamp': 1742817690416}
+2025-03-24 12:01:30 - Movimiento reenviado: 1
+2025-03-24 12:01:30 - Mensaje recibido: {'move': 1, 'timestamp': 1742817690927}
+2025-03-24 12:01:30 - Movimiento reenviado: 1
+2025-03-24 12:01:30 - Mensaje recibido: {'move': 0, 'timestamp': 1742817690932}
+2025-03-24 12:01:30 - Movimiento reenviado: 0
+2025-03-24 12:01:31 - Mensaje recibido: {'move': -1, 'timestamp': 1742817691610}
+2025-03-24 12:01:31 - Movimiento reenviado: -1
+2025-03-24 12:01:32 - Mensaje recibido: {'move': 0, 'timestamp': 1742817692058}
+2025-03-24 12:01:32 - Movimiento reenviado: 0
+2025-03-24 12:01:32 - Mensaje recibido: {'move': 1, 'timestamp': 1742817692507}
+2025-03-24 12:01:32 - Movimiento reenviado: 1
+2025-03-24 12:01:33 - Mensaje recibido: {'move': 1, 'timestamp': 1742817693008}
+2025-03-24 12:01:33 - Mensaje recibido: {'move': 0, 'timestamp': 1742817693008}
+2025-03-24 12:01:33 - Movimiento reenviado: 1
+2025-03-24 12:01:33 - Movimiento reenviado: 0
+2025-03-24 12:01:33 - Mensaje recibido: {'move': 1, 'timestamp': 1742817693928}
+2025-03-24 12:01:33 - Movimiento reenviado: 1
+2025-03-24 12:01:34 - Mensaje recibido: {'move': 1, 'timestamp': 1742817694442}
+2025-03-24 12:01:34 - Movimiento reenviado: 1
+2025-03-24 12:01:34 - Mensaje recibido: {'move': 1, 'timestamp': 1742817694474}
+2025-03-24 12:01:34 - Movimiento reenviado: 1
+2025-03-24 12:01:34 - Mensaje recibido: {'move': 1, 'timestamp': 1742817694507}
+2025-03-24 12:01:34 - Movimiento reenviado: 1
+2025-03-24 12:01:34 - Mensaje recibido: {'move': 0, 'timestamp': 1742817694511}
+2025-03-24 12:01:34 - Movimiento reenviado: 0
+2025-03-24 12:01:35 - Mensaje recibido: {'move': -1, 'timestamp': 1742817695020}
+2025-03-24 12:01:35 - Movimiento reenviado: -1
+2025-03-24 12:01:35 - Mensaje recibido: {'move': 0, 'timestamp': 1742817695156}
+2025-03-24 12:01:35 - Movimiento reenviado: 0
+2025-03-24 12:01:35 - Mensaje recibido: {'move': -1, 'timestamp': 1742817695363}
+2025-03-24 12:01:35 - Movimiento reenviado: -1
+2025-03-24 12:01:35 - Mensaje recibido: {'move': 0, 'timestamp': 1742817695731}
+2025-03-24 12:01:35 - Movimiento reenviado: 0
+2025-03-24 12:01:36 - Mensaje recibido: {'move': 1, 'timestamp': 1742817696081}
+2025-03-24 12:01:36 - Movimiento reenviado: 1
+2025-03-24 12:01:36 - Mensaje recibido: {'move': 0, 'timestamp': 1742817696381}
+2025-03-24 12:01:36 - Movimiento reenviado: 0
+2025-03-24 12:01:36 - Mensaje recibido: {'move': -1, 'timestamp': 1742817696555}
+2025-03-24 12:01:36 - Movimiento reenviado: -1
+2025-03-24 12:01:36 - Mensaje recibido: {'move': 0, 'timestamp': 1742817696707}
+2025-03-24 12:01:36 - Movimiento reenviado: 0
+2025-03-24 12:01:37 - Mensaje recibido: {'move': -1, 'timestamp': 1742817697681}
+2025-03-24 12:01:37 - Movimiento reenviado: -1
+2025-03-24 12:01:38 - Mensaje recibido: {'move': 0, 'timestamp': 1742817698082}
+2025-03-24 12:01:38 - Movimiento reenviado: 0
+2025-03-24 12:01:39 - Jugador desconectado: second, total: 1
+2025-03-24 12:01:40 - Jugador conectado: second, total: 2
+2025-03-24 12:16:08 - Jugador desconectado: second, total: 1
+2025-03-24 12:16:09 - Jugador conectado: second, total: 2
+2025-03-24 12:16:09 - Jugador desconectado: first, total: 1
+2025-03-24 12:16:09 - Reasignado rol 'first' a specific..inmemory!HaApMxJgxkRU
+2025-03-24 12:16:10 - Jugador conectado: second, total: 2
+2025-03-24 12:16:10 - Jugador desconectado: first, total: 1
+2025-03-24 12:16:10 - Reasignado rol 'first' a specific..inmemory!fmbMYQmJdzCD
+2025-03-24 12:16:11 - Jugador conectado: second, total: 2
+2025-03-24 12:16:11 - Mensaje recibido: {'ready': True}
+2025-03-24 12:16:13 - Mensaje recibido: {'ready': True}
+2025-03-24 12:16:15 - Mensaje recibido: {'move': 1, 'timestamp': 1742818575184}
+2025-03-24 12:16:15 - Movimiento reenviado: 1
+2025-03-24 12:16:15 - Mensaje recibido: {'move': 1, 'timestamp': 1742818575695}
+2025-03-24 12:16:15 - Movimiento reenviado: 1
+2025-03-24 12:16:15 - Mensaje recibido: {'move': 1, 'timestamp': 1742818575726}
+2025-03-24 12:16:15 - Movimiento reenviado: 1
+2025-03-24 12:16:15 - Mensaje recibido: {'move': 0, 'timestamp': 1742818575742}
+2025-03-24 12:16:15 - Movimiento reenviado: 0
+2025-03-24 12:22:48 - Jugador conectado: second, total: 3
+2025-03-24 12:22:50 - Jugador conectado: second, total: 4
+2025-03-24 12:22:53 - Mensaje recibido: {'ready': True}
+2025-03-24 12:22:55 - Mensaje recibido: {'ready': True}
+2025-03-24 12:22:58 - Jugador desconectado: first, total: 3
+2025-03-24 12:22:58 - Reasignado rol 'first' a specific..inmemory!lhvwaqwEOKgJ
+2025-03-24 12:22:58 - Jugador desconectado: second, total: 2
+2025-03-24 12:22:59 - Jugador conectado: second, total: 3
+2025-03-24 12:22:59 - Jugador desconectado: second, total: 2
+2025-03-24 12:22:59 - Jugador desconectado: first, total: 1
+2025-03-24 12:22:59 - Reasignado rol 'first' a specific..inmemory!ARkPTSiyWgJf
+2025-03-24 12:23:00 - Jugador conectado: second, total: 2
+2025-03-24 12:23:02 - Mensaje recibido: {'ready': True}
+2025-03-24 12:23:02 - Mensaje recibido: {'ready': True}
+2025-03-24 12:23:04 - Mensaje recibido: {'move': 1, 'timestamp': 1742818984858}
+2025-03-24 12:23:04 - Movimiento reenviado: 1
+2025-03-24 12:23:05 - Mensaje recibido: {'move': 0, 'timestamp': 1742818985304}
+2025-03-24 12:23:05 - Movimiento reenviado: 0
+2025-03-24 12:23:06 - Mensaje recibido: {'move': -1, 'timestamp': 1742818986205}
+2025-03-24 12:23:06 - Movimiento reenviado: -1
+2025-03-24 12:23:06 - Mensaje recibido: {'move': 0, 'timestamp': 1742818986510}
+2025-03-24 12:23:06 - Movimiento reenviado: 0
+2025-03-24 12:23:06 - Mensaje recibido: {'move': -1, 'timestamp': 1742818986829}
+2025-03-24 12:23:06 - Movimiento reenviado: -1
+2025-03-24 12:23:06 - Mensaje recibido: {'move': 0, 'timestamp': 1742818986972}
+2025-03-24 12:23:06 - Movimiento reenviado: 0
+2025-03-24 12:23:07 - Mensaje recibido: {'move': 1, 'timestamp': 1742818987330}
+2025-03-24 12:23:07 - Movimiento reenviado: 1
+2025-03-24 12:23:07 - Mensaje recibido: {'move': 1, 'timestamp': 1742818987845}
+2025-03-24 12:23:07 - Movimiento reenviado: 1
+2025-03-24 12:23:07 - Mensaje recibido: {'move': 1, 'timestamp': 1742818987877}
+2025-03-24 12:23:07 - Movimiento reenviado: 1
+2025-03-24 12:23:07 - Mensaje recibido: {'move': 1, 'timestamp': 1742818987909}
+2025-03-24 12:23:07 - Movimiento reenviado: 1
+2025-03-24 12:23:07 - Mensaje recibido: {'move': 1, 'timestamp': 1742818987941}
+2025-03-24 12:23:07 - Movimiento reenviado: 1
+2025-03-24 12:23:07 - Mensaje recibido: {'move': 1, 'timestamp': 1742818987972}
+2025-03-24 12:23:07 - Movimiento reenviado: 1
+2025-03-24 12:23:08 - Mensaje recibido: {'move': 1, 'timestamp': 1742818988004}
+2025-03-24 12:23:08 - Movimiento reenviado: 1
+2025-03-24 12:23:08 - Mensaje recibido: {'move': 0, 'timestamp': 1742818988006}
+2025-03-24 12:23:08 - Movimiento reenviado: 0
+2025-03-24 12:23:08 - Mensaje recibido: {'move': -1, 'timestamp': 1742818988602}
+2025-03-24 12:23:08 - Movimiento reenviado: -1
+2025-03-24 12:23:08 - Mensaje recibido: {'move': 0, 'timestamp': 1742818988911}
+2025-03-24 12:23:08 - Movimiento reenviado: 0
+2025-03-24 12:23:09 - Mensaje recibido: {'move': -1, 'timestamp': 1742818989052}
+2025-03-24 12:23:09 - Movimiento reenviado: -1
+2025-03-24 12:23:09 - Mensaje recibido: {'move': 0, 'timestamp': 1742818989176}
+2025-03-24 12:23:09 - Movimiento reenviado: 0
+2025-03-24 12:23:09 - Mensaje recibido: {'move': -1, 'timestamp': 1742818989260}
+2025-03-24 12:23:09 - Movimiento reenviado: -1
+2025-03-24 12:23:09 - Mensaje recibido: {'move': 0, 'timestamp': 1742818989542}
+2025-03-24 12:23:09 - Movimiento reenviado: 0
+2025-03-24 12:23:10 - Mensaje recibido: {'move': -1, 'timestamp': 1742818990349}
+2025-03-24 12:23:10 - Movimiento reenviado: -1
+2025-03-24 12:23:10 - Mensaje recibido: {'move': 0, 'timestamp': 1742818990425}
+2025-03-24 12:23:10 - Movimiento reenviado: 0
+2025-03-24 12:23:10 - Mensaje recibido: {'move': 1, 'timestamp': 1742818990877}
+2025-03-24 12:23:10 - Movimiento reenviado: 1
+2025-03-24 12:23:11 - Mensaje recibido: {'move': 0, 'timestamp': 1742818991253}
+2025-03-24 12:23:11 - Movimiento reenviado: 0
+2025-03-24 12:23:31 - Jugador desconectado: second, total: 1
+2025-03-24 12:23:31 - Jugador conectado: second, total: 2
+2025-03-24 12:23:32 - Jugador desconectado: first, total: 1
+2025-03-24 12:23:32 - Reasignado rol 'first' a specific..inmemory!AHtIgoMFJIkk
+2025-03-24 12:23:32 - Jugador conectado: second, total: 2
+2025-03-24 12:23:35 - Mensaje recibido: {'ready': True}
+2025-03-24 12:23:37 - Mensaje recibido: {'ready': True}
+2025-03-24 12:23:45 - Jugador desconectado: first, total: 1
+2025-03-24 12:23:45 - Reasignado rol 'first' a specific..inmemory!LjYtMACvYrSd
+2025-03-24 12:23:46 - Jugador conectado: second, total: 2
+2025-03-24 12:23:46 - Jugador desconectado: first, total: 1
+2025-03-24 12:23:46 - Reasignado rol 'first' a specific..inmemory!zzkUUFoKoBZj
+2025-03-24 12:23:46 - Jugador conectado: second, total: 2
+2025-03-24 12:23:47 - Mensaje recibido: {'ready': True}
+2025-03-24 12:23:48 - Mensaje recibido: {'ready': True}
+2025-03-24 12:23:54 - Jugador desconectado: first, total: 1
+2025-03-24 12:23:54 - Reasignado rol 'first' a specific..inmemory!EbjUSEoyXouu
+2025-03-24 12:23:54 - Jugador conectado: second, total: 2
+2025-03-24 12:31:37 - Jugador desconectado: first, total: 1
+2025-03-24 12:31:37 - Jugador desconectado: first, total: 0
+2025-03-24 12:33:21 - Jugador conectado: first, total: 1
+2025-03-24 12:33:21 - Jugador conectado: second, total: 2
+2025-03-24 12:33:22 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 12:33:23 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 12:33:25 - Mensaje recibido: {'type': 'move', 'move': 1, 'timestamp': 1742819605823}
+2025-03-24 12:33:25 - Movimiento reenviado: 1
+2025-03-24 12:33:25 - Mensaje recibido: {'type': 'move', 'move': 0, 'timestamp': 1742819605913}
+2025-03-24 12:33:25 - Movimiento reenviado: 0
+2025-03-24 12:33:26 - Mensaje recibido: {'type': 'move', 'move': 1, 'timestamp': 1742819606305}
+2025-03-24 12:33:26 - Movimiento reenviado: 1
+2025-03-24 12:33:26 - Mensaje recibido: {'type': 'move', 'move': 0, 'timestamp': 1742819606395}
+2025-03-24 12:33:26 - Movimiento reenviado: 0
+2025-03-24 12:33:26 - Mensaje recibido: {'type': 'move', 'move': 1, 'timestamp': 1742819606985}
+2025-03-24 12:33:26 - Movimiento reenviado: 1
+2025-03-24 12:33:27 - Mensaje recibido: {'type': 'move', 'move': 0, 'timestamp': 1742819607327}
+2025-03-24 12:33:27 - Movimiento reenviado: 0
+2025-03-24 12:33:27 - Mensaje recibido: {'type': 'move', 'move': -1, 'timestamp': 1742819607843}
+2025-03-24 12:33:27 - Movimiento reenviado: -1
+2025-03-24 12:33:28 - Mensaje recibido: {'type': 'move', 'move': 0, 'timestamp': 1742819608061}
+2025-03-24 12:33:28 - Movimiento reenviado: 0
+2025-03-24 12:33:28 - Mensaje recibido: {'type': 'move', 'move': -1, 'timestamp': 1742819608701}
+2025-03-24 12:33:28 - Movimiento reenviado: -1
+2025-03-24 12:33:28 - Mensaje recibido: {'type': 'move', 'move': 0, 'timestamp': 1742819608873}
+2025-03-24 12:33:28 - Movimiento reenviado: 0
+2025-03-24 12:33:29 - Mensaje recibido: {'type': 'move', 'move': -1, 'timestamp': 1742819609233}
+2025-03-24 12:33:29 - Movimiento reenviado: -1
+2025-03-24 12:33:29 - Mensaje recibido: {'type': 'move', 'move': 0, 'timestamp': 1742819609501}
+2025-03-24 12:33:29 - Movimiento reenviado: 0
+2025-03-24 12:33:30 - Mensaje recibido: {'type': 'move', 'move': -1, 'timestamp': 1742819610033}
+2025-03-24 12:33:30 - Movimiento reenviado: -1
+2025-03-24 12:33:30 - Mensaje recibido: {'type': 'move', 'move': 0, 'timestamp': 1742819610287}
+2025-03-24 12:33:30 - Movimiento reenviado: 0
+2025-03-24 12:33:31 - Mensaje recibido: {'type': 'move', 'move': 1, 'timestamp': 1742819611101}
+2025-03-24 12:33:31 - Movimiento reenviado: 1
+2025-03-24 12:33:31 - Mensaje recibido: {'type': 'move', 'move': 0, 'timestamp': 1742819611443}
+2025-03-24 12:33:31 - Movimiento reenviado: 0
+2025-03-24 12:33:31 - Mensaje recibido: {'type': 'move', 'move': -1, 'timestamp': 1742819611793}
+2025-03-24 12:33:31 - Movimiento reenviado: -1
+2025-03-24 12:33:31 - Mensaje recibido: {'type': 'move', 'move': 0, 'timestamp': 1742819611916}
+2025-03-24 12:33:31 - Movimiento reenviado: 0
+2025-03-24 12:33:32 - Mensaje recibido: {'type': 'move', 'move': -1, 'timestamp': 1742819612546}
+2025-03-24 12:33:32 - Movimiento reenviado: -1
+2025-03-24 12:33:32 - Mensaje recibido: {'type': 'move', 'move': 0, 'timestamp': 1742819612813}
+2025-03-24 12:33:32 - Movimiento reenviado: 0
+2025-03-24 12:35:03 - Jugador desconectado: first, total: 1
+2025-03-24 12:35:03 - Jugador desconectado: first, total: 0
+2025-03-24 12:37:31 - Jugador conectado: first, total: 1
+2025-03-24 12:37:32 - Jugador conectado: second, total: 2
+2025-03-24 12:37:33 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 12:37:33 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 12:37:35 - Mensaje recibido: {'type': 'move', 'move': 1, 'timestamp': 1742819855451}
+2025-03-24 12:37:35 - Movimiento reenviado: 1
+2025-03-24 12:37:35 - Mensaje recibido: {'type': 'move', 'move': 0, 'timestamp': 1742819855594}
+2025-03-24 12:37:35 - Movimiento reenviado: 0
+2025-03-24 12:37:36 - Mensaje recibido: {'type': 'move', 'move': -1, 'timestamp': 1742819856577}
+2025-03-24 12:37:36 - Movimiento reenviado: -1
+2025-03-24 12:37:36 - Mensaje recibido: {'type': 'move', 'move': 0, 'timestamp': 1742819856891}
+2025-03-24 12:37:36 - Movimiento reenviado: 0
