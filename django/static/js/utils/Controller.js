@@ -1,5 +1,6 @@
 "use strict";
 import KeyStates from "/static/js/utils/KeyStates.js";
+import WebSocketService from '/static/js/utils/WebSocketService.js';
 
 class Controller {
     constructor() {
@@ -35,28 +36,11 @@ export class RemoteControllerOutgoing extends Controller {
     #downKey;
     #localMove = 0; // Movimiento local basado en teclas
 
-    constructor(socket, upKey, downKey) {
+    constructor(upKey, downKey) {
         super();
-        if (!(socket instanceof WebSocket)) {
-            throw new Error("A valid WebSocket instance is required");
-        }
-        this.#socket = socket;
         this.#upKey = upKey;
         this.#downKey = downKey;
         this.#setupKeyListeners();
-        this.#setupSocketListeners();
-    }
-
-    #setupSocketListeners() {
-        this.#socket.addEventListener('open', () => {
-            console.log('Outgoing WebSocket connection opened');
-        });
-        this.#socket.addEventListener('error', (error) => {
-            console.error('Outgoing WebSocket error:', error);
-        });
-        this.#socket.addEventListener('close', () => {
-            console.log('Outgoing WebSocket connection closed');
-        });
     }
 
     #setupKeyListeners() {
@@ -76,19 +60,8 @@ export class RemoteControllerOutgoing extends Controller {
     }
 
     #sendMove(move) {
-        if (this.#socket.readyState !== WebSocket.OPEN) {
-            console.warn('Outgoing WebSocket is not open. Cannot send move.');
-            return;
-        }
-
-        const message = {
-			type: 'move',
-            move: move,
-            timestamp: Date.now()
-        };
-
         try {
-            this.#socket.send(JSON.stringify(message));
+            WebSocketService.send("move", { move: move });
         } catch (error) {
             console.error('Error sending move:', error);
         }
@@ -104,38 +77,15 @@ export class RemoteControllerIncoming extends Controller {
     #socket; // Socket para recibir datos
     #currentMove = 0; // Movimiento recibido del servidor
 
-    constructor(socket) {
+    constructor() {
         super();
-        if (!(socket instanceof WebSocket)) {
-            throw new Error("A valid WebSocket instance is required");
-        }
-        this.#socket = socket;
-        this.#setupSocketListeners();
-    }
-
-    #setupSocketListeners() {
-        this.#socket.addEventListener('open', () => {
-            console.log('Incoming WebSocket connection opened');
-        });
-
-        this.#socket.addEventListener('message', (event) => {
-            try {
-                const data = JSON.parse(event.data);
-                if (data && 'move' in data) {
-                    this.#currentMove = data.move;
-                }
-            } catch (error) {
-                console.error('Error parsing incoming WebSocket message:', error);
-            }
-        });
-
-        this.#socket.addEventListener('error', (error) => {
-            console.error('Incoming WebSocket error:', error);
-        });
-
-        this.#socket.addEventListener('close', () => {
-            console.log('Incoming WebSocket connection closed');
-        });
+		WebSocketService.onView("move_p", (message) => {
+			console.log("Recibido movimiento del servidor:", message);
+			if (message.move !== undefined)
+				this.#currentMove = message.move;
+			else
+				console.error("Error: No se recibió move en move");
+		});
     }
 
     getMove(paddleID, params) {

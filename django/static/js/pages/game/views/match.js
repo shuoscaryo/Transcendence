@@ -2,6 +2,7 @@ import Path from "/static/js/utils/Path.js";
 import createPongGameComponent from "/static/js/components/game.js";
 import { PongAI, PlayerController, RemoteControllerOutgoing, RemoteControllerIncoming } from "/static/js/utils/Controller.js";
 import { navigate } from '/static/js/utils/router.js';
+import WebSocketService from '/static/js/utils/WebSocketService.js';
 
 export default async function getView(isLogged, path) {
     const css = [
@@ -36,107 +37,69 @@ export default async function getView(isLogged, path) {
         gameComponent = game;
         pongInstance = pong;
     } else if (path.subPath === "/online") {
-        const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
-        const gameSocket = new WebSocket(protocol + window.location.host + "/ws/game/");
-
         let playerRole = null;
         let gameStarted = false;
 
         component.innerHTML = "<p>Esperando al segundo jugador...</p>";
 
-        gameSocket.onmessage = function(event) {
-            const message = JSON.parse(event.data);
-            console.log("Mensaje recibido:", message);
+		WebSocketService.send("init");
+		WebSocketService.send("get_role");
+		WebSocketService.onView("initial_status", (message) => {
+			playerRole = message.initial_status;
+			console.log(`Soy el jugador: ${playerRole}, conectados: ${message.players_connected}`);
+			gameStarted = false;
+		});
 
-            if (message.type === "initial_status") {
-                playerRole = message.initial_status;
-                console.log(`Soy el jugador: ${playerRole}, conectados: ${message.players_connected}`);
-            }
+		if (!gameStarted) {
+			// Mostrar botón "Start"
+			component.innerHTML = "";
+			const startButton = document.createElement("button");
+			startButton.textContent = "Start";
+			startButton.onclick = () => {
+				WebSocketService.send("player_ready", { ready: true });
+				startButton.disabled = true;
+				startButton.textContent = "Esperando al otro jugador...";
+			};
+			component.append(startButton);
+		}
+		
+		WebSocketService.onView("start_game", (message) => {
+			if (gameStarted)
+				return;
+			if (!playerRole) {
+				console.error("Error: No se recibió initial_status antes de start");
+				return;
+			}
+			gameStarted = true;
 
-			if (!gameStarted) {
-				// Mostrar botón "Start"
-				component.innerHTML = "";
-				const startButton = document.createElement("button");
-				startButton.textContent = "Start";
-				startButton.onclick = () => {
-					gameSocket.send(JSON.stringify({
-						type: "player_ready",
-						ready: true
-					}));
-					startButton.disabled = true;
-					startButton.textContent = "Esperando al otro jugador...";
+			if (playerRole === 'first') {
+				data.playerLeft = {
+					name: 'me',
+					controller: new RemoteControllerOutgoing("w", "s"),
 				};
-				component.append(startButton);
+				data.playerRight = {
+					name: 'friend',
+					controller: new RemoteControllerIncoming(),
+				};
+			} else if (playerRole === 'second') {
+				data.playerLeft = {
+					name: 'friend',
+					controller: new RemoteControllerIncoming(),
+				};
+				data.playerRight = {
+					name: 'me',
+					controller: new RemoteControllerOutgoing("w", "s"),
+				};
 			}
 
-            if (message.start && !gameStarted) {
-                if (!playerRole) {
-                    console.error("Error: No se recibió initial_status antes de start");
-                    return;
-                }
-                console.log(message.message);
-                gameStarted = true;
-
-                if (playerRole === 'first') {
-                    data.playerLeft = {
-                        name: 'me',
-                        controller: new RemoteControllerOutgoing(gameSocket, "w", "s"),
-                    };
-                    data.playerRight = {
-                        name: 'friend',
-                        controller: new RemoteControllerIncoming(gameSocket),
-                    };
-                } else if (playerRole === 'second') {
-                    data.playerLeft = {
-                        name: 'friend',
-                        controller: new RemoteControllerIncoming(gameSocket),
-                    };
-                    data.playerRight = {
-                        name: 'me',
-                        controller: new RemoteControllerOutgoing(gameSocket, "w", "s"),
-                    };
-                }
-
-                const [game, pong] = createPongGameComponent(data);
-                gameComponent = game;
-                pongInstance = pong;
-                component.innerHTML = "";
-                component.append(gameComponent);
-                console.log("¡Juego iniciado!");
-            }
-
-            if (message.waiting) {
-                console.log(message.message);
-                gameStarted = false;
-                if (pongInstance) {
-                    pongInstance.stop();
-                }
-                delete data.playerLeft;
-                delete data.playerRight;
-                component.innerHTML = "<p>Esperando al segundo jugador...</p>";
-            }
-
-            if (message.move && gameStarted) {
-                console.log(`Movimiento recibido: ${message.move}`);
-            }
-        };
-
-        gameSocket.onopen = function() {
-            console.log("Conexión WebSocket establecida");
-            playerRole = null; // Reiniciar el rol al abrir la conexión
-        };
-
-        gameSocket.onerror = function(error) {
-            console.error("Error en WebSocket:", error);
-        };
-
-        gameSocket.onclose = function() {
-            console.log("Conexión WebSocket cerrada");
-            if (pongInstance) {
-                pongInstance.stop();
-            }
-            component.innerHTML = "<p>Conexión perdida. Por favor, recarga la página.</p>";
-        };
+			const [game, pong] = createPongGameComponent(data);
+			gameComponent = game;
+			pongInstance = pong;
+			component.innerHTML = "";
+			component.append(gameComponent);
+			console.log("¡Juego iniciado!");
+		});
+		
     } else {
         return { status: 404 };
     }

@@ -1598,3 +1598,600 @@
 2025-03-24 12:37:36 - Movimiento reenviado: -1
 2025-03-24 12:37:36 - Mensaje recibido: {'type': 'move', 'move': 0, 'timestamp': 1742819856891}
 2025-03-24 12:37:36 - Movimiento reenviado: 0
+2025-03-24 18:59:49 - Jugador conectado: first, total: 1
+2025-03-24 19:00:01 - Jugador conectado: second, total: 2
+2025-03-24 19:00:06 - Jugador desconectado: first, total: 1
+2025-03-24 19:00:06 - Reasignado rol 'first' a specific..inmemory!QiWUzhnxcyXf
+2025-03-24 19:00:08 - Jugador inactivo detectado y eliminado: specific..inmemory!QiWUzhnxcyXf
+2025-03-24 19:00:08 - Jugador conectado: first, total: 1
+2025-03-24 19:00:09 - Jugador conectado: second, total: 2
+2025-03-24 19:00:12 - Jugador desconectado: first, total: 1
+2025-03-24 19:00:12 - Reasignado rol 'first' a specific..inmemory!hxfNRMmdPMvN
+2025-03-24 19:00:12 - Jugador inactivo detectado y eliminado: specific..inmemory!hxfNRMmdPMvN
+2025-03-24 19:00:12 - Jugador conectado: first, total: 1
+2025-03-24 19:00:13 - Jugador conectado: second, total: 2
+2025-03-24 19:00:17 - Jugador desconectado: first, total: 1
+2025-03-24 19:00:17 - Reasignado rol 'first' a specific..inmemory!HUAtApVGfyMT
+2025-03-24 19:00:17 - Jugador inactivo detectado y eliminado: specific..inmemory!HUAtApVGfyMT
+2025-03-24 19:00:17 - Jugador conectado: first, total: 1
+2025-03-24 19:00:18 - Jugador conectado: second, total: 2
+2025-03-24 19:01:30 - Jugador desconectado: first, total: 1
+2025-03-24 19:01:30 - Reasignado rol 'first' a specific..inmemory!OkDYRJBfSDiD
+2025-03-24 19:01:31 - Jugador inactivo detectado y eliminado: specific..inmemory!OkDYRJBfSDiD
+2025-03-24 19:01:31 - Jugador conectado: first, total: 1
+2025-03-24 19:01:31 - Jugador conectado: second, total: 2
+2025-03-24 19:02:08 - Jugador desconectado: first, total: 1
+2025-03-24 19:02:08 - Reasignado rol 'first' a specific..inmemory!lUlYsvtPTRSW
+2025-03-24 19:02:09 - Jugador inactivo detectado y eliminado: specific..inmemory!lUlYsvtPTRSW
+2025-03-24 19:02:09 - Jugador conectado: first, total: 1
+2025-03-24 19:02:09 - Jugador conectado: second, total: 2
+2025-03-24 19:02:24 - Jugador desconectado: first, total: 1
+2025-03-24 19:02:24 - Reasignado rol 'first' a specific..inmemory!LUiADbCTjRko
+2025-03-24 19:02:25 - Jugador inactivo detectado y eliminado: specific..inmemory!LUiADbCTjRko
+2025-03-24 19:02:25 - Jugador conectado: first, total: 1
+2025-03-24 19:02:26 - Jugador conectado: second, total: 2
+2025-03-24 19:02:41 - Jugador desconectado: first, total: 1
+2025-03-24 19:02:41 - Reasignado rol 'first' a specific..inmemory!hfXKpmYlFbpZ
+2025-03-24 19:02:42 - Jugador inactivo detectado y eliminado: specific..inmemory!hfXKpmYlFbpZ
+2025-03-24 19:02:42 - Jugador conectado: first, total: 1
+2025-03-24 19:02:43 - Jugador conectado: second, total: 2
+2025-03-24 19:02:55 - Jugador desconectado: second, total: 1
+2025-03-24 19:02:55 - Jugador inactivo detectado y eliminado: specific..inmemory!bByrTgGXpyuN
+2025-03-24 19:02:55 - Jugador conectado: first, total: 1
+2025-03-24 19:02:56 - Jugador conectado: second, total: 2
+2025-03-24 19:02:56 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:02:57 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:02:58 - Jugador inactivo detectado y eliminado: specific..inmemory!yYWIxKLVzsVT
+2025-03-24 19:02:58 - Jugador inactivo detectado y eliminado: specific..inmemory!McWbqmMPtglz
+2025-03-24 19:02:59 - Jugador conectado: first, total: 1
+2025-03-24 19:02:59 - Jugador conectado: second, total: 2
+2025-03-24 19:05:40 - Jugador desconectado: second, total: 1
+2025-03-24 19:05:40 - Jugador desconectado: first, total: 0
+2025-03-24 19:05:42 - Jugador conectado: first, total: 1
+2025-03-24 19:05:42 - Jugador conectado: second, total: 2
+2025-03-24 19:05:50 - Jugador desconectado: first, total: 1
+2025-03-24 19:05:50 - Reasignado rol 'first' a specific..inmemory!PURbmkvLVKTZ
+2025-03-24 19:05:50 - Jugador conectado: second, total: 2
+2025-03-24 19:05:50 - Jugador desconectado: first, total: 1
+2025-03-24 19:05:50 - Reasignado rol 'first' a specific..inmemory!KxrzbXOVhxdR
+2025-03-24 19:05:51 - Jugador conectado: second, total: 2
+2025-03-24 19:05:52 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:05:53 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:07:01 - Jugador desconectado: first, total: 1
+2025-03-24 19:07:01 - Jugador desconectado: first, total: 0
+2025-03-24 19:07:02 - Jugador conectado: first, total: 1
+2025-03-24 19:07:02 - Jugador conectado: second, total: 2
+2025-03-24 19:07:15 - Jugador desconectado: second, total: 1
+2025-03-24 19:07:15 - Jugador desconectado: first, total: 0
+2025-03-24 19:07:16 - Jugador conectado: first, total: 1
+2025-03-24 19:07:16 - Jugador conectado: second, total: 2
+2025-03-24 19:07:30 - Jugador desconectado: second, total: 1
+2025-03-24 19:07:30 - Jugador desconectado: first, total: 0
+2025-03-24 19:07:32 - Jugador conectado: first, total: 1
+2025-03-24 19:07:32 - Jugador conectado: second, total: 2
+2025-03-24 19:07:41 - Jugador desconectado: second, total: 1
+2025-03-24 19:07:41 - Jugador desconectado: first, total: 0
+2025-03-24 19:07:42 - Jugador conectado: first, total: 1
+2025-03-24 19:07:42 - Jugador conectado: second, total: 2
+2025-03-24 19:07:43 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:07:45 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:09:13 - Jugador desconectado: first, total: 1
+2025-03-24 19:09:13 - Reasignado rol 'first' a specific..inmemory!ITisWTYMnfJX
+2025-03-24 19:09:13 - Jugador conectado: second, total: 2
+2025-03-24 19:09:14 - Jugador desconectado: first, total: 1
+2025-03-24 19:09:14 - Reasignado rol 'first' a specific..inmemory!dAdaaOygyCQB
+2025-03-24 19:09:14 - Jugador conectado: second, total: 2
+2025-03-24 19:09:15 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:09:16 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:13:04 - Jugador desconectado: second, total: 1
+2025-03-24 19:13:04 - Jugador desconectado: first, total: 0
+2025-03-24 19:13:06 - Jugador conectado: first, total: 1
+2025-03-24 19:13:06 - Jugador conectado: second, total: 2
+2025-03-24 19:13:08 - Jugador desconectado: second, total: 1
+2025-03-24 19:13:08 - Jugador desconectado: first, total: 0
+2025-03-24 19:13:09 - Jugador conectado: first, total: 1
+2025-03-24 19:13:09 - Jugador conectado: second, total: 2
+2025-03-24 19:13:14 - Jugador desconectado: second, total: 1
+2025-03-24 19:13:14 - Jugador desconectado: first, total: 0
+2025-03-24 19:13:16 - Jugador conectado: first, total: 1
+2025-03-24 19:13:16 - Jugador conectado: second, total: 2
+2025-03-24 19:14:01 - Jugador desconectado: first, total: 1
+2025-03-24 19:14:01 - Reasignado rol 'first' a specific..inmemory!fvwGXQYFRSNO
+2025-03-24 19:14:02 - Jugador conectado: second, total: 2
+2025-03-24 19:14:02 - Jugador desconectado: first, total: 1
+2025-03-24 19:14:02 - Reasignado rol 'first' a specific..inmemory!QrannRHgXrUI
+2025-03-24 19:14:03 - Jugador conectado: second, total: 2
+2025-03-24 19:14:04 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:14:05 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:15:06 - Jugador desconectado: second, total: 1
+2025-03-24 19:15:06 - Jugador desconectado: first, total: 0
+2025-03-24 19:16:38 - Jugador conectado: first, total: 1
+2025-03-24 19:16:38 - Jugador conectado: second, total: 2
+2025-03-24 19:16:49 - Jugador desconectado: first, total: 1
+2025-03-24 19:16:49 - Reasignado rol 'first' a specific..inmemory!OGhWwOUaHQmz
+2025-03-24 19:16:49 - Jugador desconectado: first, total: 0
+2025-03-24 19:16:49 - Jugador conectado: first, total: 1
+2025-03-24 19:16:50 - Jugador conectado: second, total: 2
+2025-03-24 19:16:50 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:16:51 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:21:44 - Jugador desconectado: first, total: 1
+2025-03-24 19:21:44 - Jugador desconectado: first, total: 0
+2025-03-24 19:21:45 - Jugador conectado: first, total: 1
+2025-03-24 19:21:45 - Jugador conectado: second, total: 2
+2025-03-24 19:21:49 - Jugador desconectado: second, total: 1
+2025-03-24 19:21:49 - Jugador desconectado: first, total: 0
+2025-03-24 19:21:51 - Jugador conectado: first, total: 1
+2025-03-24 19:21:51 - Jugador conectado: second, total: 2
+2025-03-24 19:21:58 - Jugador desconectado: second, total: 1
+2025-03-24 19:21:58 - Jugador desconectado: first, total: 0
+2025-03-24 19:22:25 - Jugador conectado: first, total: 1
+2025-03-24 19:22:25 - Jugador conectado: second, total: 2
+2025-03-24 19:22:31 - Jugador desconectado: second, total: 1
+2025-03-24 19:22:31 - Jugador desconectado: first, total: 0
+2025-03-24 19:22:33 - Jugador conectado: first, total: 1
+2025-03-24 19:22:33 - Jugador conectado: second, total: 2
+2025-03-24 19:22:34 - Jugador desconectado: second, total: 1
+2025-03-24 19:22:34 - Jugador desconectado: first, total: 0
+2025-03-24 19:22:36 - Jugador conectado: first, total: 1
+2025-03-24 19:22:36 - Jugador conectado: second, total: 2
+2025-03-24 19:24:15 - Jugador desconectado: second, total: 1
+2025-03-24 19:24:16 - Jugador desconectado: first, total: 0
+2025-03-24 19:24:16 - Jugador conectado: first, total: 1
+2025-03-24 19:24:16 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:24:16 - Jugador conectado: second, total: 2
+2025-03-24 19:24:16 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:24:17 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:24:18 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:26:52 - Jugador desconectado: first, total: 1
+2025-03-24 19:26:52 - Jugador desconectado: first, total: 0
+2025-03-24 19:27:54 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:27:55 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:27:58 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:27:59 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:28:34 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:28:34 - Jugador registrado en init: first, total: 1
+2025-03-24 19:28:34 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:28:34 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:28:34 - Jugador registrado en init: second, total: 2
+2025-03-24 19:28:34 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:28:36 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:28:38 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:29:10 - Jugador desconectado: second, total: 1
+2025-03-24 19:29:11 - Jugador desconectado: first, total: 0
+2025-03-24 19:29:11 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:29:11 - Jugador registrado en init: first, total: 1
+2025-03-24 19:29:11 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:29:11 - Jugador registrado en init: second, total: 2
+2025-03-24 19:29:11 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:29:11 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:29:17 - Jugador desconectado: second, total: 1
+2025-03-24 19:29:17 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:29:17 - Jugador registrado en init: second, total: 2
+2025-03-24 19:29:17 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:29:20 - Jugador desconectado: first, total: 1
+2025-03-24 19:29:20 - Reasignado rol 'first' a specific..inmemory!mEUOTNLXzYwe
+2025-03-24 19:29:20 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:29:20 - Jugador registrado en init: second, total: 2
+2025-03-24 19:29:21 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:29:22 - Jugador desconectado: first, total: 1
+2025-03-24 19:29:22 - Reasignado rol 'first' a specific..inmemory!CVsIycMxWFiI
+2025-03-24 19:29:22 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:29:22 - Jugador registrado en init: second, total: 2
+2025-03-24 19:29:22 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:29:25 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:29:26 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:29:53 - Jugador desconectado: first, total: 1
+2025-03-24 19:29:53 - Reasignado rol 'first' a specific..inmemory!PrCTwalNIlCu
+2025-03-24 19:29:54 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:29:54 - Jugador registrado en init: second, total: 2
+2025-03-24 19:29:54 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:29:56 - Jugador desconectado: first, total: 1
+2025-03-24 19:29:56 - Reasignado rol 'first' a specific..inmemory!XfsCVwmrGOOz
+2025-03-24 19:29:56 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:29:56 - Jugador registrado en init: second, total: 2
+2025-03-24 19:29:56 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:29:58 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:29:59 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:30:31 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:30:31 - Jugador registrado en init: second, total: 3
+2025-03-24 19:30:31 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:30:36 - Jugador desconectado: first, total: 2
+2025-03-24 19:30:36 - Reasignado rol 'first' a specific..inmemory!HpvPOqRExkyt
+2025-03-24 19:30:37 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:30:37 - Jugador registrado en init: second, total: 3
+2025-03-24 19:30:37 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:30:39 - Jugador desconectado: first, total: 2
+2025-03-24 19:30:39 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:30:39 - Jugador inactivo detectado y eliminado: specific..inmemory!HpvPOqRExkyt
+2025-03-24 19:30:39 - Jugador registrado en init: first, total: 2
+2025-03-24 19:30:39 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:30:44 - Jugador desconectado: first, total: 1
+2025-03-24 19:30:44 - Reasignado rol 'first' a specific..inmemory!NsHdeSfmTshP
+2025-03-24 19:30:45 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:30:45 - Jugador registrado en init: second, total: 2
+2025-03-24 19:30:45 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:30:46 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:30:47 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:30:49 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:30:49 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:30:52 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:30:53 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:30:53 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:30:53 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:30:53 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:30:54 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:30:54 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:30:55 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:30:55 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:30:55 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:30:55 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:30:55 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:30:55 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:30:55 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:30:55 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:30:55 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:30:55 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:30:56 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:30:56 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:30:56 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:30:56 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:30:56 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:30:56 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:30:56 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:30:56 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:30:56 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:30:56 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:34:44 - Jugador desconectado: second, total: 1
+2025-03-24 19:34:44 - Jugador desconectado: first, total: 0
+2025-03-24 19:35:49 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:35:49 - Jugador registrado en init: first, total: 1
+2025-03-24 19:35:49 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:35:50 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:35:50 - Jugador registrado en init: second, total: 2
+2025-03-24 19:35:50 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:35:51 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:35:51 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:35:54 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:35:55 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:35:55 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:35:55 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:35:55 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:35:56 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:35:56 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:35:56 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:35:56 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:35:57 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:35:57 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:35:57 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:35:57 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:35:57 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:35:57 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:35:57 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:35:57 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:35:57 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:35:57 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:36:48 - Jugador desconectado: second, total: 1
+2025-03-24 19:36:48 - Jugador desconectado: first, total: 0
+2025-03-24 19:37:09 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:37:09 - Jugador registrado en init: first, total: 1
+2025-03-24 19:37:09 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:37:09 - Jugador registrado en init: second, total: 2
+2025-03-24 19:37:09 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:37:09 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:37:10 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:37:11 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:37:12 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:37:13 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:37:13 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:37:13 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:37:13 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:37:14 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:37:14 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:37:15 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:38:33 - Jugador desconectado: second, total: 1
+2025-03-24 19:38:33 - Jugador desconectado: first, total: 0
+2025-03-24 19:38:40 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:38:40 - Jugador registrado en init: first, total: 1
+2025-03-24 19:38:40 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:38:41 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:38:41 - Jugador registrado en init: second, total: 2
+2025-03-24 19:38:41 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:38:41 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:38:42 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:38:44 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:38:44 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:38:44 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:38:44 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:38:46 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:38:46 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:38:47 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:38:47 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:38:47 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:38:47 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:38:48 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:38:48 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:38:48 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:38:48 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:38:49 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:38:49 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:38:50 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:38:50 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:38:50 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:38:50 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:38:51 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:38:51 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:38:52 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:38:52 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:38:53 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:38:53 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:38:55 - Jugador desconectado: first, total: 1
+2025-03-24 19:38:55 - Reasignado rol 'first' a specific..inmemory!sySZCQZnxMRE
+2025-03-24 19:38:56 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:38:56 - Jugador registrado en init: second, total: 2
+2025-03-24 19:38:56 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:38:56 - Jugador desconectado: first, total: 1
+2025-03-24 19:38:56 - Reasignado rol 'first' a specific..inmemory!nFeUKbVYBMpv
+2025-03-24 19:38:57 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:38:57 - Jugador registrado en init: second, total: 2
+2025-03-24 19:38:57 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:38:57 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:38:59 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:39:02 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:39:02 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:39:03 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:39:03 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:39:03 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:39:03 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:39:03 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:39:04 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:39:04 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:39:06 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:39:06 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:39:06 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:39:07 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:39:07 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:39:07 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:39:07 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:39:08 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:39:08 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:39:08 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:39:08 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:39:08 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:39:08 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:39:08 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:39:09 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:39:09 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:39:09 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:39:09 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:39:10 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:39:10 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:39:10 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:39:10 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:39:11 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:39:11 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:39:11 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:39:41 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:39:41 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:39:46 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:39:47 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:39:54 - Jugador desconectado: first, total: 1
+2025-03-24 19:39:54 - Reasignado rol 'first' a specific..inmemory!MtcBUHwZxlZE
+2025-03-24 19:39:55 - Jugador desconectado: first, total: 0
+2025-03-24 19:39:56 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:39:56 - Jugador registrado en init: first, total: 1
+2025-03-24 19:39:56 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:39:56 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:39:56 - Jugador registrado en init: second, total: 2
+2025-03-24 19:39:56 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:40:02 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:40:03 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:40:06 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:40:06 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:40:08 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:40:08 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:40:08 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:40:08 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:40:09 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:40:09 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:40:10 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:40:10 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:40:10 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:40:10 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:41:46 - Jugador desconectado: first, total: 1
+2025-03-24 19:41:46 - Reasignado rol 'first' a specific..inmemory!EgKBJOmprWyx
+2025-03-24 19:41:48 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:41:48 - Jugador registrado en init: second, total: 2
+2025-03-24 19:41:48 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:41:48 - Jugador desconectado: first, total: 1
+2025-03-24 19:41:48 - Reasignado rol 'first' a specific..inmemory!mPVmXehpVQLw
+2025-03-24 19:41:49 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:41:49 - Jugador registrado en init: second, total: 2
+2025-03-24 19:41:49 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:41:51 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:41:52 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:41:55 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:41:55 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:42:00 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:42:00 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:42:01 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:42:01 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:44:03 - Jugador desconectado: first, total: 1
+2025-03-24 19:44:03 - Reasignado rol 'first' a specific..inmemory!ogLQFKLncmmH
+2025-03-24 19:44:03 - Jugador desconectado: first, total: 0
+2025-03-24 19:44:04 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:44:04 - Jugador registrado en init: first, total: 1
+2025-03-24 19:44:04 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:44:04 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:44:04 - Jugador registrado en init: second, total: 2
+2025-03-24 19:44:04 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:44:08 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:44:09 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:44:11 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:44:11 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:44:12 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:44:12 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:44:15 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:44:16 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:44:17 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:44:17 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:44:19 - Jugador desconectado: first, total: 1
+2025-03-24 19:44:19 - Reasignado rol 'first' a specific..inmemory!UAowUJAdbpqX
+2025-03-24 19:44:20 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:44:20 - Jugador registrado en init: second, total: 2
+2025-03-24 19:44:20 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:44:20 - Jugador desconectado: first, total: 1
+2025-03-24 19:44:20 - Reasignado rol 'first' a specific..inmemory!mLGbOXmzyFvM
+2025-03-24 19:44:20 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:44:20 - Jugador registrado en init: second, total: 2
+2025-03-24 19:44:21 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:44:21 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:44:22 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-24 19:44:23 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:44:23 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:44:24 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:44:24 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:44:25 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:44:25 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:44:25 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:44:25 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:44:25 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:44:25 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:44:25 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:44:25 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:44:25 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:44:25 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:44:25 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:44:26 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:44:27 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:44:27 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:44:27 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:44:29 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-24 19:44:29 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:44:30 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-24 19:44:30 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:44:33 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:44:33 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:44:36 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:44:44 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:44:44 - Jugador registrado en init: first, total: 3
+2025-03-24 19:44:44 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:44:45 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:44:45 - Jugador registrado en init: second, total: 4
+2025-03-24 19:44:45 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:44:46 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:44:46 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-24 19:44:48 - Jugador desconectado: first, total: 3
+2025-03-24 19:44:50 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:44:50 - Jugador inactivo detectado y eliminado: specific..inmemory!mLGbOXmzyFvM
+2025-03-24 19:44:50 - Jugador registrado en init: first, total: 3
+2025-03-24 19:44:50 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:44:51 - Jugador desconectado: first, total: 2
+2025-03-24 19:44:51 - Reasignado rol 'first' a specific..inmemory!hYmbohDYvcDn
+2025-03-24 19:44:52 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:44:52 - Jugador registrado en init: second, total: 3
+2025-03-24 19:44:52 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:44:54 - Jugador desconectado: second, total: 2
+2025-03-24 19:44:55 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:44:55 - Jugador registrado en init: second, total: 3
+2025-03-24 19:44:55 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:44:58 - Jugador desconectado: second, total: 2
+2025-03-24 19:44:59 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:44:59 - Jugador registrado en init: second, total: 3
+2025-03-24 19:44:59 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:45:03 - Jugador desconectado: first, total: 2
+2025-03-24 19:45:03 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:45:03 - Jugador inactivo detectado y eliminado: specific..inmemory!hYmbohDYvcDn
+2025-03-24 19:45:03 - Jugador registrado en init: first, total: 2
+2025-03-24 19:45:03 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:45:06 - Jugador desconectado: first, total: 1
+2025-03-24 19:45:06 - Reasignado rol 'first' a specific..inmemory!wKRdzYtplLVp
+2025-03-24 19:45:06 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:45:06 - Jugador registrado en init: second, total: 2
+2025-03-24 19:45:06 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:45:07 - Jugador desconectado: second, total: 1
+2025-03-24 19:45:08 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:45:08 - Jugador registrado en init: second, total: 2
+2025-03-24 19:45:08 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:45:09 - Jugador desconectado: second, total: 1
+2025-03-24 19:45:09 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:45:09 - Jugador registrado en init: second, total: 2
+2025-03-24 19:45:09 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:45:10 - Jugador desconectado: first, total: 1
+2025-03-24 19:45:10 - Reasignado rol 'first' a specific..inmemory!xPHNKLjHiSdr
+2025-03-24 19:45:11 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:45:11 - Jugador registrado en init: second, total: 2
+2025-03-24 19:45:11 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:45:14 - Jugador desconectado: first, total: 1
+2025-03-24 19:45:14 - Reasignado rol 'first' a specific..inmemory!PJsFnTsLYYgx
+2025-03-24 19:45:14 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:45:14 - Jugador registrado en init: second, total: 2
+2025-03-24 19:45:14 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:45:21 - Jugador desconectado: first, total: 1
+2025-03-24 19:45:21 - Reasignado rol 'first' a specific..inmemory!MhdeFAfxFlpM
+2025-03-24 19:45:22 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:45:22 - Jugador registrado en init: second, total: 2
+2025-03-24 19:45:22 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:45:24 - Jugador desconectado: second, total: 1
+2025-03-24 19:45:25 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:45:25 - Jugador registrado en init: second, total: 2
+2025-03-24 19:45:25 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:45:27 - Jugador desconectado: second, total: 1
+2025-03-24 19:45:28 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:45:28 - Jugador registrado en init: second, total: 2
+2025-03-24 19:45:28 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:45:30 - Jugador desconectado: first, total: 1
+2025-03-24 19:45:30 - Reasignado rol 'first' a specific..inmemory!UviHykIeRfxV
+2025-03-24 19:45:31 - Jugador desconectado: first, total: 0
+2025-03-24 19:45:32 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:45:32 - Jugador registrado en init: first, total: 1
+2025-03-24 19:45:32 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:45:34 - Jugador desconectado: first, total: 0
+2025-03-24 19:45:35 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:45:35 - Jugador registrado en init: first, total: 1
+2025-03-24 19:45:35 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:45:39 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:45:39 - Jugador registrado en init: second, total: 2
+2025-03-24 19:45:39 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:45:44 - Jugador desconectado: second, total: 1
+2025-03-24 19:45:44 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:45:44 - Jugador registrado en init: second, total: 2
+2025-03-24 19:45:44 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:45:47 - Jugador desconectado: second, total: 1
+2025-03-24 19:45:47 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:45:47 - Jugador registrado en init: second, total: 2
+2025-03-24 19:45:47 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:45:50 - Jugador desconectado: first, total: 1
+2025-03-24 19:45:50 - Reasignado rol 'first' a specific..inmemory!eQuCDfPaGxer
+2025-03-24 19:45:51 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:45:51 - Jugador registrado en init: second, total: 2
+2025-03-24 19:45:51 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:45:53 - Jugador desconectado: first, total: 1
+2025-03-24 19:45:53 - Reasignado rol 'first' a specific..inmemory!gWSfpQnALPNS
+2025-03-24 19:45:54 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:45:54 - Jugador registrado en init: second, total: 2
+2025-03-24 19:45:54 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:45:56 - Jugador desconectado: second, total: 1
+2025-03-24 19:45:56 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:45:56 - Jugador registrado en init: second, total: 2
+2025-03-24 19:45:57 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:45:58 - Jugador desconectado: first, total: 1
+2025-03-24 19:45:58 - Reasignado rol 'first' a specific..inmemory!OlQUXysAnVbw
+2025-03-24 19:45:59 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:45:59 - Jugador registrado en init: second, total: 2
+2025-03-24 19:45:59 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:46:02 - Jugador desconectado: first, total: 1
+2025-03-24 19:46:02 - Reasignado rol 'first' a specific..inmemory!dFjzwcFehkJo
+2025-03-24 19:46:02 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:46:02 - Jugador registrado en init: second, total: 2
+2025-03-24 19:46:02 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:46:07 - Jugador desconectado: second, total: 1
+2025-03-24 19:46:07 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:46:07 - Jugador registrado en init: second, total: 2
+2025-03-24 19:46:07 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:46:10 - Jugador desconectado: first, total: 1
+2025-03-24 19:46:10 - Reasignado rol 'first' a specific..inmemory!cZqWlHxDjPfv
+2025-03-24 19:46:11 - Mensaje recibido: {'type': 'init'}
+2025-03-24 19:46:11 - Jugador registrado en init: second, total: 2
+2025-03-24 19:46:11 - Mensaje recibido: {'type': 'get_role'}
+2025-03-24 19:46:19 - Jugador desconectado: second, total: 1
+2025-03-24 19:46:19 - Jugador desconectado: first, total: 0

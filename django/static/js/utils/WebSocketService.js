@@ -8,7 +8,8 @@ class WebSocketService {
     }
 
     connect() {
-        this.ws = new WebSocket('ws://your-server-url');
+		const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
+        this.ws = new WebSocket(protocol + window.location.host + "/ws/game/");
         this.ws.onopen = () => console.log('WebSocket connected');
         this.ws.onmessage = (event) => this.handleMessage(event.data);
         this.ws.onclose = () => this.handleClose();

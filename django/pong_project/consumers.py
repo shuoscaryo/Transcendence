@@ -23,35 +23,6 @@ class PongConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
 
-        if self.room_name not in self.active_players:
-            self.active_players[self.room_name] = []
-        players = self.active_players[self.room_name]
-
-        # Limpiar jugadores inactivos
-        active_players = []
-        for player in players:
-            try:
-                await player.send(text_data=json.dumps({'ping': True}))
-                active_players.append(player)
-            except:
-                logger.info(f"Jugador inactivo detectado y eliminado: {player.channel_name}")
-        players[:] = active_players
-
-        # Añadir el nuevo jugador
-        players.append(self)
-
-        # Asignar roles dinámicamente
-        first_player_exists = any(p.role == 'first' for p in players if p != self)
-        self.role = 'first' if not first_player_exists else 'second'
-
-        await self.send(text_data=json.dumps({
-			'type': 'initial_status',
-			'initial_status': self.role,
-			'players_connected': len(players)
-		}))
-
-        logger.info(f"Jugador conectado: {self.role}, total: {len(players)}")
-
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
@@ -80,27 +51,59 @@ class PongConsumer(AsyncWebsocketConsumer):
             if not first_player_exists:
                 players[0].role = 'first'
                 await players[0].send(text_data=json.dumps({
-					'type': 'initial_status',
-					'initial_status': 'first',
-					'players_connected': len(players)
-				}))
+                    'type': 'initial_status',
+                    'initial_status': 'first',
+                    'players_connected': len(players)
+                }))
                 logger.info(f"Reasignado rol 'first' a {players[0].channel_name}")
 
     async def receive(self, text_data):
         data = json.loads(text_data)
         logger.info(f"Mensaje recibido: {data}")
 
-        if data.get("type") == "move":
+        if data.get("type") == "init":
+            if self.room_name not in self.active_players:
+                self.active_players[self.room_name] = []
+            players = self.active_players[self.room_name]
+
+            # Limpiar jugadores inactivos
+            active_players = []
+            for player in players:
+                try:
+                    await player.send(text_data=json.dumps({'ping': True}))
+                    active_players.append(player)
+                except:
+                    logger.info(f"Jugador inactivo detectado y eliminado: {player.channel_name}")
+            players[:] = active_players
+
+            # Añadir el nuevo jugador
+            players.append(self)
+
+            # Asignar roles dinámicamente
+            first_player_exists = any(p.role == 'first' for p in players if p != self)
+            self.role = 'first' if not first_player_exists else 'second'
+
+            logger.info(f"Jugador registrado en init: {self.role}, total: {len(players)}")
+
+        elif data.get("type") == "get_role":
+            players = self.active_players.get(self.room_name, [])
+            await self.send(text_data=json.dumps({
+                'type': 'initial_status',
+                'initial_status': self.role,
+                'players_connected': len(players)
+            }))
+
+        elif data.get("type") == "move":
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
-                    'type': 'game_message',
+                    'type': 'player_move',
                     'move': data['move'],
                     'sender': self.channel_name
                 }
             )
 
-        if data.get("type") == "player_ready":
+        elif data.get("type") == "player_ready":
             self.ready_players[self.room_name] = self.ready_players.get(self.room_name, [])
             ready_players = self.ready_players[self.room_name]
 
@@ -111,28 +114,28 @@ class PongConsumer(AsyncWebsocketConsumer):
                 await self.channel_layer.group_send(
                     self.room_group_name,
                     {
-                        'type': 'start_game',
+                        'type': 'game_message',
                         'message': 'Ambos jugadores están listos. ¡El juego comienza!'
                     }
                 )
-                # Limpiar lista de ready
                 self.ready_players[self.room_name] = []
 
     async def game_message(self, event):
-        if event['sender'] != self.channel_name:
-            await self.send(text_data=json.dumps({
-                'move': event['move']
-            }))
-            logger.info(f"Movimiento reenviado: {event['move']}")
-
-    async def start_game(self, event):
         await self.send(text_data=json.dumps({
-            'start': True,
-            'message': event['message']
+            'type': 'start_game',
+            'message': event.get('message'),
+            'move': event.get('move')
         }))
 
     async def waiting_message(self, event):
         await self.send(text_data=json.dumps({
-            'waiting': True,
+            'type': 'espera',
             'message': event['message']
         }))
+
+    async def player_move(self, event):
+    	await self.send(text_data=json.dumps({
+        	'type': 'move_p',
+        	'move': event.get('move'),
+        	'sender': event.get('sender')
+    	}))
