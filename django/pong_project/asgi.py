@@ -8,7 +8,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pong_project.settings')
 
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),
-    "websocket": AuthMiddlewareStack(  # 👈 envolver aquí
+    "websocket": AuthMiddlewareStack(
         URLRouter(websocket_urlpatterns)
     ),
 })

@@ -205,6 +205,7 @@ class PongConsumer(AsyncWebsocketConsumer):
         '''
         if 'msg_type' not in message:
             raise ValueError("Forgot your 'msg_type' in the message ;)")
+        # TODO If I'm in the same group, I don't need to send the message to myself
         message_to_send = message.copy()
         message_to_send.pop('type', None)
         await self.send(text_data=json.dumps(message_to_send))

@@ -1,4 +1,3 @@
-// /static/js/utils/WebSocketService.js
 class WebSocketService {
     constructor() {
         this.ws = null;
