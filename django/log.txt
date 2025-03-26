@@ -2195,3 +2195,170 @@
 2025-03-24 19:46:11 - Mensaje recibido: {'type': 'get_role'}
 2025-03-24 19:46:19 - Jugador desconectado: second, total: 1
 2025-03-24 19:46:19 - Jugador desconectado: first, total: 0
+2025-03-26 14:24:00 - Mensaje recibido: {'type': 'init'}
+2025-03-26 14:24:00 - Jugador registrado en init: first, total: 1
+2025-03-26 14:24:00 - Mensaje recibido: {'type': 'get_role'}
+2025-03-26 14:24:14 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-26 14:24:15 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-26 14:24:20 - Mensaje recibido: {'type': 'init'}
+2025-03-26 14:24:20 - Jugador registrado en init: second, total: 2
+2025-03-26 14:24:20 - Mensaje recibido: {'type': 'get_role'}
+2025-03-26 14:24:21 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-26 14:24:26 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:26 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-26 14:24:26 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:27 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-26 14:24:27 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:24:27 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:24:27 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:24:27 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-26 14:24:28 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:28 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:28 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:28 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:28 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:28 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:28 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:28 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:28 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:28 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:28 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:28 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:28 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:29 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:29 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-26 14:24:29 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:24:29 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:24:29 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:24:29 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:24:29 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:24:29 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:24:29 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:24:29 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:24:29 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:24:29 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:24:30 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:24:30 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:24:30 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:24:30 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-26 14:24:30 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:30 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:30 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:30 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:30 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:30 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:30 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:31 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:31 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:31 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:31 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:31 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:31 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:31 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:31 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:31 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:31 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:31 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:31 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:31 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-26 14:24:31 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:24:32 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:24:32 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:24:32 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-26 14:24:32 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:24:32 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:24:33 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:24:33 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-26 14:24:33 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:34 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:34 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:34 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:34 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:34 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:24:34 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-26 14:24:40 - Jugador desconectado: second, total: 1
+2025-03-26 14:24:40 - Jugador desconectado: first, total: 0
+2025-03-26 14:29:52 - Mensaje recibido: {'type': 'init'}
+2025-03-26 14:29:52 - Jugador registrado en init: first, total: 1
+2025-03-26 14:29:52 - Mensaje recibido: {'type': 'get_role'}
+2025-03-26 14:29:54 - Mensaje recibido: {'type': 'init'}
+2025-03-26 14:29:54 - Jugador registrado en init: second, total: 2
+2025-03-26 14:29:54 - Mensaje recibido: {'type': 'get_role'}
+2025-03-26 14:29:55 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-26 14:29:56 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-26 14:29:59 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:29:59 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:29:59 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:29:59 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:29:59 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:29:59 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-26 14:30:00 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:30:00 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:30:00 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:30:00 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:30:00 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:30:00 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:30:00 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:30:00 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:30:00 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:30:00 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:30:00 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-26 14:30:01 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:30:01 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-26 14:30:02 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:30:02 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-26 14:30:03 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:30:03 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-26 14:30:03 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:30:04 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:30:04 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:30:04 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:30:04 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:30:04 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:30:04 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:30:04 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-26 14:30:04 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:30:05 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:30:05 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:30:05 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:30:05 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:30:05 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:30:05 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:30:05 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:30:05 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:30:05 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:30:05 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-26 14:30:26 - Jugador desconectado: second, total: 1
+2025-03-26 14:30:26 - Jugador desconectado: first, total: 0
+2025-03-26 14:40:14 - Mensaje recibido: {'type': 'init'}
+2025-03-26 14:40:14 - Jugador registrado en init: first, total: 1
+2025-03-26 14:40:14 - Mensaje recibido: {'type': 'get_role'}
+2025-03-26 14:40:14 - Mensaje recibido: {'type': 'init'}
+2025-03-26 14:40:14 - Jugador registrado en init: second, total: 2
+2025-03-26 14:40:14 - Mensaje recibido: {'type': 'get_role'}
+2025-03-26 14:40:15 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-26 14:40:16 - Mensaje recibido: {'type': 'player_ready', 'ready': True}
+2025-03-26 14:40:18 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:40:18 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-26 14:40:19 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:40:19 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-26 14:40:19 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:40:20 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-26 14:40:20 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:40:20 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-26 14:40:20 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:40:20 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-26 14:40:21 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:40:21 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:40:21 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:40:21 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:40:21 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:40:21 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-26 14:40:22 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:40:22 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-26 14:40:24 - Mensaje recibido: {'type': 'move', 'move': 1}
+2025-03-26 14:40:24 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-26 14:40:24 - Mensaje recibido: {'type': 'move', 'move': -1}
+2025-03-26 14:40:25 - Mensaje recibido: {'type': 'move', 'move': 0}
+2025-03-26 14:40:29 - Jugador desconectado: second, total: 1
+2025-03-26 14:40:29 - Jugador desconectado: first, total: 0
