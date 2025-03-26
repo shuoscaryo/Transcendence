@@ -30,8 +30,8 @@ class PongConsumer(AsyncWebsocketConsumer):
             await self.update_online_status(True)
 
     async def disconnect(self, close_code):
-        #if hasattr(self, 'errorClose') and self.errorClose:
-        #    return
+        if hasattr(self, 'errorClose') and self.errorClose:
+            return
     # Online Match management
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
@@ -199,7 +199,7 @@ class PongConsumer(AsyncWebsocketConsumer):
     
     async def normal_send(self, message):
         '''
-            This method is used to send messages to the user's room.
+            This method is used to send messages to the user's frontend.
             If it's the type of group_send, every user in the room will receive the message.
         '''
         if 'msg_type' not in message:
