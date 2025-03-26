@@ -160,11 +160,12 @@ class PongConsumer(AsyncWebsocketConsumer):
         }))
 
     async def player_move(self, event):
+        if event.get('sender') == self.channel_name:
+            return  # No se lo mandes a quien lo envió
         await self.send(text_data=json.dumps({
-            'msg_type': 'move_p',
-            'move': event.get('move'),
-            'sender': event.get('sender')
-        }))
+			'type': 'move_p',
+			'move': event.get('move'),
+		}))
 
     async def update_online_status(self, is_online):
         if is_online:
