@@ -130,7 +130,7 @@ class WebSocketService {
     // Send a message
     send(msg_type, data = {}) {
         console.log(`WSS send: ${msg_type}`); //XXX
-        if (this.ws.readyState === WebSocket.OPEN) {
+        if (this.isConnected()) {
             this.ws.send(JSON.stringify({ msg_type, ...data }));
         } else {
             console.warn('WebSocket not open, message dropped:', { msg_type, ...data });

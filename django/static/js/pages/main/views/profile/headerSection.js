@@ -22,8 +22,6 @@ export default function getProfileHeaderSection(profile) {
     // component userDiv userInfo randomData
     const joined = newElement('p', {parent: randomData});
     joined.innerHTML = `<b>Joined:</b> ${profile.date_joined}`;
-    const lastOnline = newElement('p', {parent: randomData});
-    lastOnline.innerHTML = `<b>Last online:</b> ${profile.last_online}`;
 
     // component
     const searchAnotherUser = newElement('div', {id: 'search-another-user', parent: component});

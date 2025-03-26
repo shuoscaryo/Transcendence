@@ -14,21 +14,29 @@ function getUserInfoDiv(friend) {
     const username = newElement('span', { parent: usernameDiv, classList: ['username', 'bold'] });
     username.textContent = friend.username;
     const lastOnline = newElement('p', { parent: usernameDiv, classList: ['last-online'] });
-    if (friend.is_online)
+    if (friend.is_online) {
         lastOnline.textContent = 'Online';
-    else if (friend.last_online)
+        lastOnline.style.color = 'var(--color-lime)';
+    } else if (friend.last_online) {
         lastOnline.textContent = `Last online: ${friend.last_online}`;
-    else
+        lastOnline.style.color = '';
+    } else {
         lastOnline.textContent = 'Offline';
+        lastOnline.style.color = '';
+    }
     WebSocketService.addViewCallback('online_status', (message) => {
         if (message.username !== friend.username)
             return;
-        if (message.is_online)
+        if (message.is_online) {
             lastOnline.textContent = 'Online';
-        else if (message.last_online)
+            lastOnline.style.color = 'var(--color-lime)';
+        } else if (message.last_online) {
             lastOnline.textContent = `Last online: ${message.last_online}`;
-        else
+            lastOnline.style.color = '';
+        } else {
             lastOnline.textContent = 'Offline';
+            lastOnline.style.color = '';
+        }
     })
     return component;
 }

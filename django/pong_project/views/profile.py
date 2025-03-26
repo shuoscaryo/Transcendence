@@ -15,7 +15,7 @@ def get_profile(username):
             'losses': user.losses,
             'profile_photo': user.profile_photo.url if user.profile_photo else '',
             'friends': list(user.friends.values_list('username', flat=True)),
-            'date_joined': user.date_joined.strftime('%Y-%m-%d %H:%M:%S')
+            'date_joined': user.date_joined,
         }
         return JsonResponse(profile)
     except CustomUser.DoesNotExist:
