@@ -2195,3 +2195,14 @@
 2025-03-24 19:46:11 - Mensaje recibido: {'type': 'get_role'}
 2025-03-24 19:46:19 - Jugador desconectado: second, total: 1
 2025-03-24 19:46:19 - Jugador desconectado: first, total: 0
+User connected: shuoscaryo
+User connected: shuoscaryo
+Online users: {'shuoscaryo'}
+User connected: nacho
+Online users: {'shuoscaryo', 'nacho'}
+User connected: nacho
+Online users: {'nacho'}
+User connected: shuoscaryo
+Online users: {'shuoscaryo', 'nacho'}
+User connected: shuoscaryo
+Online users: {'shuoscaryo'}

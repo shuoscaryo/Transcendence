@@ -44,7 +44,7 @@ export default async function getView(isLogged, path) {
 
 		WebSocketService.send("init");
 		WebSocketService.send("get_role");
-		WebSocketService.onView("initial_status", (message) => {
+		WebSocketService.addViewCallback("initial_status", (message) => {
 			playerRole = message.initial_status;
 			console.log(`Soy el jugador: ${playerRole}, conectados: ${message.players_connected}`);
 			gameStarted = false;
@@ -63,7 +63,7 @@ export default async function getView(isLogged, path) {
 			component.append(startButton);
 		}
 		
-		WebSocketService.onView("start_game", (message) => {
+		WebSocketService.addViewCallback("start_game", (message) => {
 			if (gameStarted)
 				return;
 			if (!playerRole) {

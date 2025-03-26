@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils import timezone
 
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
@@ -7,6 +8,7 @@ class CustomUser(AbstractUser):
     losses = models.IntegerField(default=0)
     profile_photo = models.ImageField(upload_to='profile_photos/', default='profile_photos/default.jpg')
     friends = models.ManyToManyField('self', blank=True)
+    last_online = models.DateTimeField(default=timezone.now)
 
 class MatchHistory(models.Model):
     playerLeft = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='match_history_as_player_left')

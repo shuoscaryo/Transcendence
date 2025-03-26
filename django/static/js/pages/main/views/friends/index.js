@@ -4,6 +4,7 @@ import Path from '/static/js/utils/Path.js';
 import { navigate } from '/static/js/utils/router.js';
 import request from '/static/js/utils/request.js';
 import { usernameOk } from '/static/js/utils/validators.js';
+import WebSocketService from '/static/js/utils/WebSocketService.js';
 
 function getUserInfoDiv(friend) {
     const component = newElement('div', { classList: ['user-info'] });
@@ -11,15 +12,24 @@ function getUserInfoDiv(friend) {
     userImage.src = friend.profile_photo;
     const usernameDiv = newElement('div', { parent: component, classList: ['username-div'] });
     const username = newElement('span', { parent: usernameDiv, classList: ['username', 'bold'] });
-    const lastOnline = newElement('p', { parent: usernameDiv, classList: ['last-online'] });
-    const lastOnlineText = newElement('span', { parent: lastOnline });
-    lastOnlineText.textContent = "Last online: ";
-    const lastOnlineSpan = newElement('span', { parent: lastOnline, id: 'last-online-text' });
-    <p class="text-sm text-gray-500">
-        <span>Last online: </span>
-    <span id="last-online-text">Now</span>
-    </p>
     username.textContent = friend.username;
+    const lastOnline = newElement('p', { parent: usernameDiv, classList: ['last-online'] });
+    if (friend.is_online)
+        lastOnline.textContent = 'Online';
+    else if (friend.last_online)
+        lastOnline.textContent = `Last online: ${friend.last_online}`;
+    else
+        lastOnline.textContent = 'Offline';
+    WebSocketService.addViewCallback('online_status', (message) => {
+        if (message.username !== friend.username)
+            return;
+        if (message.is_online)
+            lastOnline.textContent = 'Online';
+        else if (message.last_online)
+            lastOnline.textContent = `Last online: ${message.last_online}`;
+        else
+            lastOnline.textContent = 'Offline';
+    })
     return component;
 }
 
@@ -189,47 +199,31 @@ async function getRequestSection() {
 }
 
 async function getFriendListSection() {
-    // Create the main section component
-    const component = newElement('section', { classList: ['section-block'], id: 'friend-list-section' });
+    const component = newElement('section', {classList: ['section-block'], id: 'friend-list-section'});
     
-    // Create search input with limited parameters
-    const inputSearchUser = newElement('input', { 
-        parent: component, 
-        id: 'search-friend'
-    });
+    const inputSearchUser = newElement('input', {parent: component, id: 'search-friend'});
     inputSearchUser.type = 'text';
     inputSearchUser.placeholder = 'Search friend';
     
-    // Create container for the friends list
-    const friendListDiv = newElement('div', { 
-        parent: component, 
-        classList: ['friends-list'], 
-        id: 'friend-list-div' 
-    });
+    const friendListDiv = newElement('div', { parent: component, classList: ['friends-list'], id: 'friend-list-div'});
 
     // Fetch initial friends list from API
     let friendsList = [];
     const response = await request('GET', Path.API.GET_FRIENDS);
-    
-    if (response.status === 200) {
-        friendsList = response.data.friends || [];
-        console.log('Initial friends list:', friendsList); // Debug: check if we get friends
-    } else {
-        console.log('API request failed with status:', response.status); // Debug: check API failure
+    if (response.status === 200)
+        friendsList = response.data.friends;
+    else {
+        const error = newElement('div', {parent: friendListDiv, id: 'no-friends'});
+        error.textContent = "Error fetching friends";
     }
 
     // Function to update the displayed friends list based on search term
     function updateFriendList(searchTerm = '') {
-        // Clear the current container content
         friendListDiv.innerHTML = '';
-        console.log('Search term:', searchTerm); // Debug: verify search term
         
-        // Handle case when there are no friends at all
+        // Show message if no friends
         if (!friendsList || friendsList.length === 0) {
-            const noFriends = newElement('div', { 
-                parent: friendListDiv, 
-                id: 'no-friends' 
-            });
+            const noFriends = newElement('div', {parent: friendListDiv, id: 'no-friends' });
             noFriends.textContent = "No friends yet";
             return;
         }
@@ -237,11 +231,8 @@ async function getFriendListSection() {
         // Filter friends based on the search term (case-insensitive)
         const filteredFriends = friendsList.filter(friend => {
             const matches = friend.username.toLowerCase().includes(searchTerm.toLowerCase());
-            console.log(`Checking ${friend.username} against ${searchTerm}: ${matches}`); // Debug: verify filtering
             return matches;
         });
-
-        console.log('Filtered friends:', filteredFriends); // Debug: check filtered results
 
         // Show message if no matches found with search term
         if (filteredFriends.length === 0 && searchTerm) {
@@ -251,15 +242,9 @@ async function getFriendListSection() {
             });
             noMatch.textContent = "No matching friends found";
         } else if (filteredFriends.length > 0) {
-            // Display all filtered friends
             filteredFriends.forEach(friend => {
-                try {
-                    const friendRow = getFriendRow(friend);
-                    console.log('Appending friend:', friend.username); // Debug: verify each friend
-                    friendListDiv.appendChild(friendRow); // Use appendChild instead of append
-                } catch (error) {
-                    console.error('Error appending friend:', friend, error); // Debug: catch append errors
-                }
+                const friendRow = getFriendRow(friend);
+                friendListDiv.append(friendRow);
             });
         } else {
             // Show all friends when search is empty and there are friends
@@ -278,15 +263,6 @@ async function getFriendListSection() {
         const searchTerm = e.target.value.trim();
         updateFriendList(searchTerm);
     });
-
-    // Handle initial API error case
-    if (response.status !== 200) {
-        const error = newElement('div', { 
-            parent: friendListDiv, 
-            id: 'no-friends' 
-        });
-        error.textContent = "Error fetching friends";
-    }
 
     return component;
 }

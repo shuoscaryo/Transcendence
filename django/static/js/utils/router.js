@@ -62,12 +62,15 @@ async function getComponentFromUrl(url, isLogged, path) {
 }
 
 async function loadPage(path, isLogged) {
+    console.log(`[ROUTER] Loading page: ${path}`); //XXX
     // Split the path into parts
     path = parsePath(path);
     if (path.prefix !== 'pages')
         return {status: 404};
     
     // Load the page
+    WebSocketService.clearPageListeners(); // NOTE | This is temporarly here so the listeners are not deleted after loading them in
+    WebSocketService.clearViewListeners(); // NOTE | getComponentFromUrl, but it should be so the listeners are only cleared if the import is successful
     const pagePath = Path.page(path.page, 'index.js');
     const pageImport = await getComponentFromUrl(pagePath, isLogged, path);
     if (pageImport.status !== 200)
@@ -99,7 +102,6 @@ async function loadPage(path, isLogged) {
     
     // - Load the css
     if (current.page !== path.page) {
-        WebSocketService.clearPageListeners();
         css.deletePageCss();
         css.deleteViewCss();
         // Load view and page css at the same time
@@ -109,7 +111,6 @@ async function loadPage(path, isLogged) {
         ]);
     }
     else if (current.view !== path.view) {
-        WebSocketService.clearViewListeners();
         css.deleteViewCss();
         await css.loadViewCss(viewImport.css);
     }
@@ -138,8 +139,19 @@ function isErrorPage(path) {
     return !isNaN(number) && number >= 400 && number <= 599;
 }
 
-export async function router(reload=false) {
+export async function router() {
     const isLogged = await apiIsLogged();
+
+    // Connect or disconnect the WebSocket
+    if (isLogged) {
+        if (!WebSocketService.isConnected())
+            WebSocketService.connect();
+        // wait until connects
+        while (!WebSocketService.isConnected())
+            await new Promise(resolve => setTimeout(resolve, 100));
+    } else
+        WebSocketService.disconnect();
+    
     
     let path = window.location.pathname;
     if (path === '/' || path === '/home' || path === '/pages/main')
@@ -156,7 +168,7 @@ export async function router(reload=false) {
     else if (!isLogged && path.startsWith("/pages/user/"))
         return navigate('/login', true);
     
-    let result = await loadPage(path, isLogged, reload);
+    let result = await loadPage(path, isLogged);
     
     if (result.status === 200)
         return;
