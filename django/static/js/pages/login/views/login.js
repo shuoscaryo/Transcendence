@@ -119,7 +119,7 @@ function getUpperHalf() {
             if (response.status === 200) {
                 navigate('/pages/main/home');
             } else {
-                alert(result.error);
+                alert(response.error ? response.error : 'An error occurred');
             }
         },
     });

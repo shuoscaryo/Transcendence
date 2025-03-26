@@ -1,29 +1,38 @@
-# consumers.py
 from channels.generic.websocket import AsyncWebsocketConsumer
 import json
-import logging
 import asyncio
+from django.utils import timezone
+from asgiref.sync import sync_to_async
 
-logging.basicConfig(
-    filename='log.txt',
-    level=logging.INFO,
-    format='%(asctime)s - %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
-)
-logger = logging.getLogger(__name__)
+online_users = set()
 
 class PongConsumer(AsyncWebsocketConsumer):
     active_players = {}  # Diccionario para rastrear jugadores por sala
     ready_players = {}   # Diccionario para rastrear jugadores listos por sala
 
     async def connect(self):
+    # Accept the connection only if the user is authenticated
+        #if self.scope['user'].is_authenticated:
+        await self.accept()
+        #else:
+        #    self.errorClose = True
+        #    await self.close(code=403)
+        #    return
+        self.user = self.scope['user']
+
+    # Online Match management
         self.room_name = 'pong_room'
         self.room_group_name = f'game_{self.room_name}'
-
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
-        await self.accept()
+        
+    # Online-status management (Create a own room for each user)
+        if self.scope['user'].is_authenticated:
+            await self.update_online_status(True)
 
     async def disconnect(self, close_code):
+        #if hasattr(self, 'errorClose') and self.errorClose:
+        #    return
+    # Online Match management
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
         if self.room_name in self.active_players and self in self.active_players[self.room_name]:
@@ -35,7 +44,6 @@ class PongConsumer(AsyncWebsocketConsumer):
             ]
 
         players = self.active_players.get(self.room_name, [])
-        logger.info(f"Jugador desconectado: {self.role}, total: {len(players)}")
 
         if len(players) < 2:
             await self.channel_layer.group_send(
@@ -51,17 +59,43 @@ class PongConsumer(AsyncWebsocketConsumer):
             if not first_player_exists:
                 players[0].role = 'first'
                 await players[0].send(text_data=json.dumps({
-                    'type': 'initial_status',
+                    'msg_type': 'initial_status',
                     'initial_status': 'first',
                     'players_connected': len(players)
                 }))
-                logger.info(f"Reasignado rol 'first' a {players[0].channel_name}")
+        
+    # Online-status management
+        if self.scope['user'].is_authenticated:
+            await self.update_online_status(False)
 
     async def receive(self, text_data):
+        '''
+            This method is called when a message is received from the WebSocket.
+            The message is parsed as JSON and the 'msg_type' is used to call the corresponding handler.
+            To add a new message type, create a new method inside the class with the name <msg_type>_handler.
+        '''
+    # General message handling
         data = json.loads(text_data)
-        logger.info(f"Mensaje recibido: {data}")
 
-        if data.get("type") == "init":
+        # get the message type
+        msg_type = data.get("msg_type")
+        if not msg_type:
+            await self.send(text_data=json.dumps({'msg_type':  'error', 'message': 'Didn\'t receive a message type'}))
+            return
+
+        # Find and call the <msg_type>_handler method
+        handler_name = f"{msg_type}_handler"
+        handler = getattr(self, handler_name, None)
+        if handler and callable(handler):
+            await handler(data)
+        else:
+            # Don't send the error msg yet, delete the code below first
+            # TODO uncomment the line below and remove pass when function is cleaned up
+            #await self.send(text_data=json.dumps({'msg_type': 'error', 'message': f'Invalid message type {msg_type}'}))
+            pass
+    
+    # Online Match management
+        if msg_type == "init":
             if self.room_name not in self.active_players:
                 self.active_players[self.room_name] = []
             players = self.active_players[self.room_name]
@@ -69,11 +103,8 @@ class PongConsumer(AsyncWebsocketConsumer):
             # Limpiar jugadores inactivos
             active_players = []
             for player in players:
-                try:
-                    await player.send(text_data=json.dumps({'ping': True}))
-                    active_players.append(player)
-                except:
-                    logger.info(f"Jugador inactivo detectado y eliminado: {player.channel_name}")
+                await player.send(text_data=json.dumps({'msg_type': 'ping'}))
+                active_players.append(player)
             players[:] = active_players
 
             # Añadir el nuevo jugador
@@ -82,18 +113,14 @@ class PongConsumer(AsyncWebsocketConsumer):
             # Asignar roles dinámicamente
             first_player_exists = any(p.role == 'first' for p in players if p != self)
             self.role = 'first' if not first_player_exists else 'second'
-
-            logger.info(f"Jugador registrado en init: {self.role}, total: {len(players)}")
-
-        elif data.get("type") == "get_role":
+        elif msg_type == "get_role":
             players = self.active_players.get(self.room_name, [])
             await self.send(text_data=json.dumps({
-                'type': 'initial_status',
+                'msg_type': 'initial_status',
                 'initial_status': self.role,
                 'players_connected': len(players)
             }))
-
-        elif data.get("type") == "move":
+        elif msg_type == "move":
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
@@ -102,8 +129,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                     'sender': self.channel_name
                 }
             )
-
-        elif data.get("type") == "player_ready":
+        elif msg_type == "player_ready":
             self.ready_players[self.room_name] = self.ready_players.get(self.room_name, [])
             ready_players = self.ready_players[self.room_name]
 
@@ -122,21 +148,63 @@ class PongConsumer(AsyncWebsocketConsumer):
 
     async def game_message(self, event):
         await self.send(text_data=json.dumps({
-            'type': 'start_game',
+            'msg_type': 'start_game',
             'message': event.get('message'),
             'move': event.get('move')
         }))
 
     async def waiting_message(self, event):
         await self.send(text_data=json.dumps({
-            'type': 'espera',
+            'msg_type': 'espera',
             'message': event['message']
         }))
 
     async def player_move(self, event):
-          if event.get('sender') == self.channel_name:
-               return  # No se lo mandes a quien lo envió
-          await self.send(text_data=json.dumps({
+        if event.get('sender') == self.channel_name:
+            return  # No se lo mandes a quien lo envió
+        await self.send(text_data=json.dumps({
 			'type': 'move_p',
 			'move': event.get('move'),
 		}))
+
+    async def update_online_status(self, is_online):
+        if is_online:
+            # Add self to own room (alone)
+            await self.channel_layer.group_add(f'user_{self.user.username}', self.channel_name)
+            # Add user to online users set (to use in http response)
+            online_users.add(self.user.username)
+        else:
+            # Remove self from own room
+            await self.channel_layer.group_discard(f'user_{self.user.username}', self.channel_name)
+            # Remove user from online users set
+            online_users.discard(self.user.username)
+            self.user.last_online = timezone.now()
+            await sync_to_async(self.user.save)()
+        friend_list = await sync_to_async(lambda: list(self.user.friends.all()))()
+        last_online = self.user.last_online
+
+        tasks = [
+            self.channel_layer.group_send(
+                f'user_{friend.username}',
+                {
+                    'type': 'normal_send',
+                    'msg_type': 'online_status',
+                    'is_online': is_online,
+                    'username': self.user.username,
+                    'last_online': None if is_online else str(last_online)
+                }
+            )
+            for friend in friend_list
+        ]
+        await asyncio.gather(*tasks)
+    
+    async def normal_send(self, message):
+        '''
+            This method is used to send messages to the user's room.
+            If it's the type of group_send, every user in the room will receive the message.
+        '''
+        if 'msg_type' not in message:
+            raise ValueError("Forgot your 'msg_type' in the message ;)")
+        message_to_send = message.copy()
+        message_to_send.pop('type', None)
+        await self.send(text_data=json.dumps(message_to_send))

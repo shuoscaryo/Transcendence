@@ -33,6 +33,10 @@ export default class Path {
 
     };
 
+    static #WS_MSG = {
+        ONLINE_STATUS: 'online_status',
+    }
+
     constructor() {
         throw new Error('Path is a static class and cannot be instantiated.');
     }

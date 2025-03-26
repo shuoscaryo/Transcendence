@@ -30,7 +30,7 @@ def register(request):
             user = CustomUser.objects.create_user(username=username, password=password, email=email)
             django_login(request, user)
             request.session.save()
-            return JsonResponse({'message': 'User registered successfully'}, status=201)
+            return JsonResponse({'message': 'User registered successfully'}, status=200)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
 

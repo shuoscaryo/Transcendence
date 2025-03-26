@@ -4,79 +4,137 @@ class WebSocketService {
         this.ws = null;
         this.pageListeners = new Map(); // Listeners for page-level events
         this.viewListeners = new Map(); // Listeners for view-level events
-        this.connect();
+        this.specificListeners = new Map(); // Listeners for specific events
+        this.reconnect = false;
+        // Predefine internal listeners
+        this.specificListeners.set('error', [(message) => {
+            console.error('Server error:', message.message);
+        }]);
+        this.specificListeners.set('ping', [(message) => {
+            this.send('pong');
+        }]);
+        // Add listener when page unloads
+        window.addEventListener('beforeunload', () => {
+            this.disconnect();
+        });
     }
 
     connect() {
-		const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
+        console.log('WebSocketService connect'); //XXX
+        if (this.ws)
+            return;
+    
+        this.reconnect = true;
+        const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
         this.ws = new WebSocket(protocol + window.location.host + "/ws/game/");
-        this.ws.onopen = () => console.log('WebSocket connected');
-        this.ws.onmessage = (event) => this.handleMessage(event.data);
-        this.ws.onclose = () => this.handleClose();
-        this.ws.onerror = (error) => console.error('WebSocket error:', error);
+    
+        this.ws.onopen = () => {
+            console.log('WebSocket connected');
+        };
+    
+        this.ws.onmessage = (event) => this.#handleMessage(event.data);
+
+        this.ws.onclose = () => {
+            if (!this.reconnect) return;
+            console.log(`[${new Date().toISOString()}] WebSocket disconnected, reconnecting...`);
+            this.ws = null;
+            setTimeout(() => this.connect(), 1000);
+        };
+    
+        this.ws.onerror = (error) => {
+            console.error('WebSocket error:', error);
+            this.ws = null;
+        };
     }
 
-    handleMessage(data) {
+    isConnected() {
+        return this.ws && this.ws.readyState === WebSocket.OPEN;
+    }
+
+    disconnect() {
+        this.reconnect = false;
+        if (this.ws) {
+            this.ws.close();
+            this.ws = null;
+        }
+    }
+
+    #handleMessage(data) {
         const message = JSON.parse(data);
+        if (!message.msg_type) {
+            console.error('Invalid message:', message);
+            return;
+        }
+        console.log(`WSS receive: ${message.msg_type}`); //XXX
+        console.log(message); //XXX
+        console.log(this.pageListeners); //XXX
+        console.log(this.viewListeners); //XXX
+        // Notify specific listeners
+        const specificCallbacks = this.specificListeners.get(message.msg_type) || [];
+        specificCallbacks.forEach(callback => callback(message));
         // Notify page listeners
-        const pageCallbacks = this.pageListeners.get(message.type) || [];
+        const pageCallbacks = this.pageListeners.get(message.msg_type) || [];
         pageCallbacks.forEach(callback => callback(message));
         // Notify view listeners
-        const viewCallbacks = this.viewListeners.get(message.type) || [];
+        const viewCallbacks = this.viewListeners.get(message.msg_type) || [];
         viewCallbacks.forEach(callback => callback(message));
     }
 
-    handleClose() {
-        console.log('WebSocket disconnected, reconnecting...');
-        setTimeout(() => this.connect(), 1000); // Simple reconnection logic
-    }
-
-    // Subscribe to a message type at page level
-    onPage(type, callback) {
-        if (!this.pageListeners.has(type)) {
-            this.pageListeners.set(type, []);
+    // general function to add a callback to a listener (not the specificListeners)
+    #addCallback(msg_type, callback, listener) {
+        if (this.specificListeners.has(msg_type))
+            throw new Error(`Cannot subscribe to specific message type: ${msg_type}. Try another name.`);
+        if (!listener.has(msg_type)) {
+            listener.set(msg_type, []);
         }
-        this.pageListeners.get(type).push(callback);
-        return () => this.offPage(type, callback); // Return unsubscribe function
+        listener.get(msg_type).push(callback);
     }
 
-    // Subscribe to a message type at view level
-    onView(type, callback) {
-        if (!this.viewListeners.has(type)) {
-            this.viewListeners.set(type, []);
-        }
-        this.viewListeners.get(type).push(callback);
-        return () => this.offView(type, callback); // Return unsubscribe function
+    // Subscribe to a msg_type at page level
+    addPageCallback(msg_type, callback) { // TODO Rename the function to something more descriptive
+        console.log(`Adding page callback ${msg_type}`); //XXX
+        this.#addCallback(msg_type, callback, this.pageListeners);
+        return () => this.offPage(msg_type, callback); // Return unsubscribe function
+    }
+    
+    // Subscribe to a msg_type at view level
+    addViewCallback(msg_type, callback) { // TODO Rename the function to something more descriptive
+        console.log(`Adding view callback ${msg_type}`); //XXX
+        this.#addCallback(msg_type, callback, this.viewListeners);
+        return () => this.offView(msg_type, callback); // Return unsubscribe function
     }
 
-    // Unsubscribe from a message type at page level
-    offPage(type, callback) {
-        const callbacks = this.pageListeners.get(type) || [];
-        this.pageListeners.set(type, callbacks.filter(cb => cb !== callback));
+    // Unsubscribe from a msg_type at page level
+    offPage(msg_type, callback) { // TODO Rename the function to something more descriptive
+        const callbacks = this.pageListeners.get(msg_type) || [];
+        this.pageListeners.set(msg_type, callbacks.filter(cb => cb !== callback));
     }
 
-    // Unsubscribe from a message type at view level
-    offView(type, callback) {
-        const viewCallbacks = this.viewListeners.get(type) || [];
-        this.viewListeners.set(type, viewCallbacks.filter(cb => cb !== callback));
+    // Unsubscribe from a msg_type at view level
+    offView(msg_type, callback) { // TODO Rename the function to something more descriptive
+        const viewCallbacks = this.viewListeners.get(msg_type) || [];
+        this.viewListeners.set(msg_type, viewCallbacks.filter(cb => cb !== callback));
     }
 
     // Clear all page-level listeners
     clearPageListeners() {
+        console.log('Clearing page listeners'); //XXX
         this.pageListeners.clear();
     }
 
     // Clear all view-level listeners
     clearViewListeners() {
+        console.log('Clearing view listeners'); //XXX
         this.viewListeners.clear();
     }
 
     // Send a message
-    send(type, data = {}) {
+    send(msg_type, data = {}) {
+        console.log(`WSS send: ${msg_type}`); //XXX
         if (this.ws.readyState === WebSocket.OPEN) {
-            this.ws.send(JSON.stringify({ type, ...data }));
+            this.ws.send(JSON.stringify({ msg_type, ...data }));
         } else {
-            console.warn('WebSocket not open, message dropped:', { type, ...data });
+            console.warn('WebSocket not open, message dropped:', { msg_type, ...data });
         }
     }
 }
