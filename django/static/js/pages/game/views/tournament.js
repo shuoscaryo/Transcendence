@@ -166,11 +166,11 @@ class Tournament {
 let g_pong = null;
 let g_tournament = null;
 
-function loadFormView(component) {
+function loadFormView(component, myData) {
     const MAX_PLAYERS = 8;
     const players = new Set();
-    function addPlayerToForm() {
-        const playerName = input.value;
+
+    function addPlayerToForm(playerName) {
         
         if (players.size >= MAX_PLAYERS) {
             alert('Max players reached.');
@@ -245,14 +245,14 @@ function loadFormView(component) {
         if (input.value.trim() === '')
             return;
         if (event.key === 'Enter') {
-            addPlayerToForm();
+            addPlayerToForm(input.value);
         }
     });
     inputDiv.append(input);
     
     const button = document.createElement('button');
     button.textContent = 'Add Player';
-    button.addEventListener('click', addPlayerToForm);
+    button.addEventListener('click', () => {addPlayerToForm(input.value)});
     inputDiv.append(button);
     
 
@@ -283,6 +283,17 @@ function loadFormView(component) {
 
     const playerList = document.createElement('ul');    
     playersDiv.append(playerList);
+
+    if (myData) {
+        players.add(myData.display_name);
+        const listItem = document.createElement('li');
+        playerList.append(listItem);
+        
+        const listText = document.createElement('p');
+        listText.classList.add('bold');
+        listText.textContent = myData.display_name;
+        listItem.append(listText);
+    }
 }
 
 
@@ -402,8 +413,14 @@ export default async function getView(isLogged, path) {
     ];
     const component = document.createElement('div');
 
+    let response = null;
+    if (isLogged) {
+        response = await request('GET', Path.API.PROFILE);
+        if (response.status !== 200)
+            return {status: response.status, error: response.error};
+    }
     g_tournament = new Tournament();
-    loadFormView(component);
+    loadFormView(component, response?.data);
 
     const onDestroy = () => {
         if (g_pong)
