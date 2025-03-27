@@ -175,7 +175,6 @@ class PongConsumer(AsyncWebsocketConsumer):
         else:
             await self.channel_layer.group_discard(f'user_{self.user.id}', self.channel_name)
             online_users.discard(self.user.id)
-        print(f"[update_online_status] is_connecting: {is_connecting}, user: {getattr(self.user, 'id', 'Anonymous')}", file = open("log.txt", "a"))
 
         # update the user's last_online field
         self.user.last_online = timezone.now()
