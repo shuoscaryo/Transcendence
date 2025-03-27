@@ -1,4 +1,3 @@
-# views/getRequestList.py
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
@@ -20,7 +19,7 @@ def friends_request_list(request):
         sent_requests = user.friend_requests_sent.all()
         sent_data = [
             {
-                'username': req.to_user.username,
+                'display_name': req.to_user.display_name,
                 'profile_photo': req.to_user.profile_photo.url,
                 'date': req.created_at.isoformat()
             }
@@ -32,7 +31,7 @@ def friends_request_list(request):
         received_requests = user.friend_requests_received.all()
         received_data = [
             {
-                'username': req.from_user.username,
+                'display_name': req.from_user.display_name,
                 'profile_photo': req.from_user.profile_photo.url,
                 'date': req.created_at.isoformat()
             }

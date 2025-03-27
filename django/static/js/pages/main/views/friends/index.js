@@ -6,14 +6,22 @@ import request from '/static/js/utils/request.js';
 import { usernameOk } from '/static/js/utils/validators.js';
 import WebSocketService from '/static/js/utils/WebSocketService.js';
 
-function getUserInfoDiv(friend) {
-    const component = newElement('div', { classList: ['user-info'] });
-    const userImage = newElement('img', { parent: component, classList: ['user-image'] });
+function noFriendsDiv() {
+    const noFriends = newElement('div', { id: 'no-friends' });
+    noFriends.textContent = "No friends yet";
+    return noFriends;
+}
+
+function getFriendRow(friend) {
+    const component = newElement('div', { classList: ['friend-row'] });
+    
+    const userInfo = newElement('div', { classList: ['user-info'], parent: component });
+    const userImage = newElement('img', { parent: userInfo, classList: ['user-image'] });
     userImage.src = friend.profile_photo;
-    const usernameDiv = newElement('div', { parent: component, classList: ['username-div'] });
-    const username = newElement('span', { parent: usernameDiv, classList: ['username', 'bold'] });
-    username.textContent = friend.username;
-    const lastOnline = newElement('p', { parent: usernameDiv, classList: ['last-online'] });
+    const displayNameDiv = newElement('div', { parent: userInfo, classList: ['username-div'] });
+    const displayName = newElement('span', { parent: displayNameDiv, classList: ['username', 'bold'] });
+    displayName.textContent = friend.display_name;
+    const lastOnline = newElement('p', { parent: displayNameDiv, classList: ['last-online'] });
     if (friend.is_online) {
         lastOnline.textContent = 'Online';
         lastOnline.style.color = 'var(--color-lime)';
@@ -24,8 +32,8 @@ function getUserInfoDiv(friend) {
         lastOnline.textContent = 'Offline';
         lastOnline.style.color = '';
     }
-    WebSocketService.addViewCallback('online_status', (message) => {
-        if (message.username !== friend.username)
+    const delCallbackOnlineStatus = WebSocketService.addViewCallback('online_status', (message) => {
+        if (message.display_name !== friend.display_name)
             return;
         if (message.is_online) {
             lastOnline.textContent = 'Online';
@@ -38,13 +46,16 @@ function getUserInfoDiv(friend) {
             lastOnline.style.color = '';
         }
     })
-    return component;
-}
-
-function getFriendRow(friend) {
-    const component = newElement('div', { classList: ['friend-row'] });
-    
-    component.append(getUserInfoDiv(friend));
+    const delCallBackRemoveFriend = WebSocketService.addViewCallback('friend_removed', (message) => {
+        if (message.display_name !== friend.display_name)
+            return;
+        component.remove();
+        delCallBackRemoveFriend();
+        delCallbackOnlineStatus();
+        const friendListDiv = document.getElementById('friend-list-div');
+        if (friendListDiv && friendListDiv.children.length == 0)
+            friendListDiv.append(noFriendsDiv());
+    });
 
     const interactionButtons = newElement('div', { parent: component, classList: ['interaction-buttons'] });
     const buttonsList = {
@@ -52,15 +63,12 @@ function getFriendRow(friend) {
         'remove_friend': {
             label: 'Remove Friend', image: Path.img('friendsLogo.png'),
             action: async () => {
-                const response = await request('DELETE', Path.API.REMOVE_FRIEND, { username: friend.username });
+                const response = await request('DELETE', Path.API.REMOVE_FRIEND, { display_name: friend.display_name });
                 if (response.status == 200){
                     component.remove();
                     const friendListDiv = document.getElementById('friend-list-div');
-                    if (friendListDiv && friendListDiv.children.length == 0) {
-                        const noFriends = newElement('div', { id: 'no-friends' });
-                        noFriends.textContent = "No friends yet";
-                        friendListDiv.append(noFriends);
-                    }
+                    if (friendListDiv && friendListDiv.children.length == 0)
+                        friendListDiv.append(noFriendsDiv());
                 }
                 else
                     alert(`Couldn't remove friend :( ${response.error}`);
@@ -68,7 +76,7 @@ function getFriendRow(friend) {
         },
         'chat': { label: 'Chat', image: Path.img('chatLogo.png'), action: null },
         'profile': { label: 'Profile', image: Path.img('profileLogo.png'),
-            action: () => navigate(`/pages/main/profile/${friend.username}`) },
+            action: () => navigate(`/pages/main/profile/${friend.display_name}`) },
     };
     Object.keys(buttonsList).forEach(key => {
         const buttonData = buttonsList[key];
@@ -86,36 +94,43 @@ function getFriendRow(friend) {
 }
 
 function getRequestRow(user, type) {
+    let deleteCallback = null;
+    function deleteSelf() {
+        component.remove();
+        deleteCallback?.();
+    }
+
     const component = newElement('div', { classList: ['friend-row'] });
     
-    component.append(getUserInfoDiv(user));
+    const userInfo = newElement('div', { classList: ['user-info'], parent: component });
+    const userImage = newElement('img', { parent: userInfo, classList: ['user-image'] });
+    userImage.src = user.profile_photo;
+    const displayNameDiv = newElement('div', { parent: userInfo, classList: ['username-div'] });
+    const displayName = newElement('span', { parent: displayNameDiv, classList: ['username', 'bold'] });
+    displayName.textContent = user.display_name;
 
     const requestButtons = newElement('div', { parent: component, classList: ['request-buttons'] });
     const buttonsList = {
         'cancel': {
             label: 'Cancel', action: async () => {
-                const response = await request('DELETE', Path.API.CANCEL_FRIEND_REQUEST, { username: user.username });
+                const response = await request('DELETE', Path.API.CANCEL_FRIEND_REQUEST, { display_name: user.display_name });
                 if (response.status == 200)
-                    component.remove();
+                    deleteSelf();
                 else
                     alert(`Couldn't cancel friend request :( ${response.error}`);
             }
         },
         'accept': {
             label: 'Accept', action: async () => {
-                const response = await request('POST', Path.API.RESPOND_FRIEND_REQUEST, { username: user.username, action: 'accept' });
+                const response = await request('POST', Path.API.RESPOND_FRIEND_REQUEST, { display_name: user.display_name, action: 'accept' });
                 if (response.status == 200) {
-                    component.remove(); // Eliminar la solicitud
+                    deleteSelf();
                     // Añadir el nuevo amigo al inicio de la lista de amigos usando el ID
                     const friendListDiv = document.getElementById('friend-list-div');
                     if (friendListDiv) {
-                        const newFriend = { username: user.username, profile_photo: user.profile_photo };
-                        const friendRow = getFriendRow(newFriend);
-                        // Insertar como primer elemento
+                        const friendRow = getFriendRow(response.data);
                         friendListDiv.insertBefore(friendRow, friendListDiv.firstChild);
-                        // Si había un mensaje de "No friends yet", eliminarlo
-                        const noFriends = friendListDiv.querySelector('#no-friends');
-                        if (noFriends) noFriends.remove();
+                        friendListDiv.querySelector('#no-friends')?.remove();
                     }
                 } else {
                     alert(`Couldn't accept friend request :( ${response.error}`);
@@ -124,9 +139,9 @@ function getRequestRow(user, type) {
         },
         'decline': {
             label: 'Decline', action: async () => {
-                const response = await request('POST', Path.API.RESPOND_FRIEND_REQUEST, { username: user.username, action: 'decline' });
+                const response = await request('POST', Path.API.RESPOND_FRIEND_REQUEST, { display_name: user.display_name, action: 'decline' });
                 if (response.status == 200)
-                    component.remove();
+                    deleteSelf();
                 else
                     alert(`Couldn't decline friend request :( ${response.error}`);
             }
@@ -136,11 +151,25 @@ function getRequestRow(user, type) {
     let buttons = [];
     if (type == 'sent') {
         buttons = ['cancel'];
+        deleteCallback = WebSocketService.addViewCallback('friend_request_response', (message) => {
+            if (message.display_name !== user.display_name)
+                return;
+            if (message.answer === 'accept') {
+                const friendListDiv = document.getElementById('friend-list-div');
+                friendListDiv.prepend(getFriendRow(message));
+                friendListDiv.querySelector('#no-friends')?.remove();
+            }
+            deleteSelf();
+        });
     } else if (type == 'received') {
         buttons = ['accept', 'decline'];
-    } else {
+        deleteCallback = WebSocketService.addViewCallback('friend_request_cancelled', (message) => {
+            if (message.display_name !== user.display_name)
+                return;
+            deleteSelf();
+        });
+    } else
         throw new Error("[getRequestRow] Type can only be sent or received dumbass");
-    }
     buttons.forEach(buttonName => {
         const button = newElement('button', { parent: requestButtons, classList: ['request-button'] });
         button.textContent = buttonsList[buttonName].label;
@@ -167,19 +196,18 @@ async function getRequestSection() {
     button.type = "submit";
     button.addEventListener('click', async (event) => {
         event.preventDefault();
-        const username = input.value;
-        if (!usernameOk(username)) {
+        const displayName = input.value;
+        if (!usernameOk(displayName)) {
             alert("Invalid username");
             return;
         }
-        const response = await request('POST', Path.API.SEND_FRIEND_REQUEST, { username });
+        const response = await request('POST', Path.API.SEND_FRIEND_REQUEST, { display_name: displayName });
         if (response.status == 200) {
             input.value = "";
             const newRequestUser = response.data;
             requestListDiv.append(getRequestRow(newRequestUser, 'sent'));
-            alert("Friend request sent!");
         } else if (response.status == 404) {
-            alert(`User ${username} not found`);
+            alert(`User ${displayName} not found`);
         } else {
             alert(`${response.error ? response.error : "Error sending friend request"}`);
         }
@@ -202,6 +230,9 @@ async function getRequestSection() {
             });
         }
     }
+    WebSocketService.addViewCallback('friend_request_new', (message) => {
+        requestListDiv.prepend(getRequestRow(message, 'received'));
+    });
 
     return component;
 }
@@ -231,14 +262,13 @@ async function getFriendListSection() {
         
         // Show message if no friends
         if (!friendsList || friendsList.length === 0) {
-            const noFriends = newElement('div', {parent: friendListDiv, id: 'no-friends' });
-            noFriends.textContent = "No friends yet";
+            friendListDiv.append(noFriendsDiv());
             return;
         }
 
         // Filter friends based on the search term (case-insensitive)
         const filteredFriends = friendsList.filter(friend => {
-            const matches = friend.username.toLowerCase().includes(searchTerm.toLowerCase());
+            const matches = friend.display_name.toLowerCase().includes(searchTerm.toLowerCase());
             return matches;
         });
 

@@ -13,18 +13,18 @@ function secondsToMS(seconds) {
     return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
 }
 
-function getPlayerLink(username, profile, realUser = true) {
+function getPlayerLink(displayName, profile, realUser = true) {
     const component = newElement('a', {classList: ['player-link']});
-    component.textContent = username;
-    if (!realUser || username === profile.username)
+    component.textContent = displayName;
+    if (!realUser || displayName === profile.display_name)
         component.classList.add('no-link');
     else {
         component.addEventListener('click', () => {
-            navigate(`/pages/main/profile/${username}`);
+            navigate(`/pages/main/profile/${displayName}`);
         });
     }
 
-    if (username === profile.username)
+    if (displayName === profile.display_name)
         component.style.fontWeight = 'bold';
 
     return component;
@@ -53,7 +53,7 @@ function getMatchHistoryRow(profile, match) {
     }
     else if (match.matchType === 'AI') {
         playersDiv.classList.add('players-normal');
-        const player1 = getPlayerLink(match.playerLeft__username, profile);
+        const player1 = getPlayerLink(match.playerLeft__display_name, profile);
         const player2 = getPlayerLink('AI', profile, false);
         playersDiv.append(player1, player2);
         scoreDiv.textContent = `${match.scoreLeft} - ${match.scoreRight}`;
@@ -64,12 +64,12 @@ function getMatchHistoryRow(profile, match) {
     }
     else if (match.matchType === 'online') {
         playersDiv.classList.add('players-normal');
-        const player1 = getPlayerLink(match.playerLeft__username, profile);
-        const player2 = getPlayerLink(match.playerRight__username, profile);
+        const player1 = getPlayerLink(match.playerLeft__display_name, profile);
+        const player2 = getPlayerLink(match.playerRight__display_name, profile);
         playersDiv.append(player1, player2);
         scoreDiv.textContent = `${match.scoreLeft} - ${match.scoreRight}`;
         // username is left user XNOR left user won (if both conditions are same then its a win)
-        if ((profile.username === match.playerLeft__username)
+        if ((profile.display_name === match.playerLeft__display_name)
             === (match.scoreLeft > match.scoreRight))
             component.classList.add('won-match');
         else
@@ -90,7 +90,7 @@ function getMatchHistoryRow(profile, match) {
             playersColumnDiv.append(player);
         }
         scoreDiv.textContent = `${match.winner} won`;
-        if (match.winner === profile.username)
+        if (match.winner === profile.display_name)
             component.classList.add('won-match');
         else
             component.classList.add('lost-match');

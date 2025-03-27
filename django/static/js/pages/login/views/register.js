@@ -3,6 +3,7 @@ import { navigate } from '/static/js/utils/router.js';
 import getDefaultButton from '/static/js/components/defaultButton.js';
 import { emailOk, usernameOk, pwOk } from '/static/js/utils/validators.js';
 import request from '/static/js/utils/request.js';
+
 function getOtherLogin() {
     const component = document.createElement('div');
 
@@ -102,6 +103,31 @@ function getForm() {
     });
     component.append(usernameDiv);
 
+    const displayNameDiv = getInput('display_name', 'text', 'display name');
+    const displayNameInput = displayNameDiv.querySelector('input');
+    displayNameInput.addEventListener("focus", () => {
+        displayNameDiv.querySelector('p').style.display = 'none';
+        displayNameInput.classList.remove('error-input');
+    });
+    displayNameInput.addEventListener("blur", () => {
+        const value = displayNameInput.value;
+        const errorMsg = displayNameDiv.querySelector('p');
+        if (!usernameOk(value)) {
+            errorMsg.textContent = 'display name must be between 3 and 20 characters long and contain only letters, numbers, and underscores';
+            errorMsg.style.display = 'block';
+            displayNameInput.classList.add('error-input');
+        }
+        else {
+            errorMsg.style.display = 'none';
+            displayNameInput.classList.remove('error-input');
+        }
+        if (value === '') {
+            errorMsg.style.display = 'none';
+            displayNameInput.classList.remove('error-input');
+        }
+    });
+    component.append(displayNameDiv);
+
     const pwDiv = getInput('password', 'password', 'Password');
     const pwInput = pwDiv.querySelector('input');
     component.append(pwDiv);
@@ -159,12 +185,14 @@ function disableButtonOnEvent(button, form) {
         const jsonData = {
             email: formData.get('email'),
             username: formData.get('username'),
+            display_name: formData.get('display_name'),
             pw: formData.get('password'),
             repPw: formData.get('repeat-password'),
         };
         let disable = false;
         if (!emailOk(jsonData.email)
             || !usernameOk(jsonData.username)
+            || !usernameOk(jsonData.display_name)
             || !pwOk(jsonData.pw)
             || jsonData.pw !== jsonData.repPw)
             disable = true;
@@ -208,13 +236,10 @@ function getUpperHalf() {
             const jsonData = {
                 email: formData.get('email'),
                 username: formData.get('username'),
+                display_name: formData.get('display_name'),
                 password: formData.get('password'),
             };
-
-            if (formData.get('password') !== formData.get('repeat-password')) {
-                alert('Passwords do not match');
-                return;
-            }
+            console.log(jsonData);
 
             const response = await request('POST', Path.API.REGISTER, jsonData);
             if (response.status === 200) {

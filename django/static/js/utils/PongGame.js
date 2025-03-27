@@ -1,3 +1,5 @@
+import WebSocketService from '/static/js/utils/WebSocketService.js';
+
 class Vector2D {
     constructor(x = 0, y = 0) {
         this.x = x;
@@ -141,7 +143,7 @@ class Player {
 // - onGameEnd
 export default class PongGame
 {
-    constructor(canvas)
+    constructor(canvas, type = 'offline')
     {
         this.canvas = canvas;
         this.ctx = this.canvas.getContext('2d');
@@ -158,6 +160,13 @@ export default class PongGame
         this.maxScore = 5;
         this.onGameEnd = null;
         this.onGoal = null;
+        this.type = type;
+
+        if (this.type === 'client')
+            WebSocketService.addPageCallback('gameState', (data) => {
+                this.setState(data);
+                this.#draw();
+            });
         
         this.#startPosition();
         this.#draw();
@@ -194,6 +203,10 @@ export default class PongGame
 
         if (typeof this[methodName] === "function")
             this[methodName](dt);
+
+        if (this.type === 'host') {
+            WebSocketService.send('gameState', this.getState());
+        }
     }
 
     // Don't use outside of #update

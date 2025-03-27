@@ -39,7 +39,7 @@ function getNewMatchForm(profile) {
     const inputDiv = newElement('div', {parent: form, classList: ['input-div']});
 
     // component form inputDiv
-    inputDiv.append(getInputRow('Player Left:', 'text', 'playerLeft', profile.username, true));
+    inputDiv.append(getInputRow('Player Left:', 'text', 'playerLeft', profile.display_name, true));
     inputDiv.append(getInputRow('Player Right:', 'text', 'playerRight', 'player2', false));
     inputDiv.append(getInputRow('Score Left:', 'number', 'scoreLeft', 10, true));
     inputDiv.append(getInputRow('Score Right:', 'number', 'scoreRight', 5, true));
@@ -117,8 +117,8 @@ function getNewTournamentForm(profile) {
 
     // component form inputDiv
     inputDiv.append(getInputRow('Player List:', 'text', 'playerList',
-        `${profile.username}, player2, player3`, true));
-    inputDiv.append(getInputRow('Winner:', 'text', 'winner', profile.username, true));
+        `${profile.display_name}, player2, player3`, true));
+    inputDiv.append(getInputRow('Winner:', 'text', 'winner', profile.display_name, true));
     inputDiv.append(getInputRow('Duration (s):', 'number', 'duration', 1200, true));
     const matchTypeDiv = newElement('div', {parent: inputDiv, classList: ['input-row']});
     

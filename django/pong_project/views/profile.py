@@ -5,16 +5,16 @@ from pong_project.models import MatchHistory
 
 CustomUser = get_user_model()
 
-def get_profile(username):
+def get_profile(display_name):
     try:
-        user = CustomUser.objects.get(username=username)
+        user = CustomUser.objects.get(display_name=display_name)
         profile = {
-            'username': user.username,
+            'display_name': user.display_name,
             'email': user.email,
             'wins': user.wins,
             'losses': user.losses,
             'profile_photo': user.profile_photo.url if user.profile_photo else '',
-            'friends': list(user.friends.values_list('username', flat=True)),
+            'friends': list(user.friends.values_list('display_name', flat=True)),
             'date_joined': user.date_joined,
         }
         return JsonResponse(profile)
@@ -23,9 +23,9 @@ def get_profile(username):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
-def get_match_history(username, request):
+def get_match_history(display_name, request):
     try:
-        user = CustomUser.objects.get(username=username)
+        user = CustomUser.objects.get(display_name=display_name)
         
         # Parámetros de paginación
         offset = int(request.GET.get('offset', 0))
@@ -35,7 +35,7 @@ def get_match_history(username, request):
         matches = MatchHistory.objects.filter(
             Q(playerLeft=user) | Q(playerRight=user)
         ).order_by('-start_date').values(
-            'id', 'playerLeft__username', 'playerRight__username',
+            'id', 'playerLeft__display_name', 'playerRight__display_name',
             'scoreLeft', 'scoreRight', 'start_date', 'duration', 'matchType'
         )[offset:offset + limit]
 
@@ -58,15 +58,15 @@ def get_match_history(username, request):
 def profile(request):
     if not request.user.is_authenticated:
         return JsonResponse({'error': 'Not authenticated'}, status=401)
-    return get_profile(request.user.username)
+    return get_profile(request.user.display_name)
 
-def profile_by_username(request, username):
-    return get_profile(username)
+def profile_by_display_name(request, display_name):
+    return get_profile(display_name)
 
 def match_history(request):
     if not request.user.is_authenticated:
         return JsonResponse({'error': 'Not authenticated'}, status=401)
-    return get_match_history(request.user.username, request)
+    return get_match_history(request.user.display_name, request)
 
-def match_history_by_username(request, username):
-    return get_match_history(username, request)
+def match_history_by_display_name(request, display_name):
+    return get_match_history(display_name, request)

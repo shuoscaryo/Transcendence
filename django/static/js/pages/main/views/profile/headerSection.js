@@ -14,8 +14,8 @@ export default function getProfileHeaderSection(profile) {
     const userInfo = newElement('div', {id: 'user-info', parent: userDiv});
 
     // component userDiv userInfo
-    const username = newElement('h1', {parent: userInfo});
-    username.textContent = profile.username;
+    const displayName = newElement('h1', {parent: userInfo});
+    displayName.textContent = profile.display_name;
     const randomData = newElement('div', {id: 'random-data', parent: userInfo});
     randomData.id = 'random-data';
 

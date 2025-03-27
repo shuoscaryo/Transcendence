@@ -26,7 +26,7 @@ def add_match(request):
             return JsonResponse({'error': 'Invalid matchType'}, status=400)
 
         try:
-            player_left = CustomUser.objects.get(username=data['playerLeft'])
+            player_left = CustomUser.objects.get(display_name=data['playerLeft'])
         except CustomUser.DoesNotExist:
             return JsonResponse({'error': 'PlayerLeft does not exist'}, status=404)
 
@@ -35,7 +35,7 @@ def add_match(request):
             if 'playerRight' not in data:
                 return JsonResponse({'error': 'Missing playerRight for online match'}, status=400)
             try:
-                player_right = CustomUser.objects.get(username=data['playerRight'])
+                player_right = CustomUser.objects.get(display_name=data['playerRight'])
             except CustomUser.DoesNotExist:
                 return JsonResponse({'error': 'PlayerRight does not exist'}, status=404)
 

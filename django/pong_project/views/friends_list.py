@@ -1,4 +1,3 @@
-# views/friends.py
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
@@ -14,10 +13,10 @@ def friends_list(request):
         friends = user.friends.all()
         friends_data = [
             {
-                'username': friend.username,
+                'display_name': friend.display_name,
                 'profile_photo': friend.profile_photo.url if friend.profile_photo else '',
-                'is_online': friend.username in online_users,
-                'last_online': None if friend.username in online_users else friend.last_online,
+                'is_online': friend.id in online_users,
+                'last_online': None if friend.id in online_users else friend.last_online,
             }
             for friend in friends
         ]

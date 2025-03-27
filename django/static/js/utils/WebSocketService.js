@@ -7,7 +7,7 @@ class WebSocketService {
         this.reconnect = false;
         // Predefine internal listeners
         this.specificListeners.set('error', [(message) => {
-            console.error('Server error:', message.message);
+            console.error('[WebSocketService] got error message:', message.message);
         }]);
         this.specificListeners.set('ping', [(message) => {
             this.send('pong');
@@ -59,24 +59,22 @@ class WebSocketService {
     }
 
     #handleMessage(data) {
-        const message = JSON.parse(data);
-        if (!message.msg_type) {
-            console.error('Invalid message:', message);
+        const jsonData = JSON.parse(data);
+        if (!jsonData.msg_type) {
+            console.error('Invalid message:', jsonData);
             return;
         }
-        console.log(`WSS receive: ${message.msg_type}`); //XXX
-        console.log(message); //XXX
-        console.log(this.pageListeners); //XXX
-        console.log(this.viewListeners); //XXX
+        const { msg_type, ...msg } = jsonData;
+        console.log(`WSS receive: ${msg_type}`); //XXX
         // Notify specific listeners
-        const specificCallbacks = this.specificListeners.get(message.msg_type) || [];
-        specificCallbacks.forEach(callback => callback(message));
+        const specificCallbacks = this.specificListeners.get(msg_type) || [];
+        specificCallbacks.forEach(callback => callback(msg));
         // Notify page listeners
-        const pageCallbacks = this.pageListeners.get(message.msg_type) || [];
-        pageCallbacks.forEach(callback => callback(message));
+        const pageCallbacks = this.pageListeners.get(msg_type) || [];
+        pageCallbacks.forEach(callback => callback(msg));
         // Notify view listeners
-        const viewCallbacks = this.viewListeners.get(message.msg_type) || [];
-        viewCallbacks.forEach(callback => callback(message));
+        const viewCallbacks = this.viewListeners.get(msg_type) || [];
+        viewCallbacks.forEach(callback => callback(msg));
     }
 
     // general function to add a callback to a listener (not the specificListeners)

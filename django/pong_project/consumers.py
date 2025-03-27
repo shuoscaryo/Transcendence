@@ -25,9 +25,8 @@ class PongConsumer(AsyncWebsocketConsumer):
         self.room_group_name = f'game_{self.room_name}'
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         
-    # Online-status management (Create a own room for each user)
-        if self.scope['user'].is_authenticated:
-            await self.update_online_status(True)
+    # Online-status management
+        await self.update_online_status(True)
 
     async def disconnect(self, close_code):
         if hasattr(self, 'errorClose') and self.errorClose:
@@ -65,8 +64,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                 }))
         
     # Online-status management
-        if self.scope['user'].is_authenticated:
-            await self.update_online_status(False)
+        await self.update_online_status(False)
 
     async def receive(self, text_data):
         '''
@@ -167,31 +165,33 @@ class PongConsumer(AsyncWebsocketConsumer):
 			'move': event.get('move'),
 		}))
 
-    async def update_online_status(self, is_online):
-        if is_online:
-            # Add self to own room (alone)
-            await self.channel_layer.group_add(f'user_{self.user.username}', self.channel_name)
-            # Add user to online users set (to use in http response)
-            online_users.add(self.user.username)
+    async def update_online_status(self, is_connecting):
+        # When connecting create own room and add self to online_users set and remove when disconnecting
+        if is_connecting:
+            if not self.user.is_authenticated:
+                return
+            await self.channel_layer.group_add(f'user_{self.user.id}', self.channel_name)
+            online_users.add(self.user.id)
         else:
-            # Remove self from own room
-            await self.channel_layer.group_discard(f'user_{self.user.username}', self.channel_name)
-            # Remove user from online users set
-            online_users.discard(self.user.username)
-            self.user.last_online = timezone.now()
-            await sync_to_async(self.user.save)()
-        friend_list = await sync_to_async(lambda: list(self.user.friends.all()))()
-        last_online = self.user.last_online
+            await self.channel_layer.group_discard(f'user_{self.user.id}', self.channel_name)
+            online_users.discard(self.user.id)
+        print(f"[update_online_status] is_connecting: {is_connecting}, user: {getattr(self.user, 'id', 'Anonymous')}", file = open("log.txt", "a"))
 
+        # update the user's last_online field
+        self.user.last_online = timezone.now()
+        await sync_to_async(self.user.save)()
+
+        # Get friend list and send online status to all of them (in parallel)
+        friend_list = await sync_to_async(lambda: list(self.user.friends.all()))()
         tasks = [
             self.channel_layer.group_send(
-                f'user_{friend.username}',
+                f'user_{friend.id}',
                 {
                     'type': 'normal_send',
                     'msg_type': 'online_status',
-                    'is_online': is_online,
-                    'username': self.user.username,
-                    'last_online': None if is_online else str(last_online)
+                    'is_online': is_connecting,
+                    'display_name': self.user.display_name,
+                    'last_online': None if is_connecting else str(self.user.last_online)
                 }
             )
             for friend in friend_list

@@ -1,28 +1,30 @@
-# views/sendRequest.py
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from ..models import FriendRequest
 import json
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 CustomUser = get_user_model()
+channel_layer = get_channel_layer()
 
 @login_required
 def friends_request_send(request):
     """
     Sends a friend request from the authenticated user to another user.
-    Expects a POST request with a JSON body containing 'username'.
+    Expects a POST request with a JSON body containing 'display_name'.
     """
     if request.method != 'POST':
         return JsonResponse({'error': 'Method not allowed'}, status=405)
 
     try:
         data = json.loads(request.body)
-        username = data.get('username')
-        if not username:
-            return JsonResponse({'error': 'username is required'}, status=400)
+        display_name = data.get('display_name')
+        if not display_name:
+            return JsonResponse({'error': 'display_name is required'}, status=400)
 
-        to_user = CustomUser.objects.get(username=username)
+        to_user = CustomUser.objects.get(display_name=display_name)
         from_user = request.user
 
         if from_user == to_user:
@@ -36,13 +38,23 @@ def friends_request_send(request):
             return JsonResponse({'error': 'Friend request already sent'}, status=400)
 
         FriendRequest.objects.create(from_user=from_user, to_user=to_user)
-        
+
+        async_to_sync(channel_layer.group_send)(
+            f"user_{to_user.id}",
+            {
+                "type": "normal_send",
+                "msg_type": "friend_request_new",
+                "display_name": from_user.display_name,
+                "profile_photo": from_user.profile_photo.url
+            }
+        )
+
         return JsonResponse({
-            'message': f'Friend request sent to {username}',
-            'username': to_user.username,
+            'message': f'Friend request sent to {display_name}',
+            'display_name': to_user.display_name,
             'profile_photo': to_user.profile_photo.url
         })
     except CustomUser.DoesNotExist:
-        return JsonResponse({'error': f'User {username} not found'}, status=404)
+        return JsonResponse({'error': f'User {display_name} not found'}, status=404)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
