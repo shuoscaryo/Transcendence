@@ -1,6 +1,7 @@
 import { navigate } from '/static/js/utils/router.js';
 import getDefaultButton from '/static/js/components/defaultButton.js';
 import newElement from '/static/js/utils/newElement.js';
+import { formatDate } from '/static/js/utils/time.js';
 
 export default function getProfileHeaderSection(profile) {
     const component = newElement('section', {id: 'header', classList: ['section-block']});
@@ -21,7 +22,7 @@ export default function getProfileHeaderSection(profile) {
 
     // component userDiv userInfo randomData
     const joined = newElement('p', {parent: randomData});
-    joined.innerHTML = `<b>Joined:</b> ${profile.date_joined}`;
+    joined.innerHTML = `<b>Joined:</b> ${formatDate(profile.date_joined)}`;
 
     // component
     const searchAnotherUser = newElement('div', {id: 'search-another-user', parent: component});

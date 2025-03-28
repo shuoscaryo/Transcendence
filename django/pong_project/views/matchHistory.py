@@ -9,11 +9,11 @@ def get_match_history(display_name, request):
     try:
         user = CustomUser.objects.get(display_name=display_name)
         
-        # Parámetros de paginación
+        # Params
         offset = int(request.GET.get('offset', 0))
         limit = int(request.GET.get('limit', 10))
 
-        # Obtener historial de partidas
+        # Get the matches range
         matches = MatchHistory.objects.filter(
             Q(playerLeft=user) | Q(playerRight=user)
         ).order_by('-start_date').values(
@@ -21,12 +21,13 @@ def get_match_history(display_name, request):
             'scoreLeft', 'scoreRight', 'start_date', 'duration', 'matchType'
         )[offset:offset + limit]
 
-        # Formatear fechas
+        # Format dates so it doesn't crash the JSON serializer
         formatted_matches = []
         for match in matches:
-            match['start_date'] = match['start_date'].strftime('%Y-%m-%d %H:%M:%S')
+            match['start_date'] = match['start_date'].isoformat()
             formatted_matches.append(match)
 
+        # Get total matches
         total_matches = MatchHistory.objects.filter(
             Q(playerLeft=user) | Q(playerRight=user)
         ).count()

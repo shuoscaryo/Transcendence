@@ -16,7 +16,7 @@ def friends_list(request):
                 'display_name': friend.display_name,
                 'profile_photo': friend.profile_photo.url if friend.profile_photo else '',
                 'is_online': friend.id in online_users,
-                'last_online': None if friend.id in online_users else friend.last_online,
+                'last_online': None if friend.id in online_users else friend.last_online.isoformat(),
             }
             for friend in friends
         ]

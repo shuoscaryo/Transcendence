@@ -190,7 +190,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                     'msg_type': 'online_status',
                     'is_online': is_connecting,
                     'display_name': self.user.display_name,
-                    'last_online': None if is_connecting else str(self.user.last_online)
+                    'last_online': None if is_connecting else self.user.last_online.isoformat()
                 }
             )
             for friend in friend_list

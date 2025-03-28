@@ -5,6 +5,7 @@ import { navigate } from '/static/js/utils/router.js';
 import request from '/static/js/utils/request.js';
 import { usernameOk } from '/static/js/utils/validators.js';
 import WebSocketService from '/static/js/utils/WebSocketService.js';
+import { formatTimeAgo } from '/static/js/utils/time.js';
 
 function noFriendsDiv() {
     const noFriends = newElement('div', { id: 'no-friends' });
@@ -26,7 +27,7 @@ function getFriendRow(friend) {
         lastOnline.textContent = 'Online';
         lastOnline.style.color = 'var(--color-lime)';
     } else if (friend.last_online) {
-        lastOnline.textContent = `Last online: ${friend.last_online}`;
+        lastOnline.textContent = `Last online: ${formatTimeAgo(friend.last_online)}`;
         lastOnline.style.color = '';
     } else {
         lastOnline.textContent = 'Offline';
@@ -39,7 +40,7 @@ function getFriendRow(friend) {
             lastOnline.textContent = 'Online';
             lastOnline.style.color = 'var(--color-lime)';
         } else if (message.last_online) {
-            lastOnline.textContent = `Last online: ${message.last_online}`;
+            lastOnline.textContent = `Last online: ${formatTimeAgo(message.last_online)}`;
             lastOnline.style.color = '';
         } else {
             lastOnline.textContent = 'Offline';
