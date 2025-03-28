@@ -31,7 +31,6 @@ export class PlayerController extends Controller {
     }
 }
 export class RemoteControllerOutgoing extends Controller {
-    #socket; // Socket para enviar datos
     #upKey;
     #downKey;
     #localMove = 0; // Movimiento local basado en teclas
@@ -74,7 +73,6 @@ export class RemoteControllerOutgoing extends Controller {
 
 // Controlador para la paleta derecha (recibe datos a través de su propio socket)
 export class RemoteControllerIncoming extends Controller {
-    #socket; // Socket para recibir datos
     #currentMove = 0; // Movimiento recibido del servidor
 
     constructor() {
