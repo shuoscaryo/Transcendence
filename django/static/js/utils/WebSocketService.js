@@ -19,7 +19,7 @@ class WebSocketService {
     }
 
     connect() {
-        console.log('WebSocketService connect'); //XXX
+        console.log('WSS connecting'); //XXX
         if (this.ws)
             return;
     
@@ -28,7 +28,7 @@ class WebSocketService {
         this.ws = new WebSocket(protocol + window.location.host + "/ws/game/");
     
         this.ws.onopen = () => {
-            console.log('WebSocket connected');
+            console.log('WSS connected');
         };
     
         this.ws.onmessage = (event) => this._handleMessage(event.data);
@@ -89,16 +89,14 @@ class WebSocketService {
 
     // Subscribe to a msg_type at page level
     addPageCallback(msg_type, callback) {
-        console.log(`Adding page callback ${msg_type}`); //XXX
         this._addCallback(msg_type, callback, this.pageListeners);
         return () => this.rmPageCallback(msg_type, callback); // Return unsubscribe function
     }
     
     // Subscribe to a msg_type at view level
     addViewCallback(msg_type, callback) {
-        console.log(`Adding view callback ${msg_type}`); //XXX
         this._addCallback(msg_type, callback, this.viewListeners);
-        return () => this.rnViewCallback(msg_type, callback); // Return unsubscribe function
+        return () => this.rmViewCallback(msg_type, callback); // Return unsubscribe function
     }
 
     // Unsubscribe from a msg_type at page level
@@ -108,20 +106,18 @@ class WebSocketService {
     }
 
     // Unsubscribe from a msg_type at view level
-    rnViewCallback(msg_type, callback) {
+    rmViewCallback(msg_type, callback) {
         const viewCallbacks = this.viewListeners.get(msg_type) || [];
         this.viewListeners.set(msg_type, viewCallbacks.filter(cb => cb !== callback));
     }
 
     // Clear all page-level listeners
     clearPageListeners() {
-        console.log('Clearing page listeners'); //XXX
         this.pageListeners.clear();
     }
 
     // Clear all view-level listeners
     clearViewListeners() {
-        console.log('Clearing view listeners'); //XXX
         this.viewListeners.clear();
     }
 

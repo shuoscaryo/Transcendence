@@ -12,6 +12,14 @@ export class Controller {
     getMove(paddleID, gameStatus) {
         throw new Error("Must override getMove()");
     }
+
+	start() { // Called on game start if needed
+		// Do nothing
+	}
+
+	stop() { // Called on game stop if needed
+		// Do nothing
+	}
 }
 
 export class PlayerController extends Controller {
@@ -51,8 +59,8 @@ export class RemoteControllerOutgoing extends Controller {
             } else if (KeyStates.get(this._downKey)) {
                 move = 1;
             }
-            this._localMove = move; // Actualiza el movimiento local
-            this._sendMove(move);   // Envía al servidor
+            this._localMove = move;
+            this._sendMove(move);
         };
 
         document.addEventListener('keydown', updateMove);
@@ -78,17 +86,28 @@ export class RemoteControllerIncoming extends Controller {
 
     constructor() {
         super();
-		WebSocketService.addViewCallback("move_p", (message) => {
-			if (message.move !== undefined)
-				this._currentMove = message.move;
-			else
-				console.error("Error: No se recibió move en move");
-		});
+		this.rmCallback = null;
     }
 
     getMove(paddleID, gameStatus) {
         return this._currentMove; // Devuelve el movimiento recibido del servidor
     }
+
+	start() {
+		if (this.rmCallback)
+			return;
+		this.rmCallback = WebSocketService.addViewCallback("move_p", (message) => {
+			if (message.move !== undefined)
+				this._currentMove = message.move;
+			else
+				console.error("Error: move not defined in message move_p");
+		});
+	}
+
+	stop () {
+		this.rmCallback();
+		this.rmCallback = null;
+	}
 }
 
 export class DemoAI extends Controller {

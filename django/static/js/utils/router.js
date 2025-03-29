@@ -62,7 +62,6 @@ async function getComponentFromUrl(url, isLogged, path) {
 }
 
 async function loadPage(path, isLogged) {
-    console.log(`[ROUTER] Loading page: ${path}`); //XXX
     // Split the path into parts
     path = parsePath(path);
     if (path.prefix !== 'pages')

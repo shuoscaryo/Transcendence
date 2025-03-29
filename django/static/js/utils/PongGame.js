@@ -260,30 +260,49 @@ export default class PongGame {
     }
 
     start() {
+        // If game already running don't start again
         if (this._animationFrameId)
             return;
+
+        // If game ended already, reset it and continue
         if (this._state === "End")
             this.reset();
         this._lastTime = null;
+
+        // Annoying addition to enable and disable callbacks of controllers
+        this._playerLeft.controller?.start();
+        this._playerRight.controller?.start();
+        
+        // If client, add callback to receive game state
         if (this._type === 'client')
             this._rmStateCallback = WebSocketService.addViewCallback('game_state', (data) => {
                 this._receivedState = data;
             });
+        
+        // This is the main loop of the game
         const gameLoop = (timestamp) => {
+            // Update the game state synchronously
             if (this._receivedState) {
                 this.setGameStatus(this._receivedState);
                 this._receivedState = null;
             }
-            if (this._lastTime === null) //TODO _lastTime is not updated in callback, check if it doesn't do weird things
-                this._lastTime = timestamp;
 
+            // Calculate the time since the last update
+            if (this._lastTime == null) //TODO _lastTime is not updated in callback, check if it doesn't do weird things
+                this._lastTime = timestamp;
             const dt = (timestamp - this._lastTime) / 1000;
             this._lastTime = timestamp;
             
+            // Update the game state
             this._update(dt);
+            
+            // Send the game state to the clients if host
             if (this._type === 'host')
                 WebSocketService.send('game_state', JSON.parse(JSON.stringify(this.getGameStatus())));
+
+            // Draw the game in the canvas
             this._draw();
+
             // If the loop hasn't been stopped, request another frame
             if (this._animationFrameId)
                 this._animationFrameId = requestAnimationFrame(gameLoop);
@@ -293,9 +312,14 @@ export default class PongGame {
     }
 
     stop() {
+        // Remove the callback from the game_state message
         if (this._rmStateCallback)
             this._rmStateCallback();
         this._rmStateCallback = null;
+
+        // Stop the controllers
+            this._playerLeft.controller?.stop();
+            this._playerRight.controller?.stop();
         this._lastTime = null;
         if (this._animationFrameId) {
             cancelAnimationFrame(this._animationFrameId);
