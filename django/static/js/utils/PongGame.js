@@ -50,10 +50,15 @@ class Vector2D {
         return this.x * vector.x + this.y * vector.y;
     }
 
-    print() {
-        console.log(`[${this.x}, ${this.y}]`);
+    getValues() {
+        return { x: this.x, y: this.y };
     }
 
+    setValues(data) {
+        if (!data) return;
+        this.x = data.x ?? this.x;
+        this.y = data.y ?? this.y;
+    }
 }
 
 function reflectVector(incident, normal) {
@@ -82,12 +87,19 @@ class Object {
         ctx.fillRect(this.pos.x, this.pos.y, this.size.x, this.size.y);
     }
 
-    print() {
-        console.log(
-            `pos: [${this.pos.x}, ${this.pos.y}], 
-            v: [${this.v.x}, ${this.v.y}], 
-            size: [${this.size.x}, ${this.size.y}]`
-        );
+    getValues() {
+        return {
+            pos: this.pos.getValues(),
+            v: this.v.getValues(),
+            size: this.size.getValues()
+        };
+    }
+
+    setValues(data) {
+        if (!data) return;
+        this.pos.setValues(data.pos);
+        this.v.setValues(data.v);
+        this.size.setValues(data.size);
     }
 }
 
@@ -122,6 +134,21 @@ class Paddle extends Object {
         this.v.y = this.direction * this.moveSpeed;
         super.update(dt);
     }
+
+    getValues() {
+        return {
+            ...super.getValues(),
+            direction: this.direction,
+            moveSpeed: this.moveSpeed
+        };
+    }
+
+    setValues(data) {
+        if (!data) return;
+        super.setValues(data);
+        this.direction = data.direction ?? this.direction;
+        this.moveSpeed = data.moveSpeed ?? this.moveSpeed;
+    }
 }
 
 class Player {
@@ -129,6 +156,13 @@ class Player {
         this.name = null;
         this.score = 0;
         this.controller = null;
+    }
+
+    getValues() {
+        return {
+            name: this.name,
+            score: this.score
+        };
     }
 }
 
@@ -156,8 +190,13 @@ export default class PongGame {
     _animationFrameId; // variable to start and stop the game loop
     _lastTime; // variable to store the time of the last update call (milliseconds)
     _paddleOffset; // Distance from the paddle to the wall (pixels)
+    _rmStateCallback; // Function to remove the callback from the WebSocketService when the game stops
 
     constructor(canvas, type = 'offline') { // type: 'offline', 'host', 'client'
+        if (!(canvas instanceof HTMLCanvasElement))
+            throw new Error("canvas must be an instance of HTMLCanvasElement");
+        if (type !== 'offline' && type !== 'host' && type !== 'client')
+            throw new Error("PongGame type must be 'offline', 'host' or 'client'");
         this._canvas = canvas;
         this._ctx = this._canvas.getContext('2d');
         this._ball = new Ball(10);
@@ -173,13 +212,6 @@ export default class PongGame {
         this._type = type;
         this._state = 'Playing';
         this._paddleOffset = this._paddleLeft.size.x * 2;
-
-        // NOTE Does this break update loop if gets triggered during update?
-        if (this._type === 'client')
-            WebSocketService.addPageCallback('gameState', (data) => {
-                this.setGameStatus(data);
-                this._draw();
-            });
         
         this._startPosition();
         this._draw();
@@ -233,14 +265,25 @@ export default class PongGame {
         if (this._state === "End")
             this.reset();
         this._lastTime = null;
+        if (this._type === 'client')
+            this._rmStateCallback = WebSocketService.addViewCallback('game_state', (data) => {
+                this._receivedState = data;
+            });
         const gameLoop = (timestamp) => {
-            if (this._lastTime === null)
+            if (this._receivedState) {
+                this.setGameStatus(this._receivedState);
+                this._receivedState = null;
+            }
+            if (this._lastTime === null) //TODO _lastTime is not updated in callback, check if it doesn't do weird things
                 this._lastTime = timestamp;
 
             const dt = (timestamp - this._lastTime) / 1000;
             this._lastTime = timestamp;
-
+            
             this._update(dt);
+            if (this._type === 'host')
+                WebSocketService.send('game_state', JSON.parse(JSON.stringify(this.getGameStatus())));
+            this._draw();
             // If the loop hasn't been stopped, request another frame
             if (this._animationFrameId)
                 this._animationFrameId = requestAnimationFrame(gameLoop);
@@ -250,6 +293,9 @@ export default class PongGame {
     }
 
     stop() {
+        if (this._rmStateCallback)
+            this._rmStateCallback();
+        this._rmStateCallback = null;
         this._lastTime = null;
         if (this._animationFrameId) {
             cancelAnimationFrame(this._animationFrameId);
@@ -272,13 +318,13 @@ export default class PongGame {
                 width: this._canvas.width,
                 height: this._canvas.height
             },
-            ball: this._ball,
+            ball: this._ball.getValues(),
             ballSpeedIncrease: this._ballSpeedIncrease,
             ballMaxAngle: this._ballMaxAngle,
-            paddleLeft: this._paddleLeft,
-            paddleRight: this._paddleRight,
-            playerLeft: this._playerLeft,
-            playerRight: this._playerRight,
+            paddleLeft: this._paddleLeft.getValues(),
+            paddleRight: this._paddleRight.getValues(),
+            playerLeft: this._playerLeft.getValues(),
+            playerRight: this._playerRight.getValues(),
             maxScore: this._maxScore,
             state: this._state,
             lastState: this._lastState,
@@ -295,19 +341,20 @@ export default class PongGame {
         
         this._canvas.width = status.canvas?.width ?? this._canvas.width;
         this._canvas.height = status.canvas?.height ?? this._canvas.height;
-        this._ball = status.ball ?? this._ball;
+        if (status.ball)
+            this._ball.setValues(status.ball);
         this._ballSpeedIncrease = status.ballSpeedIncrease ?? this._ballSpeedIncrease;
         this._ballMaxAngle = status.ballMaxAngle ?? this._ballMaxAngle;
-        this._paddleLeft = status.paddleLeft ?? this._paddleLeft;
-        this._paddleRight = status.paddleRight ?? this._paddleRight;
-        this._playerLeft = status.playerLeft ?? this._playerLeft;
-        this._playerRight = status.playerRight ?? this._playerRight;
+        if (status.paddleLeft)
+            this._paddleLeft.setValues(status.paddleLeft);
+        if (status.paddleRight)
+            this._paddleRight.setValues(status.paddleRight);
+        this._playerRight.score = status.playerRight?.score ?? this._playerRight.score;
+        this._playerLeft.score = status.playerLeft?.score ?? this._playerLeft.score;
         this._maxScore = status.maxScore ?? this._maxScore;
         this._state = status.state ?? this._state;
         this._lastState = status.lastState ?? this._lastState;
-        this._goalTimer = status.goalTimer ?? this._goalTimer;
         this._goalFlag = status.goalFlag ?? this._goalFlag;
-        this._lastTime = status.lastTime ?? this._lastTime;
         this._paddleOffset = status.paddleOffset ?? this._paddleOffset;
     }
 
@@ -323,7 +370,7 @@ export default class PongGame {
         this._paddleRight.size.y = ratio * this._canvas.height;
         this._paddleRight.moveSpeed = this._canvas.height;
 
-        this._ball.v.setPolar(this._canvas.height, Math.PI / 4);
+        this._ball.v.setPolar(this._canvas.height / 20, Math.PI / 4);
         this._ball.pos.x = this._canvas.width / 2;
         this._ball.pos.y = this._canvas.height / 2;
     }
@@ -342,9 +389,6 @@ export default class PongGame {
         if (typeof this[methodName] === "function")
             this[methodName](dt);
 
-        if (this._type === 'host')
-            WebSocketService.send('gameState', JSON.stringify(this.getGameStatus()));
-
     }
 
     _updatePlaying(dt) {
@@ -356,7 +400,6 @@ export default class PongGame {
         this._updatePaddle(this._paddleLeft, dt);
         this._updatePaddle(this._paddleRight, dt);
         this._updateBall(this._ball, dt);
-        this._draw();
 
         // Check goal
         if (this._ball.pos.x + this._ball.size.x < 0) {
@@ -376,7 +419,7 @@ export default class PongGame {
     }
 
     _updateGoalInit() {
-        this._goalTimer = performance.now() / 1000;
+        this._goalTimer = performance.now() / 1000; // TODO check if this timer in "client" mode is working properly (not updated in callback)
         this._goalFlag = false;
     }
 
@@ -405,7 +448,6 @@ export default class PongGame {
 
         this._updatePaddle(this._paddleLeft, dt);
         this._updatePaddle(this._paddleRight, dt);
-        this._draw();
     }
 
     _updateEnd(dt) {

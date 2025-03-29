@@ -79,7 +79,6 @@ export class RemoteControllerIncoming extends Controller {
     constructor() {
         super();
 		WebSocketService.addViewCallback("move_p", (message) => {
-			console.log("Recibido movimiento del servidor:", message);
 			if (message.move !== undefined)
 				this._currentMove = message.move;
 			else

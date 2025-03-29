@@ -239,7 +239,6 @@ function getUpperHalf() {
                 display_name: formData.get('display_name'),
                 password: formData.get('password'),
             };
-            console.log(jsonData);
 
             const response = await request('POST', Path.API.REGISTER, jsonData);
             if (response.status === 200) {

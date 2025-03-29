@@ -24,7 +24,7 @@ export default function createPongGameComponent(data) {
     canvas.width = 800;
     canvas.height = 600;
     
-    const pong = new PongGame(canvas);
+    const pong = new PongGame(canvas, data.type? data.type : 'offline');
     if(data?.playerLeft?.controller !== undefined)
         pong.setLeftController(data.playerLeft.controller);
     if(data?.playerRight?.controller !== undefined)

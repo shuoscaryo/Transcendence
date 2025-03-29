@@ -161,7 +161,7 @@ class PongConsumer(AsyncWebsocketConsumer):
         if event.get('sender') == self.channel_name:
             return  # No se lo mandes a quien lo envió
         await self.send(text_data=json.dumps({
-			'type': 'move_p',
+			'msg_type': 'move_p',
 			'move': event.get('move'),
 		}))
 
@@ -196,6 +196,18 @@ class PongConsumer(AsyncWebsocketConsumer):
             for friend in friend_list
         ]
         await asyncio.gather(*tasks)
+    
+    async def game_state_handler(self, data):
+        '''
+            This method is called when a 'game_state' message is received.
+            It sends the game state to the other player in the room.
+        '''
+        players = self.active_players.get(self.room_name, [])
+        for player in players:
+            if player != self:  # enviar solo al otro
+                dataToSend = data.copy()
+                dataToSend['msg_type'] = 'game_state'
+                await player.send(text_data=json.dumps(dataToSend))
     
     async def normal_send(self, message):
         '''

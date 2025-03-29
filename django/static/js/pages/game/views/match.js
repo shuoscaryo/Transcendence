@@ -67,7 +67,6 @@ export default async function getView(isLogged, path) {
 				return;
 			}
 			gameStarted = true;
-
 			if (playerRole === 'first') {
 				data.playerLeft = {
 					name: 'me',
@@ -77,6 +76,7 @@ export default async function getView(isLogged, path) {
 					name: 'friend',
 					controller: new RemoteControllerIncoming(),
 				};
+				data.type = 'host';
 			} else if (playerRole === 'second') {
 				data.playerLeft = {
 					name: 'friend',
@@ -86,13 +86,17 @@ export default async function getView(isLogged, path) {
 					name: 'me',
 					controller: new RemoteControllerOutgoing("w", "s"),
 				};
+				data.type = 'client';
 			}
-
-			const [game, pong] = createPongGameComponent(data, 'host');
+			const [game, pong] = createPongGameComponent(data);
 			gameComponent = game;
 			pongInstance = pong;
 			component.innerHTML = "";
 			component.append(gameComponent);
+			const tmp = document.createElement("p"); // XXX temporal
+			tmp.textContent = data.type; // XXX temporal
+			component.append(tmp); // XXX temporal
+			
 			console.log("¡Juego iniciado!");
 		});
 		
