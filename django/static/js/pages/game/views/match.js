@@ -71,7 +71,7 @@ export default async function getView(isLogged, path) {
 			if (playerRole === 'first') {
 				data.playerLeft = {
 					name: 'me',
-					controller: new playerController("w", "s"),
+					controller: new PlayerController("w", "s"),
 				};
 				data.playerRight = {
 					name: 'friend',
