@@ -88,27 +88,27 @@ class WebSocketService {
     }
 
     // Subscribe to a msg_type at page level
-    addPageCallback(msg_type, callback) { // TODO Rename the function to something more descriptive
+    addPageCallback(msg_type, callback) {
         console.log(`Adding page callback ${msg_type}`); //XXX
         this._addCallback(msg_type, callback, this.pageListeners);
-        return () => this.offPage(msg_type, callback); // Return unsubscribe function
+        return () => this.rmPageCallback(msg_type, callback); // Return unsubscribe function
     }
     
     // Subscribe to a msg_type at view level
-    addViewCallback(msg_type, callback) { // TODO Rename the function to something more descriptive
+    addViewCallback(msg_type, callback) {
         console.log(`Adding view callback ${msg_type}`); //XXX
         this._addCallback(msg_type, callback, this.viewListeners);
-        return () => this.offView(msg_type, callback); // Return unsubscribe function
+        return () => this.rnViewCallback(msg_type, callback); // Return unsubscribe function
     }
 
     // Unsubscribe from a msg_type at page level
-    offPage(msg_type, callback) { // TODO Rename the function to something more descriptive
+    rmPageCallback(msg_type, callback) {
         const callbacks = this.pageListeners.get(msg_type) || [];
         this.pageListeners.set(msg_type, callbacks.filter(cb => cb !== callback));
     }
 
     // Unsubscribe from a msg_type at view level
-    offView(msg_type, callback) { // TODO Rename the function to something more descriptive
+    rnViewCallback(msg_type, callback) {
         const viewCallbacks = this.viewListeners.get(msg_type) || [];
         this.viewListeners.set(msg_type, viewCallbacks.filter(cb => cb !== callback));
     }

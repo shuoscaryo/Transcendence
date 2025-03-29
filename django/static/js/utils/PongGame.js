@@ -286,7 +286,7 @@ export default class PongGame {
             goalFlag: this._goalFlag,
             lastTime: this._lastTime,
             paddleOffset: this._paddleOffset
-        }
+        };
         return status;
     }
 
