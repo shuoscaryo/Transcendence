@@ -1,8 +1,8 @@
-export default async function settings() {
+export default async function getView() {
     const css = [
 
     ];
     const component = document.createElement('div');
 
-    return { css, component };
+    return { status: 200, css, component };
 }
