@@ -11,8 +11,8 @@ class Tournament {
 
     init(players) {
 		this.players = players;
-        const shuffledPlayers = this.#shuffle(players);
-        this.#createMatchBoxes(shuffledPlayers.length);
+        const shuffledPlayers = this._shuffle(players);
+        this._createMatchBoxes(shuffledPlayers.length);
         this.match = 0;
         this.round = 0;
         this.over = false;
@@ -66,7 +66,7 @@ class Tournament {
             this.setMatchResult(0);
     }
 
-    #shuffle(array) {
+    _shuffle(array) {
         const shuffledPlayers = [...array];
         for (let i = shuffledPlayers.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -75,13 +75,13 @@ class Tournament {
         return shuffledPlayers;
     }
 
-    #addNullPlayer(array) {
+    _addNullPlayer(array) {
         const randomIndex = Math.floor(Math.random() * (array.length + 1));
         array.splice(randomIndex, 0, null);
         return array
     }
 
-    #createMatchBoxes(numPlayers) {
+    _createMatchBoxes(numPlayers) {
         this.matchBoxes = [];
         
         if (numPlayers == 0)
@@ -92,7 +92,7 @@ class Tournament {
             const roundPlayers = Math.ceil(numPlayers / 2 ** i);
             this.matchBoxes.push(Array(roundPlayers).fill(undefined));
             if (roundPlayers % 2 != 0)
-                this.matchBoxes[i] = this.#addNullPlayer(this.matchBoxes[i]);
+                this.matchBoxes[i] = this._addNullPlayer(this.matchBoxes[i]);
         }
     }
 

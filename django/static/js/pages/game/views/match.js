@@ -15,10 +15,6 @@ export default async function getView(isLogged, path) {
     const data = {
         onContinueButton: () => { navigate("/"); },
         maxScore: 3,
-        onGameEnd: (game) => {
-            if (game.playerRight.score > game.playerLeft.score)
-                addRatonMiltonVideo();
-        },
     };
 
     let gameComponent;
@@ -75,7 +71,7 @@ export default async function getView(isLogged, path) {
 			if (playerRole === 'first') {
 				data.playerLeft = {
 					name: 'me',
-					controller: new RemoteControllerOutgoing("w", "s"),
+					controller: new playerController("w", "s"),
 				};
 				data.playerRight = {
 					name: 'friend',
@@ -84,7 +80,7 @@ export default async function getView(isLogged, path) {
 			} else if (playerRole === 'second') {
 				data.playerLeft = {
 					name: 'friend',
-					controller: new RemoteControllerIncoming(),
+					controller: null,
 				};
 				data.playerRight = {
 					name: 'me',
@@ -92,7 +88,7 @@ export default async function getView(isLogged, path) {
 				};
 			}
 
-			const [game, pong] = createPongGameComponent(data);
+			const [game, pong] = createPongGameComponent(data, 'host');
 			gameComponent = game;
 			pongInstance = pong;
 			component.innerHTML = "";

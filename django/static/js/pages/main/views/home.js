@@ -50,9 +50,9 @@ function getSection1() {
     canvas.height = 400;
     divCanvas.append(canvas);
     g_pong = new PongGame(canvas);
-    g_pong.playerLeft.controller = new DemoAI();
-    g_pong.playerRight.controller = new DemoAI();
-    g_pong.onGameEnd = (game) => {game.start();};
+    g_pong.setLeftController(new DemoAI());
+    g_pong.setRightController(new DemoAI());
+    g_pong.onGameEnd((game) => {game.start();});
     g_pong.start();
 
     const divIntro = document.createElement('div');

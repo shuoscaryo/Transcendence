@@ -31,7 +31,7 @@ class WebSocketService {
             console.log('WebSocket connected');
         };
     
-        this.ws.onmessage = (event) => this.#handleMessage(event.data);
+        this.ws.onmessage = (event) => this._handleMessage(event.data);
 
         this.ws.onclose = () => {
             if (!this.reconnect) return;
@@ -58,7 +58,7 @@ class WebSocketService {
         }
     }
 
-    #handleMessage(data) {
+    _handleMessage(data) {
         const jsonData = JSON.parse(data);
         if (!jsonData.msg_type) {
             console.error('Invalid message:', jsonData);
@@ -78,7 +78,7 @@ class WebSocketService {
     }
 
     // general function to add a callback to a listener (not the specificListeners)
-    #addCallback(msg_type, callback, listener) {
+    _addCallback(msg_type, callback, listener) {
         if (this.specificListeners.has(msg_type))
             throw new Error(`Cannot subscribe to specific message type: ${msg_type}. Try another name.`);
         if (!listener.has(msg_type)) {
@@ -90,14 +90,14 @@ class WebSocketService {
     // Subscribe to a msg_type at page level
     addPageCallback(msg_type, callback) { // TODO Rename the function to something more descriptive
         console.log(`Adding page callback ${msg_type}`); //XXX
-        this.#addCallback(msg_type, callback, this.pageListeners);
+        this._addCallback(msg_type, callback, this.pageListeners);
         return () => this.offPage(msg_type, callback); // Return unsubscribe function
     }
     
     // Subscribe to a msg_type at view level
     addViewCallback(msg_type, callback) { // TODO Rename the function to something more descriptive
         console.log(`Adding view callback ${msg_type}`); //XXX
-        this.#addCallback(msg_type, callback, this.viewListeners);
+        this._addCallback(msg_type, callback, this.viewListeners);
         return () => this.offView(msg_type, callback); // Return unsubscribe function
     }
 

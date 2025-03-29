@@ -1,100 +1,72 @@
 import PongGame from "/static/js/utils/PongGame.js";
 import { navigate } from '/static/js/utils/router.js';
+import newElement from '/static/js/utils/newElement.js';
 
-function checkData(data){
-    if (!data.playerLeft)
-        throw new Error('playerLeft is required');
-    if (!data.playerRight)
-        throw new Error('playerRight is required');
-    if (!data.playerLeft.controller)
-        throw new Error('playerLeft.controller is required');
-    if (!data.playerRight.controller)
-        throw new Error('playerRight.controller is required');
-    if (!data.playerLeft.name)
-        throw new Error('playerLeft.name is required');
-    if (!data.playerRight.name)
-        throw new Error('playerRight.name is required');
-}
 
 export default function createPongGameComponent(data) {
-    // Check if the minimum data is present
-    checkData(data);
-
     // Create the container for the component
-    const component = document.createElement('div');
-    component.classList.add('section-block');
-    component.classList.add('pong-game');
+    const component = newElement('div', { classList: ['section-block', 'pong-game'] });
 
     // Create another container that has the game and the buttons
-    const gameDiv = document.createElement('div');
-    gameDiv.classList.add('div-game');
-    component.append(gameDiv);
+    const gameDiv = newElement('div', { classList: ['div-game'], parent: component });
 
     // Create the score display
-    const statsDiv = document.createElement('div');
-    statsDiv.classList.add('div-stats');
-    gameDiv.append(statsDiv);
-
-    const playerLeftDiv = document.createElement('div');
-    playerLeftDiv.classList.add('div-player', 'player-left');
+    const statsDiv = newElement('div', { classList: ['div-stats'], parent: gameDiv });
+    const playerLeftDiv = newElement('div', { classList: ['div-player', 'player-left'], parent: statsDiv });
     playerLeftDiv.textContent = data.playerLeft.name;
-    statsDiv.append(playerLeftDiv);
-    
-    const scoreDiv = document.createElement('div');
-    scoreDiv.classList.add('div-score');
+    const scoreDiv = newElement('div', { classList: ['div-score'], parent: statsDiv });
     scoreDiv.textContent = '0 - 0';
-    statsDiv.append(scoreDiv);
-
-    const playerRightDiv = document.createElement('div');
-    playerRightDiv.classList.add('div-player', 'player-right');
+    const playerRightDiv = newElement('div', { classList: ['div-player', 'player-right'], parent: statsDiv });
     playerRightDiv.textContent = data.playerRight.name;
-    statsDiv.append(playerRightDiv);
 
     // Create the canvas and the game
-    const canvas = document.createElement('canvas');
-    canvas.classList.add('canvas-game');
+    const canvas = newElement('canvas', { classList: ['canvas-game'], parent: gameDiv });
     canvas.width = 800;
     canvas.height = 600;
-    gameDiv.append(canvas);
     
     const pong = new PongGame(canvas);
-    pong.playerLeft.controller = data.playerLeft.controller;
-    pong.playerRight.controller = data.playerRight.controller;
-    pong.playerLeft.name = data.playerLeft.name;
-    pong.playerRight.name = data.playerRight.name;
-    pong.onGoal = (game) => {
-        scoreDiv.textContent = `${game.playerLeft.score} - ${game.playerRight.score}`;
-        if (data.onGoal)
+    if(data?.playerLeft?.controller !== undefined)
+        pong.setLeftController(data.playerLeft.controller);
+    if(data?.playerRight?.controller !== undefined)
+        pong.setRightController(data.playerRight.controller);
+    if(data?.playerLeft?.name !== undefined)
+        pong.setLeftName(data.playerLeft.name);
+    if(data?.playerRight?.name !== undefined)
+        pong.setRightName(data.playerRight.name);
+    if(data?.maxScore !== undefined)
+        pong.setMaxScore(data.maxScore);
+    
+    pong.onGoal((game) => {
+        const gameStatus = game.getGameStatus();
+        scoreDiv.textContent = `${gameStatus.playerLeft.score} - ${gameStatus.playerRight.score}`;
+        if (data?.onGoal !== undefined)
             data.onGoal(game);
-    };
-    pong.onGameEnd = (game) => {
+    });
+    
+    pong.onGameEnd((game) => {
+        const gameStatus = game.getGameStatus();
         playerLeftDiv.style.display = 'none';
         playerRightDiv.style.display = 'none';
         statsDiv.classList.add('end');
-        if (game.playerLeft.score > game.playerRight.score)
-            scoreDiv.textContent = `${game.playerLeft.name} wins!`;
+        if (gameStatus.playerLeft.score > gameStatus.playerRight.score)
+            scoreDiv.textContent = `${gameStatus.playerLeft.name} wins!`;
         else
-            scoreDiv.textContent = `${game.playerRight.name} wins!`;
+            scoreDiv.textContent = `${gameStatus.playerRight.name} wins!`;
         buttonsDiv.innerHTML = '';
         buttonsDiv.append(resetButton);
-        if (data.onGameEnd)
+        if (data?.onGameEnd !== undefined)
             data.onGameEnd(game);
-    }
-    pong.maxScore = data.maxScore || pong.maxScore;
+    });
 
     // Create control buttons
-    const buttonsDiv = document.createElement('div');
-    buttonsDiv.classList.add('div-buttons');
-    gameDiv.append(buttonsDiv);
-    
-    const startButton = document.createElement('button');
+    const buttonsDiv = newElement('div', { classList: ['div-buttons'], parent: gameDiv });
+    const startButton = newElement('button', { parent: buttonsDiv });
     startButton.textContent = 'Start';
     startButton.addEventListener('click', () => {
         buttonsDiv.removeChild(startButton);
         buttonsDiv.append(stopButton);
         pong.start();
     });
-    buttonsDiv.append(startButton);
     
     const stopButton = document.createElement('button');
     stopButton.textContent = 'Pause';
