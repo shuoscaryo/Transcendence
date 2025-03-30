@@ -24,7 +24,7 @@ export default function createPongGameComponent(data) {
     canvas.width = 800;
     canvas.height = 600;
     
-    const pong = new PongGame(canvas, data.type? data.type : 'offline');
+    const pong = new PongGame(canvas, data?.type? data.type : 'offline');
     if(data?.playerLeft?.controller !== undefined)
         pong.setLeftController(data.playerLeft.controller);
     if(data?.playerRight?.controller !== undefined)
@@ -35,6 +35,8 @@ export default function createPongGameComponent(data) {
         pong.setRightName(data.playerRight.name);
     if(data?.maxScore !== undefined)
         pong.setMaxScore(data.maxScore);
+    if(data?.setBallSpeedIncrease !== undefined)
+        pong.setBallSpeedIncrease(data.setBallSpeedIncrease);
     
     pong.onGoal((game) => {
         const gameStatus = game.getGameStatus();

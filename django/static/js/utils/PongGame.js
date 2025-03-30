@@ -259,6 +259,12 @@ export default class PongGame {
         this._onGameEnd = callback;
     }
 
+    setBallSpeedIncrease(amount) {
+        if (typeof amount !== "number" || amount < 0)
+            throw new Error("amount must be a number greater than or equal to 0");
+        this._ballSpeedIncrease = amount;
+    }
+
     start() {
         // If game already running don't start again
         if (this._animationFrameId)
@@ -394,7 +400,7 @@ export default class PongGame {
         this._paddleRight.size.y = ratio * this._canvas.height;
         this._paddleRight.moveSpeed = this._canvas.height;
 
-        this._ball.v.setPolar(this._canvas.height, Math.PI / 4);
+        this._ball.v.setPolar(this._canvas.width / 4, Math.PI / 8);
         this._ball.pos.x = this._canvas.width / 2;
         this._ball.pos.y = this._canvas.height / 2;
     }

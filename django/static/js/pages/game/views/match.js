@@ -15,6 +15,7 @@ export default async function getView(isLogged, path) {
     const data = {
         onContinueButton: () => { navigate("/"); },
         maxScore: 3,
+		setBallSpeedIncrease:100,
     };
 
     let gameComponent;
