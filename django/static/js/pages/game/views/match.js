@@ -3,6 +3,7 @@ import createPongGameComponent from "/static/js/components/game.js";
 import { PongAI, PlayerController, RemoteControllerOutgoing, RemoteControllerIncoming } from "/static/js/utils/Controller.js";
 import { navigate } from '/static/js/utils/router.js';
 import WebSocketService from '/static/js/utils/WebSocketService.js';
+import request from '/static/js/utils/request.js';
 
 export default async function getView(isLogged, path) {
     const css = [
@@ -12,23 +13,37 @@ export default async function getView(isLogged, path) {
     ];
     const component = document.createElement("div");
 
+	let displayName = null;
+	if (isLogged) {
+		const response = await request("GET", Path.API.PROFILE);
+		if (response.status === 200)
+			displayName = response.data.display_name ?? null;
+	}
+
+	const canvasWidth = 800;
+	const ballInitialSpeed = canvasWidth / 4;
     const data = {
         onContinueButton: () => { navigate("/"); },
         maxScore: 3,
-		setBallSpeedIncrease:100,
+		ballSpeedIncrease: ballInitialSpeed / 4,
+		ballInitialSpeed: ballInitialSpeed,
+		canvas: {
+			width: canvasWidth,
+			height: 600,
+		}
     };
 
     let gameComponent;
     let pongInstance;
 
     if (path.subPath === "/AI") {
-        data.playerLeft = { name: "Player 1", controller: new PlayerController("w", "s") };
+        data.playerLeft = { name: displayName ?? "Me", controller: new PlayerController("w", "s") };
         data.playerRight = { name: "AI", controller: new PongAI() };
         const [game, pong] = createPongGameComponent(data);
         gameComponent = game;
         pongInstance = pong;
     } else if (path.subPath === "/local") {
-        data.playerLeft = { name: "Player 1", controller: new PlayerController("w", "s") };
+        data.playerLeft = { name: displayName ?? "Me" , controller: new PlayerController("w", "s") };
         data.playerRight = { name: "Random Chump", controller: new PlayerController("ArrowUp", "ArrowDown") };
         const [game, pong] = createPongGameComponent(data);
         gameComponent = game;
@@ -70,7 +85,7 @@ export default async function getView(isLogged, path) {
 			gameStarted = true;
 			if (playerRole === 'first') {
 				data.playerLeft = {
-					name: 'me',
+					name: displayName ?? "Me",
 					controller: new PlayerController("w", "s"),
 				};
 				data.playerRight = {

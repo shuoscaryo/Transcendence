@@ -191,27 +191,29 @@ export default class PongGame {
     _lastTime; // variable to store the time of the last update call (milliseconds)
     _paddleOffset; // Distance from the paddle to the wall (pixels)
     _rmStateCallback; // Function to remove the callback from the WebSocketService when the game stops
+    _ballInitialSpeed; // [configurable] Initial speed of the ball (pixels/s)
 
     constructor(canvas, type = 'offline') { // type: 'offline', 'host', 'client'
         if (!(canvas instanceof HTMLCanvasElement))
             throw new Error("canvas must be an instance of HTMLCanvasElement");
         if (type !== 'offline' && type !== 'host' && type !== 'client')
             throw new Error("PongGame type must be 'offline', 'host' or 'client'");
+        this._type = type;
+        this._state = 'Start';
         this._canvas = canvas;
         this._ctx = this._canvas.getContext('2d');
         this._ball = new Ball(10);
-        this._paddleLeft = new Paddle(10, 100, 200);
-        this._paddleRight = new Paddle(10, 100, 200);
-        this._playerLeft = new Player();
-        this._playerRight = new Player();
+        this._ballInitialSpeed = this._canvas.width / 2;
         this._ballSpeedIncrease = 0;
         this._ballMaxAngle = 60;
+        this._paddleLeft = new Paddle(10, 100, this._canvas.height / 3);
+        this._paddleRight = new Paddle(10, 100, this._canvas.height / 3);
+        this._paddleOffset = this._paddleLeft.size.x * 2;
+        this._playerLeft = new Player();
+        this._playerRight = new Player();
         this._maxScore = 5;
         this._onGameEnd = null;
         this._onGoal = null;
-        this._type = type;
-        this._state = 'Playing';
-        this._paddleOffset = this._paddleLeft.size.x * 2;
         
         this._startPosition();
         this._draw();
@@ -265,6 +267,12 @@ export default class PongGame {
         this._ballSpeedIncrease = amount;
     }
 
+    setBallInitialSpeed(speed) {
+        if (typeof speed !== "number" || speed <= 0)
+            throw new Error("speed must be a number greater than 0");
+        this._ballInitialSpeed = speed;
+    }
+
     start() {
         // If game already running don't start again
         if (this._animationFrameId)
@@ -273,7 +281,14 @@ export default class PongGame {
         // If game ended already, reset it and continue
         if (this._state === "End")
             this.reset();
-        this._lastTime = null;
+
+        // If start state, init parameters and skip to playing
+        if (this._state === "Start") {
+            this._state = "Playing";
+            this._startPosition();
+            this._draw();
+            this._lastTime = null;
+        }
 
         // Annoying addition to enable and disable callbacks of controllers
         this._playerLeft.controller?.start();
@@ -338,7 +353,7 @@ export default class PongGame {
         this._startPosition();
         this._playerLeft.score = 0;
         this._playerRight.score = 0;
-        this._state = "Playing";
+        this._state = "Start";
         this._draw();
     }
     
@@ -351,6 +366,7 @@ export default class PongGame {
             ball: this._ball.getValues(),
             ballSpeedIncrease: this._ballSpeedIncrease,
             ballMaxAngle: this._ballMaxAngle,
+            ballInitialSpeed: this._ballInitialSpeed,
             paddleLeft: this._paddleLeft.getValues(),
             paddleRight: this._paddleRight.getValues(),
             playerLeft: this._playerLeft.getValues(),
@@ -375,6 +391,7 @@ export default class PongGame {
             this._ball.setValues(status.ball);
         this._ballSpeedIncrease = status.ballSpeedIncrease ?? this._ballSpeedIncrease;
         this._ballMaxAngle = status.ballMaxAngle ?? this._ballMaxAngle;
+        this._ballInitialSpeed = status.ballInitialSpeed ?? this._ballInitialSpeed;
         if (status.paddleLeft)
             this._paddleLeft.setValues(status.paddleLeft);
         if (status.paddleRight)
@@ -400,7 +417,7 @@ export default class PongGame {
         this._paddleRight.size.y = ratio * this._canvas.height;
         this._paddleRight.moveSpeed = this._canvas.height;
 
-        this._ball.v.setPolar(this._canvas.width / 4, Math.PI / 8);
+        this._ball.v.setPolar(this._ballInitialSpeed, Math.PI / 8);
         this._ball.pos.x = this._canvas.width / 2;
         this._ball.pos.y = this._canvas.height / 2;
     }

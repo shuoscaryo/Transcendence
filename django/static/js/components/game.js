@@ -21,22 +21,25 @@ export default function createPongGameComponent(data) {
 
     // Create the canvas and the game
     const canvas = newElement('canvas', { classList: ['canvas-game'], parent: gameDiv });
-    canvas.width = 800;
-    canvas.height = 600;
-    
+    canvas.width = data?.canvas?.width !== undefined? data.canvas.width: 800;
+    canvas.height = data?.canvas?.height !== undefined? data.canvas.height: 600;
+
     const pong = new PongGame(canvas, data?.type? data.type : 'offline');
-    if(data?.playerLeft?.controller !== undefined)
+    if (data?.playerLeft?.controller !== undefined)
         pong.setLeftController(data.playerLeft.controller);
-    if(data?.playerRight?.controller !== undefined)
+    if (data?.playerRight?.controller !== undefined)
         pong.setRightController(data.playerRight.controller);
-    if(data?.playerLeft?.name !== undefined)
+    if (data?.playerLeft?.name !== undefined)
         pong.setLeftName(data.playerLeft.name);
-    if(data?.playerRight?.name !== undefined)
+    if (data?.playerRight?.name !== undefined)
         pong.setRightName(data.playerRight.name);
-    if(data?.maxScore !== undefined)
+    if (data?.maxScore !== undefined)
         pong.setMaxScore(data.maxScore);
-    if(data?.setBallSpeedIncrease !== undefined)
-        pong.setBallSpeedIncrease(data.setBallSpeedIncrease);
+    if (data?.ballSpeedIncrease !== undefined)
+        pong.setBallSpeedIncrease(data.ballSpeedIncrease);
+    if (data?.ballInitialSpeed !== undefined)
+        pong.setBallInitialSpeed(data.ballInitialSpeed);
+        
     
     pong.onGoal((game) => {
         const gameStatus = game.getGameStatus();
