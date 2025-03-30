@@ -6,6 +6,8 @@ import uuid
 from PIL import Image
 from io import BytesIO
 from django.core.files.base import ContentFile
+from django.contrib.auth import get_user_model
+from django.contrib.auth import update_session_auth_hash
 
 def crop_center(image):
     width, height = image.size
@@ -93,6 +95,8 @@ def update_credentials(request, credential):
             return JsonResponse({'error': 'Invalid username format'}, status=400)
         if value == user.username:
             return JsonResponse({'error': 'Username is the same as current'}, status=400)
+        if get_user_model().objects.filter(username=value).exclude(id=user.id).exists():
+            return JsonResponse({'error': 'Username already taken'}, status=400)
         user.username = value
 
     # --- Email ---
@@ -101,6 +105,8 @@ def update_credentials(request, credential):
             return JsonResponse({'error': 'Invalid email format'}, status=400)
         if value == user.email:
             return JsonResponse({'error': 'Email is the same as current'}, status=400)
+        if get_user_model().objects.filter(email=value).exclude(id=user.id).exists():
+            return JsonResponse({'error': 'Email already taken'}, status=400)
         user.email = value
 
     # --- Display name ---
@@ -109,6 +115,8 @@ def update_credentials(request, credential):
             return JsonResponse({'error': 'Invalid display name format'}, status=400)
         if value == user.display_name:
             return JsonResponse({'error': 'Display name is the same as current'}, status=400)
+        if get_user_model().objects.filter(display_name=value).exclude(id=user.id).exists():
+            return JsonResponse({'error': 'Display name already taken'}, status=400)
         user.display_name = value
 
     # --- Password ---
@@ -124,6 +132,8 @@ def update_credentials(request, credential):
         return JsonResponse({'error': 'Invalid credential type'}, status=400)
 
     user.save()
+    update_session_auth_hash(request, user)
+
     if credential == 'password':
-        return JsonResponse()
+        return JsonResponse({})
     return JsonResponse({credential: value})

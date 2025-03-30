@@ -31,6 +31,9 @@ export default class Path {
         REMOVE_FRIEND: 'friends/remove',
         GET_FRIENDS: 'friends/list',
 
+        // Update user info
+        UPDATE_CREDENTIALS: 'update_credentials',
+
     };
 
     static _WS_MSG = {
