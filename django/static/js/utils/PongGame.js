@@ -394,7 +394,7 @@ export default class PongGame {
         this._paddleRight.size.y = ratio * this._canvas.height;
         this._paddleRight.moveSpeed = this._canvas.height;
 
-        this._ball.v.setPolar(this._canvas.height / 20, Math.PI / 4);
+        this._ball.v.setPolar(this._canvas.height, Math.PI / 4);
         this._ball.pos.x = this._canvas.width / 2;
         this._ball.pos.y = this._canvas.height / 2;
     }
