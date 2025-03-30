@@ -3,7 +3,7 @@ import newElement from "/static/js/utils/newElement.js";
 import request from "/static/js/utils/request.js";
 import {navigate} from "/static/js/utils/router.js";
 import * as validators from "/static/js/utils/validators.js";
-
+import getDefaultButton from "/static/js/components/defaultButton.js";
 function getPhotoSection(profile) {
     const component = newElement('section', { classList: ['section-block'], id: 'photo-section'});
 
@@ -81,119 +81,95 @@ function getInputRow(label, type, name, placeholder, required = true) {
 }
 
 function getUserUpdatesSection() {
-    const component = newElement('section', { classList: ['section-block']});
+    const component = newElement('section', { classList: ['section-block'], id: 'user-updates-section'});
+    const header = newElement('h2', {parent: component, id: 'user-updates-header'});
+    header.textContent = 'Update your credentials';
 
-    const userForm = newElement('form', {parent: component, classList: ['credential-update']});
-    userForm.method = "POST";
-    userForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const formData = new FormData(userForm);
-        const username = formData.get('username');
-        const password = formData.get('password');
-        if (!validators.usernameOk(username)) {
-            alert('Invalid username');
-            return;
+    // Each form configuration
+    const formConfigs = [
+        {
+            endpoint: 'username',
+            fields: [
+                { label: 'Username:', type: 'text', name: 'username', placeholder: 'username', validator: validators.usernameOk },
+                { label: 'Password:', type: 'password', name: 'password', placeholder: 'password' }
+            ],
+            successMessage: 'Username updated'
+        },
+        {
+            endpoint: 'display_name',
+            fields: [
+                { label: 'Display name:', type: 'text', name: 'display_name', placeholder: 'display name', validator: validators.usernameOk },
+                { label: 'Password:', type: 'password', name: 'password', placeholder: 'password' }
+            ],
+            successMessage: 'Display name updated'
+        },
+        {
+            endpoint: 'email',
+            fields: [
+                { label: 'Email:', type: 'email', name: 'email', placeholder: 'email', validator: validators.emailOk },
+                { label: 'Password:', type: 'password', name: 'password', placeholder: 'password' }
+            ],
+            successMessage: 'Email updated'
+        },
+        {
+            endpoint: 'password',
+            fields: [
+                { label: 'New password:', type: 'password', name: 'new_password', placeholder: 'new password', validator: validators.pwOk },
+                { label: 'Repeat new password:', type: 'password', name: 'new_password2', placeholder: 'new password' },
+                { label: 'Current password:', type: 'password', name: 'password', placeholder: 'Current password' }
+            ],
+            successMessage: 'Password updated'
         }
-        const response = await request('POST', Path.join(Path.API.UPDATE_CREDENTIALS, "username"), { value: username, password });
-        if (response.status !== 200) {
-            alert(response.error);
-            return;
-        }
-        alert('Username updated');
-        navigate();
-    });
-    const usernameInput = getInputRow('Username:', 'text', 'username', 'username', true);
-    userForm.append(usernameInput);
-    const usernamePwInput = getInputRow('Password:', 'password', 'password', 'password', true);
-    userForm.append(usernamePwInput);
-    const usernameButton = newElement('button', {parent: userForm});
-    usernameButton.textContent = 'Save';
+    ];
 
+    // Function to create a form
+    const createUpdateForm = ({ endpoint, fields, successMessage }) => {
+        const form = newElement('form', { parent: component, classList: ['credential-update'] });
+        form.method = 'POST';
 
-    const displayNameForm = newElement('form', {parent: component, classList: ['credential-update']});
-    displayNameForm.method = "POST";
-    displayNameForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const formData = new FormData(displayNameForm);
-        const displayName = formData.get('display_name');
-        const password = formData.get('password');
-        if (!validators.usernameOk(displayName)) {
-            alert('Invalid display name');
-            return;
-        }
-        const response = await request('POST', Path.join(Path.API.UPDATE_CREDENTIALS, "display_name"), { value: displayName, password });
-        if (response.status !== 200) {
-            alert(response.error);
-            return;
-        }
-        alert('display name updated');
-        navigate();
-    });
-    const displayNameInput = getInputRow('Display name:', 'text', 'display_name', 'display name', true);
-    displayNameForm.append(displayNameInput);
-    const displayNamePwInput = getInputRow('Password:', 'password', 'password', 'password', true);
-    displayNameForm.append(displayNamePwInput);
-    const displayNameButton = newElement('button', {parent: displayNameForm});
-    displayNameButton.textContent = 'Save';
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(form);
+            const password = formData.get('password');
+            const value = formData.get(fields[0].name);
 
-    const emailForm = newElement('form', {parent: component, classList: ['credential-update']});
-    emailForm.method = "POST";
-    emailForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const formData = new FormData(emailForm);
-        const email = formData.get('email');
-        const password = formData.get('password');
-        if (!validators.emailOk(email)) {
-            alert('Invalid email');
-            return;
-        }
-        const response = await request('POST', Path.join(Path.API.UPDATE_CREDENTIALS, "email"), { value: email, password });
-        if (response.status !== 200) {
-            alert(response.error);
-            return;
-        }
-        alert('email updated');
-        navigate();
-    });
-    const emailInput = getInputRow('Email:', 'email', 'email', 'email', true);
-    emailForm.append(emailInput);
-    const emailPwInput = getInputRow('Password:', 'password', 'password', 'password', true);
-    emailForm.append(emailPwInput);
-    const emailButton = newElement('button', {parent: emailForm});
-    emailButton.textContent = 'Save';
+            // Validate fields
+            if (fields[0].validator && !fields[0].validator(value)) {
+                alert(`Invalid ${fields[0].name}`);
+                return;
+            }
+            if (endpoint === 'password' && value !== formData.get('new_password2')) {
+                alert('Passwords do not match');
+                return;
+            }
 
-    const passwordForm = newElement('form', {parent: component, classList: ['credential-update']});
-    passwordForm.method = "POST";
-    passwordForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const formData = new FormData(passwordForm);
-        const password = formData.get('password');
-        const newPassword = formData.get('new_password');
-        const newPassword2 = formData.get('new_password2');
-        if (!validators.pwOk(newPassword)) {
-            alert('Invalid password');
-            return;
-        }
-        if (newPassword !== newPassword2) {
-            alert('Passwords do not match');
-            return;
-        }
-        const response = await request('POST', Path.join(Path.API.UPDATE_CREDENTIALS, "password"), { value: newPassword, password });
-        if (response.status !== 200) {
-            alert(response.error);
-            return;
-        }
-        alert('password updated');
-        navigate();
-    });
-    const newPasswordInput = getInputRow('New password:', 'password', 'new_password', 'new password', true);
-    passwordForm.append(newPasswordInput);
-    const newPassword2Input = getInputRow('Repeat new password:', 'password', 'new_password2', 'new password', true);
-    passwordForm.append(newPassword2Input);
-    const passwordInput = getInputRow('Current password:', 'password', 'password', ' Current password', true);
-    passwordForm.append(passwordInput);
-    const passwordButton = newElement('button', {parent: passwordForm});
-    passwordButton.textContent = 'Save';
+            // Send request
+            const response = await request('POST', Path.join(Path.API.UPDATE_CREDENTIALS, endpoint), { value, password });
+            if (response.status !== 200) {
+                alert(response.error);
+                return;
+            }
+
+            alert(successMessage);
+            navigate();
+        });
+        const inputsDiv = newElement('div', { parent: form , classList: ['inputs-div'] });
+        // Create input rows
+        fields.forEach(field => {
+            const inputRow = getInputRow(field.label, field.type, field.name, field.placeholder, true);
+            inputsDiv.append(inputRow);
+        });
+        const saveButton = getDefaultButton({
+            bgColor: 'var(--color-lime)',
+            content: 'Save',
+        });
+        form.append(saveButton);
+
+        return form;
+    };
+
+    // Create all forms
+    formConfigs.forEach(config => createUpdateForm(config));
 
     return component;
 }
