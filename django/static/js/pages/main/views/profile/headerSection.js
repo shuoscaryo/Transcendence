@@ -10,7 +10,7 @@ export default function getProfileHeaderSection(profile) {
     const userDiv = newElement('div', {id: 'user', parent: component});
 
     // component userDiv
-    const profileImg = newElement('img', {src: profile.profile_photo, parent: userDiv});
+    const profileImg = newElement('img', {parent: userDiv});
     profileImg.src = profile.profile_photo;
     const userInfo = newElement('div', {id: 'user-info', parent: userDiv});
 
