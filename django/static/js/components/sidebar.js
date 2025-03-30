@@ -18,6 +18,7 @@ function getUpperHalf(isLogged)
         'friends':{ label: 'Friends', image: Path.img('friendsLogo.png'), action: () => {navigate("/pages/main/friends");}},
         'chat':{ label: 'Chat', image: Path.img('chatLogo.png'), action: () => {navigate("/pages/main/chat");}},
         'profile':{ label: 'Profile', image: Path.img('profileLogo.png'), action: () => {navigate("/pages/main/profile");}},
+        'settings':{ label: 'Settings', image: Path.img('settingsLogo.png'), action: () => {navigate("/pages/main/settings");}},
     };
     let buttons = [];
     if (isLogged) {
@@ -26,6 +27,7 @@ function getUpperHalf(isLogged)
             headerButtonsDict['friends'],
             headerButtonsDict['chat'],
             headerButtonsDict['profile'],
+            headerButtonsDict['settings'],
         ];
     }
     else {
