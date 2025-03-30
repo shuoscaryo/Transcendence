@@ -3,6 +3,7 @@ import json
 import asyncio
 from django.utils import timezone
 from asgiref.sync import sync_to_async
+from django.contrib.auth import get_user_model
 
 online_users = set()
 
@@ -18,7 +19,7 @@ class PongConsumer(AsyncWebsocketConsumer):
         #    self.errorClose = True
         #    await self.close(code=403)
         #    return
-        self.user = self.scope['user']
+        self.user_id = self.scope['user'].id
 
     # Online Match management
         self.room_name = 'pong_room'
@@ -166,22 +167,24 @@ class PongConsumer(AsyncWebsocketConsumer):
 		}))
 
     async def update_online_status(self, is_connecting):
+        CustomUser = get_user_model()
+        user = await sync_to_async(CustomUser.objects.get)(id=self.user_id)
         # When connecting create own room and add self to online_users set and remove when disconnecting
         if is_connecting:
-            if not self.user.is_authenticated:
+            if not user.is_authenticated:
                 return
-            await self.channel_layer.group_add(f'user_{self.user.id}', self.channel_name)
-            online_users.add(self.user.id)
+            await self.channel_layer.group_add(f'user_{user.id}', self.channel_name)
+            online_users.add(user.id)
         else:
-            await self.channel_layer.group_discard(f'user_{self.user.id}', self.channel_name)
-            online_users.discard(self.user.id)
+            await self.channel_layer.group_discard(f'user_{user.id}', self.channel_name)
+            online_users.discard(user.id)
 
         # update the user's last_online field
-        self.user.last_online = timezone.now()
-        await sync_to_async(self.user.save)()
+        user.last_online = timezone.now()
+        await sync_to_async(user.save)()
 
         # Get friend list and send online status to all of them (in parallel)
-        friend_list = await sync_to_async(lambda: list(self.user.friends.all()))()
+        friend_list = await sync_to_async(lambda: list(user.friends.all()))()
         tasks = [
             self.channel_layer.group_send(
                 f'user_{friend.id}',
@@ -189,8 +192,8 @@ class PongConsumer(AsyncWebsocketConsumer):
                     'type': 'normal_send',
                     'msg_type': 'online_status',
                     'is_online': is_connecting,
-                    'display_name': self.user.display_name,
-                    'last_online': None if is_connecting else self.user.last_online.isoformat()
+                    'display_name': user.display_name,
+                    'last_online': None if is_connecting else user.last_online.isoformat()
                 }
             )
             for friend in friend_list

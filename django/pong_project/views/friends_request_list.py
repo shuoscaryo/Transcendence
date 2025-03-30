@@ -20,7 +20,7 @@ def friends_request_list(request):
         sent_data = [
             {
                 'display_name': req.to_user.display_name,
-                'profile_photo': req.to_user.profile_photo.url,
+                'profile_photo': req.to_user.profile_photo_url,
                 'date': req.created_at.isoformat()
             }
             for req in sent_requests
@@ -32,7 +32,7 @@ def friends_request_list(request):
         received_data = [
             {
                 'display_name': req.from_user.display_name,
-                'profile_photo': req.from_user.profile_photo.url,
+                'profile_photo': req.from_user.profile_photo_url,
                 'date': req.created_at.isoformat()
             }
             for req in received_requests

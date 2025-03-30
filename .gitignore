@@ -20,3 +20,4 @@
 #ignore all object files and libraries
 django/**/__pycache__/
 django/**/*.pyc
+django/media/

@@ -45,14 +45,14 @@ def friends_request_send(request):
                 "type": "normal_send",
                 "msg_type": "friend_request_new",
                 "display_name": from_user.display_name,
-                "profile_photo": from_user.profile_photo.url
+                "profile_photo": from_user.profile_photo_url,
             }
         )
 
         return JsonResponse({
             'message': f'Friend request sent to {display_name}',
             'display_name': to_user.display_name,
-            'profile_photo': to_user.profile_photo.url
+            'profile_photo': to_user.profile_photo_url,
         })
     except CustomUser.DoesNotExist:
         return JsonResponse({'error': f'User {display_name} not found'}, status=404)

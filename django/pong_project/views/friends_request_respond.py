@@ -48,7 +48,7 @@ def friends_request_respond(request):
                 "type": "normal_send",
                 "msg_type": "friend_request_response",
                 "answer": action,
-                "profile_photo": to_user.profile_photo.url,
+                "profile_photo": to_user.profile_photo_url,
                 "display_name": to_user.display_name,
                 "is_online": to_user.id in online_users,
                 "last_online": None if to_user.id in online_users else to_user.last_online,
@@ -59,7 +59,7 @@ def friends_request_respond(request):
             from_user.friends.add(to_user)
             to_user.friends.add(from_user)
             return JsonResponse({
-                "profile_photo": from_user.profile_photo.url,
+                "profile_photo": from_user.profile_photo_url,
                 "display_name": from_user.display_name,
                 "is_online": from_user.id in online_users,
                 "last_online": None if from_user.id in online_users else from_user.last_online,

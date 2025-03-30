@@ -39,6 +39,10 @@ function getPhotoSection(profile) {
             });
     
             if (!res.ok) {
+                if (res.status === 413) {
+                    alert('Image too large. Max size is 10MB.');
+                    return;
+                }
                 const err = await res.json();
                 alert('Upload failed: ' + (err.error || res.status));
                 return;

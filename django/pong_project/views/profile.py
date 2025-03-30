@@ -11,7 +11,7 @@ def get_profile(display_name, own_profile=False):
             'display_name': user.display_name,
             'wins': user.wins,
             'losses': user.losses,
-            'profile_photo': user.profile_photo.url if user.profile_photo else '',
+            'profile_photo': user.profile_photo_url,
             'date_joined': user.date_joined,
         }
         # Specific data for own profile

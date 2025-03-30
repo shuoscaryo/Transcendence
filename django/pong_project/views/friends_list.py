@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from ..consumers import online_users
+from django.conf import settings
 
 CustomUser = get_user_model()
 
@@ -14,7 +15,7 @@ def friends_list(request):
         friends_data = [
             {
                 'display_name': friend.display_name,
-                'profile_photo': friend.profile_photo.url if friend.profile_photo else '',
+                'profile_photo': friend.profile_photo_url,
                 'is_online': friend.id in online_users,
                 'last_online': None if friend.id in online_users else friend.last_online.isoformat(),
             }
