@@ -5,6 +5,22 @@ import { navigate } from '/static/js/utils/router.js';
 import WebSocketService from '/static/js/utils/WebSocketService.js';
 import request from '/static/js/utils/request.js';
 
+async function sendMatchResult(type, game) {
+	request("POST", Path.API.ADD_MATCH, {
+		player_left: game.getPlayerLeft().name,
+		player_right: game.getPlayerRight().name,
+		match_type: type,
+		score_left: game.getPlayerLeft().score,
+		score_right: game.getPlayerRight().score,
+		duration: game.getDuration(),
+	}).then(response => {
+		if (response.status !== 200)
+			console.error(`Error: ${response.error}`);
+	}).catch(error => {
+		console.error(`Request failed: ${error}`);
+	});
+}
+
 export default async function getView(isLogged, path) {
     const css = [
         Path.css("game/match.css"),
@@ -39,12 +55,14 @@ export default async function getView(isLogged, path) {
     if (path.subPath === "/AI") {
         data.playerLeft = { name: displayName ?? "Me", controller: new PlayerController("w", "s") };
         data.playerRight = { name: "AI", controller: new PongAI() };
+		data.onGameEnd = (game) => {if (isLogged) sendMatchResult("AI", game);};
         const [game, pong] = createPongGameComponent(data);
         gameComponent = game;
         pongInstance = pong;
     } else if (path.subPath === "/local") {
         data.playerLeft = { name: displayName ?? "Me" , controller: new PlayerController("w", "s") };
         data.playerRight = { name: "Random Chump", controller: new PlayerController("ArrowUp", "ArrowDown") };
+		data.onGameEnd = (game) => {if (isLogged) sendMatchResult("local", game);};
         const [game, pong] = createPongGameComponent(data);
         gameComponent = game;
         pongInstance = pong;
@@ -85,21 +103,22 @@ export default async function getView(isLogged, path) {
 			gameStarted = true;
 			if (playerRole === 'first') {
 				data.playerLeft = {
-					name: displayName ?? "Me",
+					name: message.player_left,
 					controller: new PlayerController("w", "s"),
 				};
 				data.playerRight = {
-					name: 'friend',
+					name: message.player_right,
 					controller: new RemoteControllerIncoming(),
 				};
+				data.onGameEnd = (game) => {if (isLogged) sendMatchResult("online", game);};
 				data.type = 'host';
 			} else if (playerRole === 'second') {
 				data.playerLeft = {
-					name: 'friend',
+					name: message.player_left,
 					controller: null,
 				};
 				data.playerRight = {
-					name: 'me',
+					name: message.player_right,
 					controller: new RemoteControllerOutgoing("w", "s"),
 				};
 				data.type = 'client';
@@ -109,9 +128,6 @@ export default async function getView(isLogged, path) {
 			pongInstance = pong;
 			component.innerHTML = "";
 			component.append(gameComponent);
-			const tmp = document.createElement("p"); // XXX temporal
-			tmp.textContent = data.type; // XXX temporal
-			component.append(tmp); // XXX temporal
 			
 			console.log("¡Juego iniciado!");
 		});

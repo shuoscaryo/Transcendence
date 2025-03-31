@@ -105,7 +105,8 @@ export class RemoteControllerIncoming extends Controller {
 	}
 
 	stop () {
-		this.rmCallback();
+		if (this.rmCallback)
+			this.rmCallback();
 		this.rmCallback = null;
 	}
 }

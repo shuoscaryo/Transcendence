@@ -192,6 +192,8 @@ export default class PongGame {
     _paddleOffset; // Distance from the paddle to the wall (pixels)
     _rmStateCallback; // Function to remove the callback from the WebSocketService when the game stops
     _ballInitialSpeed; // [configurable] Initial speed of the ball (pixels/s)
+    _startTime; // Time when the game started (seconds)
+    _matchDuration; // Duration of the match (seconds)
 
     constructor(canvas, type = 'offline') { // type: 'offline', 'host', 'client'
         if (!(canvas instanceof HTMLCanvasElement))
@@ -214,6 +216,8 @@ export default class PongGame {
         this._maxScore = 5;
         this._onGameEnd = null;
         this._onGoal = null;
+        this._startTime = null;
+        this._duration = null;
         
         this._startPosition();
         this._draw();
@@ -273,6 +277,19 @@ export default class PongGame {
         this._ballInitialSpeed = speed;
     }
 
+    getPlayerLeft() {
+        return { name: this._playerLeft.name, score: this._playerLeft.score };
+    }
+
+    getPlayerRight() {
+        return { name: this._playerRight.name, score: this._playerRight.score };
+    }
+
+    getDuration() {
+        return this._duration;
+    }
+
+
     start() {
         // If game already running don't start again
         if (this._animationFrameId)
@@ -288,6 +305,7 @@ export default class PongGame {
             this._startPosition();
             this._draw();
             this._lastTime = null;
+            this._startTime = performance.now() / 1000;
         }
 
         // Annoying addition to enable and disable callbacks of controllers
@@ -354,6 +372,8 @@ export default class PongGame {
         this._playerLeft.score = 0;
         this._playerRight.score = 0;
         this._state = "Start";
+        this._startTime = null;
+        this._duration = null;
         this._draw();
     }
     
@@ -499,6 +519,7 @@ export default class PongGame {
 
     _updateEnd(dt) {
         this.stop();
+        this._duration = performance.now() / 1000 - this._startTime;
         if (this._onGameEnd)
             this._onGameEnd(this);
     }

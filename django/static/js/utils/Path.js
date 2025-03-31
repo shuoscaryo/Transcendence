@@ -31,8 +31,9 @@ export default class Path {
         REMOVE_FRIEND: 'friends/remove',
         GET_FRIENDS: 'friends/list',
 
-        // Update user info
+        // Update stuff
         UPDATE_CREDENTIALS: 'update_credentials',
+        ADD_MATCH: 'add-match',
 
     };
 

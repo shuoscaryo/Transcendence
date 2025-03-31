@@ -3,6 +3,8 @@ from django.http import JsonResponse
 from django.contrib.auth import get_user_model
 import json
 from pong_project.models import MatchHistory
+from django.utils import timezone
+from datetime import timedelta
 
 CustomUser = get_user_model()
 
@@ -16,8 +18,9 @@ def add_match(request):
         data = json.loads(request.body)
 
         required_fields = ['score_left', 'score_right', 'duration', 'match_type']
-        if not all(field in data for field in required_fields):
-            return JsonResponse({'error': 'Missing required fields'}, status=400)
+        for field in required_fields:
+            if field not in data:
+                return JsonResponse({'error': f'Missing required field {field}'}, status=400)
 
         score_left = int(data['score_left'])
         score_right = int(data['score_right'])
@@ -44,7 +47,8 @@ def add_match(request):
             score_left=score_left,
             score_right=score_right,
             duration=duration,
-            match_type=match_type
+            match_type=match_type,
+            start_date= timezone.now() - timedelta(seconds=duration),
         )
 
         # Update stats

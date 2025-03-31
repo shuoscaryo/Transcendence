@@ -136,11 +136,16 @@ class PongConsumer(AsyncWebsocketConsumer):
                 ready_players.append(self)
 
             if len(ready_players) >= 2:
+                CustomUser = get_user_model() # NOTE added by Oscar
+                player_left = await sync_to_async(CustomUser.objects.get)(id=ready_players[0].user_id) # NOTE added by Oscar
+                player_right = await sync_to_async(CustomUser.objects.get)(id=ready_players[1].user_id) # NOTE added by Oscar
                 await self.channel_layer.group_send(
                     self.room_group_name,
                     {
                         'type': 'game_message',
-                        'message': 'Ambos jugadores están listos. ¡El juego comienza!'
+                        'message': 'Ambos jugadores están listos. ¡El juego comienza!',
+                        'player_left': player_left.display_name, # NOTE added by Oscar
+                        'player_right': player_right.display_name, # NOTE added by Oscar
                     }
                 )
                 self.ready_players[self.room_name] = []
@@ -149,7 +154,9 @@ class PongConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             'msg_type': 'start_game',
             'message': event.get('message'),
-            'move': event.get('move')
+            'move': event.get('move'),
+            'player_left': event.get('player_left'), # NOTE added by Oscar
+            'player_right': event.get('player_right'), # NOTE added by Oscar
         }))
 
     async def waiting_message(self, event):
