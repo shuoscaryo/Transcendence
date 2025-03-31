@@ -9,7 +9,7 @@
  * 
  * @returns {HTMLElement} The newly created element.
  */
-export default function newElement(type, { parent = null, classList = [], id = null }) {
+export default function newElement(type, { parent = null, classList = [], id = null } = {}) {
     const element = document.createElement(type);
     
     if (classList.length) element.classList.add(...classList);

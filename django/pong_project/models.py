@@ -19,8 +19,6 @@ class PathAndRename:
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
     display_name = models.CharField(max_length=30, unique=True)
-    wins = models.IntegerField(default=0)
-    losses = models.IntegerField(default=0)
     profile_photo = models.ImageField(upload_to=PathAndRename('profile_photos/'), blank=True, null=True)
     @property
     def profile_photo_url(self):

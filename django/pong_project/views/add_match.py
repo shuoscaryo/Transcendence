@@ -51,20 +51,6 @@ def add_match(request):
             start_date= timezone.now() - timedelta(seconds=duration),
         )
 
-        # Update stats
-        if score_left > score_right:
-            player_left.wins += 1
-            if player_right:
-                player_right.losses += 1
-        elif score_left < score_right:
-            player_left.losses += 1
-            if player_right:
-                player_right.wins += 1
-
-        player_left.save()
-        if player_right:
-            player_right.save()
-
         return JsonResponse({
             'message': 'Match recorded successfully',
             'match_id': match.id

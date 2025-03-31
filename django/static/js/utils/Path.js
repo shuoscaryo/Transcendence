@@ -22,6 +22,7 @@ export default class Path {
         // Profile
         PROFILE: 'profile',
         MATCH_HISTORY: 'match-history',
+        STATS: 'profile-stats',
 
         // Friend requests
         SEND_FRIEND_REQUEST: 'friends/request/send',

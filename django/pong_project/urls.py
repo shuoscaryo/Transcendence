@@ -29,6 +29,8 @@ urlpatterns = [
     path('api/profile/<str:display_name>', views.profile_by_display_name),
     path('api/match-history', views.match_history),
     path('api/match-history/<str:display_name>', views.match_history_by_display_name),
+    path('api/profile-stats', views.profile_stats),
+    path('api/profile-stats/<str:display_name>', views.profile_stats_by_display_name),
     path('api/add-match', views.add_match),
 	path('api/tournaments', views.tournaments),
     path('api/friends/list', views.friends_list),

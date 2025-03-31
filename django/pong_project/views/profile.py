@@ -9,8 +9,6 @@ def get_profile(display_name, own_profile=False):
         # Start with general data for everyone
         output_data = {
             'display_name': user.display_name,
-            'wins': user.wins,
-            'losses': user.losses,
             'profile_photo': user.profile_photo_url,
             'date_joined': user.date_joined,
         }
