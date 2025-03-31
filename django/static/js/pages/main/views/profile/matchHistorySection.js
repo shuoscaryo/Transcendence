@@ -4,7 +4,6 @@ import getDefaultButton from '/static/js/components/defaultButton.js';
 import newElement from '/static/js/utils/newElement.js';
 import fetchMatchHistory from './fetchMatchHistory.js';
 import { formatTimeAgo } from '/static/js/utils/time.js';
-import getCreateELementsDiv from './manualCreateMatches.js';
 
 function secondsToMS(seconds) {
     const minutes = Math.floor(seconds / 60);
@@ -110,8 +109,6 @@ export default function getMatchHistorySection(profile, matchHistory, path) {
     const component = newElement('section', {id: 'match-history-section', classList: ['section-block']});
 
     //component
-    const createElementsDiv = getCreateELementsDiv(profile);
-    component.append(createElementsDiv);
     const matchHistoryDiv = newElement('div', {id: 'match-history-div', parent: component});
 
     // component matchHistoryDiv
