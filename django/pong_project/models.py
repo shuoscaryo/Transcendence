@@ -32,20 +32,18 @@ class CustomUser(AbstractUser):
 
 
 class MatchHistory(models.Model):
-    playerLeft = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='match_history_as_player_left')
-    playerRight = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='match_history_as_player_right', null=True)
-    scoreLeft = models.IntegerField()
-    scoreRight = models.IntegerField()
+    player_left = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='match_history_as_player_left')
+    player_right = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='match_history_as_player_right', null=True)
+    score_left = models.IntegerField()
+    score_right = models.IntegerField()
     start_date = models.DateTimeField(auto_now_add=True)
     duration = models.IntegerField()
-    matchType = models.CharField(
+    match_type = models.CharField(
         max_length=20,
         choices = [
             ('local','local'),
             ('AI', 'AI'),
             ('online','online'),
-            ('tournament-local','tournament-local'),
-            ('tournament-online', 'tournament-online'),
         ]
     )
 

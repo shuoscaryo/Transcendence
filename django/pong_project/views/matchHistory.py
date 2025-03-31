@@ -15,10 +15,10 @@ def get_match_history(display_name, request):
 
         # Get the matches range
         matches = MatchHistory.objects.filter(
-            Q(playerLeft=user) | Q(playerRight=user)
+            Q(player_left=user) | Q(player_right=user)
         ).order_by('-start_date').values(
-            'id', 'playerLeft__display_name', 'playerRight__display_name',
-            'scoreLeft', 'scoreRight', 'start_date', 'duration', 'matchType'
+            'id', 'player_left__display_name', 'player_right__display_name',
+            'score_left', 'score_right', 'start_date', 'duration', 'match_type'
         )[offset:offset + limit]
 
         # Format dates so it doesn't crash the JSON serializer
@@ -29,7 +29,7 @@ def get_match_history(display_name, request):
 
         # Get total matches
         total_matches = MatchHistory.objects.filter(
-            Q(playerLeft=user) | Q(playerRight=user)
+            Q(player_left=user) | Q(player_right=user)
         ).count()
 
         return JsonResponse({'matches': formatted_matches, 'total_matches': total_matches})

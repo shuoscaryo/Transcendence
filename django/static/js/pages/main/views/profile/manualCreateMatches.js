@@ -39,10 +39,10 @@ function getNewMatchForm(profile) {
     const inputDiv = newElement('div', {parent: form, classList: ['input-div']});
 
     // component form inputDiv
-    inputDiv.append(getInputRow('Player Left:', 'text', 'playerLeft', profile.display_name, true));
-    inputDiv.append(getInputRow('Player Right:', 'text', 'playerRight', 'player2', false));
-    inputDiv.append(getInputRow('Score Left:', 'number', 'scoreLeft', 10, true));
-    inputDiv.append(getInputRow('Score Right:', 'number', 'scoreRight', 5, true));
+    inputDiv.append(getInputRow('Player Left:', 'text', 'player_left', profile.display_name, true));
+    inputDiv.append(getInputRow('Player Right:', 'text', 'player_right', 'player2', false));
+    inputDiv.append(getInputRow('Score Left:', 'number', 'score_left', 10, true));
+    inputDiv.append(getInputRow('Score Right:', 'number', 'score_right', 5, true));
     inputDiv.append(getInputRow('Duration (s):', 'number', 'duration', 120, true));
     const matchTypeDiv = newElement('div', {parent: inputDiv, classList: ['input-row']});
 
@@ -50,7 +50,7 @@ function getNewMatchForm(profile) {
     const matchTypeLabel = newElement('label', {parent: matchTypeDiv});
     matchTypeLabel.textContent = 'Match Type:';
     const matchTypeSelect = newElement('select', {parent: matchTypeDiv});
-    matchTypeSelect.name = 'matchType';
+    matchTypeSelect.name = 'match_type';
 
     // component form inputDiv matchTypeDiv matchTypeSelect
     const types = ['local', 'AI', 'online'];
@@ -74,15 +74,15 @@ function getNewMatchForm(profile) {
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
     
-        if (!usernameOk(data.playerLeft)) {
+        if (!usernameOk(data.player_left)) {
             alert('Invalid player left');
             return;
         }
-        if (data.matchType === 'online' && data.playerRight !== '' && !usernameOk(data.playerRight)) {
+        if (data.match_type === 'online' && data.player_right !== '' && !usernameOk(data.player_right)) {
             alert('Invalid player right');
             return;
         }
-        if (!isUintValid(data.scoreLeft) || !isUintValid(data.scoreRight)) {
+        if (!isUintValid(data.score_left) || !isUintValid(data.score_right)) {
             alert('Invalid scores');
             return;
         }

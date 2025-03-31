@@ -32,50 +32,49 @@ function getPlayerLink(displayName, profile, realUser = true) {
 
 function getMatchHistoryRow(profile, match) {
     const component = newElement('div', {classList: ['match']});
-    if (match.matchType.startsWith('tournament'))
+    if (match.match_type.startsWith('tournament'))
         component.classList.add('tournament');
 
     // component
     const img = newElement('img', {parent: component});
-    if (match.matchType.startsWith('tournament'))
+    if (match.match_type.startsWith('tournament'))
         img.src = Path.img('match_tournament.png');
     else
-        img.src = Path.img(`match_${match.matchType}.png`);
-    img.alt = match.matchType;
+        img.src = Path.img(`match_${match.match_type}.png`);
     const playersDiv = newElement('div', {parent: component, classList: ['players-div', 'match-div']});
     const scoreDiv = newElement('div', {parent: component, classList: ['score', 'match-div']});
 
     // component (playersDiv && scoreDiv)
-    if (match.matchType === 'local') {
+    if (match.match_type === 'local') {
         playersDiv.classList.add('players-local');
         playersDiv.textContent = 'Local match';
-        scoreDiv.textContent = `${match.scoreLeft} - ${match.scoreRight}`;
+        scoreDiv.textContent = `${match.score_left} - ${match.score_right}`;
     }
-    else if (match.matchType === 'AI') {
+    else if (match.match_type === 'AI') {
         playersDiv.classList.add('players-normal');
-        const player1 = getPlayerLink(match.playerLeft__display_name, profile);
+        const player1 = getPlayerLink(match.player_left__display_name, profile);
         const player2 = getPlayerLink('AI', profile, false);
         playersDiv.append(player1, player2);
-        scoreDiv.textContent = `${match.scoreLeft} - ${match.scoreRight}`;
-        if (match.scoreLeft > match.scoreRight)
+        scoreDiv.textContent = `${match.score_left} - ${match.score_right}`;
+        if (match.score_left > match.score_right)
             component.classList.add('won-match');
         else
             component.classList.add('lost-match');
     }
-    else if (match.matchType === 'online') {
+    else if (match.match_type === 'online') {
         playersDiv.classList.add('players-normal');
-        const player1 = getPlayerLink(match.playerLeft__display_name, profile);
-        const player2 = getPlayerLink(match.playerRight__display_name, profile);
+        const player1 = getPlayerLink(match.player_left__display_name, profile);
+        const player2 = getPlayerLink(match.player_right__display_name, profile);
         playersDiv.append(player1, player2);
-        scoreDiv.textContent = `${match.scoreLeft} - ${match.scoreRight}`;
+        scoreDiv.textContent = `${match.score_left} - ${match.score_right}`;
         // username is left user XNOR left user won (if both conditions are same then its a win)
-        if ((profile.display_name === match.playerLeft__display_name)
-            === (match.scoreLeft > match.scoreRight))
+        if ((profile.display_name === match.player_left__display_name)
+            === (match.score_left > match.score_right))
             component.classList.add('won-match');
         else
             component.classList.add('lost-match');
     }
-    else if (match.matchType.startsWith('tournament')) {
+    else if (match.match_type.startsWith('tournament')) {
         playersDiv.classList.add('players-tournament');
         const rowLength = 4;
         let playersColumnDiv;
@@ -85,7 +84,7 @@ function getMatchHistoryRow(profile, match) {
             const player = getPlayerLink(
                 match.players[i],
                 profile,
-                match.matchType === 'tournament-online'
+                match.match_type === 'tournament-online'
             );
             playersColumnDiv.append(player);
         }
