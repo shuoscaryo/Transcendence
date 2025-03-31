@@ -74,7 +74,7 @@ class PongConsumer(AsyncWebsocketConsumer):
             To add a new message type, create a new method inside the class with the name <msg_type>_handler.
         '''
     # General message handling
-        data = json.loads(text_data)
+        data = json.loads(text_data) # TODO try except
 
         # get the message type
         msg_type = data.get("msg_type")
