@@ -3,7 +3,7 @@ import { navigate } from '/static/js/utils/router.js';
 import getDefaultButton from '/static/js/components/defaultButton.js';
 import newElement from '/static/js/utils/newElement.js';
 import fetchMatchHistory from './fetchMatchHistory.js';
-import { formatTimeAgo } from '/static/js/utils/time.js';
+import { formatDate } from '/static/js/utils/time.js';
 
 function secondsToMS(seconds) {
     const minutes = Math.floor(seconds / 60);
@@ -98,9 +98,7 @@ function getMatchHistoryRow(profile, match) {
     const durationDiv = newElement('div', {parent: component, classList: ['duration', 'match-div']});
     durationDiv.textContent = secondsToMS(match.duration);
     const startTimeDiv = newElement('div', {parent: component, classList: ['start-time', 'match-div']});
-    const date = match.start_date.split(' ');
-    startTimeDiv.innerHTML = `${date[0]}<br>${date[1]}`;
-    startTimeDiv.innerHTML = formatTimeAgo(match.start_date);
+    startTimeDiv.textContent = formatDate(match.start_date);
 
     return component;
 }

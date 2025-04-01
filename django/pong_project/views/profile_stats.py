@@ -38,9 +38,9 @@ def get_profile_stats(display_name):
             enemy_average = round(total_enemy_score / count, 2) if count > 0 else 0
             return user_average, enemy_average
 
-        def get_avg_duration(matches):
+        def get_total_duration(matches):
             total = sum([match.duration for match in matches])
-            return round(total / len(matches), 1) if matches else 0
+            return total if matches else 0
 
         def get_longest_winstreak(matches):
             streak = max_streak = 0
@@ -65,27 +65,29 @@ def get_profile_stats(display_name):
             return {
                 'total': len(matches),
                 'wins': wins,
-                'losses': losses,
                 'avg_score': {
                     'user': avg_score_user,
                     'enemy': avg_score_enemy,
                 },
-                'avg_duration': get_avg_duration(matches),
+                'total_seconds': get_total_duration(matches),
                 'longest_winstreak': get_longest_winstreak(matches),
             }
 
         stats = {
             'local': {
                 'total': local_matches.count(),
+                'total_seconds': get_total_duration(local_matches),
             },
             'ai': count_stats(ai_matches),
             'online': count_stats(online_matches),
-            'tournaments_local': {
+            'tournaments_local': { # TODO: implement
                 'total': 0,  # placeholder, not implemented
+                'total_seconds': 0,  # placeholder
             },
-            'tournaments_online': {
+            'tournaments_online': { # TODO: implement
+                'total': 0,  # placeholder, not implemented
                 'wins': 0,  # placeholder
-                'losses': 0,
+                'total_seconds': 0,  # placeholder
             },
         }
 
