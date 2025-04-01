@@ -2,13 +2,11 @@ import newElement from '/static/js/utils/newElement.js';
 
 // Function to create and return a canvas with a bar graph
 function getBarGraph(stats) {
-    const canvas = newElement('canvas');
-    canvas.id = 'matchesChart';
+    const canvas = newElement('canvas', {id: 'stats-bar-graph'});
     canvas.width = 400;
     canvas.height = 200;
 
     const ctx = canvas.getContext('2d');
-
     const data = {
         labels: ['Local', 'AI', 'Online'],
         datasets: [
