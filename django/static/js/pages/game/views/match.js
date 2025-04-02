@@ -21,6 +21,13 @@ async function sendMatchResult(type, game) {
 	});
 }
 
+async function getPlayerName() {
+	const response = await request("GET", Path.API.PROFILE);
+	if (response.status === 200)
+		return response.data.display_name ?? null;
+	return null;
+}
+
 export default async function getView(isLogged, path) {
     const css = [
         Path.css("game/match.css"),
@@ -30,11 +37,8 @@ export default async function getView(isLogged, path) {
     const component = document.createElement("div");
 
 	let displayName = null;
-	if (isLogged) {
-		const response = await request("GET", Path.API.PROFILE);
-		if (response.status === 200)
-			displayName = response.data.display_name ?? null;
-	}
+	if (isLogged)
+		displayName = await getPlayerName();
 
 	const canvasWidth = 800;
 	const ballInitialSpeed = canvasWidth / 4;
@@ -69,8 +73,6 @@ export default async function getView(isLogged, path) {
     } else if (path.subPath === "/online") {
         let playerRole = null;
         let gameStarted = false;
-
-        component.innerHTML = "<p>Esperando al segundo jugador...</p>";
 
 		WebSocketService.send("init");
 		WebSocketService.send("get_role");
