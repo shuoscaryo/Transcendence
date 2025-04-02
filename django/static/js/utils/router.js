@@ -165,7 +165,7 @@ export async function router() {
     
     // Change path to the correct page on specific cases
     let path = window.location.pathname;
-    if (path === '/' || path === '/home' || path === '/main')
+    if (path === '/' || path === '/home' || path === '/main' || path === '/main/' ||  path === '/home/')
         path = '/main/home';
     else if (path === '/login')
         path = '/login/login';
