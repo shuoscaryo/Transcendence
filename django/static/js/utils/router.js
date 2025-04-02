@@ -16,18 +16,17 @@ async function apiIsLogged() {
 }
 
 function parsePath(path) {
-    // The path is expected to be in the format /pages/page/view/restOfPath?query#hash
+    // The path is expected to be in the format /page/view/restOfPath?query#hash
     if (path.startsWith('/'))
         path = path.substring(1);
     const parts = path.split('/');
 
     // Get the important parts
-    const prefix = parts[0];
-    const page = parts[1];
-    const view = parts[2];
-    const subPath = '/' + parts.slice(3).join('/');
+    const page = parts[0];
+    const view = parts[1];
+    const subPath = '/' + parts.slice(2).join('/');
 
-    return { prefix, page, view, subPath };
+    return { page, view, subPath };
 }
 
 // returns {status, component, css, [onDestroy]} on success, {status + extras (like redirect with 300)} if error
@@ -63,8 +62,6 @@ async function getComponentFromUrl(url, isLogged, path) {
 async function loadPage(path, isLogged) {
     // Split the path into parts
     path = parsePath(path);
-    if (path.prefix !== 'pages')
-        return {status: 404};
     
     // Load the page
     WebSocketService.clearCallbacks(); // NOTE | This is temporarly here so the listeners are not deleted after loading them in
@@ -168,16 +165,16 @@ export async function router() {
     
     // Change path to the correct page on specific cases
     let path = window.location.pathname;
-    if (path === '/' || path === '/home' || path === '/pages/main')
-        path = '/pages/main/home';
+    if (path === '/' || path === '/home' || path === '/main')
+        path = '/main/home';
     else if (path === '/login')
-        path = '/pages/login/login';
+        path = '/login/login';
     else if (path === '/register')
-        path = '/pages/login/register';
+        path = '/login/register';
     else if (isErrorPage(path))
-        path = `/pages/error${path}`;
+        path = `/error${path}`;
     // Redirect home if logged in from login pages
-    if (isLogged && path.startsWith("/pages/login"))
+    if (isLogged && path.startsWith("/login"))
         return navigate('/home', true);
     
     // Load the page
@@ -192,7 +189,7 @@ export async function router() {
     // Print the error and load the error page
     if (result.error)
         console.error(`[ROUTER] ${result.error}`);
-    result = await loadPage(`/pages/error/${result.status}`, isLogged);
+    result = await loadPage(`/error/${result.status}`, isLogged);
     // If error page fails to load, do manual html error
     if (result.status !== 200) {
         const divApp = document.getElementById('app');

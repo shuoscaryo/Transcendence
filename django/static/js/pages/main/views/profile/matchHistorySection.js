@@ -19,7 +19,7 @@ function getPlayerLink(displayName, profile, realUser = true) {
         component.classList.add('no-link');
     else {
         component.addEventListener('click', () => {
-            navigate(`/pages/main/profile/${displayName}`);
+            navigate(`/main/profile/${displayName}`);
         });
     }
 

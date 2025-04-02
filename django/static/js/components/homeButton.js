@@ -12,7 +12,7 @@ export default function getHomeButton()
     component.append(image);
 
     component.addEventListener('click', () => {
-        navigate("/pages/main/home");
+        navigate("/main/home");
     });
 
     return component;

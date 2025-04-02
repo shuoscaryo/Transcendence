@@ -42,7 +42,7 @@ export default function getProfileHeaderSection(profile) {
         onClick: () => {
             if (searchInput.value === '')
                 return;
-            navigate(`/pages/main/profile/${searchInput.value}`);
+            navigate(`/main/profile/${searchInput.value}`);
         }
     })
     searchButton.id = 'search-button';

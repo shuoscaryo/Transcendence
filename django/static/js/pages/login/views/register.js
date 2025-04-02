@@ -28,7 +28,7 @@ function getOtherLogin() {
         bgColor: 'var(--color-button-fortito)',
         bgHoverColor: 'var(--color-button-fortito-hover)',
         content: buttonContent,
-        onClick: () => {navigate('/pages/main/home');},
+        onClick: () => {navigate('/main/home');},
     });
     fortitoButton.classList.add('button-other-login');
     component.append(fortitoButton);
@@ -243,7 +243,7 @@ function getUpperHalf() {
             const response = await request('POST', Path.API.REGISTER, jsonData);
             if (response.status === 200) {
                 alert('Account created successfully');
-                navigate('/pages/main/home');
+                navigate('/main/home');
             } else {
                 alert(response.error ? response.error : 'An error occurred');
             }
@@ -278,7 +278,7 @@ export default async function getView(isLogged) {
     const registerButton = document.createElement('button');
     registerButton.id = 'button-register';
     registerButton.addEventListener('click', () => {
-        navigate('/pages/login/login');
+        navigate('/login/login');
     });
     registerButton.textContent = 'Already have an account? Log in';
     divLower.append(registerButton);

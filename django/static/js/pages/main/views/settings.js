@@ -60,7 +60,7 @@ function getPhotoSection(profile) {
     const userInfo = newElement('div', {id: 'user-info', parent: component});
     const displayName = newElement('h1', {parent: userInfo});
     displayName.textContent = profile.display_name;
-    displayName.addEventListener('click', () => {navigate('/pages/main/profile');});
+    displayName.addEventListener('click', () => {navigate('/main/profile');});
 
     return component;
 }
@@ -176,9 +176,9 @@ function getUserUpdatesSection() {
 
 export default async function getView(isLogged, path) {
     if (!isLogged)
-        return { status: 300, redirect: '/pages/login/login' };
+        return { status: 300, redirect: '/login/login' };
     if (path.subPath !== '/')
-        return { status: 300, redirect: '/pages/main/settings' };
+        return { status: 300, redirect: '/main/settings' };
     const css = [
         Path.css("main/settings.css")
     ];

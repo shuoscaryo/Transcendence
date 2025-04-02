@@ -27,7 +27,7 @@ function getOtherLogin() {
         bgColor: 'var(--color-button-fortito)',
         bgHoverColor: 'var(--color-button-fortito-hover)',
         content: buttonContent,
-        onClick: () => {navigate('/pages/main/home');},
+        onClick: () => {navigate('/main/home');},
     });
     fortitoButton.classList.add('button-other-login');
     component.append(fortitoButton);
@@ -117,7 +117,7 @@ function getUpperHalf() {
             };
             const response = await request('POST', Path.API.LOGIN, jsonData);
             if (response.status === 200) {
-                navigate('/pages/main/home');
+                navigate('/main/home');
             } else {
                 alert(response.error ? response.error : 'An error occurred');
             }
@@ -152,7 +152,7 @@ export default async function getView(isLogged) {
     const registerButton = document.createElement('button');
     registerButton.id = 'button-register';
     registerButton.addEventListener('click', () => {
-        navigate('/pages/login/register');
+        navigate('/login/register');
     });
     registerButton.textContent = 'New? Sign up - and start playing pong!';
     divLower.append(registerButton);

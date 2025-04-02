@@ -372,7 +372,7 @@ async function loadMatchesView(component) {
             bgColor: 'var(--color-lime)',
             content: 'Go Back to Home',
             onClick: () => {
-                navigate('/pages/main/home');
+                navigate('/main/home');
             },
         });
         buttonsDiv.append(buttonHome);

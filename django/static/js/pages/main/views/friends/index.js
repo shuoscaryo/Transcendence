@@ -77,7 +77,7 @@ function getFriendRow(friend) {
         },
         'chat': { label: 'Chat', image: Path.img('chatLogo.png'), action: null },
         'profile': { label: 'Profile', image: Path.img('profileLogo.png'),
-            action: () => navigate(`/pages/main/profile/${friend.display_name}`) },
+            action: () => navigate(`/main/profile/${friend.display_name}`) },
     };
     Object.keys(buttonsList).forEach(key => {
         const buttonData = buttonsList[key];
@@ -308,7 +308,7 @@ async function getFriendListSection() {
 
 export default async function getView(isLogged, path) {
     if (!isLogged) {
-        return { status: 300, redirect: "/pages/login/login" };
+        return { status: 300, redirect: "/login/login" };
     }
 
     const css = [

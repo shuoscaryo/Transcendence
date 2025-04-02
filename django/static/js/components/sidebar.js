@@ -14,11 +14,11 @@ function getUpperHalf(isLogged)
     component.append(homeButton);
 
     const headerButtonsDict = {
-        'play':{ label: 'Play', image: Path.img('playLogo.png'), action: () => {navigate("/pages/game/match/local");}},
-        'friends':{ label: 'Friends', image: Path.img('friendsLogo.png'), action: () => {navigate("/pages/main/friends");}},
-        'chat':{ label: 'Chat', image: Path.img('chatLogo.png'), action: () => {navigate("/pages/main/chat");}},
-        'profile':{ label: 'Profile', image: Path.img('profileLogo.png'), action: () => {navigate("/pages/main/profile");}},
-        'settings':{ label: 'Settings', image: Path.img('settingsLogo.png'), action: () => {navigate("/pages/main/settings");}},
+        'play':{ label: 'Play', image: Path.img('playLogo.png'), action: () => {navigate("/game/match/local");}},
+        'friends':{ label: 'Friends', image: Path.img('friendsLogo.png'), action: () => {navigate("/main/friends");}},
+        'chat':{ label: 'Chat', image: Path.img('chatLogo.png'), action: () => {navigate("/main/chat");}},
+        'profile':{ label: 'Profile', image: Path.img('profileLogo.png'), action: () => {navigate("/main/profile");}},
+        'settings':{ label: 'Settings', image: Path.img('settingsLogo.png'), action: () => {navigate("/main/settings");}},
     };
     let buttons = [];
     if (isLogged) {
@@ -69,7 +69,7 @@ function getLowerHalf(isLogged)
             bgColor: 'var(--color-lime)',
             textColor: null,
             content: 'Sign Up',
-            onClick: () => {navigate("/pages/login/register");}
+            onClick: () => {navigate("/login/register");}
         });
         registerButton.classList.add('button-login');
         component.append(registerButton);
@@ -78,7 +78,7 @@ function getLowerHalf(isLogged)
             bgColor: '#444444',
             textColor: null,
             content: 'Log In',
-            onClick: () => {navigate("/pages/login/login");}
+            onClick: () => {navigate("/login/login");}
         });
         loginButton.classList.add('button-login');
         component.append(loginButton);

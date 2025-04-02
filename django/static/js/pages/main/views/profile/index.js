@@ -10,7 +10,7 @@ import getStatsSection from './statsSection.js';
 export default async function getView(isLogged, path) {
     // Redirect to login if not logged in and trying to access the main profile page
     if (!isLogged && path.subPath === '/') {
-        return { status: 300, redirect: "/pages/login/login" };
+        return { status: 300, redirect: "/login/login" };
     }
 
     const css = [
