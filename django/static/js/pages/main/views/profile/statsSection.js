@@ -5,7 +5,7 @@ import Path from '/static/js/utils/Path.js';
 function getBarGraph(stats) {
     const canvas = newElement('canvas', {id: 'stats-bar-graph'});
     canvas.width = 400;
-    canvas.height = 400;
+    canvas.height = 300;
 
     const ctx = canvas.getContext('2d');
     const data = {
@@ -105,7 +105,7 @@ function getSummaryStats(stats) {
 
     const thead = newElement('thead', { parent: table });
     const headerRow = newElement('tr', { parent: thead });
-    ['', 'Matches', 'Time'].forEach(text => {
+    ['', 'Total', 'Time'].forEach(text => {
         const th = newElement('th', { parent: headerRow });
         th.textContent = text;
     });
@@ -117,7 +117,7 @@ function getSummaryStats(stats) {
         ai: 'AI',
         online: 'online',
         tournaments_local: 'tournament',
-        tournaments_online: 'tournament'
+        tournaments_online: 'tournament_online'
     };
 
     for (const key in modes) {
@@ -188,6 +188,7 @@ function addExtraStats(stats) {
 export default function getStatsSection(profile, stats, matchHistory) {
     stats = addExtraStats(stats);
     console.log(stats);
+    console.log(matchHistory);
     const component = newElement('div', { id: 'stats-section', classList: ['section-block'] });
 
 

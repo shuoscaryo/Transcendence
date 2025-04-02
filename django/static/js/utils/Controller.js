@@ -96,7 +96,7 @@ export class RemoteControllerIncoming extends Controller {
 	start() {
 		if (this.rmCallback)
 			return;
-		this.rmCallback = WebSocketService.addViewCallback("move_p", (message) => {
+		this.rmCallback = WebSocketService.addCallback("move_p", (message) => {
 			if (message.move !== undefined)
 				this._currentMove = message.move;
 			else

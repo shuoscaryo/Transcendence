@@ -314,7 +314,7 @@ export default class PongGame {
         
         // If client, add callback to receive game state
         if (this._type === 'client')
-            this._rmStateCallback = WebSocketService.addViewCallback('game_state', (data) => {
+            this._rmStateCallback = WebSocketService.addCallback('game_state', (data) => {
                 this._receivedState = data;
             });
         

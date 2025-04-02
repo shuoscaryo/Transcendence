@@ -8,7 +8,6 @@ const current = {
     view: null,
     pageOnDestroy: null,
     viewOnDestroy: null,
-    isLogged: null,
 };
 
 async function apiIsLogged() {
@@ -68,8 +67,7 @@ async function loadPage(path, isLogged) {
         return {status: 404};
     
     // Load the page
-    WebSocketService.clearPageListeners(); // NOTE | This is temporarly here so the listeners are not deleted after loading them in
-    WebSocketService.clearViewListeners(); // NOTE | getComponentFromUrl, but it should be so the listeners are only cleared if the import is successful
+    WebSocketService.clearCallbacks(); // NOTE | This is temporarly here so the listeners are not deleted after loading them in
     const pagePath = Path.page(path.page, 'index.js');
     const pageImport = await getComponentFromUrl(pagePath, isLogged, path);
     if (pageImport.status !== 200)
@@ -125,7 +123,6 @@ async function loadPage(path, isLogged) {
 
     // Update the current data
     current.page = path.page;
-    current.isLogged = isLogged;
     current.view = path.view;
     current.pageOnDestroy = pageImport?.onDestroy ? pageImport.onDestroy : null;
     current.viewOnDestroy = viewImport?.onDestroy ? viewImport.onDestroy : null;
@@ -133,11 +130,29 @@ async function loadPage(path, isLogged) {
     return {status: 200};
 }
 
+// if hte path is a number between 400 and 599, it is an error page
 function isErrorPage(path) {
     const number = parseInt(path.substring(1), 10);
     return !isNaN(number) && number >= 400 && number <= 599;
 }
 
+/**
+ * Handles the routing logic for the application.
+ *
+ * - Determines the user's authentication status by calling `apiIsLogged`.
+ * - Manages WebSocket connections based on the user's login state.
+ * - Resolves the current path and maps it to the appropriate page or view.
+ * - Redirects to specific pages based on conditions (e.g., login, register, error pages).
+ * - Loads the corresponding page and view components dynamically.
+ * - Handles errors by attempting to load an error page or displaying a fallback error message.
+ *
+ * This function ensures that the correct page is displayed based on the current URL
+ * and user state, while managing WebSocket connections and dynamic imports.
+ *
+ * @async
+ * @function
+ * @returns nothing
+ */
 export async function router() {
     const isLogged = await apiIsLogged();
 
@@ -151,7 +166,7 @@ export async function router() {
     } else
         WebSocketService.disconnect();
     
-    
+    // Change path to the correct page on specific cases
     let path = window.location.pathname;
     if (path === '/' || path === '/home' || path === '/pages/main')
         path = '/pages/main/home';
@@ -161,21 +176,24 @@ export async function router() {
         path = '/pages/login/register';
     else if (isErrorPage(path))
         path = `/pages/error${path}`;
-    
+    // Redirect home if logged in from login pages
     if (isLogged && path.startsWith("/pages/login"))
         return navigate('/home', true);
-    else if (!isLogged && path.startsWith("/pages/user/"))
-        return navigate('/login', true);
     
+    // Load the page
     let result = await loadPage(path, isLogged);
     
+    // if everything is ok, do nothing more
     if (result.status === 200)
         return;
+    // If page wants to redirect, do it
     if (result.status === 300)
         return navigate(result.redirect, true);
+    // Print the error and load the error page
     if (result.error)
         console.error(`[ROUTER] ${result.error}`);
     result = await loadPage(`/pages/error/${result.status}`, isLogged);
+    // If error page fails to load, do manual html error
     if (result.status !== 200) {
         const divApp = document.getElementById('app');
         if (!divApp) {
@@ -188,7 +206,18 @@ export async function router() {
     }
 }
 
+/**
+ * Navigates to a specified path or reloads the current page.
+ *
+ * - If `path` is `null`, the function simply reloads the current page.
+ * - If `path` is provided and `redirect` is `false`, the new page is added to the browser's history.
+ * - If `path` is provided and `redirect` is `true`, the current history entry is replaced with the new one.
+ *
+ * @param {string|null} [path=null] - The path to navigate to. If `null`, the page is reloaded.
+ * @param {boolean} [redirect=false] - Determines whether to replace the current history entry (`true`) or add a new one (`false`).
+ */
 export function navigate(path = null, redirect=false) {
+
     if (path != null){
         if (redirect)
             window.history.replaceState({}, '', path);
@@ -196,12 +225,4 @@ export function navigate(path = null, redirect=false) {
             window.history.pushState({}, '', path);
     }
     router();
-}
-
-export function goBack() {
-    if (window.history.length > 1) {
-        window.history.back();
-    } else {
-        navigate('/home');
-    }
 }

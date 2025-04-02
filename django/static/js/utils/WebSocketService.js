@@ -1,135 +1,110 @@
 class WebSocketService {
-    constructor() {
-        this.ws = null;
-        this.pageListeners = new Map(); // Listeners for page-level events
-        this.viewListeners = new Map(); // Listeners for view-level events
-        this.specificListeners = new Map(); // Listeners for specific events
-        this.reconnect = false;
-        // Predefine internal listeners
-        this.specificListeners.set('error', [(message) => {
-            console.error('[WebSocketService] got error message:', message.message);
-        }]);
-        this.specificListeners.set('ping', [(message) => {
-            this.send('pong');
-        }]);
-        // Add listener when page unloads
-        window.addEventListener('beforeunload', () => {
-            this.disconnect();
-        });
-    }
+	constructor() {
+		this.ws = null;
+		this.listeners = new Map();         // Persistent
+		this.oneTimeListeners = new Map();  // One-time
+		this.specificListeners = new Map(); // Secret callbacks
 
-    connect() {
-        console.log('WSS connecting'); //XXX
-        if (this.ws)
-            return;
-    
-        this.reconnect = true;
-        const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
-        this.ws = new WebSocket(protocol + window.location.host + "/ws/game/");
-    
-        this.ws.onopen = () => {
-            console.log('WSS connected');
-        };
-    
-        this.ws.onmessage = (event) => this._handleMessage(event.data);
+        // Add specific listeners
+        this.specificListeners.set('error', [(msg) => {
+			console.error('[WebSocketService] error:', msg.message);
+		}]);
+		this.specificListeners.set('ping', [() => {
+			this.send('pong');
+		}]);
 
-        this.ws.onclose = () => {
-            if (!this.reconnect) return;
-            console.log(`[${new Date().toISOString()}] WebSocket disconnected, reconnecting...`);
-            this.ws = null;
-            setTimeout(() => this.connect(), 1000);
-        };
-    
-        this.ws.onerror = (error) => {
-            console.error('WebSocket error:', error);
-            this.ws = null;
-        };
-    }
+        window.addEventListener('beforeunload', () => this.disconnect());
+	}
 
-    isConnected() {
-        return this.ws && this.ws.readyState === WebSocket.OPEN;
-    }
+	connect() {
+		if (this.ws) return;
 
-    disconnect() {
-        this.reconnect = false;
-        if (this.ws) {
-            this.ws.close();
-            this.ws = null;
-        }
-    }
+		this.reconnect = true;
+		const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
+		this.ws = new WebSocket(protocol + window.location.host + "/ws/game/");
 
-    _handleMessage(data) {
-        const jsonData = JSON.parse(data);
-        if (!jsonData.msg_type) {
-            console.error('Invalid message:', jsonData);
-            return;
-        }
-        const { msg_type, ...msg } = jsonData;
-        console.log(`WSS receive: ${msg_type}`); //XXX
-        // Notify specific listeners
-        const specificCallbacks = this.specificListeners.get(msg_type) || [];
-        specificCallbacks.forEach(callback => callback(msg));
-        // Notify page listeners
-        const pageCallbacks = this.pageListeners.get(msg_type) || [];
-        pageCallbacks.forEach(callback => callback(msg));
-        // Notify view listeners
-        const viewCallbacks = this.viewListeners.get(msg_type) || [];
-        viewCallbacks.forEach(callback => callback(msg));
-    }
+		this.ws.onopen = () => console.log('WSS connected');
+		this.ws.onmessage = (event) => this._handleMessage(event.data);
 
-    // general function to add a callback to a listener (not the specificListeners)
-    _addCallback(msg_type, callback, listener) {
+		this.ws.onclose = () => {
+			if (!this.reconnect) return;
+			console.log(`[${new Date().toISOString()}] WSS disconnected, reconnecting...`);
+			this.ws = null;
+			setTimeout(() => this.connect(), 1000);
+		};
+
+		this.ws.onerror = (error) => {
+			console.error('WebSocket error:', error);
+			this.ws = null;
+		};
+	}
+
+	isConnected() {
+		return this.ws && this.ws.readyState === WebSocket.OPEN;
+	}
+
+	disconnect() {
+		this.reconnect = false;
+		if (this.ws) {
+            console.log('WSS disconnecting...');
+			this.ws.close();
+			this.ws = null;
+		}
+	}
+
+	_handleMessage(data) {
+		const json = JSON.parse(data);
+		if (!json.msg_type) {
+			console.error('Invalid message:', json);
+			return;
+		}
+		const { msg_type, ...msg } = json;
+		console.log(`WSS receive: ${msg_type}`);
+
+		(this.specificListeners.get(msg_type) || []).forEach(cb => cb(msg));
+		(this.listeners.get(msg_type) || []).forEach(cb => cb(msg));
+		(this.oneTimeListeners.get(msg_type) || []).forEach(cb => cb(msg));
+		this.oneTimeListeners.delete(msg_type);
+	}
+
+    addCallback(msg_type, callback, { once = false } = {}) {
+        // Check if it's a specific message type
         if (this.specificListeners.has(msg_type))
-            throw new Error(`Cannot subscribe to specific message type: ${msg_type}. Try another name.`);
-        if (!listener.has(msg_type)) {
-            listener.set(msg_type, []);
-        }
-        listener.get(msg_type).push(callback);
+            throw new Error(`Cannot subscribe to specific message type: ${msg_type}`);
+        // Add to target listener
+        const target = once ? this.oneTimeListeners : this.listeners;
+        if (!target.has(msg_type))
+            target.set(msg_type, []);
+        target.get(msg_type).push(callback);
+        // returns a function to remove the callback
+        return () => this.rmCallback(msg_type, callback);
     }
 
-    // Subscribe to a msg_type at page level
-    addPageCallback(msg_type, callback) {
-        this._addCallback(msg_type, callback, this.pageListeners);
-        return () => this.rmPageCallback(msg_type, callback); // Return unsubscribe function
-    }
-    
-    // Subscribe to a msg_type at view level
-    addViewCallback(msg_type, callback) {
-        this._addCallback(msg_type, callback, this.viewListeners);
-        return () => this.rmViewCallback(msg_type, callback); // Return unsubscribe function
+	// Remove callback
+    rmCallback(msg_type, callback) {
+        // Delete from listeners
+        const list = this.listeners.get(msg_type) || [];
+        this.listeners.set(msg_type, list.filter(cb => cb !== callback));
+        // Delete from one-time listeners
+        const oneTimeList = this.oneTimeListeners.get(msg_type) || [];
+        this.oneTimeListeners.set(msg_type, oneTimeList.filter(cb => cb !== callback));
     }
 
-    // Unsubscribe from a msg_type at page level
-    rmPageCallback(msg_type, callback) {
-        const callbacks = this.pageListeners.get(msg_type) || [];
-        this.pageListeners.set(msg_type, callbacks.filter(cb => cb !== callback));
-    }
+	// Clear everything except `specificListeners`
+	clearCallbacks() {
+		this.listeners.clear();
+		this.oneTimeListeners.clear();
+	}
 
-    // Unsubscribe from a msg_type at view level
-    rmViewCallback(msg_type, callback) {
-        const viewCallbacks = this.viewListeners.get(msg_type) || [];
-        this.viewListeners.set(msg_type, viewCallbacks.filter(cb => cb !== callback));
-    }
-
-    // Clear all page-level listeners
-    clearPageListeners() {
-        this.pageListeners.clear();
-    }
-
-    // Clear all view-level listeners
-    clearViewListeners() {
-        this.viewListeners.clear();
-    }
-
-    // Send a message
-    send(msg_type, data = {}) {
-        console.log(`WSS send: ${msg_type}`); //XXX
-        if (this.isConnected()) {
-            this.ws.send(JSON.stringify({ msg_type, ...data }));
-        } else {
-            console.warn('WebSocket not open, message dropped:', { msg_type, ...data });
-        }
-    }
+	// Send
+	send(msg_type, data = {}) {
+		console.log(`WSS send: ${msg_type}`);
+		if (this.isConnected()) {
+			this.ws.send(JSON.stringify({ msg_type, ...data }));
+		} else {
+			console.warn('WebSocket not open, dropped:', { msg_type, ...data });
+		}
+	}
 }
 
-export default new WebSocketService(); // Singleton instance
+export default new WebSocketService();

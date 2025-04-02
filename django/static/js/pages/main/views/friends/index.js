@@ -33,7 +33,7 @@ function getFriendRow(friend) {
         lastOnline.textContent = 'Offline';
         lastOnline.style.color = '';
     }
-    const delCallbackOnlineStatus = WebSocketService.addViewCallback('online_status', (message) => {
+    const delCallbackOnlineStatus = WebSocketService.addCallback('online_status', (message) => {
         if (message.display_name !== friend.display_name)
             return;
         if (message.is_online) {
@@ -47,7 +47,7 @@ function getFriendRow(friend) {
             lastOnline.style.color = '';
         }
     })
-    const delCallBackRemoveFriend = WebSocketService.addViewCallback('friend_removed', (message) => {
+    const delCallBackRemoveFriend = WebSocketService.addCallback('friend_removed', (message) => {
         if (message.display_name !== friend.display_name)
             return;
         component.remove();
@@ -152,7 +152,7 @@ function getRequestRow(user, type) {
     let buttons = [];
     if (type == 'sent') {
         buttons = ['cancel'];
-        deleteCallback = WebSocketService.addViewCallback('friend_request_response', (message) => {
+        deleteCallback = WebSocketService.addCallback('friend_request_response', (message) => {
             if (message.display_name !== user.display_name)
                 return;
             if (message.answer === 'accept') {
@@ -164,7 +164,7 @@ function getRequestRow(user, type) {
         });
     } else if (type == 'received') {
         buttons = ['accept', 'decline'];
-        deleteCallback = WebSocketService.addViewCallback('friend_request_cancelled', (message) => {
+        deleteCallback = WebSocketService.addCallback('friend_request_cancelled', (message) => {
             if (message.display_name !== user.display_name)
                 return;
             deleteSelf();
@@ -231,7 +231,7 @@ async function getRequestSection() {
             });
         }
     }
-    WebSocketService.addViewCallback('friend_request_new', (message) => {
+    WebSocketService.addCallback('friend_request_new', (message) => {
         requestListDiv.prepend(getRequestRow(message, 'received'));
     });
 

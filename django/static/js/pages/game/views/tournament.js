@@ -10,7 +10,7 @@ class Tournament {
     }
 
     init(players) {
-		this.players = players;
+		this.players = {...players};
         const shuffledPlayers = this._shuffle(players);
         this._createMatchBoxes(shuffledPlayers.length);
         this.match = 0;

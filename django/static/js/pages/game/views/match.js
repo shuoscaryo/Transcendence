@@ -74,11 +74,11 @@ export default async function getView(isLogged, path) {
 
 		WebSocketService.send("init");
 		WebSocketService.send("get_role");
-		WebSocketService.addViewCallback("initial_status", (message) => {
+		WebSocketService.addCallback("initial_status", (message) => {
 			playerRole = message.initial_status;
 			console.log(`Soy el jugador: ${playerRole}, conectados: ${message.players_connected}`);
 			gameStarted = false;
-		});
+		}, { once: true });
 
 		if (!gameStarted) {
 			// Mostrar botón "Start"
@@ -93,7 +93,7 @@ export default async function getView(isLogged, path) {
 			component.append(startButton);
 		}
 		
-		WebSocketService.addViewCallback("start_game", (message) => {
+		WebSocketService.addCallback("start_game", (message) => {
 			if (gameStarted)
 				return;
 			if (!playerRole) {
@@ -130,7 +130,7 @@ export default async function getView(isLogged, path) {
 			component.append(gameComponent);
 			
 			console.log("¡Juego iniciado!");
-		});
+		}, { once: true });
 		
     } else {
         return { status: 404 };
