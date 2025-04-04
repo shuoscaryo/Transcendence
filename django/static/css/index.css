@@ -24,15 +24,35 @@
     padding: 0;
 }
 
+h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+h2 {
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+h4 {
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+p {
+    font-size: 1rem;
+    font-weight: 400;
+}
+
 button {
     cursor: pointer;
     background-color: transparent;
     border: none;
-}
-
-p {
-    font-size: 1rem; /* modificable */
-    color: var(--color-white); /* modificable */
 }
 
 #app {
@@ -50,7 +70,7 @@ p {
     font-weight: bold;
     border-radius: 12px;
     overflow: hidden;
-    min-width: fit-content;
+    width: fit-content;
     transition: box-shadow 0.1s ease-in, background-color 0.1s ease-in;
 }
 

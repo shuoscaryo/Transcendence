@@ -9,12 +9,18 @@
  * 
  * @returns {HTMLElement} The newly created element.
  */
-export default function newElement(type, { parent = null, classList = [], id = null } = {}) {
+export default function newElement(type, {
+    parent = null,
+    classList = [],
+    ...props
+    } = {}
+) {
     const element = document.createElement(type);
-    
+  
     if (classList.length) element.classList.add(...classList);
-    if (id) element.id = id;
     if (parent) parent.append(element);
-
+  
+    Object.assign(element, props);
+  
     return element;
 }

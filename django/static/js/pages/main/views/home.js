@@ -1,71 +1,48 @@
 import getDefaultButton from '/static/js/components/defaultButton.js';
 import PongGame from '/static/js/utils/PongGame.js';
-import { DemoAI } from '/static/js/utils/Controller.js';
+import { DemoAI, PlayerController, PongAI } from '/static/js/utils/Controller.js';
 import Path from '/static/js/utils/Path.js';
 import { navigate } from '/static/js/utils/router.js';
-import { PlayerController, PongAI } from '/static/js/utils/Controller.js';
+import newElement from '/static/js/utils/newElement.js';
 
 let g_pong = null;
 
 function getButtonWithImage({imgSrc, text, description, bgColor, bgHoverColor, textColor, onClick}) {
-    const buttonContent = document.createElement('div');
-    buttonContent.classList.add('button-content');
-
-    const img = document.createElement('img');
+    const buttonContent = newElement('div', {classList: ['button-content']});
+    const img = newElement('img', {parent: buttonContent});
     img.src = imgSrc;
-    buttonContent.append(img);
-
-    const divText = document.createElement('div');
-    divText.classList.add('button-text');
-    buttonContent.append(divText);
-
-    const h2 = document.createElement('h2');
-    h2.textContent = text;
-    divText.append(h2);
-
-    const p = document.createElement('p');
-    p.textContent = description;
-    divText.append(p);
+    const divText = newElement('div', {parent: buttonContent});
+    const mainText = newElement('span', {classList: ['button-text'], parent: divText});
+    mainText.textContent = text;
+    const descriptionText = newElement('span', {classList: ['description-text'], parent: divText});
+    descriptionText.textContent = description;
 
     return getDefaultButton({
-        bgColor: bgColor,
-        bgHoverColor: bgHoverColor,
-        textColor: textColor,
+        bgColor,
+        bgHoverColor,
+        textColor,
         content: buttonContent,
-        onClick: onClick
+        onClick
     });
 }
 
 function getSection1() {
-    const section = document.createElement('section');
-    section.id = 'section-1';
+    const component = newElement('section', {id: 'section-1', classList: ['section-block']});
 
-    const divCanvas = document.createElement('div');
-    divCanvas.id = 'div-canvas';
-    section.append(divCanvas);
-
-    const canvas = document.createElement('canvas');
-    canvas.id = 'demo-gameplay';
+    const canvas = newElement('canvas', {parent: component});
     canvas.width = 600;
     canvas.height = 400;
-    divCanvas.append(canvas);
     g_pong = new PongGame(canvas);
     g_pong.setLeftController(new DemoAI());
     g_pong.setRightController(new DemoAI());
     g_pong.onGameEnd((game) => {game.start();});
     g_pong.start();
 
-    const divIntro = document.createElement('div');
-    divIntro.id = 'div-intro';
-    section.append(divIntro);
+    const sectionContent = newElement('div', {parent: component});
+    const pageTitle = newElement('h1', {parent: sectionContent});
+    pageTitle.textContent = 'Play Pong online on the #1 site!';
 
-    const h1 = document.createElement('h1');
-    h1.textContent = 'Play Pong online on the #1 site!';
-    divIntro.append(h1);
-
-    const divButtons = document.createElement('div');
-    divButtons.id = 'div-buttons';
-    divIntro.append(divButtons);
+    const buttonsDiv = newElement('div', {parent: sectionContent, id: 'buttons-div'});
 
     const buttonPlayVersus = getButtonWithImage({
         imgSrc: Path.img('playLogo.png'),
@@ -74,7 +51,7 @@ function getSection1() {
         bgColor: 'var(--color-lime)',
         onClick: () => {navigate('/game/match/local');}
     });
-    divButtons.append(buttonPlayVersus);
+    buttonsDiv.append(buttonPlayVersus);
 
     const buttonPlayTournament = getButtonWithImage({
         imgSrc: Path.img('tournamentLogo.png'),
@@ -84,35 +61,23 @@ function getSection1() {
         onClick: () => {navigate('/game/tournament');}
     });
     buttonPlayTournament.id = 'button-play-tournament';
-    divButtons.append(buttonPlayTournament);
+    buttonsDiv.append(buttonPlayTournament);
 
-    return section;
+    return component;
 }
 
 function getSection2() {
-    const container = document.createElement('section');
-    container.classList.add('section-block');
-    container.id = 'section-2';
+    const component = newElement('section', {id: 'section-2', classList: ['section-block']});
+    const sectionContent = newElement('div', {parent: component});
 
-    const div = document.createElement('div');
-    div.id = 'div-section-2-left';
-    container.append(div);
-    const divText = document.createElement('div');
-    divText.id = 'div-section-2-left-text';
-    div.append(divText);
-
-    const h1 = document.createElement('h1');
-    h1.textContent = 'Also check our major Module AI';
-    divText.append(h1);
-
-    const p = document.createElement('p');
-    p.innerHTML = `Our AI module is the best in the market,
-    with a 99% win rate<br>
-    <br>
+    const divText = newElement('div', {parent: sectionContent, classList: ['text-div']});
+    const h2 = newElement('h2', {parent: divText});
+    h2.textContent = 'Also check our major Module AI';
+    const p = newElement('p', {parent: divText});
+    p.innerHTML = `Our AI module is the best in the market, with a 99% win rate<br><br>
     It only sees the map once a second and calculates where to move the paddle
-    to bounce the ball.<br>It guesses where the paddle is by simulating the movement
-    using the time since the last call and the last move decision.<br>`;
-    divText.append(p);
+    to bounce the ball. It guesses where the paddle is by simulating the movement
+    using the time since the last call and the last move decision.`;
 
     const button = getButtonWithImage({
         imgSrc: Path.img('AILogo.png'),
@@ -130,26 +95,47 @@ function getSection2() {
                     name: "AI",
                 },
                 maxScore: 3,
-
                 onContinueButton: (game) => {
                     navigate('/main/home');
                 }
             });
         }
     });
-    button.classList.add('button-green');
-    button.id = 'button-play-ai';
-    div.append(button);
+    sectionContent.append(button);
 
-    const divImg = document.createElement('div');
-    divImg.id = 'div-section-2-right';
-    container.append(divImg);
-
-    const img = document.createElement('img');
+    const img = newElement('img', {parent: component});
     img.src = Path.img('AI.png');
-    divImg.append(img);
 
-    return container;
+    return component;
+}
+
+function getSection3() {
+    const component = newElement('section', {id: 'section-3', classList: ['section-block']});
+    const img = newElement('img', {parent: component});
+    img.src = Path.img('homeOnlineSection.png');
+    const sectionContent = newElement('div', {parent: component});
+    
+    const divText = newElement('div', {parent: sectionContent, classList: ['text-div']});
+    const h2 = newElement('h2', {parent: divText});
+    h2.textContent = 'Challenge players online!';
+    const p = newElement('p', {parent: divText});
+    p.innerHTML = `Join our online matchmaking system to play against players
+    from all over the world (42 campus at most).<br><br>
+    We use advanced websocket technology to provide a seamless experience, 
+    allowing you to play against other players in real-time!.`;
+
+    const button = getButtonWithImage({
+        imgSrc: Path.img('match_online.png'),
+        text: 'Play Online',
+        description: 'Find an online match',
+        bgColor: 'var(--color-lime)',
+        onClick: () => {
+            navigate('/game/match/online');
+        }
+    });
+    sectionContent.append(button);
+
+    return component;
 }
 
 export default async function getView(isLogged, path) {
@@ -157,17 +143,13 @@ export default async function getView(isLogged, path) {
         return {status: 300, redirect: '/home'};
     }
 
-    const css = [
-        Path.css('main/home.css'),
-    ];
+    const css = [Path.css('main/home.css')];
     const component = document.createElement('div');
 
-    const divSections = document.createElement('div');
-    divSections.id = 'div-sections';
-    component.append(divSections);
-    divSections.append(getSection1());
-    divSections.append(getSection2());
-    
+    component.append(getSection1());
+    component.append(getSection2());
+    component.append(getSection3());
+
     const pongInstance = g_pong;
     const onDestroy = () => {
         if (pongInstance)

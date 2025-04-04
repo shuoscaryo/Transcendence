@@ -3,12 +3,11 @@ import { navigate } from '/static/js/utils/router.js';
 import getHomeButton from '/static/js/components/homeButton.js';
 import getDefaultButton from '/static/js/components/defaultButton.js';
 import request from '/static/js/utils/request.js';
+import newElement from '/static/js/utils/newElement.js';
 
 function getUpperHalf(isLogged)
 {
-    const component = document.createElement('div');
-    component.className = 'upper-half';
-
+    const component = newElement('div', {classList: ['upper-half']});
     const homeButton = getHomeButton();
     homeButton.classList.add('header-button');
     component.append(homeButton);
@@ -37,23 +36,10 @@ function getUpperHalf(isLogged)
     }
 
     buttons.forEach(buttonData => {
-        const button = document.createElement('button');
-        button.className = 'header-button';
-
-        const div1 = document.createElement('div');
-        button.append(div1);
-        const image = document.createElement('img');
-        image.src = buttonData.image;
-        div1.append(image);
-
-        const div2 = document.createElement('div');
-        button.append(div2);
-        const p = document.createElement('p');
-        p.textContent = buttonData.label;
-        div2.append(p);
-
+        const button = newElement('div', {classList: ['header-button']});
+        newElement('img', {parent: button, src: buttonData.image});
+        newElement('span', {parent: button, textContent: buttonData.label}); 
         button.addEventListener('click', buttonData.action);
-
         component.append(button);
     });
     return component;
@@ -105,12 +91,9 @@ function getLowerHalf(isLogged)
 
 export default function getSidebar(isLogged)
 {
-    const component = document.createElement('div');
-    component.className = 'sidebar';
-
+    const component = newElement('div', {id: 'sidebar'});
     // contains home button and move to other pages
     component.append(getUpperHalf(isLogged));
-
     // contains login and contract sidebar button
     component.append(getLowerHalf(isLogged));
 
