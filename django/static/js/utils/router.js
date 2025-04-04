@@ -2,6 +2,7 @@ import Path from '/static/js/utils/Path.js';
 import * as css from '/static/js/utils/css.js';
 import request from '/static/js/utils/request.js';
 import WebSocketService from '/static/js/utils/WebSocketService.js';
+import ViewLifeCycle from '/static/js/utils/ViewLifeCycle.js';
 
 const current = {
     page: null,
@@ -63,8 +64,11 @@ async function loadPage(path, isLogged) {
     // Split the path into parts
     path = parsePath(path);
     
+    // Don't allow clicking while loading
+    document.body.style.pointerEvents = 'none';
+
     // Load the page
-    WebSocketService.clearCallbacks(); // NOTE | This is temporarly here so the listeners are not deleted after loading them in
+    ViewLifeCycle.destroy();
     const pagePath = Path.page(path.page, 'index.js');
     const pageImport = await getComponentFromUrl(pagePath, isLogged, path);
     if (pageImport.status !== 200)
@@ -118,11 +122,17 @@ async function loadPage(path, isLogged) {
     divApp.replaceWith(pageImport.component);
     pageImport.component.id = 'app';
 
+    // - Call mount on the new view
+    ViewLifeCycle.mount();
+
     // Update the current data
     current.page = path.page;
     current.view = path.view;
     current.pageOnDestroy = pageImport?.onDestroy ? pageImport.onDestroy : null;
     current.viewOnDestroy = viewImport?.onDestroy ? viewImport.onDestroy : null;
+
+    // Undo the pointer events block
+    document.body.style.pointerEvents = '';
 
     return {status: 200};
 }

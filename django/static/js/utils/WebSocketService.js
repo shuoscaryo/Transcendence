@@ -1,3 +1,5 @@
+import ViewLifeCycle from '/static/js/utils/ViewLifeCycle.js';
+
 class WebSocketService {
 	constructor() {
 		this.ws = null;
@@ -67,18 +69,22 @@ class WebSocketService {
 		this.oneTimeListeners.delete(msg_type);
 	}
 
-    addCallback(msg_type, callback, { once = false } = {}) {
+	addCallback(msg_type, callback, { once = false } = {}) {
         // Check if it's a specific message type
-        if (this.specificListeners.has(msg_type))
-            throw new Error(`Cannot subscribe to specific message type: ${msg_type}`);
-        // Add to target listener
-        const target = once ? this.oneTimeListeners : this.listeners;
-        if (!target.has(msg_type))
-            target.set(msg_type, []);
-        target.get(msg_type).push(callback);
-        // returns a function to remove the callback
-        return () => this.rmCallback(msg_type, callback);
-    }
+		if (this.specificListeners.has(msg_type))
+			throw new Error(`Cannot subscribe to specific message type: ${msg_type}`);
+	  
+		// Add to listeners list (persistent or one-time)
+		const target = once ? this.oneTimeListeners : this.listeners;
+		if (!target.has(msg_type))
+			target.set(msg_type, []);
+		target.get(msg_type).push(callback);
+
+		// Return remove function and also add it to auto-removal on view change
+		const remover = () => this.rmCallback(msg_type, callback);
+		ViewLifeCycle.onDestroy(remover);
+		return remover;
+	}
 
 	// Remove callback
     rmCallback(msg_type, callback) {
