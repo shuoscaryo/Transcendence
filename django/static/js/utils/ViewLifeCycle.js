@@ -103,7 +103,7 @@ class ViewLifeCycle {
     async request(method, url, {
         body = null,
         onResolve,
-        onThrow,
+        onThrow = (err) => console.error(err),
         disableCatch = false,
         headers = {},
         ...options
