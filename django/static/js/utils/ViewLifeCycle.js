@@ -1,4 +1,6 @@
 class ViewLifeCycle {
+    static VIEW_CHANGED = Symbol('view changed'); // special throw type
+    
     _generation = 0;
     _onMount = [];
     _onDestroy = [];
@@ -22,7 +24,7 @@ class ViewLifeCycle {
       const currentGen = this._generation;
       return promise.then((result) => {
         if (currentGen !== this._generation)
-          return Promise.reject("view changed");
+          return Promise.reject(ViewLifecycle.VIEW_CHANGED);
         return result;
       });
     }
