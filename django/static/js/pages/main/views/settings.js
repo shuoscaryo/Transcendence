@@ -1,9 +1,10 @@
 import Path from '/static/js/utils/Path.js';
 import newElement from "/static/js/utils/newElement.js";
-import request from "/static/js/utils/request.js";
 import {navigate} from "/static/js/utils/router.js";
 import * as validators from "/static/js/utils/validators.js";
 import getDefaultButton from "/static/js/components/defaultButton.js";
+import ViewLifeCycle from "/static/js/utils/ViewLifeCycle.js";
+
 function getPhotoSection(profile) {
     const component = newElement('section', { classList: ['section-block'], id: 'photo-section'});
 
@@ -32,35 +33,42 @@ function getPhotoSection(profile) {
         const formData = new FormData();
         formData.append('profile_photo', file);
     
-        try {
-            const res = await fetch('/api/update_credentials/profile_photo', {
-                method: 'POST',
+        await ViewLifeCycle.request(
+            'POST',
+            Path.join(Path.API.UPDATE_CREDENTIALS, 'profile_photo'),
+            {
                 body: formData,
-                credentials: 'include'
-            });
-    
-            if (!res.ok) {
-                if (res.status === 413) {
-                    alert('Image too large. Max size is 10MB.');
-                    return;
+                headers: {'Content-Type': null}, // Let the browser set the correct Content-Type
+                onResolve: (res) => {
+                    if (res.status === 413) {
+                        alert('Image too large. Max size is 10MB.');
+                        return;
+                    }
+                    if (res.status !== 200) {
+                        const error = res.data?.error || res.status;
+                        alert('Upload failed: ' + error);
+                        return;
+                    }
+                    profileImg.src = res.data.profile_photo; // Update image preview
+                },
+                onThrow: (err) => {
+                    alert('Error uploading image.');
+                    console.error(err);
                 }
-                const err = await res.json();
-                alert('Upload failed: ' + (err.error || res.status));
-                return;
             }
-    
-            const data = await res.json();
-            profileImg.src = data.profile_photo; // Update image preview
-        } catch (err) {
-            alert('Error uploading image.');
-            console.error(err);
-        }
+        );
     });
 
     const userInfo = newElement('div', {id: 'user-info', parent: component});
-    const displayName = newElement('h1', {parent: userInfo});
+    const displayName = newElement('span', {id: 'display-name', parent: userInfo});
     displayName.textContent = profile.display_name;
     displayName.addEventListener('click', () => {navigate('/main/profile');});
+
+    const username = newElement('span', {id: 'username', parent: userInfo});
+    username.textContent = `username: ${profile.username}`;
+
+    const email = newElement('span', {id: 'email', parent: userInfo});
+    email.textContent = `email: ${profile.email}`;
 
     return component;
 }
@@ -144,14 +152,22 @@ function getUserUpdatesSection() {
             }
 
             // Send request
-            const response = await request('POST', Path.join(Path.API.UPDATE_CREDENTIALS, endpoint), { value, password });
-            if (response.status !== 200) {
-                alert(response.error);
-                return;
-            }
-
-            alert(successMessage);
-            navigate();
+            await ViewLifeCycle.request(
+                'POST',
+                Path.join(Path.API.UPDATE_CREDENTIALS, endpoint),
+                {
+                    body: { value, password },
+                    onResolve: (res) => {
+                        if (res.status !== 200){
+                            alert(res.data.error || res.status);
+                            return;
+                        }
+                        alert(successMessage);
+                        navigate();
+                    },
+                    onThrow: (err) => { console.error(err); }
+                }
+            );
         });
         const inputsDiv = newElement('div', { parent: form , classList: ['inputs-div'] });
         // Create input rows
@@ -184,7 +200,13 @@ export default async function getView(isLogged, path) {
     ];
     const component = document.createElement('div');
 
-    const response = await request('GET', Path.API.PROFILE);
+    const response = await ViewLifeCycle.request(
+        'GET',
+        Path.API.PROFILE,
+        {onThrow: (err) => { console.error(err);}}
+    );
+    if (!response)
+        return { status: 500, error: 'Error fetching profile data' };
     if (response.status !== 200)
         return { status: response.status, error: response.error };
     const profile = response.data;
