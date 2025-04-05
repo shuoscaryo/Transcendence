@@ -117,7 +117,7 @@ class ViewLifeCycle {
                 finalHeaders['Content-Type'] = 'application/json';
                 parsedBody = typeof body === 'string' ? body : JSON.stringify(body);
             }
-            
+
             // Remove the Content-Type header if is set to null
             if (finalHeaders['Content-Type'] === null) {
                 delete finalHeaders['Content-Type'];
@@ -132,7 +132,6 @@ class ViewLifeCycle {
             }, options);
     
             // Perform the request
-            console.log('fetch', url, fetchOptions);
             const res = await this.wrapAsync(fetch(url, fetchOptions));
     
             // Build the response object
@@ -156,7 +155,6 @@ class ViewLifeCycle {
                 headers: res.headers,
                 data: responseData
             };
-            console.log('fetch response', resData);
     
             onResolve?.(resData);
             return resData;
