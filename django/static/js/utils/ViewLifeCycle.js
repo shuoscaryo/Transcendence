@@ -100,7 +100,8 @@ class ViewLifeCycle {
 	 * 🔴 Use `onThrow` for custom error handling (e.g., showing alerts or retries)
 	 * 🟡 If `disableCatch = true`, you must handle errors manually with try/catch
 	 */
-    async request(method, url, data = {}, {
+    async request(method, url, {
+        body = null,
         onResolve,
         onThrow,
         disableCatch = false,
@@ -109,13 +110,17 @@ class ViewLifeCycle {
     } = {}) {
         try {
             const finalHeaders = { ...headers };
-            let body = null;
+            let parsedBody = body;
     
             // Auto-handle Content-Type and JSON body
-            if (data !== null) {
-                if (!('Content-Type' in finalHeaders))
-                    finalHeaders['Content-Type'] = 'application/json';
-                body = typeof data === 'string' ? data : JSON.stringify(data);
+            if (body !== null && !('Content-Type' in finalHeaders)) {
+                finalHeaders['Content-Type'] = 'application/json';
+                parsedBody = typeof body === 'string' ? body : JSON.stringify(body);
+            }
+            
+            // Remove the Content-Type header if is set to null
+            if (finalHeaders['Content-Type'] === null) {
+                delete finalHeaders['Content-Type'];
             }
     
             // Final options: merge fixed defaults + user options
@@ -123,10 +128,11 @@ class ViewLifeCycle {
                 method: method.toUpperCase(),
                 credentials: 'include',
                 headers: finalHeaders,
-                body
+                body: parsedBody,
             }, options);
     
             // Perform the request
+            console.log('fetch', url, fetchOptions);
             const res = await this.wrapAsync(fetch(url, fetchOptions));
     
             // Build the response object
@@ -150,11 +156,12 @@ class ViewLifeCycle {
                 headers: res.headers,
                 data: responseData
             };
+            console.log('fetch response', resData);
     
             onResolve?.(resData);
             return resData;
         } catch (err) {
-            if (!disableCatch) throw err;
+            if (disableCatch) throw err;
             if (err === this.VIEW_CHANGED) return null;
             onThrow?.(err);
             return null;
