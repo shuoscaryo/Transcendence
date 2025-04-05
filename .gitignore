@@ -21,3 +21,4 @@
 django/**/__pycache__/
 django/**/*.pyc
 django/media/
+django/pong_project/migrations
