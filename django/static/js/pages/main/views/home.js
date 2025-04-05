@@ -4,18 +4,14 @@ import { DemoAI, PlayerController, PongAI } from '/static/js/utils/Controller.js
 import Path from '/static/js/utils/Path.js';
 import { navigate } from '/static/js/utils/router.js';
 import newElement from '/static/js/utils/newElement.js';
-
-let g_pong = null;
+import ViewLifeCycle from '/static/js/utils/ViewLifeCycle.js';
 
 function getButtonWithImage({imgSrc, text, description, bgColor, bgHoverColor, textColor, onClick}) {
     const buttonContent = newElement('div', {classList: ['button-content']});
-    const img = newElement('img', {parent: buttonContent});
-    img.src = imgSrc;
+    newElement('img', {parent: buttonContent, src: imgSrc});
     const divText = newElement('div', {parent: buttonContent});
-    const mainText = newElement('span', {classList: ['button-text'], parent: divText});
-    mainText.textContent = text;
-    const descriptionText = newElement('span', {classList: ['description-text'], parent: divText});
-    descriptionText.textContent = description;
+    newElement('span', {classList: ['button-text'], textContent: text, parent: divText});
+    newElement('span', {classList: ['description-text'], textContent: description, parent: divText});
 
     return getDefaultButton({
         bgColor,
@@ -29,14 +25,13 @@ function getButtonWithImage({imgSrc, text, description, bgColor, bgHoverColor, t
 function getSection1() {
     const component = newElement('section', {id: 'section-1', classList: ['section-block']});
 
-    const canvas = newElement('canvas', {parent: component});
-    canvas.width = 600;
-    canvas.height = 400;
-    g_pong = new PongGame(canvas);
-    g_pong.setLeftController(new DemoAI());
-    g_pong.setRightController(new DemoAI());
-    g_pong.onGameEnd((game) => {game.start();});
-    g_pong.start();
+    const canvas = newElement('canvas', {width: 600, height: 400, parent: component});
+    const pong = new PongGame(canvas);
+    pong.setLeftController(new DemoAI());
+    pong.setRightController(new DemoAI());
+    pong.onGameEnd((game) => {game.start();});
+    ViewLifeCycle.onMount(() => pong.start());
+    ViewLifeCycle.onDestroy(() => pong.stop());
 
     const sectionContent = newElement('div', {parent: component});
     const pageTitle = newElement('h1', {parent: sectionContent});
@@ -150,10 +145,5 @@ export default async function getView(isLogged, path) {
     component.append(getSection2());
     component.append(getSection3());
 
-    const pongInstance = g_pong;
-    const onDestroy = () => {
-        if (pongInstance)
-            pongInstance.stop();
-    };
-    return {status: 200, component, css, onDestroy};
+    return {status: 200, component, css};
 }
