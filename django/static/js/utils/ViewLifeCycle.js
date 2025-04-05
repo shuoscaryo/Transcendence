@@ -70,7 +70,7 @@ class ViewLifeCycle {
         const currentGen = this._generation;
         return promise.then((result) => {
             if (currentGen !== this._generation)
-                return Promise.reject(ViewLifecycle.VIEW_CHANGED);
+                return Promise.reject(this.VIEW_CHANGED);
             return result;
         });
     }
@@ -100,7 +100,7 @@ class ViewLifeCycle {
 	 * 🔴 Use `onThrow` for custom error handling (e.g., showing alerts or retries)
 	 * 🟡 If `disableCatch = true`, you must handle errors manually with try/catch
 	 */
-    async request(method, url, data, {
+    async request(method, url, data = {}, {
         onResolve,
         onThrow,
         disableCatch = false,
@@ -127,7 +127,7 @@ class ViewLifeCycle {
             }, options);
     
             // Perform the request
-            const res = await ViewLifecycle.wrapAsync(fetch(url, fetchOptions));
+            const res = await this.wrapAsync(fetch(url, fetchOptions));
     
             // Build the response object
             const contentType = res.headers.get('Content-Type') || '';
@@ -155,7 +155,7 @@ class ViewLifeCycle {
             return resData;
         } catch (err) {
             if (!disableCatch) throw err;
-            if (err === ViewLifecycle.VIEW_CHANGED) return null;
+            if (err === this.VIEW_CHANGED) return null;
             onThrow?.(err);
             return null;
         }
@@ -182,5 +182,5 @@ class ViewLifeCycle {
     }
 }
   
-  export default new ViewLifeCycle();
+export default new ViewLifeCycle();
   
