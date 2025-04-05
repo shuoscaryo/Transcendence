@@ -6,6 +6,7 @@ import request from '/static/js/utils/request.js';
 import { usernameOk } from '/static/js/utils/validators.js';
 import WebSocketService from '/static/js/utils/WebSocketService.js';
 import { formatTimeAgo } from '/static/js/utils/time.js';
+import ViewLifeCycle from '/static/js/utils/ViewLifeCycle.js';
 
 function noFriendsDiv() {
     const noFriends = newElement('div', { id: 'no-friends' });
@@ -63,17 +64,24 @@ function getFriendRow(friend) {
         'challenge': { label: 'Challenge', image: Path.img('playLogo.png'), action: null },
         'remove_friend': {
             label: 'Remove Friend', image: Path.img('friendsLogo.png'),
-            action: async () => {
-                const response = await request('DELETE', Path.API.REMOVE_FRIEND, { display_name: friend.display_name });
-                if (response.status == 200){
-                    component.remove();
-                    const friendListDiv = document.getElementById('friend-list-div');
-                    if (friendListDiv && friendListDiv.children.length == 0)
-                        friendListDiv.append(noFriendsDiv());
+            action: async () => { ViewLifeCycle.request(
+                'DELETE',
+                Path.API.REMOVE_FRIEND,
+                {
+                    body: { display_name: friend.display_name },
+                    onResolve: (res) => {
+                        if (res.status == 200) {
+                            component.remove();
+                            delCallBackRemoveFriend();
+                            delCallbackOnlineStatus();
+                            const friendListDiv = document.getElementById('friend-list-div');
+                            if (friendListDiv && friendListDiv.children.length == 0)
+                                friendListDiv.append(noFriendsDiv());
+                        } else
+                            alert(`Couldn't remove friend :( ${res.data.error}`);
+                    },
                 }
-                else
-                    alert(`Couldn't remove friend :( ${response.error}`);
-            }
+            )}
         },
         'chat': { label: 'Chat', image: Path.img('chatLogo.png'), action: null },
         'profile': { label: 'Profile', image: Path.img('profileLogo.png'),
@@ -114,37 +122,59 @@ function getRequestRow(user, type) {
     const buttonsList = {
         'cancel': {
             label: 'Cancel', action: async () => {
-                const response = await request('DELETE', Path.API.CANCEL_FRIEND_REQUEST, { display_name: user.display_name });
-                if (response.status == 200)
-                    deleteSelf();
-                else
-                    alert(`Couldn't cancel friend request :( ${response.error}`);
+                ViewLifeCycle.request(
+                    'DELETE',
+                    Path.API.CANCEL_FRIEND_REQUEST,
+                    {
+                        body: { display_name: user.display_name },
+                        onResolve: (res) => {
+                            if (res.status == 200)
+                                deleteSelf();
+                            else
+                                alert(`Couldn't cancel friend request :( ${res.data.error}`);
+                        },
+                    }
+                );
             }
         },
         'accept': {
             label: 'Accept', action: async () => {
-                const response = await request('POST', Path.API.RESPOND_FRIEND_REQUEST, { display_name: user.display_name, action: 'accept' });
-                if (response.status == 200) {
-                    deleteSelf();
-                    // Añadir el nuevo amigo al inicio de la lista de amigos usando el ID
-                    const friendListDiv = document.getElementById('friend-list-div');
-                    if (friendListDiv) {
-                        const friendRow = getFriendRow(response.data);
-                        friendListDiv.insertBefore(friendRow, friendListDiv.firstChild);
-                        friendListDiv.querySelector('#no-friends')?.remove();
+                ViewLifeCycle.request(
+                    'POST',
+                    Path.API.RESPOND_FRIEND_REQUEST,
+                    {
+                        body: { display_name: user.display_name, action: 'accept' },
+                        onResolve: (res) => {
+                            if (res.status == 200) {
+                                deleteSelf();
+                                const friendListDiv = document.getElementById('friend-list-div');
+                                if (friendListDiv) {
+                                    const friendRow = getFriendRow(res.data);
+                                    friendListDiv.insertBefore(friendRow, friendListDiv.firstChild);
+                                    friendListDiv.querySelector('#no-friends')?.remove();
+                                }
+                            } else
+                                alert(`Couldn't accept friend request :( ${res.data.error}`);
+                        },
                     }
-                } else {
-                    alert(`Couldn't accept friend request :( ${response.error}`);
-                }
+                );
             }
         },
         'decline': {
             label: 'Decline', action: async () => {
-                const response = await request('POST', Path.API.RESPOND_FRIEND_REQUEST, { display_name: user.display_name, action: 'decline' });
-                if (response.status == 200)
-                    deleteSelf();
-                else
-                    alert(`Couldn't decline friend request :( ${response.error}`);
+                ViewLifeCycle.request(
+                    'POST',
+                    Path.API.RESPOND_FRIEND_REQUEST,
+                    {
+                        body: { display_name: user.display_name, action: 'decline' },
+                        onResolve: (res) => {
+                            if (res.status == 200)
+                                deleteSelf();
+                            else
+                                alert(`Couldn't decline friend request :( ${res.data.error}`);
+                        },
+                    }
+                );
             }
         },
     };
@@ -202,35 +232,49 @@ async function getRequestSection() {
             alert("Invalid username");
             return;
         }
-        const response = await request('POST', Path.API.SEND_FRIEND_REQUEST, { display_name: displayName });
-        if (response.status == 200) {
-            input.value = "";
-            const newRequestUser = response.data;
-            requestListDiv.append(getRequestRow(newRequestUser, 'sent'));
-        } else if (response.status == 404) {
-            alert(`User ${displayName} not found`);
-        } else {
-            alert(`${response.error ? response.error : "Error sending friend request"}`);
-        }
+        ViewLifeCycle.request(
+            'POST',
+            Path.API.SEND_FRIEND_REQUEST,
+            {
+                body: { display_name: displayName },
+                onResolve: (res) => {
+                    if (res.status == 200) {
+                        input.value = "";
+                        const newRequestUser = res.data;
+                        requestListDiv.append(getRequestRow(newRequestUser, 'sent'));
+                    } else if (res.status == 404)
+                        alert(`User ${displayName} not found`);
+                    else
+                        alert(`${res.data.error ? res.data.error : "Error sending friend request"}`);
+                },
+            }
+        );
     });
 
-    const response = await request('GET', Path.API.GET_FRIEND_REQUESTS);
-    if (response.status == 200) {
-        const sentRequests = response.data.sent;
-        if (sentRequests && sentRequests.length > 0) {
-            sentRequests.forEach(request => {
-                const requestRow = getRequestRow(request, 'sent');
-                requestListDiv.append(requestRow);
-            });
+    ViewLifeCycle.request(
+        'GET',
+        Path.API.GET_FRIEND_REQUESTS,
+        {
+            onResolve: (res) => {
+                if (res.status == 200) {
+                    const sentRequests = res.data.sent;
+                    if (sentRequests && sentRequests.length > 0) {
+                        sentRequests.forEach(request => {
+                            const requestRow = getRequestRow(request, 'sent');
+                            requestListDiv.append(requestRow);
+                        });
+                    }
+                    const receivedRequests = res.data.received;
+                    if (receivedRequests && receivedRequests.length > 0) {
+                        receivedRequests.forEach(request => {
+                            const requestRow = getRequestRow(request, 'received');
+                            requestListDiv.append(requestRow);
+                        });
+                    }
+                }
+            },
         }
-        const receivedRequests = response.data.received;
-        if (receivedRequests && receivedRequests.length > 0) {
-            receivedRequests.forEach(request => {
-                const requestRow = getRequestRow(request, 'received');
-                requestListDiv.append(requestRow);
-            });
-        }
-    }
+    );
     WebSocketService.addCallback('friend_request_new', (message) => {
         requestListDiv.prepend(getRequestRow(message, 'received'));
     });
@@ -249,13 +293,14 @@ async function getFriendListSection() {
 
     // Fetch initial friends list from API
     let friendsList = [];
-    const response = await request('GET', Path.API.GET_FRIENDS);
-    if (response.status === 200)
-        friendsList = response.data.friends;
-    else {
+    const response = await ViewLifeCycle.request('GET', Path.API.GET_FRIENDS);
+    if (!response || response.status !== 200) {
         const error = newElement('div', {parent: friendListDiv, id: 'no-friends'});
         error.textContent = "Error fetching friends";
+        return component;
     }
+    if (response.status === 200)
+        friendsList = response.data.friends;
 
     // Function to update the displayed friends list based on search term
     function updateFriendList(searchTerm = '') {
