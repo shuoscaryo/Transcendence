@@ -352,13 +352,14 @@ export default class PongGame {
 
     stop() {
         // Remove the callback from the game_state message
-        if (this._rmStateCallback)
-            this._rmStateCallback();
+        this._rmStateCallback?.();
         this._rmStateCallback = null;
 
         // Stop the controllers
-            this._playerLeft.controller?.stop();
-            this._playerRight.controller?.stop();
+        this._playerLeft.controller?.stop();
+        this._playerRight.controller?.stop();
+
+        // Stop the game loop
         this._lastTime = null;
         if (this._animationFrameId) {
             cancelAnimationFrame(this._animationFrameId);
