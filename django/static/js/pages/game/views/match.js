@@ -27,8 +27,27 @@ async function sendMatchResult(type, game) {
 function waitingMatchView(component, data) {
 	component.innerHTML = "";
 
+	const title = newElement("p", {
+		parent: component,
+		textContent: "Searching Match...",
+		style: "font-size: 1.2em; margin-bottom: 10px; text-align: center;"
+	});
+
+	const counter = newElement("p", {
+		parent: component,
+		textContent: "0s",
+		style: "text-align: center; margin-bottom: 15px;"
+	});
+
+	let seconds = 0;
+	const intervalId = setInterval(() => {
+		seconds += 1;
+		counter.textContent = `${seconds}s`;
+	}, 1000);
+
 	const rmCallback = WebSocketService.addCallback("match_found",
 		(msg) => {
+			clearInterval(intervalId);
 			const gameData = data;
 			console.log(msg);
 			if (msg.player_role === 'first') {
@@ -40,7 +59,7 @@ function waitingMatchView(component, data) {
 					name: msg.player_right,
 					controller: new RemoteControllerIncoming(),
 				};
-				gameData.onGameEnd = (game) => {sendMatchResult("online", game);};
+				gameData.onGameEnd = (game) => { sendMatchResult("online", game); };
 				gameData.type = 'host';
 			} else if (msg.player_role === 'second') {
 				gameData.playerLeft = {
@@ -52,10 +71,10 @@ function waitingMatchView(component, data) {
 					controller: new RemoteControllerOutgoing("w", "s"),
 				};
 				gameData.type = 'client';
-			}
-			else {
+			} else {
 				console.error(`Error: player_role not valid (${msg.player_role})`);
 				onlinePlayView(component, data);
+				return;
 			}
 			component.innerHTML = "";
 			const [game, pong] = createPongGameComponent(gameData);
@@ -67,15 +86,24 @@ function waitingMatchView(component, data) {
 
 	const playButton = getDefaultButton({
 		bgColor: 'var(--color-lime)',
-		content: 'Cancel',
+		content: 'Cancelar',
 		onClick: () => {
+			clearInterval(intervalId);
 			rmCallback();
 			WebSocketService.send("stop_find_match");
 			onlinePlayView(component, data);
 		}
 	});
+
+	ViewScope.onDestroy(() => {
+		clearInterval(intervalId);
+		rmCallback();
+		WebSocketService.send("stop_find_match");
+	});
+
 	component.append(playButton);
 }
+
 
 function onlinePlayView(component, data) {
 	component.innerHTML = "";
