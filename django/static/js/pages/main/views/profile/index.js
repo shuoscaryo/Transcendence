@@ -1,11 +1,8 @@
 import Path from '/static/js/utils/Path.js';
-import fetchProfileData from './fetchProfileData.js';
-import fetchMatchHistory from './fetchMatchHistory.js';
-import fetchStats from './fetchStats.js';
 import getProfileHeaderSection from './headerSection.js';
 import getMatchHistorySection from './matchHistorySection.js';
 import getStatsSection from './statsSection.js';
-
+import ViewLifeCycle from '/static/js/utils/ViewLifeCycle.js';
 
 export default async function getView(isLogged, path) {
     // Redirect to login if not logged in and trying to access the main profile page
@@ -19,17 +16,23 @@ export default async function getView(isLogged, path) {
     const component = document.createElement('div');
 
     // get profile data and match history data from the API
-    const [profileData, matchHistoryData, statsData] = await Promise.all([
-        fetchProfileData(path.subPath),
-        fetchMatchHistory(path.subPath, 0, 10),
-        fetchStats(path.subPath),
-    ]);
-    if (profileData.status && profileData.status !== 200)
-        return {status: profileData.status, error: profileData.error};
-    if (matchHistoryData.status && matchHistoryData.status !== 200)
-        return {status: matchHistoryData.status, error: matchHistoryData.error};
-    if (statsData.status && statsData.status !== 200)
-        return {status: statsData.status, error: statsData.error};
+    let profileData, matchHistoryData, statsData;
+    try {
+        [profileData, matchHistoryData, statsData] = await Promise.all([
+            ViewLifeCycle.request('GET', `${Path.API.PROFILE}${path.subPath}`, {disableCatch: true}),
+            ViewLifeCycle.request('GET', `${Path.API.MATCH_HISTORY}${path.subPath}?offset=0&limit=10`, {disableCatch: true}),
+            ViewLifeCycle.request('GET', `${Path.API.STATS}${path.subPath}`, {disableCatch: true}),
+        ]);
+    } catch (error) {
+        console.error("Profile page load error:", error);
+        return {status: 500, error: "An error occurred while fetching data."};
+    }
+    if (profileData.status !== 200)
+        return {status: profileData.status, error: profileData.data.error};
+    if (matchHistoryData.status !== 200)
+        return {status: matchHistoryData.status, error: matchHistoryData.data.error};
+    if (statsData.status !== 200)
+        return {status: statsData.status, error: statsData.data.error};
     const profile = profileData.data;
     const matchHistory = matchHistoryData.data.matches;
     const stats = statsData.data;

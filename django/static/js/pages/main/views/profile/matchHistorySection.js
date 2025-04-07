@@ -2,8 +2,8 @@ import Path from '/static/js/utils/Path.js';
 import { navigate } from '/static/js/utils/router.js';
 import getDefaultButton from '/static/js/components/defaultButton.js';
 import newElement from '/static/js/utils/newElement.js';
-import fetchMatchHistory from './fetchMatchHistory.js';
 import { formatDate } from '/static/js/utils/time.js';
+import ViewLifeCycle from '/static/js/utils/ViewLifeCycle.js';
 
 function secondsToMS(seconds) {
     const minutes = Math.floor(seconds / 60);
@@ -133,20 +133,27 @@ export default function getMatchHistorySection(profile, matchHistory, path) {
         content: 'Get more matches',
         onClick: async () => {
             getMoreButton.disabled = true;
-            const matchHistoryData = await fetchMatchHistory(path.subPath, offset, matchesPerFetch);
-            if (matchHistoryData.status && matchHistoryData.status !== 200) {
-                getMoreButton.disabled = false;
-                return;
-            }
-            const matchHistory = matchHistoryData.data.matches;
-            let maxMatches = matchHistoryData.data.total_matches;
-            matchHistory.forEach(match => {
-                matchHistoryRows.append(getMatchHistoryRow(profile, match));
-            });
-            offset += matchesPerFetch;
-            if (offset >= maxMatches)
-                offset = maxMatches;
-            getMoreButton.disabled = false;
+            ViewLifeCycle.request(
+                'GET',
+                `${Path.API.MATCH_HISTORY}${path.subPath}?offset=${offset}&limit=${matchesPerFetch}`,
+                {
+                    onResolve: (res) => {
+                        if (res.status !== 200) {
+                            getMoreButton.disabled = false;
+                            return;
+                        }
+                        const matchHistory = matchHistoryData.data.matches;
+                        let maxMatches = matchHistoryData.data.total_matches;
+                        matchHistory.forEach(match => {
+                            matchHistoryRows.append(getMatchHistoryRow(profile, match));
+                        });
+                        offset += matchesPerFetch;
+                        if (offset >= maxMatches)
+                            offset = maxMatches;
+                        getMoreButton.disabled = false;
+                    }
+                }
+            );
         }
     });
     getMoreButton.id = 'get-more-matches';
