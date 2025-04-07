@@ -9,7 +9,6 @@ online_users = set()
 
 class PongConsumer(AsyncWebsocketConsumer):
     active_players = {}  # Dictionary to track players per room
-    ready_players = {}   # Dictionary to track ready players per room
     room_counter = 0     # Counter for unique room names
 
     async def connect(self):
@@ -40,11 +39,6 @@ class PongConsumer(AsyncWebsocketConsumer):
                 ]
                 if not self.active_players[self.room_name]:
                     del self.active_players[self.room_name]
-
-            if self.room_name in self.ready_players:
-                self.ready_players[self.room_name] = [
-                    p for p in self.ready_players[self.room_name] if p != self
-                ]
 
             players = self.active_players.get(self.room_name, [])
             if len(players) == 1:
