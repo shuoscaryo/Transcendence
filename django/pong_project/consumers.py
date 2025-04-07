@@ -13,17 +13,19 @@ class PongConsumer(AsyncWebsocketConsumer):
     room_counter = 0     # Counter for unique room names
 
     async def connect(self):
-        # Accept the WebSocket connection
-        await self.accept()
-
-        # Save user ID for later use
+        # Only authenticated users can connect
+        if (self.scope["user"].is_authenticated):
+            await self.accept()
+        else:
+            self.errorClose = True
+            await self.close(code = 4000)
+            return
         self.user_id = self.scope['user'].id
 
-        # Update online status (for friends, etc.)
         await self.update_online_status(True)
 
     async def disconnect(self, close_code):
-        if hasattr(self, 'errorClose') and self.errorClose:
+        if (close_code == 4000):
             return
 
         # Remove from channel group
@@ -69,7 +71,11 @@ class PongConsumer(AsyncWebsocketConsumer):
             The message is parsed as JSON and the 'msg_type' is used to call the corresponding handler.
             To add a new message type, create a method named <msg_type>_handler.
         '''
-        data = json.loads(text_data)  # TODO: try/except for safety
+        try:
+            data = json.loads(text_data)
+        except json.JSONDecodeError:
+            await self.send(text_data=json.dumps({'msg_type': 'error', 'message': "Invalid JSON"}))
+            return
 
         msg_type = data.get("msg_type")
         if not msg_type:
@@ -81,18 +87,9 @@ class PongConsumer(AsyncWebsocketConsumer):
         if handler and callable(handler):
             await handler(data)
         else:
-            pass  # TODO: uncomment below when ready
-            # await self.send(text_data=json.dumps({'msg_type': 'error', 'message': f'Invalid message type {msg_type}'}))
+            await self.send(text_data=json.dumps({'msg_type': 'error', 'message': f'Invalid message type {msg_type}'}))
 
-        if msg_type == "get_role":
-            players = self.active_players.get(self.room_name, [])
-            await self.send(text_data=json.dumps({
-                'msg_type': 'initial_status',
-                'initial_status': self.role,
-                'players_connected': len(players)
-            }))
-
-        elif msg_type == "move":
+        if msg_type == "move":
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
@@ -101,6 +98,21 @@ class PongConsumer(AsyncWebsocketConsumer):
                     'sender': self.channel_name
                 }
             )
+
+    async def move_handler(self, data):
+        '''
+            Called when a 'move' message is received.
+            Sends the move to the other player in the room.
+        '''
+        if (!hasattr(self, 'room_group_name')):
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'player_move',
+                'move': data['move'],
+                'sender': self.channel_name
+            }
+        )
 
     async def game_message(self, event):
         await self.send(text_data=json.dumps({
@@ -182,7 +194,6 @@ class PongConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps(message_to_send))
 
     async def find_match_handler(self, data):
-        print("Finding match...", file=open('debug.txt', 'a'))
         self.room_name = await self.find_or_create_room()
         self.room_group_name = f'game_{self.room_name}'
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
