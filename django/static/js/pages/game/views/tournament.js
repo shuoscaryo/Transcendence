@@ -425,9 +425,9 @@ export default async function getView(isLogged, path) {
     g_tournament = new Tournament();
     loadFormView(component, response?.data);
 
-    const onDestroy = () => {
+    ViewScope.onDestroy(() => {
         if (g_pong)
             g_pong.stop();
-    };
-    return {status: 200, component, css, onDestroy};
+    });
+    return {status: 200, component, css};
 }

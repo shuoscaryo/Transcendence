@@ -144,11 +144,11 @@ export default async function getView(isLogged, path) {
         component.append(gameComponent);
     }
 
-    const onDestroy = () => {
+    ViewScope.onDestroy(() => {
         if (pongInstance) {
             pongInstance.stop();
         }
-    };
+    });
 
-    return { status: 200, component, css, onDestroy };
+    return { status: 200, component, css};
 }
