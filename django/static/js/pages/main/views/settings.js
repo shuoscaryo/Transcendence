@@ -3,7 +3,7 @@ import newElement from "/static/js/utils/newElement.js";
 import {navigate} from "/static/js/utils/router.js";
 import * as validators from "/static/js/utils/validators.js";
 import getDefaultButton from "/static/js/components/defaultButton.js";
-import ViewLifeCycle from "/static/js/utils/ViewLifeCycle.js";
+import ViewScope from "/static/js/utils/ViewScope.js";
 
 function getPhotoSection(profile) {
     const component = newElement('section', { classList: ['section-block'], id: 'photo-section'});
@@ -33,7 +33,7 @@ function getPhotoSection(profile) {
         const formData = new FormData();
         formData.append('profile_photo', file);
     
-        await ViewLifeCycle.request(
+        await ViewScope.request(
             'POST',
             Path.join(Path.API.UPDATE_CREDENTIALS, 'profile_photo'),
             {
@@ -152,7 +152,7 @@ function getUserUpdatesSection() {
             }
 
             // Send request
-            await ViewLifeCycle.request(
+            await ViewScope.request(
                 'POST',
                 Path.join(Path.API.UPDATE_CREDENTIALS, endpoint),
                 {
@@ -200,7 +200,7 @@ export default async function getView(isLogged, path) {
     ];
     const component = document.createElement('div');
 
-    const response = await ViewLifeCycle.request(
+    const response = await ViewScope.request(
         'GET',
         Path.API.PROFILE,
         {onThrow: (err) => { console.error(err);}}

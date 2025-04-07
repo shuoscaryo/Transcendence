@@ -2,7 +2,7 @@ import Path from '/static/js/utils/Path.js';
 import getProfileHeaderSection from './headerSection.js';
 import getMatchHistorySection from './matchHistorySection.js';
 import getStatsSection from './statsSection.js';
-import ViewLifeCycle from '/static/js/utils/ViewLifeCycle.js';
+import ViewScope from '/static/js/utils/ViewScope.js';
 
 export default async function getView(isLogged, path) {
     // Redirect to login if not logged in and trying to access the main profile page
@@ -19,9 +19,9 @@ export default async function getView(isLogged, path) {
     let profileData, matchHistoryData, statsData;
     try {
         [profileData, matchHistoryData, statsData] = await Promise.all([
-            ViewLifeCycle.request('GET', `${Path.API.PROFILE}${path.subPath}`, {disableCatch: true}),
-            ViewLifeCycle.request('GET', `${Path.API.MATCH_HISTORY}${path.subPath}?offset=0&limit=10`, {disableCatch: true}),
-            ViewLifeCycle.request('GET', `${Path.API.STATS}${path.subPath}`, {disableCatch: true}),
+            ViewScope.request('GET', `${Path.API.PROFILE}${path.subPath}`, {disableCatch: true}),
+            ViewScope.request('GET', `${Path.API.MATCH_HISTORY}${path.subPath}?offset=0&limit=10`, {disableCatch: true}),
+            ViewScope.request('GET', `${Path.API.STATS}${path.subPath}`, {disableCatch: true}),
         ]);
     } catch (error) {
         console.error("Profile page load error:", error);

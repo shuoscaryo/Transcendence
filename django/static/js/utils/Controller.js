@@ -1,7 +1,7 @@
 "use strict";
 import KeyStates from "/static/js/utils/KeyStates.js";
 import WebSocketService from '/static/js/utils/WebSocketService.js';
-import ViewLifeCycle from '/static/js/utils/ViewLifeCycle.js';
+import ViewScope from '/static/js/utils/ViewScope.js';
 
 export class Controller {
     constructor() {
@@ -64,8 +64,8 @@ export class RemoteControllerOutgoing extends Controller {
             this._sendMove(move);
         };
 
-        ViewLifeCycle.addEventListener(document, 'keydown', updateMove);
-        ViewLifeCycle.addEventListener(document, 'keyup', updateMove);
+        ViewScope.addEventListener(document, 'keydown', updateMove);
+        ViewScope.addEventListener(document, 'keyup', updateMove);
     }
 
     _sendMove(move) {

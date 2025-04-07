@@ -2,7 +2,7 @@ import Path from '/static/js/utils/Path.js';
 import * as css from '/static/js/utils/css.js';
 import request from '/static/js/utils/request.js';
 import WebSocketService from '/static/js/utils/WebSocketService.js';
-import ViewLifeCycle from '/static/js/utils/ViewLifeCycle.js';
+import ViewScope from '/static/js/utils/ViewScope.js';
 
 const current = {
     page: null,
@@ -68,7 +68,7 @@ async function loadPage(path, isLogged) {
     document.body.style.pointerEvents = 'none';
 
     // Load the page
-    ViewLifeCycle.destroy();
+    ViewScope.destroy();
     const pagePath = Path.page(path.page, 'index.js');
     const pageImport = await getComponentFromUrl(pagePath, isLogged, path);
     if (pageImport.status !== 200)
@@ -123,7 +123,7 @@ async function loadPage(path, isLogged) {
     pageImport.component.id = 'app';
 
     // - Call mount on the new view
-    ViewLifeCycle.mount();
+    ViewScope.mount();
 
     // Update the current data
     current.page = path.page;

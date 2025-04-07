@@ -4,7 +4,7 @@ import { DemoAI, PlayerController, PongAI } from '/static/js/utils/Controller.js
 import Path from '/static/js/utils/Path.js';
 import { navigate } from '/static/js/utils/router.js';
 import newElement from '/static/js/utils/newElement.js';
-import ViewLifeCycle from '/static/js/utils/ViewLifeCycle.js';
+import ViewScope from '/static/js/utils/ViewScope.js';
 
 function getButtonWithImage({imgSrc, text, description, bgColor, bgHoverColor, textColor, onClick}) {
     const buttonContent = newElement('div', {classList: ['button-content']});
@@ -30,8 +30,8 @@ function getSection1() {
     pong.setLeftController(new DemoAI());
     pong.setRightController(new DemoAI());
     pong.onGameEnd((game) => {game.start();});
-    ViewLifeCycle.onMount(() => pong.start());
-    ViewLifeCycle.onDestroy(() => pong.stop());
+    ViewScope.onMount(() => pong.start());
+    ViewScope.onDestroy(() => pong.stop());
 
     const sectionContent = newElement('div', {parent: component});
     const pageTitle = newElement('h1', {parent: sectionContent});

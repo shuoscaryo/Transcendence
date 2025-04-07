@@ -1,5 +1,5 @@
 /**
- * ViewLifeCycle is a global singleton that manages the lifecycle of views in a single-page application (SPA).
+ * ViewScope is a global singleton that manages the lifecycle of views in a single-page application (SPA).
  *
  * Its main role is to provide tools for safely:
  * - Attaching logic to the current view (onMount / onDestroy)
@@ -18,7 +18,7 @@
  * - Perform HTTP requests
  * - Handle view-local resources like intervals, animations, sockets
  */
-class ViewLifeCycle {
+class ViewScope {
     static VIEW_CHANGED = Symbol('view changed'); // special throw type
     
     _generation = 0;
@@ -187,5 +187,5 @@ class ViewLifeCycle {
     }
 }
   
-export default new ViewLifeCycle();
+export default new ViewScope();
   

@@ -1,4 +1,4 @@
-import ViewLifeCycle from '/static/js/utils/ViewLifeCycle.js';
+import ViewScope from '/static/js/utils/ViewScope.js';
 
 class WebSocketService {
 	constructor() {
@@ -82,7 +82,7 @@ class WebSocketService {
 
 		// Return remove function and also add it to auto-removal on view change
 		const remover = () => this.rmCallback(msg_type, callback);
-		ViewLifeCycle.onDestroy(remover);
+		ViewScope.onDestroy(remover);
 		return remover;
 	}
 
