@@ -69,7 +69,7 @@ function waitingMatchView(component, data) {
 		bgColor: 'var(--color-lime)',
 		content: 'Cancel',
 		onClick: () => {
-			WebSocketService.rmCallback(rmCallback);
+			rmCallback();
 			WebSocketService.send("stop_find_match");
 			onlinePlayView(component, data);
 		}
@@ -78,6 +78,8 @@ function waitingMatchView(component, data) {
 }
 
 function onlinePlayView(component, data) {
+	component.innerHTML = "";
+
 	const buttonDiv = newElement("div", {parent: component, id: "play-container"});
 	newElement("img", {parent: buttonDiv, id: "arrow-img", src: Path.img("play_arrows.png")});
 	const playButton = getDefaultButton({

@@ -8,7 +8,7 @@ from django.contrib.auth import get_user_model
 online_users = set()
 
 class PongConsumer(AsyncWebsocketConsumer):
-    active_players = {}  # Dictionary to track players per room
+    active_rooms = {}  # Dictionary to track players per room
     room_counter = 0     # Counter for unique room names
 
     async def connect(self):
@@ -33,14 +33,14 @@ class PongConsumer(AsyncWebsocketConsumer):
 
         # Remove from matchmaking
         if hasattr(self, 'room_name'):
-            if self.room_name in self.active_players:
-                self.active_players[self.room_name] = [
-                    p for p in self.active_players[self.room_name] if p != self
+            if self.room_name in self.active_rooms:
+                self.active_rooms[self.room_name] = [
+                    p for p in self.active_rooms[self.room_name] if p != self
                 ]
-                if not self.active_players[self.room_name]:
-                    del self.active_players[self.room_name]
+                if not self.active_rooms[self.room_name]:
+                    del self.active_rooms[self.room_name]
 
-            players = self.active_players.get(self.room_name, [])
+            players = self.active_rooms.get(self.room_name, [])
             if len(players) == 1:
                 await self.channel_layer.group_send(
                     self.room_group_name,
@@ -158,7 +158,7 @@ class PongConsumer(AsyncWebsocketConsumer):
             Called when a 'game_state' message is received.
             Sends the game state to the other player in the room.
         '''
-        players = self.active_players.get(self.room_name, [])
+        players = self.active_rooms.get(self.room_name, [])
         for player in players:
             if player != self:
                 await player.send(text_data=json.dumps({
@@ -171,9 +171,9 @@ class PongConsumer(AsyncWebsocketConsumer):
         self.room_group_name = f'game_{self.room_name}'
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
 
-        self.active_players[self.room_name].append(self)
+        self.active_rooms[self.room_name].append(self)
 
-        players = self.active_players[self.room_name]
+        players = self.active_rooms[self.room_name]
         self.role = 'first' if len(players) == 1 else 'second'
 
         if len(players) >= 2:
@@ -189,6 +189,20 @@ class PongConsumer(AsyncWebsocketConsumer):
                 }
             )
 
+    async def stop_find_match_handler(self, data):
+        # Remove the player from the matchmaking queue
+        if hasattr(self, 'room_group_name'):
+            await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
+
+        # Remove the player from the active rooms and delete the room if empty
+        if hasattr(self, 'room_name'):
+            if self.room_name in self.active_rooms:
+                self.active_rooms[self.room_name] = [
+                    p for p in self.active_rooms[self.room_name] if p != self
+                ]
+                if not self.active_rooms[self.room_name]:
+                    del self.active_rooms[self.room_name]
+
     async def match_found_response(self, event):
         await self.send(text_data=json.dumps({
             'msg_type': 'match_found',
@@ -200,11 +214,11 @@ class PongConsumer(AsyncWebsocketConsumer):
         }))
 
     async def find_or_create_room(self):
-        for name, players in self.active_players.items():
+        for name, players in self.active_rooms.items():
             if len(players) < 2:
                 return name
 
         PongConsumer.room_counter += 1
         new_room = f'pong_room_{PongConsumer.room_counter}'
-        self.active_players[new_room] = []
+        self.active_rooms[new_room] = []
         return new_room
