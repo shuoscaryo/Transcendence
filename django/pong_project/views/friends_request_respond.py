@@ -45,13 +45,15 @@ def friends_request_respond(request):
         async_to_sync(channel_layer.group_send)(
             f"user_{from_user.id}",
             {
-                "type": "normal_send",
+                "type": "broadcast",
                 "msg_type": "friend_request_response",
-                "answer": action,
-                "profile_photo": to_user.profile_photo_url,
-                "display_name": to_user.display_name,
-                "is_online": to_user.id in online_users,
-                "last_online": None if to_user.id in online_users else to_user.last_online,
+                "data": {
+                    "answer": action,
+                    "profile_photo": to_user.profile_photo_url,
+                    "display_name": to_user.display_name,
+                    "is_online": to_user.id in online_users,
+                    "last_online": None if to_user.id in online_users else to_user.last_online,
+                }
             }
         )
         friend_request.delete()

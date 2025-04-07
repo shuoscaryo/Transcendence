@@ -40,7 +40,7 @@ function waitingMatchView(component, data) {
 					name: msg.player_right,
 					controller: new RemoteControllerIncoming(),
 				};
-				gameData.onGameEnd = (game) => {if (isLogged) sendMatchResult("online", game);};
+				gameData.onGameEnd = (game) => {sendMatchResult("online", game);};
 				gameData.type = 'host';
 			} else if (msg.player_role === 'second') {
 				gameData.playerLeft = {

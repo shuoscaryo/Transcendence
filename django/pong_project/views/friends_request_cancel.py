@@ -40,9 +40,11 @@ def friends_request_cancel(request):
         async_to_sync(channel_layer.group_send)(
             f"user_{to_user.id}",
             {
-                "type": "normal_send",
+                "type": "broadcast",
                 "msg_type": "friend_request_cancelled",
-                "display_name": from_user.display_name,
+                "data": {
+                    "display_name": from_user.display_name,
+                }
             }
         )
         return JsonResponse({'message': f'Friend request to {display_name} canceled'})

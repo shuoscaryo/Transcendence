@@ -40,9 +40,11 @@ def friends_remove(request):
         async_to_sync(channel_layer.group_send)(
             f"user_{friend.id}",
             {
-                "type": "normal_send",
+                "type": "broadcast",
                 "msg_type": "friend_removed",
-                "display_name": user.display_name,
+                "data": {
+                    "display_name": user.display_name,
+                }
             }
         )
         return JsonResponse({'message': f'{display_name} has been removed from your friends list'})

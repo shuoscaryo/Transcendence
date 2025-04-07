@@ -45,17 +45,10 @@ class PongConsumer(AsyncWebsocketConsumer):
                 await self.channel_layer.group_send(
                     self.room_group_name,
                     {
-                        'type': 'waiting_message',
-                        'message': 'Waiting for second player...'
+                        'type': 'broadcast',
+                        'msg_type': 'wait_for_opponent',
                     }
                 )
-                if not any(p.role == 'first' for p in players):
-                    players[0].role = 'first'
-                    await players[0].send(text_data=json.dumps({
-                        'msg_type': 'initial_status',
-                        'initial_status': 'first',
-                        'players_connected': len(players)
-                    }))
 
         await self.update_online_status(False)
 
@@ -65,17 +58,20 @@ class PongConsumer(AsyncWebsocketConsumer):
             The message is parsed as JSON and the 'msg_type' is used to call the corresponding handler.
             To add a new message type, create a method named <msg_type>_handler.
         '''
+        # Load the JSON data
         try:
             data = json.loads(text_data)
         except json.JSONDecodeError:
             await self.send(text_data=json.dumps({'msg_type': 'error', 'message': "Invalid JSON"}))
             return
 
+        # Check if the message has a 'msg_type'
         msg_type = data.get("msg_type")
         if not msg_type:
             await self.send(text_data=json.dumps({'msg_type': 'error', 'message': "Didn't receive a message type"}))
             return
 
+        # Call the appropriate handler based on the 'msg_type'
         handler_name = f"{msg_type}_handler"
         handler = getattr(self, handler_name, None)
         if handler and callable(handler):
@@ -83,54 +79,45 @@ class PongConsumer(AsyncWebsocketConsumer):
         else:
             await self.send(text_data=json.dumps({'msg_type': 'error', 'message': f'Invalid message type {msg_type}'}))
 
-        if msg_type == "move":
-            await self.channel_layer.group_send(
-                self.room_group_name,
-                {
-                    'type': 'player_move',
-                    'move': data['move'],
-                    'sender': self.channel_name
-                }
-            )
+    async def broadcast(self, event):
+        '''
+        Sends a message to the user's frontend.
+        Skips if sender is the same as this connection.
+        Requires 'msg_type' at the top level.
+        Sends:
+        {
+            "msg_type": "...",
+            "data": { ... }
+        }
+        '''
+        if 'msg_type' not in event:
+            raise ValueError("Missing 'msg_type' in the event.")
+
+        if event.get('sender') == self.channel_name:
+            return
+
+        await self.send(text_data=json.dumps({
+            'msg_type': event['msg_type'],
+            'data': event.get('data', {})
+        }))
 
     async def move_handler(self, data):
         '''
             Called when a 'move' message is received.
             Sends the move to the other player in the room.
         '''
-        if (!hasattr(self, 'room_group_name')):
+        if not hasattr(self, 'room_group_name'):
+            await self.send(text_data=json.dumps({'msg_type': 'error', 'message': "move_handler: No room group name"}))
+            return
         await self.channel_layer.group_send(
             self.room_group_name,
             {
-                'type': 'player_move',
-                'move': data['move'],
-                'sender': self.channel_name
+                'type': 'broadcast',
+                'msg_type': 'move_p',
+                'sender': self.channel_name,
+                'data': data,
             }
         )
-
-    async def game_message(self, event):
-        await self.send(text_data=json.dumps({
-            'msg_type': 'match_found',
-            'message': event.get('message'),
-            'move': event.get('move'),
-            'player_left': event.get('player_left'),
-            'player_right': event.get('player_right'),
-            'player_role': self.role,
-        }))
-
-    async def waiting_message(self, event):
-        await self.send(text_data=json.dumps({
-            'msg_type': 'waiting',
-            'message': event['message']
-        }))
-
-    async def player_move(self, event):
-        if event.get('sender') == self.channel_name:
-            return  # Don't send back to the sender
-        await self.send(text_data=json.dumps({
-            'msg_type': 'move_p',
-            'move': event.get('move'),
-        }))
 
     async def update_online_status(self, is_connecting):
         CustomUser = get_user_model()
@@ -153,11 +140,13 @@ class PongConsumer(AsyncWebsocketConsumer):
             self.channel_layer.group_send(
                 f'user_{friend.id}',
                 {
-                    'type': 'normal_send',
+                    'type': 'broadcast',
                     'msg_type': 'online_status',
-                    'is_online': is_connecting,
-                    'display_name': user.display_name,
-                    'last_online': None if is_connecting else user.last_online.isoformat()
+                    'data': {
+                        'is_online': is_connecting,
+                        'display_name': user.display_name,
+                        'last_online': None if is_connecting else user.last_online.isoformat()
+                    }
                 }
             )
             for friend in friend_list
@@ -172,20 +161,10 @@ class PongConsumer(AsyncWebsocketConsumer):
         players = self.active_players.get(self.room_name, [])
         for player in players:
             if player != self:
-                data_to_send = data.copy()
-                data_to_send['msg_type'] = 'game_state'
-                await player.send(text_data=json.dumps(data_to_send))
-
-    async def normal_send(self, message):
-        '''
-            Sends a message to the user's frontend.
-            For group_send types, all users in the room will receive it.
-        '''
-        if 'msg_type' not in message:
-            raise ValueError("Missing 'msg_type' in the message.")
-        message_to_send = message.copy()
-        message_to_send.pop('type', None)
-        await self.send(text_data=json.dumps(message_to_send))
+                await player.send(text_data=json.dumps({
+                    'msg_type': 'game_state',
+                    'data': data,
+                }))
 
     async def find_match_handler(self, data):
         self.room_name = await self.find_or_create_room()
@@ -197,24 +176,28 @@ class PongConsumer(AsyncWebsocketConsumer):
         players = self.active_players[self.room_name]
         self.role = 'first' if len(players) == 1 else 'second'
 
-        if len(players) < 2:
-            await self.send(text_data=json.dumps({
-                'msg_type': 'waiting',
-                'message': 'Waiting for the second player...'
-            }))
-        else:
-                CustomUser = get_user_model()
-                player_left = await sync_to_async(CustomUser.objects.get)(id=players[0].user_id)
-                player_right = await sync_to_async(CustomUser.objects.get)(id=players[1].user_id)
-                await self.channel_layer.group_send(
-                    self.room_group_name,
-                    {
-                        'type': 'game_message',
-                        'message': 'Both players are ready. The game begins!',
-                        'player_left': player_left.display_name,
-                        'player_right': player_right.display_name,
-                    }
-                )
+        if len(players) >= 2:
+            CustomUser = get_user_model()
+            player_left = await sync_to_async(CustomUser.objects.get)(id=players[0].user_id)
+            player_right = await sync_to_async(CustomUser.objects.get)(id=players[1].user_id)
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'match_found_response',
+                    'player_left': player_left.display_name,
+                    'player_right': player_right.display_name,
+                }
+            )
+
+    async def match_found_response(self, event):
+        await self.send(text_data=json.dumps({
+            'msg_type': 'match_found',
+            'data': {
+                'player_left': event.get('player_left'),
+                'player_right': event.get('player_right'),
+                'player_role': self.role,
+            }
+        }))
 
     async def find_or_create_room(self):
         for name, players in self.active_players.items():

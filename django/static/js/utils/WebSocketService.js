@@ -9,7 +9,7 @@ class WebSocketService {
 
         // Add specific listeners
         this.specificListeners.set('error', [(msg) => {
-			console.error('[WebSocketService] error:', msg.message);
+			console.error('[WebSocketService] error:', msg?.message);
 		}]);
 		this.specificListeners.set('ping', [() => {
 			this.send('pong');
@@ -60,13 +60,12 @@ class WebSocketService {
 			console.error('Invalid message:', json);
 			return;
 		}
-		const { msg_type, ...msg } = json;
-		console.log(`WSS receive: ${msg_type}`);
+		console.log(`WSS receive: ${json.msg_type}`); //XXX
 
-		(this.specificListeners.get(msg_type) || []).forEach(cb => cb(msg));
-		(this.listeners.get(msg_type) || []).forEach(cb => cb(msg));
-		(this.oneTimeListeners.get(msg_type) || []).forEach(cb => cb(msg));
-		this.oneTimeListeners.delete(msg_type);
+		(this.specificListeners.get(json.msg_type) || []).forEach(cb => cb(json.data));
+		(this.listeners.get(json.msg_type) || []).forEach(cb => cb(json.data));
+		(this.oneTimeListeners.get(json.msg_type) || []).forEach(cb => cb(json.data));
+		this.oneTimeListeners.delete(json.msg_type);
 	}
 
 	addCallback(msg_type, callback, { once = false } = {}) {
@@ -112,5 +111,6 @@ class WebSocketService {
 		}
 	}
 }
+
 
 export default new WebSocketService();

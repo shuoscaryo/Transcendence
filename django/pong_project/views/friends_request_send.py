@@ -42,10 +42,12 @@ def friends_request_send(request):
         async_to_sync(channel_layer.group_send)(
             f"user_{to_user.id}",
             {
-                "type": "normal_send",
+                "type": "broadcast",
                 "msg_type": "friend_request_new",
-                "display_name": from_user.display_name,
-                "profile_photo": from_user.profile_photo_url,
+                "data": {
+                    "display_name": from_user.display_name,
+                    "profile_photo": from_user.profile_photo_url,
+                }
             }
         )
 
