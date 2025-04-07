@@ -2,7 +2,7 @@ import Path from '/static/js/utils/Path.js';
 import { navigate } from '/static/js/utils/router.js';
 import getDefaultButton from '/static/js/components/defaultButton.js';
 import { emailOk, usernameOk, pwOk } from '/static/js/utils/validators.js';
-import request from '/static/js/utils/request.js';
+import ViewScope from '/static/js/utils/ViewScope.js';
 
 function getOtherLogin() {
     const component = document.createElement('div');
@@ -239,14 +239,16 @@ function getUpperHalf() {
                 display_name: formData.get('display_name'),
                 password: formData.get('password'),
             };
-
-            const response = await request('POST', Path.API.REGISTER, jsonData);
-            if (response.status === 200) {
-                alert('Account created successfully');
-                navigate('/main/home');
-            } else {
-                alert(response.error ? response.error : 'An error occurred');
-            }
+            ViewScope.request('POST', Path.API.REGISTER, {
+                body: jsonData,
+                onResolve: (res) => {
+                    if (res.status === 200) {
+                        alert('Account created successfully');
+                        navigate('/main/home');
+                    } else
+                        alert(res.data.error ? res.data.error : 'An error occurred');
+                },
+            });
         },
     });
     loginButton.disabled = true;
@@ -282,17 +284,6 @@ export default async function getView(isLogged) {
     });
     registerButton.textContent = 'Already have an account? Log in';
     divLower.append(registerButton);
-
-    const TMP = getDefaultButton({
-        bgColor: 'var(--color-button-fortito)',
-        content: 'Toggle popups',
-        onClick: () => {
-            const popups = document.querySelectorAll('.popup');
-            popups.forEach((popup) => {
-                popup.classList.toggle('hidden');
-            });
-        },
-    });
 
     return {status: 200, component, css};
 }

@@ -1,7 +1,7 @@
 import Path from '/static/js/utils/Path.js';
 import { navigate } from '/static/js/utils/router.js';
 import getDefaultButton from '/static/js/components/defaultButton.js';
-import request from '/static/js/utils/request.js';
+import ViewScope from '/static/js/utils/ViewScope.js';
 
 function getOtherLogin() {
     const component = document.createElement('div');
@@ -115,12 +115,15 @@ function getUpperHalf() {
                 username: formData.get('username'),
                 password: formData.get('password')
             };
-            const response = await request('POST', Path.API.LOGIN, jsonData);
-            if (response.status === 200) {
-                navigate('/main/home');
-            } else {
-                alert(response.error ? response.error : 'An error occurred');
-            }
+            ViewScope.request('POST', Path.API.LOGIN, {
+                body: jsonData,
+                onResolve: (res) => {
+                    if (res.status === 200)
+                        navigate('/main/home');
+                    else
+                        alert(res.data.error ? res.data.error : 'An error occurred');
+                },
+            });
         },
     });
     loginButton.disabled = true;
