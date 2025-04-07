@@ -4,6 +4,8 @@ import { PongAI, PlayerController, RemoteControllerOutgoing, RemoteControllerInc
 import { navigate } from '/static/js/utils/router.js';
 import WebSocketService from '/static/js/utils/WebSocketService.js';
 import ViewScope from '/static/js/utils/ViewScope.js';
+import getDefaultButton from "/static/js/components/defaultButton.js";
+import newElement from "/static/js/utils/newElement.js";
 
 async function sendMatchResult(type, game) {
 	ViewScope.request("POST", Path.API.ADD_MATCH, {
@@ -22,7 +24,79 @@ async function sendMatchResult(type, game) {
 	});
 }
 
+function waitingMatchView(component, data) {
+	component.innerHTML = "";
+
+	const rmCallback = WebSocketService.addCallback("match_found",
+		(msg) => {
+			const gameData = data;
+			console.log(msg);
+			if (msg.player_role === 'first') {
+				gameData.playerLeft = {
+					name: msg.player_left,
+					controller: new PlayerController("w", "s"),
+				};
+				gameData.playerRight = {
+					name: msg.player_right,
+					controller: new RemoteControllerIncoming(),
+				};
+				gameData.onGameEnd = (game) => {if (isLogged) sendMatchResult("online", game);};
+				gameData.type = 'host';
+			} else if (msg.player_role === 'second') {
+				gameData.playerLeft = {
+					name: msg.player_left,
+					controller: null,
+				};
+				gameData.playerRight = {
+					name: msg.player_right,
+					controller: new RemoteControllerOutgoing("w", "s"),
+				};
+				gameData.type = 'client';
+			}
+			else {
+				console.error(`Error: player_role not valid (${msg.player_role})`);
+				onlinePlayView(component, data);
+			}
+			component.innerHTML = "";
+			const [game, pong] = createPongGameComponent(gameData);
+			ViewScope.onDestroy(() => { pong.stop(); });
+			component.append(game);
+		},
+		{ once: true }
+	);
+
+	const playButton = getDefaultButton({
+		bgColor: 'var(--color-lime)',
+		content: 'Cancel',
+		onClick: () => {
+			WebSocketService.rmCallback(rmCallback);
+			WebSocketService.send("stop_find_match");
+			onlinePlayView(component, data);
+		}
+	});
+	component.append(playButton);
+}
+
+function onlinePlayView(component, data) {
+	const buttonDiv = newElement("div", {parent: component, id: "play-container"});
+	newElement("img", {parent: buttonDiv, id: "arrow-img", src: Path.img("play_arrows.png")});
+	const playButton = getDefaultButton({
+		bgColor: 'var(--color-lime)',
+		content: 'Play',
+		onClick: () => {
+			WebSocketService.send("find_match");
+			waitingMatchView(component, data);
+		}
+	});
+	buttonDiv.append(playButton);
+}
+
 export default async function getView(isLogged, path) {
+	if (path.subPath !== "/AI" && path.subPath !== "/local" && path.subPath !== "/online")
+		return { status: 404, error: "Not found" };
+	if (path.subPath === "/online" && !isLogged)
+		return { status: 300, redirect: "/login" };
+
     const css = [
         Path.css("game/match.css"),
         Path.css("game/match.css"),
@@ -42,6 +116,7 @@ export default async function getView(isLogged, path) {
 			console.warn(`Error fetching profile: ${response.data.error}`);
 	}
 
+	// General game data
 	const canvasWidth = 800;
 	const ballInitialSpeed = canvasWidth / 4;
     const data = {
@@ -55,100 +130,22 @@ export default async function getView(isLogged, path) {
 		}
     };
 
-    let gameComponent;
-    let pongInstance;
-
     if (path.subPath === "/AI") {
         data.playerLeft = { name: displayName ?? "Me", controller: new PlayerController("w", "s") };
         data.playerRight = { name: "AI", controller: new PongAI() };
 		data.onGameEnd = (game) => {if (isLogged) sendMatchResult("AI", game);};
         const [game, pong] = createPongGameComponent(data);
-        gameComponent = game;
-        pongInstance = pong;
+        component.append(game);
+        ViewScope.onDestroy(() => { pong.stop(); });
     } else if (path.subPath === "/local") {
-        data.playerLeft = { name: displayName ?? "Me" , controller: new PlayerController("w", "s") };
+		data.playerLeft = { name: displayName ?? "Me" , controller: new PlayerController("w", "s") };
         data.playerRight = { name: "Random Chump", controller: new PlayerController("ArrowUp", "ArrowDown") };
 		data.onGameEnd = (game) => {if (isLogged) sendMatchResult("local", game);};
         const [game, pong] = createPongGameComponent(data);
-        gameComponent = game;
-        pongInstance = pong;
-    } else if (path.subPath === "/online") {
-        let playerRole = null;
-        let gameStarted = false;
-
-		WebSocketService.send("init");
-		WebSocketService.send("get_role");
-		WebSocketService.addCallback("initial_status", (message) => {
-			playerRole = message.initial_status;
-			console.log(`Soy el jugador: ${playerRole}, conectados: ${message.players_connected}`);
-			gameStarted = false;
-		}, { once: true });
-
-		if (!gameStarted) {
-			// Mostrar botón "Start"
-			component.innerHTML = "";
-			const startButton = document.createElement("button");
-			startButton.textContent = "Start";
-			startButton.onclick = () => {
-				WebSocketService.send("player_ready", { ready: true });
-				startButton.disabled = true;
-				startButton.textContent = "Esperando al otro jugador...";
-			};
-			component.append(startButton);
-		}
-		
-		WebSocketService.addCallback("start_game", (message) => {
-			if (gameStarted)
-				return;
-			if (!playerRole) {
-				console.error("Error: No se recibió initial_status antes de start");
-				return;
-			}
-			gameStarted = true;
-			if (playerRole === 'first') {
-				data.playerLeft = {
-					name: message.player_left,
-					controller: new PlayerController("w", "s"),
-				};
-				data.playerRight = {
-					name: message.player_right,
-					controller: new RemoteControllerIncoming(),
-				};
-				data.onGameEnd = (game) => {if (isLogged) sendMatchResult("online", game);};
-				data.type = 'host';
-			} else if (playerRole === 'second') {
-				data.playerLeft = {
-					name: message.player_left,
-					controller: null,
-				};
-				data.playerRight = {
-					name: message.player_right,
-					controller: new RemoteControllerOutgoing("w", "s"),
-				};
-				data.type = 'client';
-			}
-			const [game, pong] = createPongGameComponent(data);
-			gameComponent = game;
-			pongInstance = pong;
-			component.innerHTML = "";
-			component.append(gameComponent);
-			
-			console.log("¡Juego iniciado!");
-		}, { once: true });
-		
-    } else {
-        return { status: 404 };
-    }
-
-    if (gameComponent) {
-        component.append(gameComponent);
-    }
-
-    ViewScope.onDestroy(() => {
-        if (pongInstance) {
-            pongInstance.stop();
-        }
-    });
+        component.append(game);
+        ViewScope.onDestroy(() => { pong.stop(); });
+    } else if (path.subPath === "/online")
+		onlinePlayView(component, data);
 
     return { status: 200, component, css};
 }
