@@ -10,20 +10,17 @@ export default class Path {
 
     // API paths (full paths as strings)
     static _API = {
-        // Matches
-        SEND_TOURNAMENT: 'matches/send-tournament',
-
         // Authentication
         IS_LOGGED: 'is-logged',
         LOGIN: 'login',
         LOGOUT: 'logout',
         REGISTER: 'register',
-
+        
         // Profile
         PROFILE: 'profile',
         MATCH_HISTORY: 'match-history',
         STATS: 'profile-stats',
-
+        
         // Friend requests
         SEND_FRIEND_REQUEST: 'friends/request/send',
         RESPOND_FRIEND_REQUEST: 'friends/request/respond',
@@ -31,11 +28,11 @@ export default class Path {
         GET_FRIEND_REQUESTS: 'friends/request/list',
         REMOVE_FRIEND: 'friends/remove',
         GET_FRIENDS: 'friends/list',
-
+        
         // Update stuff
         UPDATE_CREDENTIALS: 'update_credentials',
         ADD_MATCH: 'add-match',
-
+        ADD_TOURNAMENT: 'add-tournament',
     };
 
     static _WS_MSG = {

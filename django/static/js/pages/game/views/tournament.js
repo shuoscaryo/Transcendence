@@ -3,7 +3,7 @@ import { PlayerController } from '/static/js/utils/Controller.js';
 import Path from '/static/js/utils/Path.js';
 import { navigate } from '/static/js/utils/router.js';
 import getDefaultButton from '/static/js/components/defaultButton.js';
-import request from '/static/js/utils/request.js';
+import ViewScope from '/static/js/utils/ViewScope.js';
 
 class Tournament {
     constructor() {
@@ -315,7 +315,7 @@ async function loadMatchesView(component) {
 			"winner": g_tournament.getWinner(),
 			"matches" : g_tournament.matchBoxes,
 		};
-        request('POST', Path.API.SEND_TOURNAMENT, dataToServer);
+        ViewScope.request('POST', Path.API.ADD_TOURNAMENT, {body:dataToServer});
     }
 
     const matchesList = g_tournament.getComponent();
@@ -414,11 +414,14 @@ export default async function getView(isLogged, path) {
     const component = document.createElement('div');
 
     let response = null;
-    if (isLogged) {
-        response = await request('GET', Path.API.PROFILE);
-        if (response.status !== 200)
-            return {status: response.status, error: response.error};
-    }
+	if (isLogged) {
+		response = await ViewScope.request("GET", Path.API.PROFILE);
+		if (!response)
+			return { status: 500, error: "Error fetching profile" };
+		if (response.status !== 200)
+			console.warn(`Error fetching profile: ${response.data.error}`);
+	}
+
     g_tournament = new Tournament();
     loadFormView(component, response?.data);
 

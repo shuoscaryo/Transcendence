@@ -5,7 +5,7 @@ from web3 import Web3
 from datetime import datetime
 
 @csrf_exempt
-def tournaments(request):
+def add_tournament(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)

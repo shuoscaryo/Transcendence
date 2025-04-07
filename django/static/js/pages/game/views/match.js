@@ -3,29 +3,23 @@ import createPongGameComponent from "/static/js/components/game.js";
 import { PongAI, PlayerController, RemoteControllerOutgoing, RemoteControllerIncoming } from "/static/js/utils/Controller.js";
 import { navigate } from '/static/js/utils/router.js';
 import WebSocketService from '/static/js/utils/WebSocketService.js';
-import request from '/static/js/utils/request.js';
+import ViewScope from '/static/js/utils/ViewScope.js';
 
 async function sendMatchResult(type, game) {
-	request("POST", Path.API.ADD_MATCH, {
-		player_left: game.getPlayerLeft().name,
-		player_right: game.getPlayerRight().name,
-		match_type: type,
-		score_left: game.getPlayerLeft().score,
-		score_right: game.getPlayerRight().score,
-		duration: game.getDuration(),
-	}).then(response => {
-		if (response.status !== 200)
-			console.error(`Error: ${response.error}`);
-	}).catch(error => {
-		console.error(`Request failed: ${error}`);
+	ViewScope.request("POST", Path.API.ADD_MATCH, {
+		body: {
+			player_left: game.getPlayerLeft().name,
+			player_right: game.getPlayerRight().name,
+			match_type: type,
+			score_left: game.getPlayerLeft().score,
+			score_right: game.getPlayerRight().score,
+			duration: game.getDuration(),
+		},
+		onResolve: (res) => {
+			if (res.status !== 200)
+				console.error(`Error: ${res.data.error}`);
+		},
 	});
-}
-
-async function getPlayerName() {
-	const response = await request("GET", Path.API.PROFILE);
-	if (response.status === 200)
-		return response.data.display_name ?? null;
-	return null;
 }
 
 export default async function getView(isLogged, path) {
@@ -36,9 +30,17 @@ export default async function getView(isLogged, path) {
     ];
     const component = document.createElement("div");
 
+	// Get the player name if logged in
 	let displayName = null;
-	if (isLogged)
-		displayName = await getPlayerName();
+	if (isLogged) {
+		const response = await ViewScope.request("GET", Path.API.PROFILE);
+		if (!response)
+			return { status: 500, error: "Error fetching profile" };
+		if (response.status === 200)
+			displayName = response.data.display_name ?? null;
+		else
+			console.warn(`Error fetching profile: ${response.data.error}`);
+	}
 
 	const canvasWidth = 800;
 	const ballInitialSpeed = canvasWidth / 4;

@@ -32,7 +32,7 @@ urlpatterns = [
     path('api/profile-stats/', views.profile_stats),
     path('api/profile-stats/<str:display_name>', views.profile_stats_by_display_name),
     path('api/add-match', views.add_match),
-	path('api/tournaments', views.tournaments),
+	path('api/add-tournament', views.add_tournament),
     path('api/friends/list', views.friends_list),
     path('api/friends/remove', views.friends_remove),
     path('api/friends/request/cancel', views.friends_request_cancel),
