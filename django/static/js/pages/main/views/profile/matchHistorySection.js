@@ -4,6 +4,7 @@ import getDefaultButton from '/static/js/components/defaultButton.js';
 import newElement from '/static/js/utils/newElement.js';
 import { formatDate } from '/static/js/utils/time.js';
 import ViewScope from '/static/js/utils/ViewScope.js';
+import { lastGamesStats } from './statsSection.js';
 
 function secondsToMS(seconds) {
     const minutes = Math.floor(seconds / 60);
@@ -126,7 +127,7 @@ export default function getMatchHistorySection(profile, matchHistory, path) {
         matchHistoryRows.append(getMatchHistoryRow(profile, match));
     });
 
-    let offset = 10;
+    let currMatchDisplayed = 10;
     const matchesPerFetch = 5;
     const getMoreButton = getDefaultButton({
         bgColor: 'var(--color-dark-gray)',
@@ -135,7 +136,7 @@ export default function getMatchHistorySection(profile, matchHistory, path) {
             getMoreButton.disabled = true;
             ViewScope.request(
                 'GET',
-                `${Path.API.MATCH_HISTORY}${path.subPath}?offset=${offset}&limit=${matchesPerFetch}`,
+                `${Path.API.MATCH_HISTORY}${path.subPath}?offset=0&limit=${currMatchDisplayed + matchesPerFetch}`,
                 {
                     onResolve: (res) => {
                         if (res.status !== 200) {
@@ -144,12 +145,22 @@ export default function getMatchHistorySection(profile, matchHistory, path) {
                         }
                         const matchHistory = res.data.matches;
                         let maxMatches = res.data.total_matches;
+                        if (matchHistory.length === 0) {
+                            getMoreButton.disabled = true;
+                            return;
+                        }
+                        matchHistoryRows.innerHTML = '';
                         matchHistory.forEach(match => {
                             matchHistoryRows.append(getMatchHistoryRow(profile, match));
                         });
-                        offset += matchesPerFetch;
-                        if (offset >= maxMatches)
-                            offset = maxMatches;
+                        currMatchDisplayed += matchesPerFetch;
+                        if (currMatchDisplayed >= maxMatches)
+                            currMatchDisplayed = maxMatches;
+                        console.log(currMatchDisplayed);
+                        // update lastGamesStats
+                        const lastGamesDiv = document.querySelector('#last-games-stats');
+                        if (lastGamesDiv)
+                            lastGamesDiv.replaceWith(lastGamesStats(matchHistory, profile));
                         getMoreButton.disabled = false;
                     }
                 }

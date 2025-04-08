@@ -17,7 +17,6 @@ function getBarGraph(stats) {
                 backgroundColor: '#888',
                 barThickness: 20,
                 categoryPercentage: 0.4,
-                // move bar right
                 order: 1,
             },
             {
@@ -25,7 +24,6 @@ function getBarGraph(stats) {
                 data: [null, stats.ai.wins, stats.online.wins, null, stats.tournaments_online.wins],
                 backgroundColor: '#2196f3',
                 barThickness: 10,
-                // move bar left
                 order: 0,
             },
             {
@@ -48,7 +46,7 @@ function getBarGraph(stats) {
                 title: {
                     display: true,
                     text: 'Total matches and wins/losses',
-                    color: '#eee', // color claro para el título
+                    color: '#eee',
                     font: { size: 16 }
                 }
             },
@@ -56,9 +54,9 @@ function getBarGraph(stats) {
                 x: {
                     stacked: false,
                     grid: {
-                        display: false,         // no dibuja líneas internas
-                        drawBorder: true,       // sí muestra el eje
-                        borderColor: '#eee'     // color claro para el eje
+                        display: false,
+                        drawBorder: true,
+                        borderColor: '#eee'
                     },
                     ticks: {
                         color: '#eee',
@@ -77,7 +75,7 @@ function getBarGraph(stats) {
                     grid: {
                         display: false,
                         drawBorder: true,
-                        borderColor: '#eee'     // color claro para el eje
+                        borderColor: '#eee'
                     }
                 }
             }
@@ -88,9 +86,104 @@ function getBarGraph(stats) {
     return canvas;
 }
 
-function lastGamesStats(matchHistory) {
+export function lastGamesStats(matchHistory, profile) {
+    let wins = 0;
+    let losses = 0;
+    let neutral = 0;
+    let totalScoreMe = 0;
+    let totalScoreOpp = 0;
 
+    const matchTypes = { local: 0, AI: 0, online: 0, tournament_local: 0, tournament_online: 0 };
+
+    for (const match of matchHistory) {
+        const isPlayer1 = match.player_left__display_name === profile.display_name;
+        const myScore = isPlayer1 ? match.score_left : match.score_right;
+        const oppScore = isPlayer1 ? match.score_right : match.score_left;
+
+        totalScoreMe += myScore;
+        totalScoreOpp += oppScore;
+
+        const type = match.match_type;
+        if (matchTypes[type] !== undefined) matchTypes[type]++;
+
+        if (type === 'local' || type === 'tournament_local') {
+            neutral++;
+        } else if (myScore > oppScore) {
+            wins++;
+        } else {
+            losses++;
+        }
+    }
+
+    const totalGames = wins + losses + neutral;
+    const winrate = totalGames > 0 ? Math.round((wins / (wins + losses)) * 100) : 0;
+    const avgMe = totalGames > 0 ? (totalScoreMe / totalGames).toFixed(1) : '0';
+    const avgOpp = totalGames > 0 ? (totalScoreOpp / totalGames).toFixed(1) : '0';
+
+    const container = newElement('div', { id: 'last-games-stats', classList: ['last-games-container'] });
+
+    // Title
+    const title = newElement('p', { parent: container, classList: ['last-games-title'] });
+    title.textContent = `Last ${totalGames} matches`;
+
+    // Wrapper for left and right blocks
+    const mainContent = newElement('div', { parent: container, classList: ['last-games-main'] });
+
+    // LEFT side: graph + score
+    const leftBlock = newElement('div', { parent: mainContent, classList: ['left-block'] });
+
+    const pieBox = newElement('div', { parent: leftBlock, classList: ['pie-box'] });
+    const canvas = newElement('canvas', { parent: pieBox });
+    canvas.width = 200;
+    canvas.height = 200;
+    const ctx = canvas.getContext('2d');
+
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Wins', 'Losses', 'Neutral'],
+            datasets: [{
+                data: [wins, losses, neutral],
+                backgroundColor: ['#2196f3', '#ca1e1e', '#888']
+            }]
+        },
+        options: {
+            plugins: {
+                legend: { display: false },
+                title: { display: false }
+            }
+        }
+    });
+
+    const winrateText = newElement('div', { parent: pieBox, classList: ['winrate-box'] });
+    winrateText.textContent = `Winrate: ${winrate}%`;
+    winrateText.style.color = winrate >= 50 ? '#2196f3' : '#ca1e1e';
+
+    const scoreBox = newElement('div', { parent: leftBlock, classList: ['score-box'] });
+    newElement('p', { parent: scoreBox }).textContent = 'Average Score (You vs Opponent)';
+    newElement('p', { parent: scoreBox, classList: ['score-values'] }).textContent = `${avgMe} - ${avgOpp}`;
+
+    // RIGHT side: match type breakdown
+    const rightBlock = newElement('div', { parent: mainContent, classList: ['right-block'] });
+    newElement('p', {
+        parent: rightBlock,
+        textContent: 'Match Types Breakdown',
+        style: 'font-weight: bold'
+    });
+    
+    const list = newElement('ul', { parent: rightBlock, classList: ['match-types-list'] });
+    
+    Object.entries(matchTypes).forEach(([type, count]) => {
+        const percent = Math.round((count / totalGames) * 100) || 0;
+    
+        const li = newElement('li', { parent: list, classList: ['match-type-item'] });
+    
+        newElement('span', { parent: li, textContent: type.replace("_"," "), classList: ['type-label'] });
+        newElement('span', { parent: li, textContent: `${percent}%`, classList: ['type-percent'] });
+    });
+    return container;
 }
+
 
 function formatTime(seconds) {
     if (seconds < 60) return `${Math.round(seconds)}s`;
@@ -187,15 +280,12 @@ function addExtraStats(stats) {
 // Main function to generate the stats section
 export default function getStatsSection(profile, stats, matchHistory) {
     stats = addExtraStats(stats);
-    console.log(stats);
-    console.log(matchHistory);
     const component = newElement('div', { id: 'stats-section', classList: ['section-block'] });
-
 
     // Append the canvas with the bar graph to the component
     component.append(getSummaryStats(stats));
     component.append(getBarGraph(stats));
-    //component.append(lastGamesStats(matchHistory));
+    component.append(lastGamesStats(matchHistory, profile));
 
     return component;
 }

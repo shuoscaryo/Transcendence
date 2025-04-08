@@ -4,7 +4,6 @@
     align-items: center;
     justify-content: space-between;
     gap: 20px; /* modificable */
-    width: 50%;
 }
 
 /* ############ */
@@ -129,6 +128,93 @@
         border-radius: 0.5rem;
         overflow: hidden;
       }
+    /* Contenedor principal */
+    .last-games-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        color: #eee;
+        background-color: #2a2a2a;
+        padding: 1rem;
+        border-radius: 1rem;
+    }
+
+    /* Título */
+    .last-games-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    /* Bloque horizontal principal */
+    .last-games-main {
+        display: flex;
+        flex-direction: row;
+        gap: 2rem;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+
+    /* Lado izquierdo */
+    .left-block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        flex: 1;
+        min-width: 250px;
+    }
+
+    /* Pie chart + winrate */
+    .pie-box {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    /* Winrate grande al lado de la gráfica */
+    .winrate-box {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    /* Score promedio */
+    .score-box {
+        text-align: center;
+    }
+
+    .score-box .score-values {
+        font-size: 1.2rem;
+        margin-top: 0.5rem;
+    }
+
+    /* Lado derecho */
+    .right-block {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .match-types-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .match-type-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.3rem 0;
+        border-bottom: 1px solid #333;
+    }
+    
+    .type-label {
+        text-transform: capitalize;
+    }
+    
+    .type-percent {
+        font-weight: bold;
+    }
 
 /* ############# */
 /* MATCH HISTORY */
@@ -356,4 +442,3 @@
         border-top-left-radius: 0;
         border-top-right-radius: 0;
     }
-
