@@ -6,6 +6,7 @@ from asgiref.sync import sync_to_async
 from django.contrib.auth import get_user_model
 
 online_users = set()
+user_rooms = {}  # user_id -> room_name
 
 class PongConsumer(AsyncWebsocketConsumer):
     active_rooms = {}  # Dictionary to track players per room
@@ -30,25 +31,6 @@ class PongConsumer(AsyncWebsocketConsumer):
         # Remove from channel group
         if hasattr(self, 'room_group_name'):
             await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
-
-        # Remove from matchmaking
-        if hasattr(self, 'room_name'):
-            if self.room_name in self.active_rooms:
-                self.active_rooms[self.room_name] = [
-                    p for p in self.active_rooms[self.room_name] if p != self
-                ]
-                if not self.active_rooms[self.room_name]:
-                    del self.active_rooms[self.room_name]
-
-            players = self.active_rooms.get(self.room_name, [])
-            if len(players) == 1:
-                await self.channel_layer.group_send(
-                    self.room_group_name,
-                    {
-                        'type': 'broadcast',
-                        'msg_type': 'wait_for_opponent',
-                    }
-                )
 
         await self.update_online_status(False)
 
@@ -166,8 +148,24 @@ class PongConsumer(AsyncWebsocketConsumer):
                     'data': data,
                 }))
 
+    async def find_or_create_room(self):
+        for name, players in self.active_rooms.items():
+            if len(players) < 2:
+                return name
+
+        PongConsumer.room_counter += 1
+        new_room = f'pong_room_{PongConsumer.room_counter}'
+        self.active_rooms[new_room] = []
+        return new_room
+
     async def find_match_handler(self, data):
+        # 🔁 Check if user needs to reconnect
+        existing_room = user_rooms.get(self.user_id)
+        if existing_room and existing_room in self.active_rooms:
+            await self.reconnect_handler(data)
+            return
         self.room_name = await self.find_or_create_room()
+        user_rooms[self.user_id] = self.room_name
         self.room_group_name = f'game_{self.room_name}'
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
 
@@ -210,15 +208,56 @@ class PongConsumer(AsyncWebsocketConsumer):
                 'player_left': event.get('player_left'),
                 'player_right': event.get('player_right'),
                 'player_role': self.role,
+                'room': self.room_name,
             }
         }))
 
-    async def find_or_create_room(self):
-        for name, players in self.active_rooms.items():
-            if len(players) < 2:
-                return name
+    async def reconnect_handler(self, data):
+        room = user_rooms.get(self.user_id)
 
-        PongConsumer.room_counter += 1
-        new_room = f'pong_room_{PongConsumer.room_counter}'
-        self.active_rooms[new_room] = []
-        return new_room
+        if not room or room not in self.active_rooms:
+            await self.send(text_data=json.dumps({
+                "msg_type": "reconnect_failed",
+                "data": { "message": "No active game found" }
+            }))
+            return
+
+        self.room_name = room
+        self.room_group_name = f'game_{self.room_name}'
+        await self.channel_layer.group_add(self.room_group_name, self.channel_name)
+
+        # Replace the old instance with the new one (self)
+        players = self.active_rooms[self.room_name]
+        self.sender = players
+        for i in range(len(players)):
+            if players[i].user_id == self.user_id:
+                self.role = getattr(players[i], 'role', None)  # 🔐 preserve old role
+                players[i] = self
+                break
+
+        CustomUser = get_user_model()
+        player_left = await sync_to_async(CustomUser.objects.get)(id=players[0].user_id)
+        player_right = await sync_to_async(CustomUser.objects.get)(id=players[1].user_id)
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'match_found_response',
+                'player_left': player_left.display_name,
+                'player_right': player_right.display_name,
+            }
+        )
+
+        await self.send(text_data=json.dumps({
+            "msg_type": "reconnected",
+            "data": { "message": "You have rejoined the game" }
+        }))
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                "type": "broadcast",
+                "msg_type": "opponent_reconnected",
+                "sender": self.channel_name,
+                "data": { "user_id": self.user_id }
+            }
+        )
+

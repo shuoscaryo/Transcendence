@@ -77,6 +77,14 @@ function waitingMatchView(component, data) {
 				return;
 			}
 			component.innerHTML = "";
+			const p = newElement("p", {
+				parent: component,
+				textContent: msg.room,
+			});
+			const p2 = newElement("p2", {
+				parent: component,
+				textContent: msg.player_role,
+			});
 			const [game, pong] = createPongGameComponent(gameData);
 			ViewScope.onDestroy(() => { pong.stop(); });
 			component.append(game);

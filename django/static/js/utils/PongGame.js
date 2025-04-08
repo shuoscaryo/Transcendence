@@ -337,6 +337,7 @@ export default class PongGame {
             
             // Send the game state to the clients if host
             if (this._type === 'host')
+				
                 WebSocketService.send('game_state', JSON.parse(JSON.stringify(this.getGameStatus())));
 
             // Draw the game in the canvas
