@@ -178,7 +178,7 @@ export function lastGamesStats(matchHistory, profile) {
     
         const li = newElement('li', { parent: list, classList: ['match-type-item'] });
     
-        newElement('span', { parent: li, textContent: type, classList: ['type-label'] });
+        newElement('span', { parent: li, textContent: type.replace("_"," "), classList: ['type-label'] });
         newElement('span', { parent: li, textContent: `${percent}%`, classList: ['type-percent'] });
     });
     return container;
