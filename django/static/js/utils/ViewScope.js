@@ -26,36 +26,54 @@ class ViewScope {
     _onDestroy = [];
 
     /**
-	 * Register a function to be called when the view is mounted.
-	 * This is triggered by the router when the new view is fully inserted in the DOM.
-	 * @param {() => void} fn - The function to run on mount.
-	 */
+     * Register a function to be called when the view is mounted.
+     * Returns an unsubscribe function that removes the callback.
+     *
+     * @param {() => void} fn - The function to run on mount.
+     * @returns {() => void} Unsubscribe function
+     */
     onMount(fn) {
         this._onMount.push(fn);
+        return () => {
+            this._onMount = this._onMount.filter(f => f !== fn);
+        };
     }
 
     /**
-	 * Register a function to be called when the view is destroyed (unmounted).
-	 * This runs before a new view is mounted and can be used to clean up state, intervals, etc.
-	 * @param {() => void} fn - The function to run on destroy.
-	 */
+     * Register a function to be called when the view is destroyed (unmounted).
+     * Returns an unsubscribe function that removes the callback.
+     *
+     * @param {() => void} fn - The function to run on destroy.
+     * @returns {() => void} Unsubscribe function
+     */
     onDestroy(fn) {
         this._onDestroy.push(fn);
+        return () => {
+            this._onDestroy = this._onDestroy.filter(f => f !== fn);
+        };
     }
 
     /**
-	 * Adds an event listener to a global target (e.g. window or document),
-	 * and ensures it is removed automatically when the view is destroyed.
-	 * @param {EventTarget} target - The object to attach the event to (e.g. document, window).
-	 * @param {string} event - The event name (e.g. 'keydown').
-	 * @param {Function} handler - The event handler.
-	 * @param {boolean|AddEventListenerOptions} [options=false] - Options passed to addEventListener.
-	 */
+     * Adds an event listener to a global target (e.g. window or document),
+     * and ensures it is removed automatically when the view is destroyed.
+     * Also returns a function that can be called to remove the listener manually before that.
+     *
+     * @param {EventTarget} target - The object to attach the event to (e.g. document, window).
+     * @param {string} event - The event name (e.g. 'keydown').
+     * @param {Function} handler - The event handler.
+     * @param {boolean|AddEventListenerOptions} [options=false] - Options passed to addEventListener.
+     * @returns {() => void} Function to remove the listener manually.
+     */
     addEventListener(target, event, handler, options = false) {
         target.addEventListener(event, handler, options);
-        this.onDestroy(() => {
+        const off = () => {
             target.removeEventListener(event, handler, options);
-        });
+        };
+        const unsubscribe = this.onDestroy(off);
+        return () => {
+            off();       // quitar el listener manualmente
+            unsubscribe(); // quitar de la lista de onDestroy
+        };
     }
 
     /**
