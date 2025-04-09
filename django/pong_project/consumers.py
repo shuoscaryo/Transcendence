@@ -31,6 +31,18 @@ class PongConsumer(AsyncWebsocketConsumer):
         # Remove from channel group
         if hasattr(self, 'room_group_name'):
             await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
+        
+        players = self.active_rooms.get(self.room_name, [])
+        for p in players:
+            if p["consumer"] == self:
+                p["online"] = False
+            
+        players = self.active_rooms.get(self.room_name, [])
+        if all(not p["online"] for p in players):
+            del self.active_rooms[self.room_name]
+            user_ids = [p["consumer"].user_id for p in players]
+            for uid in user_ids:
+                user_rooms.pop(uid, None)
 
         await self.update_online_status(False)
 
@@ -142,15 +154,16 @@ class PongConsumer(AsyncWebsocketConsumer):
         '''
         
         players = self.active_rooms.get(self.room_name, [])
-        for player in players:
-            if player != self and hasattr(player, 'channel_name'):
+        for p in players:
+            if p["consumer"] != self and p["online"]:
                 try:
-                    await player.send(text_data=json.dumps({
+                    await p["consumer"].send(text_data=json.dumps({
                         'msg_type': 'game_state',
                         'data': data,
                     }))
                 except Exception as e:
-                    print(f"[WARNING] Failed to send to user_id={getattr(player, 'user_id', '?')}: {e}")
+                    print(f"[WARNING] Failed to send to user_id={getattr(p['consumer'], 'user_id', '?')}: {e}")
+                    p["online"] = False
 
     async def find_or_create_room(self):
         for name, players in self.active_rooms.items():
@@ -173,15 +186,15 @@ class PongConsumer(AsyncWebsocketConsumer):
         self.room_group_name = f'game_{self.room_name}'
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
 
-        self.active_rooms[self.room_name].append(self)
+        self.active_rooms[self.room_name].append({"consumer": self, "online": True})
 
         players = self.active_rooms[self.room_name]
         self.role = 'first' if len(players) == 1 else 'second'
 
         if len(players) >= 2:
             CustomUser = get_user_model()
-            player_left = await sync_to_async(CustomUser.objects.get)(id=players[0].user_id)
-            player_right = await sync_to_async(CustomUser.objects.get)(id=players[1].user_id)
+            player_left = await sync_to_async(CustomUser.objects.get)(id=players[0]["consumer"].user_id)
+            player_right = await sync_to_async(CustomUser.objects.get)(id=players[1]["consumer"].user_id)
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
@@ -200,7 +213,7 @@ class PongConsumer(AsyncWebsocketConsumer):
         if hasattr(self, 'room_name'):
             if self.room_name in self.active_rooms:
                 self.active_rooms[self.room_name] = [
-                    p for p in self.active_rooms[self.room_name] if p != self
+                    p for p in self.active_rooms[self.room_name] if p["consumer"] != self
                 ]
                 if not self.active_rooms[self.room_name]:
                     del self.active_rooms[self.room_name]
@@ -232,16 +245,16 @@ class PongConsumer(AsyncWebsocketConsumer):
 
         # Replace the old instance with the new one (self)
         players = self.active_rooms[self.room_name]
-        self.sender = players
-        for i in range(len(players)):
-            if players[i].user_id == self.user_id:
-                self.role = getattr(players[i], 'role', None)  # 🔐 preserve old role
-                players[i] = self
+        for p in players:
+            if p["consumer"].user_id == self.user_id:
+                self.role = getattr(p["consumer"], 'role', None)
+                p["consumer"] = self
+                p["online"] = True
                 break
 
         CustomUser = get_user_model()
-        player_left = await sync_to_async(CustomUser.objects.get)(id=players[0].user_id)
-        player_right = await sync_to_async(CustomUser.objects.get)(id=players[1].user_id)
+        player_left = await sync_to_async(CustomUser.objects.get)(id=players[0]["consumer"].user_id)
+        player_right = await sync_to_async(CustomUser.objects.get)(id=players[1]["consumer"].user_id)
         await self.channel_layer.group_send(
             self.room_group_name,
             {
