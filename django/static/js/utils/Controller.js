@@ -64,7 +64,7 @@ export class RemoteControllerOutgoing extends Controller {
 			WebSocketService.send("move", { move: move });
         };
 
-        this._downKeyRmCallback = ViewScope.addEventListener(document, 'keydown', updateMove);
+        this._downKeyRmCallBack = ViewScope.addEventListener(document, 'keydown', updateMove);
         this._upKeyRmCallBack = ViewScope.addEventListener(document, 'keyup', updateMove);
     }
 
@@ -82,9 +82,9 @@ export class RemoteControllerOutgoing extends Controller {
 	stop() {
 		if (!this._started)
 			return;
-		this._downKeyRmCallback?.();
+		this._downKeyRmCallBack?.();
 		this._upKeyRmCallBack?.();
-		this._downKeyRmCallback = null;
+		this._downKeyRmCallBack = null;
 		this._upKeyRmCallBack = null;
 		this._localMove = 0;
 		this._started = false;
