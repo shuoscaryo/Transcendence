@@ -43,13 +43,13 @@ export class PlayerController extends Controller {
 export class RemoteControllerOutgoing extends Controller {
     _upKey;
     _downKey;
-    _localMove = 0; // Movimiento local basado en teclas
+    _localMove = 0;
 
     constructor(upKey, downKey) {
         super();
         this._upKey = upKey;
         this._downKey = downKey;
-        this._setupKeyListeners();
+		this._started = false;
     }
 
     _setupKeyListeners() {
@@ -61,24 +61,34 @@ export class RemoteControllerOutgoing extends Controller {
                 move = 1;
             }
             this._localMove = move;
-            this._sendMove(move);
+			WebSocketService.send("move", { move: move });
         };
 
-        ViewScope.addEventListener(document, 'keydown', updateMove);
-        ViewScope.addEventListener(document, 'keyup', updateMove);
-    }
-
-    _sendMove(move) {
-        try {
-            WebSocketService.send("move", { move: move });
-        } catch (error) {
-            console.error('Error sending move:', error);
-        }
+        this._downKeyRmCallback = ViewScope.addEventListener(document, 'keydown', updateMove);
+        this._upKeyRmCallBack = ViewScope.addEventListener(document, 'keyup', updateMove);
     }
 
     getMove(paddleID, gameStatus) {
-        return this._localMove; // Devuelve el movimiento local directamente
+        return this._localMove;
     }
+
+	start() {
+		if (this._started)
+			return;
+		this._setupKeyListeners();
+		this._started = true;
+	}
+
+	stop() {
+		if (!this._started)
+			return;
+		this._downKeyRmCallback?.();
+		this._upKeyRmCallBack?.();
+		this._downKeyRmCallback = null;
+		this._upKeyRmCallBack = null;
+		this._localMove = 0;
+		this._started = false;
+	}
 }
 
 // Controlador para la paleta derecha (recibe datos a través de su propio socket)
