@@ -91,9 +91,8 @@ export class RemoteControllerOutgoing extends Controller {
 	}
 }
 
-// Controlador para la paleta derecha (recibe datos a través de su propio socket)
 export class RemoteControllerIncoming extends Controller {
-    _currentMove = 0; // Movimiento recibido del servidor
+    _currentMove = 0;
 
     constructor() {
         super();
@@ -101,7 +100,7 @@ export class RemoteControllerIncoming extends Controller {
     }
 
     getMove(paddleID, gameStatus) {
-        return this._currentMove; // Devuelve el movimiento recibido del servidor
+        return this._currentMove;
     }
 
 	start() {
@@ -116,9 +115,9 @@ export class RemoteControllerIncoming extends Controller {
 	}
 
 	stop () {
-		if (this.rmCallback)
-			this.rmCallback();
+		this.rmCallback?.();
 		this.rmCallback = null;
+		this._currentMove = 0;
 	}
 }
 
