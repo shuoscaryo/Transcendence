@@ -66,6 +66,7 @@ export class RemoteControllerOutgoing extends Controller {
 
         this._downKeyRmCallBack = ViewScope.addEventListener(document, 'keydown', updateMove);
         this._upKeyRmCallBack = ViewScope.addEventListener(document, 'keyup', updateMove);
+        this._blurRmCallBack = ViewScope.addEventListener(window, 'blur', updateMove);
     }
 
     getMove(paddleID, gameStatus) {
@@ -84,8 +85,11 @@ export class RemoteControllerOutgoing extends Controller {
 			return;
 		this._downKeyRmCallBack?.();
 		this._upKeyRmCallBack?.();
+		this._blurRmCallBack?.();
+		WebSocketService.send("move", { move: 0 });
 		this._downKeyRmCallBack = null;
 		this._upKeyRmCallBack = null;
+		this._blurRmCallBack = null;
 		this._localMove = 0;
 		this._started = false;
 	}
