@@ -49,7 +49,6 @@ function waitingMatchView(component, data) {
 		(msg) => {
 			clearInterval(intervalId);
 			const gameData = data;
-			console.log(msg);
 			if (msg.player_role === 'first') {
 				gameData.playerLeft = {
 					name: msg.player_left,
@@ -59,7 +58,10 @@ function waitingMatchView(component, data) {
 					name: msg.player_right,
 					controller: new RemoteControllerIncoming(),
 				};
-				gameData.onGameEnd = (game) => { sendMatchResult("online", game); };
+				gameData.onGameEnd = (game) => {
+					sendMatchResult("AI", game);
+					WebSocketService.send("match_end");
+				};
 				gameData.type = 'host';
 			} else if (msg.player_role === 'second') {
 				gameData.playerLeft = {
