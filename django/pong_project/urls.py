@@ -40,6 +40,7 @@ urlpatterns = [
     path('api/friends/request/respond', views.friends_request_respond),
     path('api/friends/request/send', views.friends_request_send),
     path('api/update_credentials/<str:credential>', views.update_credentials),
+    path("api/login_42", views.login_42),
 	path('', views.index),
 	re_path(r'^(?!api/).*$', views.index),
 ]
