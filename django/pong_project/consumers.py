@@ -141,10 +141,6 @@ class PongConsumer(AsyncWebsocketConsumer):
             Sends the game state to the other player in the room.
         '''
         
-        print(f"[game_state_handler] user_id={self.user_id}  has room={hasattr(self, 'room_name')}")
-        if not hasattr(self, 'room_name'):
-            await self.reconnect_handler(data)
-            return
         players = self.active_rooms.get(self.room_name, [])
         for player in players:
             if player != self and hasattr(player, 'channel_name'):
