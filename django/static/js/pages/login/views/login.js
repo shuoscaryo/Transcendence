@@ -2,60 +2,7 @@ import Path from '/static/js/utils/Path.js';
 import { navigate } from '/static/js/utils/router.js';
 import getDefaultButton from '/static/js/components/defaultButton.js';
 import ViewScope from '/static/js/utils/ViewScope.js';
-
-function getOtherLogin() {
-    const component = document.createElement('div');
-
-    const separatorDiv = document.createElement('div');
-    separatorDiv.id = 'div-separator';
-    separatorDiv.textContent = 'OR';
-    component.append(separatorDiv);
-
-    const buttonContent = document.createElement('div');
-    buttonContent.classList.add('button-content');
-    
-    const img = document.createElement('img');
-    img.src = Path.img('42Logo.png');
-    buttonContent.append(img);
-
-    const textDiv = document.createElement('div');
-    textDiv.id = 'div-text';
-    textDiv.textContent = 'Log in with 42';
-    buttonContent.append(textDiv);
-
-    const fortitoButton = getDefaultButton({
-        bgColor: 'var(--color-button-fortito)',
-        bgHoverColor: 'var(--color-button-fortito-hover)',
-        content: buttonContent,
-        onClick: () => {
-            const clientId = "u-s4t2ud-9e021bb5ffb5f79ae45cf5506f52edd2bba9a0bf09fcfd42c208be2687e69153";
-            const redirectUri = "https://localhost/api/login_42";
-            const authUrl = `https://api.intra.42.fr/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`;
-        
-            const width = 500;
-            const height = 600;
-            const left = (window.innerWidth - width) / 2;
-            const top = (window.innerHeight - height) / 2;
-        
-            window.open(
-                authUrl,
-                "Login42",
-                `width=${width},height=${height},top=${top},left=${left}`
-            );
-        }
-    });
-    fortitoButton.classList.add('button-other-login');
-    component.append(fortitoButton);
-    
-    ViewScope.onMount(() => {
-        ViewScope.addEventListener(window, "message", (event) => {
-            if (event.data.success) {
-                window.location.href = "/main/home";
-            }
-        });
-    });
-    return component;
-}
+import getOtherLogin from '../getOtherLogin.js';
 
 function getInput(name, type, placeholder) {
     const component = document.createElement('div');

@@ -19,6 +19,9 @@ services:
       - ../.env
     image: django
     container_name: django
+    environment:
+      FORTY_TWO_CLIENT_SECRET: ${FORTY_TWO_CLIENT_SECRET}
+      FORTY_TWO_CLIENT_ID: ${FORTY_TWO_CLIENT_ID}
     volumes: 
       - django:/app
       - ganache_data:/app/blockchain_data  # Connect Django with Ganache
