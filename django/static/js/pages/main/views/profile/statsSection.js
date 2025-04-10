@@ -171,7 +171,6 @@ export function lastGamesStats(matchHistory, profile) {
     const winrateDiv = newElement('div', { parent: pieBox, classList: ['winrate-box'] });
     newElement('span', { parent: winrateDiv, classList: ['winrate-text'], textContent: 'Winrate' });
     const winrateValue = newElement('span', { parent: winrateDiv, classList: ['winrate-value'] });
-    console.log(wins, losses, winrate);
     winrateValue.textContent = `${wins + losses > 0 ? `${winrate}%` : '-'}`;
 
     const scoreBox = newElement('div', { parent: leftBlock, classList: ['score-box'] });
