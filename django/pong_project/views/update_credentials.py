@@ -84,9 +84,9 @@ def update_credentials(request, credential):
     password = data.get('password')
     if not value:
         return JsonResponse({'error': 'Missing value'}, status=400)
-    if not password:
+    if credential != 'display_name' and not password:
         return JsonResponse({'error': 'Password is required'}, status=400)
-    if not user.check_password(password):
+    if credential != 'display_name' and not user.check_password(password):
         return JsonResponse({'error': 'Incorrect password'}, status=403)
 
     # --- Username ---

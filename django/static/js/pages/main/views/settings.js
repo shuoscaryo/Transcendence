@@ -64,11 +64,16 @@ function getPhotoSection(profile) {
     displayName.textContent = profile.display_name;
     displayName.addEventListener('click', () => {navigate('/main/profile');});
 
-    const username = newElement('span', {id: 'username', parent: userInfo});
-    username.textContent = `username: ${profile.username}`;
+    if (!profile.is_42_user) {
+        const username = newElement('span', {id: 'username', parent: userInfo});
+        username.textContent = `username: ${profile.username}`;
 
-    const email = newElement('span', {id: 'email', parent: userInfo});
-    email.textContent = `email: ${profile.email}`;
+        const email = newElement('span', {id: 'email', parent: userInfo});
+        email.textContent = `email: ${profile.email}`;
+    } else {
+        const user42 = newElement('span', {id: 'user-42', parent: userInfo});
+        user42.textContent = `42 user`;
+    }
 
     return component;
 }
@@ -88,7 +93,7 @@ function getInputRow(label, type, name, placeholder, required = true) {
     return component;
 }
 
-function getUserUpdatesSection() {
+function getUserUpdatesSection(profile) {
     const component = newElement('section', { classList: ['section-block'], id: 'user-updates-section'});
     const header = newElement('h2', {parent: component, id: 'user-updates-header'});
     header.textContent = 'Update your credentials';
@@ -107,7 +112,6 @@ function getUserUpdatesSection() {
             endpoint: 'display_name',
             fields: [
                 { label: 'Display name:', type: 'text', name: 'display_name', placeholder: 'display name', validator: validators.usernameOk },
-                { label: 'Password:', type: 'password', name: 'password', placeholder: 'password' }
             ],
             successMessage: 'Display name updated'
         },
@@ -185,7 +189,10 @@ function getUserUpdatesSection() {
     };
 
     // Create all forms
-    formConfigs.forEach(config => createUpdateForm(config));
+    formConfigs.forEach((config) => {
+        if (!profile.is_42_user || config.endpoint === 'display_name')
+            createUpdateForm(config);
+    });
 
     return component;
 }

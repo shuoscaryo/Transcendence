@@ -11,6 +11,7 @@ def get_profile(display_name, own_profile=False):
             'display_name': user.display_name,
             'profile_photo': user.profile_photo_url,
             'date_joined': user.date_joined,
+            'is_42_user': user.forty_two_id is not None,
         }
         # Specific data for own profile
         if own_profile:
