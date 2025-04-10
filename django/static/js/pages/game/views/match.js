@@ -93,10 +93,10 @@ function renderOnlineWaiting(component, data) {
 						: new RemoteControllerOutgoing("w", "s")
 				},
 				type: msg.player_role === 'first' ? 'host' : 'client',
-				onGameEnd: (game) => {
+				onGameEnd: msg.player_role === 'first' ? (game) => {
 					sendMatchResult("online", game);
 					WebSocketService.send("match_end");
-				},
+				}: undefined,
 				room: msg.room,
 				player_role: msg.player_role,
 			};
