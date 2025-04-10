@@ -43,13 +43,13 @@ export class PlayerController extends Controller {
 export class RemoteControllerOutgoing extends Controller {
     _upKey;
     _downKey;
-    _localMove = 0; // Movimiento local basado en teclas
+    _localMove = 0;
 
     constructor(upKey, downKey) {
         super();
         this._upKey = upKey;
         this._downKey = downKey;
-        this._setupKeyListeners();
+		this._started = false;
     }
 
     _setupKeyListeners() {
@@ -61,29 +61,42 @@ export class RemoteControllerOutgoing extends Controller {
                 move = 1;
             }
             this._localMove = move;
-            this._sendMove(move);
+			WebSocketService.send("move", { move: move });
         };
 
-        ViewScope.addEventListener(document, 'keydown', updateMove);
-        ViewScope.addEventListener(document, 'keyup', updateMove);
-    }
-
-    _sendMove(move) {
-        try {
-            WebSocketService.send("move", { move: move });
-        } catch (error) {
-            console.error('Error sending move:', error);
-        }
+        this._downKeyRmCallBack = ViewScope.addEventListener(document, 'keydown', updateMove);
+        this._upKeyRmCallBack = ViewScope.addEventListener(document, 'keyup', updateMove);
+        this._blurRmCallBack = ViewScope.addEventListener(window, 'blur', updateMove);
     }
 
     getMove(paddleID, gameStatus) {
-        return this._localMove; // Devuelve el movimiento local directamente
+        return this._localMove;
     }
+
+	start() {
+		if (this._started)
+			return;
+		this._setupKeyListeners();
+		this._started = true;
+	}
+
+	stop() {
+		if (!this._started)
+			return;
+		this._downKeyRmCallBack?.();
+		this._upKeyRmCallBack?.();
+		this._blurRmCallBack?.();
+		WebSocketService.send("move", { move: 0 });
+		this._downKeyRmCallBack = null;
+		this._upKeyRmCallBack = null;
+		this._blurRmCallBack = null;
+		this._localMove = 0;
+		this._started = false;
+	}
 }
 
-// Controlador para la paleta derecha (recibe datos a través de su propio socket)
 export class RemoteControllerIncoming extends Controller {
-    _currentMove = 0; // Movimiento recibido del servidor
+    _currentMove = 0;
 
     constructor() {
         super();
@@ -91,7 +104,7 @@ export class RemoteControllerIncoming extends Controller {
     }
 
     getMove(paddleID, gameStatus) {
-        return this._currentMove; // Devuelve el movimiento recibido del servidor
+        return this._currentMove;
     }
 
 	start() {
@@ -106,9 +119,9 @@ export class RemoteControllerIncoming extends Controller {
 	}
 
 	stop () {
-		if (this.rmCallback)
-			this.rmCallback();
+		this.rmCallback?.();
 		this.rmCallback = null;
+		this._currentMove = 0;
 	}
 }
 

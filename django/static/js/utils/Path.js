@@ -20,6 +20,7 @@ export default class Path {
         PROFILE: 'profile',
         MATCH_HISTORY: 'match-history',
         STATS: 'profile-stats',
+        GET_42_CLIENT_ID: 'get-42-client-id',
         
         // Friend requests
         SEND_FRIEND_REQUEST: 'friends/request/send',

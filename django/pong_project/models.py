@@ -17,7 +17,7 @@ class PathAndRename:
         return os.path.join(self.path, filename)
 
 class CustomUser(AbstractUser):
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=True, null=True, blank=True)
     display_name = models.CharField(max_length=30, unique=True)
     profile_photo = models.ImageField(upload_to=PathAndRename('profile_photos/'), blank=True, null=True)
     @property
@@ -27,6 +27,8 @@ class CustomUser(AbstractUser):
         return f'{settings.MEDIA_URL}profile_photos/default.jpg'
     friends = models.ManyToManyField('self', blank=True)
     last_online = models.DateTimeField(default=timezone.now)
+    forty_two_id = models.IntegerField(unique=True, null=True, blank=True)
+
 
 
 class MatchHistory(models.Model):

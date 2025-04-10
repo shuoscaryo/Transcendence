@@ -87,6 +87,7 @@ class WebSocketService {
 
 	// Remove callback
     rmCallback(msg_type, callback) {
+		console.log(`WSS rmCallback: ${msg_type}`); //XXX
         // Delete from listeners
         const list = this.listeners.get(msg_type) || [];
         this.listeners.set(msg_type, list.filter(cb => cb !== callback));

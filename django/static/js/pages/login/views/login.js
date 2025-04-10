@@ -2,38 +2,7 @@ import Path from '/static/js/utils/Path.js';
 import { navigate } from '/static/js/utils/router.js';
 import getDefaultButton from '/static/js/components/defaultButton.js';
 import ViewScope from '/static/js/utils/ViewScope.js';
-
-function getOtherLogin() {
-    const component = document.createElement('div');
-
-    const separatorDiv = document.createElement('div');
-    separatorDiv.id = 'div-separator';
-    separatorDiv.textContent = 'OR';
-    component.append(separatorDiv);
-
-    const buttonContent = document.createElement('div');
-    buttonContent.classList.add('button-content');
-    
-    const img = document.createElement('img');
-    img.src = Path.img('42Logo.png');
-    buttonContent.append(img);
-
-    const textDiv = document.createElement('div');
-    textDiv.id = 'div-text';
-    textDiv.textContent = 'Log in with 42';
-    buttonContent.append(textDiv);
-
-    const fortitoButton = getDefaultButton({
-        bgColor: 'var(--color-button-fortito)',
-        bgHoverColor: 'var(--color-button-fortito-hover)',
-        content: buttonContent,
-        onClick: () => {navigate('/main/home');},
-    });
-    fortitoButton.classList.add('button-other-login');
-    component.append(fortitoButton);
-
-    return component;
-}
+import getOtherLogin from '../getOtherLogin.js';
 
 function getInput(name, type, placeholder) {
     const component = document.createElement('div');

@@ -7,6 +7,7 @@ import ViewScope from '/static/js/utils/ViewScope.js';
 import getDefaultButton from "/static/js/components/defaultButton.js";
 import newElement from "/static/js/utils/newElement.js";
 
+
 async function sendMatchResult(type, game) {
 	ViewScope.request("POST", Path.API.ADD_MATCH, {
 		body: {
@@ -24,10 +25,24 @@ async function sendMatchResult(type, game) {
 	});
 }
 
-function waitingMatchView(component, data) {
-	component.innerHTML = "";
+function renderOnlineInGame(component, data) {
+	console.log(data);
+	newElement("p", {
+		parent: component,
+		textContent: data.room,
+	});
+	newElement("p2", {
+		parent: component,
+		textContent: data.player_role,
+	});
+	const [game, pong] = createPongGameComponent(data);
+	ViewScope.onDestroy(() => { pong.stop(); });
+	component.append(game);
+}
 
-	const title = newElement("p", {
+// Used by the onlineStateRender function
+function renderOnlineWaiting(component, data) {
+	newElement("p", {
 		parent: component,
 		textContent: "Searching Match...",
 		style: "font-size: 1.2em; margin-bottom: 10px; text-align: center;"
@@ -39,98 +54,97 @@ function waitingMatchView(component, data) {
 		style: "text-align: center; margin-bottom: 15px;"
 	});
 
-	let seconds = 0;
-	const intervalId = setInterval(() => {
-		seconds += 1;
-		counter.textContent = `${seconds}s`;
-	}, 1000);
-
-	const rmCallback = WebSocketService.addCallback("match_found",
-		(msg) => {
-			clearInterval(intervalId);
-			const gameData = data;
-			if (msg.player_role === 'first') {
-				gameData.playerLeft = {
-					name: msg.player_left,
-					controller: new PlayerController("w", "s"),
-				};
-				gameData.playerRight = {
-					name: msg.player_right,
-					controller: new RemoteControllerIncoming(),
-				};
-				gameData.onGameEnd = (game) => {
-					sendMatchResult("AI", game);
-					WebSocketService.send("match_end");
-				};
-				gameData.type = 'host';
-			} else if (msg.player_role === 'second') {
-				gameData.playerLeft = {
-					name: msg.player_left,
-					controller: null,
-				};
-				gameData.playerRight = {
-					name: msg.player_right,
-					controller: new RemoteControllerOutgoing("w", "s"),
-				};
-				gameData.type = 'client';
-			} else {
-				console.error(`Error: player_role not valid (${msg.player_role})`);
-				onlinePlayView(component, data);
+	ViewScope.onMount(() => {
+		try {
+			let seconds = 0;
+			setInterval(() => {
+				seconds += 1;
+				counter.textContent = `${seconds}s`;
+			}, 1000);
+		} catch (error) {
+			if (error === ViewScope.VIEW_CHANGED)
 				return;
-			}
-			component.innerHTML = "";
-			const p = newElement("p", {
-				parent: component,
-				textContent: msg.room,
-			});
-			const p2 = newElement("p2", {
-				parent: component,
-				textContent: msg.player_role,
-			});
-			const [game, pong] = createPongGameComponent(gameData);
-			ViewScope.onDestroy(() => { pong.stop(); });
-			component.append(game);
-		},
-		{ once: true }
-	);
-
-	const playButton = getDefaultButton({
-		bgColor: 'var(--color-lime)',
-		content: 'Cancelar',
-		onClick: () => {
-			clearInterval(intervalId);
-			rmCallback();
-			WebSocketService.send("stop_find_match");
-			onlinePlayView(component, data);
 		}
 	});
 
-	ViewScope.onDestroy(() => {
-		clearInterval(intervalId);
-		rmCallback();
-		WebSocketService.send("stop_find_match");
+	let unsubscribeStopFindMatch = null;
+	ViewScope.onMount(() => {
+		WebSocketService.send("find_match");
+		// When leaving the page, automatically stop searching for a match
+		unsubscribeStopFindMatch = ViewScope.onDestroy(() => {
+			WebSocketService.send("stop_find_match");
+		});
 	});
+
+	WebSocketService.addCallback("match_found",
+		(msg) => {
+			const gameData = {
+				...data,
+				playerLeft: {
+					name: msg.player_left,
+					controller: msg.player_role === 'first'
+						? new PlayerController("w", "s")
+						: null
+				},
+				playerRight: {
+					name: msg.player_right,
+					controller: msg.player_role === 'first'
+						? new RemoteControllerIncoming()
+						: new RemoteControllerOutgoing("w", "s")
+				},
+				type: msg.player_role === 'first' ? 'host' : 'client',
+				onGameEnd: (game) => {
+					sendMatchResult("online", game);
+					WebSocketService.send("match_end");
+				},
+				room: msg.room,
+				player_role: msg.player_role,
+			};
+			// Stop the onDestroy that sends stop_find_match
+			if (unsubscribeStopFindMatch)
+				unsubscribeStopFindMatch();
+			onlineStateRender(component, "InGame", gameData);
+		},
+		{ once: true }
+	);
+	
+	const playButton = getDefaultButton({
+		bgColor: 'var(--color-lime)',
+		content: 'Cancel',
+		onClick: () => {
+			onlineStateRender(component, "Init", data);
+		}
+	});
+
 
 	component.append(playButton);
 }
 
-
-function onlinePlayView(component, data) {
-	component.innerHTML = "";
-
+// Used by the onlineStateRender function
+function renderOnlineInit(component, data) {
 	const buttonDiv = newElement("div", {parent: component, id: "play-container"});
 	newElement("img", {parent: buttonDiv, id: "arrow-img", src: Path.img("play_arrows.png")});
 	const playButton = getDefaultButton({
 		bgColor: 'var(--color-lime)',
 		content: 'Play',
 		onClick: () => {
-			WebSocketService.send("find_match");
-			waitingMatchView(component, data);
+			onlineStateRender(component, "Waiting", data)
 		}
 	});
 	buttonDiv.append(playButton);
 }
 
+function onlineStateRender(component, state, data) {
+	component.innerHTML = "";
+	ViewScope.destroy();
+	const functionName = `renderOnline${state}`;
+	if (typeof eval(functionName) === "function") {
+		eval(functionName)(component, data);
+		ViewScope.mount();
+	} else {
+		console.error(`No renderer found for state: ${state}`);
+	}
+}
 export default async function getView(isLogged, path) {
 	if (path.subPath !== "/AI" && path.subPath !== "/local" && path.subPath !== "/online")
 		return { status: 404, error: "Not found" };
@@ -184,8 +198,17 @@ export default async function getView(isLogged, path) {
         const [game, pong] = createPongGameComponent(data);
         component.append(game);
         ViewScope.onDestroy(() => { pong.stop(); });
-    } else if (path.subPath === "/online")
-		onlinePlayView(component, data);
+    } else if (path.subPath === "/online") {
+		//const response = await ViewScope.request("GET", Path.API.GAME_STATE);
+		//if (!response)
+		//	return { status: 500, error: "Error fetching game state" };
+		//if (response.status !== 200)
+		//	return { status: 500, error: response.data.error };
+		//if (!response.data.status)
+		//	return { status: 500, error: "Game state not found" };
+		//onlineStateRender(component, response.data.status, data);
+		onlineStateRender(component, "Init", data);
+	}
 
     return { status: 200, component, css};
 }

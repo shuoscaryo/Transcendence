@@ -13,6 +13,11 @@ class KeyStates {
         document.addEventListener('keyup', (event) => {
             KeyStates.keyState[event.key] = false;
         });
+
+        // Reset all keys when window loses focus
+        window.addEventListener('blur', () => {
+            KeyStates.keyState = {};
+        });
     }
 
     static get(key) {

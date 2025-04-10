@@ -115,28 +115,19 @@ class PongConsumer(AsyncWebsocketConsumer):
         try:
             data = json.loads(text_data)
         except json.JSONDecodeError:
-            await self.send(text_data=json.dumps({
-                'msg_type': 'error',
-                'message': "Invalid JSON"
-            }))
+            await self.send(text_data=json.dumps({'msg_type': 'error', "data": {'message': "Invalid JSON"}}))
             return
 
         msg_type = data.get("msg_type")
         if not msg_type:
-            await self.send(text_data=json.dumps({
-                'msg_type': 'error',
-                'message': "Didn't receive a message type"
-            }))
+            await self.send(text_data=json.dumps({'msg_type': 'error', "data": {'message': "Didn't receive a message type"}}))
             return
 
         handler = getattr(self, f"{msg_type}_handler", None)
         if handler and callable(handler):
             await handler(data)
         else:
-            await self.send(text_data=json.dumps({
-                'msg_type': 'error',
-                'message': f'Invalid message type {msg_type}'
-            }))
+            await self.send(text_data=json.dumps({'msg_type': 'error', 'data': {'message': f'Invalid message type {msg_type}'}}))
 
     async def broadcast(self, event):
         if 'msg_type' not in event:

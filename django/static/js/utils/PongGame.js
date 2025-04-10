@@ -337,7 +337,6 @@ export default class PongGame {
             
             // Send the game state to the clients if host
             if (this._type === 'host')
-				
                 WebSocketService.send('game_state', JSON.parse(JSON.stringify(this.getGameStatus())));
 
             // Draw the game in the canvas
@@ -466,9 +465,9 @@ export default class PongGame {
         if (this._playerRight.controller)
             this._paddleRight.move(this._playerRight.controller.getMove("right", this.getGameStatus()));
 
-        this._updatePaddle(this._paddleLeft, dt);
-        this._updatePaddle(this._paddleRight, dt);
-        this._updateBall(this._ball, dt);
+        this._paddleUpdate(this._paddleLeft, dt);
+        this._paddleUpdate(this._paddleRight, dt);
+        this._ballUpdate(this._ball, dt);
 
         // Check goal
         if (this._ball.pos.x + this._ball.size.x < 0) {
@@ -515,8 +514,8 @@ export default class PongGame {
         if (this._playerRight.controller)
             this._paddleRight.move(this._playerRight.controller.getMove("right", this.getGameStatus()));
 
-        this._updatePaddle(this._paddleLeft, dt);
-        this._updatePaddle(this._paddleRight, dt);
+        this._paddleUpdate(this._paddleLeft, dt);
+        this._paddleUpdate(this._paddleRight, dt);
     }
 
     _updateEnd(dt) {
@@ -526,7 +525,7 @@ export default class PongGame {
             this._onGameEnd(this);
     }
 
-    _updateBall(ball, dt) {
+    _ballUpdate(ball, dt) {
         const ignorePaddles = ball.pos.x < this._paddleLeft.pos.x + this._paddleLeft.size.x
             || ball.pos.x + ball.size.x > this._paddleRight.pos.x;
 
@@ -585,7 +584,7 @@ export default class PongGame {
         }
     }
 
-    _updatePaddle(paddle, dt) {
+    _paddleUpdate(paddle, dt) {
         paddle.update(dt);
 
         // Check paddles collision with walls
