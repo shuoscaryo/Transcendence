@@ -116,7 +116,7 @@ export function lastGamesStats(matchHistory, profile) {
     }
 
     const totalGames = wins + losses + neutral;
-    const winrate = totalGames > 0 ? Math.round((wins / (wins + losses)) * 100) : 0;
+    const winrate = wins + losses > 0 ? Math.round((wins / (wins + losses)) * 100) : 0;
     const avgMe = totalGames > 0 ? (totalScoreMe / totalGames).toFixed(1) : '0';
     const avgOpp = totalGames > 0 ? (totalScoreOpp / totalGames).toFixed(1) : '0';
 
@@ -134,30 +134,45 @@ export function lastGamesStats(matchHistory, profile) {
 
     const pieBox = newElement('div', { parent: leftBlock, classList: ['pie-box'] });
     const canvas = newElement('canvas', { parent: pieBox });
-    canvas.width = 200;
-    canvas.height = 200;
+    canvas.width = 150;
+    canvas.height = 150;
     const ctx = canvas.getContext('2d');
 
-    new Chart(ctx, {
-        type: 'pie',
-        data: {
+    const pieData = totalGames > 0
+        ? {
             labels: ['Wins', 'Losses', 'Neutral'],
             datasets: [{
                 data: [wins, losses, neutral],
                 backgroundColor: ['#2196f3', '#ca1e1e', '#888']
             }]
-        },
+        }
+        : {
+            labels: ['No matches'],
+            datasets: [{
+                data: [1],
+                backgroundColor: ['#ccc']
+            }]
+        };
+
+    new Chart(ctx, {
+        type: 'pie',
+        data: pieData,
         options: {
+            layout: { padding: 0 },
             plugins: {
                 legend: { display: false },
                 title: { display: false }
-            }
+            },
+            responsive: false,
+            maintainAspectRatio: false
         }
     });
 
-    const winrateText = newElement('div', { parent: pieBox, classList: ['winrate-box'] });
-    winrateText.textContent = `Winrate: ${winrate}%`;
-    winrateText.style.color = winrate >= 50 ? '#2196f3' : '#ca1e1e';
+    const winrateDiv = newElement('div', { parent: pieBox, classList: ['winrate-box'] });
+    newElement('span', { parent: winrateDiv, classList: ['winrate-text'], textContent: 'Winrate' });
+    const winrateValue = newElement('span', { parent: winrateDiv, classList: ['winrate-value'] });
+    console.log(wins, losses, winrate);
+    winrateValue.textContent = `${wins + losses > 0 ? `${winrate}%` : '-'}`;
 
     const scoreBox = newElement('div', { parent: leftBlock, classList: ['score-box'] });
     newElement('p', { parent: scoreBox }).textContent = 'Average Score (You vs Opponent)';
