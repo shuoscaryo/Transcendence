@@ -4,6 +4,58 @@ from django.core.files.base import ContentFile
 from django.http import HttpResponse
 from django.contrib.auth import get_user_model, login
 from django.utils import timezone
+from PIL import Image, ExifTags
+from io import BytesIO
+
+def apply_exif_orientation(img):
+    try:
+        exif = img._getexif()
+        if exif is not None:
+            orientation_key = next(
+                k for k, v in ExifTags.TAGS.items() if v == "Orientation"
+            )
+            orientation = exif.get(orientation_key)
+
+            if orientation == 3:
+                img = img.rotate(180, expand=True)
+            elif orientation == 6:
+                img = img.rotate(270, expand=True)
+            elif orientation == 8:
+                img = img.rotate(90, expand=True)
+    except Exception:
+        pass
+    return img
+
+def crop_center(img):
+    width, height = img.size
+    new_edge = min(width, height)
+    left = (width - new_edge) // 2
+    top = (height - new_edge) // 2
+    right = left + new_edge
+    bottom = top + new_edge
+    return img.crop((left, top, right, bottom))
+
+def process_square_image(image_bytes, size=256):
+    """
+    Takes raw image bytes, returns JPEG bytes cropped and resized to size x size.
+    """
+    img = Image.open(BytesIO(image_bytes))
+    img = apply_exif_orientation(img)
+
+    # Remove alpha channel
+    if img.mode in ('RGBA', 'LA'):
+        background = Image.new('RGB', img.size, (255, 255, 255))
+        background.paste(img, mask=img.split()[-1])
+        img = background
+    elif img.mode != 'RGB':
+        img = img.convert('RGB')
+
+    img = crop_center(img)
+    img = img.resize((size, size))
+
+    buffer = BytesIO()
+    img.save(buffer, format='JPEG')
+    return buffer.getvalue()
 
 def login_42(request):
     code = request.GET.get("code")
@@ -71,11 +123,12 @@ def login_42(request):
         # Save profile image from 42
         image_url = user_data.get("image", {}).get("link")
         if image_url:
-            image_response = requests.get(image_url)
-            if image_response.status_code == 200:
+            response = requests.get(image_url)
+            if response.status_code == 200:
+                processed_bytes = process_square_image(response.content, size=256)
                 user.profile_photo.save(
                     f"{username}.jpg",
-                    ContentFile(image_response.content),
+                    ContentFile(processed_bytes),
                     save=True
                 )
 
