@@ -2,56 +2,134 @@
 pragma solidity ^0.8.0;
 
 contract Tournaments {
-    // Structure to store tournament data
+    struct Match {
+        string player1Name;
+        uint player1;
+        string player2Name;
+        uint player2;
+        uint score1;
+        uint score2;
+    }
+
     struct Tournament {
-        uint256 id;             // Unique ID of the tournament
-		uint256 rounds;		    // Number of rounds in the tournament
-        string[][] matches;       // List of player names
-        string winner;          // Winner of the tournament (name)
-        uint256 date;           // Completion timestamp
+        string gameType; // "local" or "online"
+        uint winnerId;
+        string winnerName;
+        uint[] playerIds;
+        string[] playerNames;
+        Match[] matches;
+        string startDate;
+        string duration;
     }
 
-    // Mapping to store tournaments by ID
-    mapping(uint256 => Tournament) public tournaments;
+    uint public nextId = 0;
 
-    // Counter to assign unique IDs to tournaments
-    uint256 public tournamentCount;
+    mapping(uint => Tournament) public tournaments;
+    mapping(uint => uint[]) public userTournaments;
 
-    // Event to notify when a tournament is created
-    event TournamentCreated(uint256 id, string[][] matches);
+    event TournamentCreated(uint tournamentId);
 
-    // Function to create a new tournament
-    function createTournament(string[][] memory _matches, string memory _winner) public {
-        // Increment the tournament counter
-        tournamentCount++;
+    // Create a tournament
+    function addTournament(
+        uint _winnerId,
+        string memory _winnerName,
+        uint[] memory _playerIds,
+        string[] memory _playerNames,
+        string memory _startDate,
+        string memory _duration,
+        string memory _gameType
+    ) public {
+        require(_playerIds.length == _playerNames.length, "IDs and names must match");
 
-        // Create and store the tournament
-        tournaments[tournamentCount] = Tournament({
-            id: tournamentCount,
-			rounds: _matches.length - 1,
-            matches: _matches,
-            winner: _winner, // Initially no winner
-            date: block.timestamp // Not completed yet
-        });
+        Tournament storage t = tournaments[nextId];
+        t.winnerId = _winnerId;
+        t.winnerName = _winnerName;
+        t.playerIds = _playerIds;
+        t.playerNames = _playerNames;
+        t.startDate = _startDate;
+        t.duration = _duration;
+        t.gameType = _gameType;
 
-        // Emit event
-        emit TournamentCreated(tournamentCount, _matches);
+        emit TournamentCreated(nextId);
+        nextId++;
     }
 
-    // Function to retrieve a tournament by ID
-    function getTournament(uint256 _id)
-		public
-		view
-		returns (
-			uint256 id,
-			uint256 rounds,
-			string[][] memory matches,
-			string memory winner,
-			uint256 date
-		)
-	{
-		require(_id > 0 && _id <= tournamentCount, "Tournament not found");
-		Tournament memory t = tournaments[_id];
-		return (t.id, t.rounds, t.matches, t.winner, t.date);
-	}
+    // Add a match to a tournament
+    function addMatch(
+        uint tournamentId,
+        string memory p1Name,
+        uint p1,
+        string memory p2Name,
+        uint p2,
+        uint s1,
+        uint s2
+    ) public {
+        tournaments[tournamentId].matches.push(
+            Match(p1Name, p1, p2Name, p2, s1, s2)
+        );
+    }
+
+    // Link players to the tournament
+    function addPlayerTournament(uint tournamentId, uint[] memory players) public {
+        for (uint i = 0; i < players.length; i++) {
+            userTournaments[players[i]].push(tournamentId);
+        }
+    }
+
+    // Get tournament data
+    function getTournament(uint id)
+        public
+        view
+        returns (
+            uint winnerId,
+            string memory winnerName,
+            uint[] memory playerIds,
+            string[] memory playerNames,
+            uint matchCount,
+            string memory startDate,
+            string memory duration,
+            string memory gameType
+        )
+    {
+        Tournament storage t = tournaments[id];
+        return (
+            t.winnerId,
+            t.winnerName,
+            t.playerIds,
+            t.playerNames,
+            t.matches.length,
+            t.startDate,
+            t.duration,
+            t.gameType
+        );
+    }
+
+    // Get a specific match
+    function getMatch(uint tournamentId, uint matchIndex)
+        public
+        view
+        returns (
+            string memory p1Name,
+            uint p1,
+            string memory p2Name,
+            uint p2,
+            uint s1,
+            uint s2
+        )
+    {
+        Match storage m = tournaments[tournamentId].matches[matchIndex];
+        return (
+            m.player1Name,
+            m.player1,
+            m.player2Name,
+            m.player2,
+            m.score1,
+            m.score2
+        );
+    }
+
+    // Get tournaments a user has played in
+    function getTournamentIdsForUser(uint userId) public view returns (uint[] memory) {
+        return userTournaments[userId];
+    }
 }
