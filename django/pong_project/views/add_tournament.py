@@ -32,7 +32,7 @@ def check_match_duration(duration):
     except (ValueError, TypeError):
         return False
 
-def check_matches(matches):
+def check_matches(matches, player_names):
     if not isinstance(matches, list) or len(matches) == 0:
         return False
 
@@ -48,6 +48,11 @@ def check_matches(matches):
 
         if not has_p1 and not has_p2:
             return False  # at least one name is required
+
+        if has_p1 and p1 not in player_names:
+            return False
+        if has_p2 and p2 not in player_names:
+            return False
 
         if has_p1 and has_p2:
             try:
@@ -90,7 +95,7 @@ def add_tournament(request):
         return JsonResponse({'error': 'Invalid players list'}, status=400)
     if not check_winner_name(winner_name, player_names): # check after player_names
         return JsonResponse({'error': 'Invalid winner name'}, status=400)
-    if not check_matches(matches):
+    if not check_matches(matches, player_names):
         return JsonResponse({'error': 'Invalid matches list'}, status=400)
     if not check_match_duration(duration):
         return JsonResponse({'error': 'Invalid duration'}, status=400)
