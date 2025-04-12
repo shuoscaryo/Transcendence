@@ -127,9 +127,10 @@ def add_tournament(request):
                 return JsonResponse({'error': f'user {player_names[i]} does not exist in DB'}, status=400)
 
     ## Calculate start date and format duration
-    start_date = timezone.now() - timedelta(seconds=int(duration))
+    duration = int(duration)
+    start_date = timezone.now() - timedelta(seconds=duration)
     start_date = start_date.isoformat()
-    duration = str(timedelta(seconds=int(duration)))
+    
 
     ## Get matches data
     players_dict = dict(zip(player_names, player_ids)) # temp for getting match ids
@@ -150,81 +151,83 @@ def add_tournament(request):
         match_data['score2'] = int(match.get('score2', 0)) if p2_name else 0
         formatted_matches.append(match_data)
             
+    try:
+        # Connect to Ganache
+        w3 = Web3(Web3.HTTPProvider("http://ganache-hardhat:7545"))
+        if not w3.is_connected():
+            return JsonResponse({'error': 'Could not connect to blockchain'}, status=500)
 
-    # Connect to Ganache
-    w3 = Web3(Web3.HTTPProvider("http://ganache-hardhat:7545"))
-    if not w3.is_connected():
-        return JsonResponse({'error': 'Could not connect to blockchain'}, status=500)
+        with open("/app/blockchain_data/contractAddress.json") as f:
+            contract_address = json.load(f)["address"]
 
-    with open("/app/blockchain_data/contractAddress.json") as f:
-        contract_address = json.load(f)["address"]
+        with open("/app/blockchain_data/Tournaments.json") as f:
+            contract_abi = json.load(f)["abi"]
 
-    with open("/app/blockchain_data/Tournaments.json") as f:
-        contract_abi = json.load(f)["abi"]
+        contract = w3.eth.contract(address=contract_address, abi=contract_abi)
 
-    contract = w3.eth.contract(address=contract_address, abi=contract_abi)
+        sender_address = "0x9dbBE0483E8f7C8231bd9e8c117b0f7821abD8Ea"
+        private_key = "0x5832c8b670e026f7d230a7e4f8e2894c432d1a21dd62e29221e460f892258ac0"
 
-    sender_address = "0x9dbBE0483E8f7C8231bd9e8c117b0f7821abD8Ea"
-    private_key = "0x5832c8b670e026f7d230a7e4f8e2894c432d1a21dd62e29221e460f892258ac0"
-
-    # Create Tournament
-    nonce = w3.eth.get_transaction_count(sender_address)
-    tx1 = contract.functions.addTournament(
-        winner_id,
-        winner_name,
-        player_ids,
-        player_names,
-        start_date,
-        duration,
-        game_type
-    ).build_transaction({
-        'from': sender_address,
-        'nonce': nonce,
-        'gas': 3000000,
-        'gasPrice': w3.to_wei('10', 'gwei')
-    })
-    signed_tx1 = w3.eth.account.sign_transaction(tx1, private_key)
-    tx_hash1 = w3.eth.send_raw_transaction(signed_tx1.raw_transaction)
-    receipt1 = w3.eth.wait_for_transaction_receipt(tx_hash1)
-    tournament_id = contract.events.TournamentCreated().process_receipt(receipt1)[0]['args']['tournamentId']
-
-    # Add Matches
-    for match in formatted_matches:
-
-        nonce += 1
-        tx2 = contract.functions.addMatch(
-            tournament_id,
-            match['player1Name'],
-            match['player1'],
-            match['player2Name'],
-            match['player2'],
-            match['score1'],
-            match['score2']
+        # Create Tournament
+        nonce = w3.eth.get_transaction_count(sender_address)
+        tx1 = contract.functions.addTournament(
+            winner_id,
+            winner_name,
+            player_ids,
+            player_names,
+            start_date,
+            duration,
+            game_type
         ).build_transaction({
             'from': sender_address,
             'nonce': nonce,
             'gas': 3000000,
             'gasPrice': w3.to_wei('10', 'gwei')
         })
-        signed_tx2 = w3.eth.account.sign_transaction(tx2, private_key)
-        tx_hash2 = w3.eth.send_raw_transaction(signed_tx2.raw_transaction)
-        w3.eth.wait_for_transaction_receipt(tx_hash2)
+        signed_tx1 = w3.eth.account.sign_transaction(tx1, private_key)
+        tx_hash1 = w3.eth.send_raw_transaction(signed_tx1.raw_transaction)
+        receipt1 = w3.eth.wait_for_transaction_receipt(tx_hash1)
+        tournament_id = contract.events.TournamentCreated().process_receipt(receipt1)[0]['args']['tournamentId']
 
-    # Link players to the tournament
-    filtered_player_ids = [player_id for player_id in player_ids if player_id != 0]
-    if len(filtered_player_ids) > 0:
-        nonce += 1
-        tx3 = contract.functions.addPlayerTournament(
-            tournament_id,
-            filtered_player_ids
-        ).build_transaction({
-            'from': sender_address,
-            'nonce': nonce,
-            'gas': 3000000,
-            'gasPrice': w3.to_wei('10', 'gwei')
-        })
-        signed_tx3 = w3.eth.account.sign_transaction(tx3, private_key)
-        tx_hash3 = w3.eth.send_raw_transaction(signed_tx3.raw_transaction)
-        w3.eth.wait_for_transaction_receipt(tx_hash3)
+        # Add Matches
+        for match in formatted_matches:
+
+            nonce += 1
+            tx2 = contract.functions.addMatch(
+                tournament_id,
+                match['player1Name'],
+                match['player1'],
+                match['player2Name'],
+                match['player2'],
+                match['score1'],
+                match['score2']
+            ).build_transaction({
+                'from': sender_address,
+                'nonce': nonce,
+                'gas': 3000000,
+                'gasPrice': w3.to_wei('10', 'gwei')
+            })
+            signed_tx2 = w3.eth.account.sign_transaction(tx2, private_key)
+            tx_hash2 = w3.eth.send_raw_transaction(signed_tx2.raw_transaction)
+            w3.eth.wait_for_transaction_receipt(tx_hash2)
+
+        # Link players to the tournament
+        filtered_player_ids = [player_id for player_id in player_ids if player_id != 0]
+        if len(filtered_player_ids) > 0:
+            nonce += 1
+            tx3 = contract.functions.addPlayerTournament(
+                tournament_id,
+                filtered_player_ids
+            ).build_transaction({
+                'from': sender_address,
+                'nonce': nonce,
+                'gas': 3000000,
+                'gasPrice': w3.to_wei('10', 'gwei')
+            })
+            signed_tx3 = w3.eth.account.sign_transaction(tx3, private_key)
+            tx_hash3 = w3.eth.send_raw_transaction(signed_tx3.raw_transaction)
+            w3.eth.wait_for_transaction_receipt(tx_hash3)
+    except Exception as e:
+        return JsonResponse({'error': f'Blockchain transaction failed: {str(e)}'}, status=500)
 
     return JsonResponse({'success': True, 'tournamentId': tournament_id})

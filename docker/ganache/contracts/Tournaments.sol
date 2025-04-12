@@ -19,7 +19,7 @@ contract Tournaments {
         string[] playerNames;
         Match[] matches;
         string startDate;
-        string duration;
+        uint duration;
     }
 
     uint public nextId = 0;
@@ -36,7 +36,7 @@ contract Tournaments {
         uint[] memory _playerIds,
         string[] memory _playerNames,
         string memory _startDate,
-        string memory _duration,
+        uint _duration,
         string memory _gameType
     ) public {
         require(_playerIds.length == _playerNames.length, "IDs and names must match");
@@ -76,8 +76,8 @@ contract Tournaments {
         }
     }
 
-    // Get tournament data
-    function getTournament(uint id)
+    // Get a tournament played by the index (0 is first ever played)
+    function getUserTournament(uint userId, uint index)
         public
         view
         returns (
@@ -87,11 +87,13 @@ contract Tournaments {
             string[] memory playerNames,
             uint matchCount,
             string memory startDate,
-            string memory duration,
+            uint duration,
             string memory gameType
         )
     {
-        Tournament storage t = tournaments[id];
+        require(index < userTournaments[userId].length, "Index out of bounds");
+        uint tournamentId = userTournaments[userId][index];
+        Tournament storage t = tournaments[tournamentId];
         return (
             t.winnerId,
             t.winnerName,
@@ -105,7 +107,7 @@ contract Tournaments {
     }
 
     // Get a specific match
-    function getMatch(uint tournamentId, uint matchIndex)
+    function getUserMatch(uint userId, uint tournamentIndex, uint matchIndex)
         public
         view
         returns (
@@ -117,6 +119,10 @@ contract Tournaments {
             uint s2
         )
     {
+        require(tournamentIndex < userTournaments[userId].length, "Tournament index out of bounds");
+        uint tournamentId = userTournaments[userId][tournamentIndex];
+        require(matchIndex < tournaments[tournamentId].matches.length, "Match index out of bounds");
+
         Match storage m = tournaments[tournamentId].matches[matchIndex];
         return (
             m.player1Name,
@@ -128,8 +134,8 @@ contract Tournaments {
         );
     }
 
-    // Get tournaments a user has played in
-    function getTournamentIdsForUser(uint userId) public view returns (uint[] memory) {
-        return userTournaments[userId];
+    // Get length of tournaments used played in
+    function getTournamentCountForUser(uint userId) public view returns (uint) {
+        return userTournaments[userId].length;
     }
 }
