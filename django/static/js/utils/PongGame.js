@@ -327,7 +327,7 @@ export default class PongGame {
             }
 
             // Calculate the time since the last update
-            if (this._lastTime == null) //TODO _lastTime is not updated in callback, check if it doesn't do weird things
+            if (this._lastTime == null)
                 this._lastTime = timestamp;
             const dt = (timestamp - this._lastTime) / 1000;
             this._lastTime = timestamp;
