@@ -10,6 +10,8 @@ fi
 # Ensure folders exist
 mkdir -p /ganache
 mkdir -p /ganache_db
+chown root:root /ganache_db
+chmod 700 /ganache_db
 
 MNEMONIC_FILE="/ganache/.mnemonic_used"
 
