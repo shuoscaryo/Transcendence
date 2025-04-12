@@ -210,23 +210,6 @@ def add_tournament(request):
             signed_tx2 = w3.eth.account.sign_transaction(tx2, private_key)
             tx_hash2 = w3.eth.send_raw_transaction(signed_tx2.raw_transaction)
             w3.eth.wait_for_transaction_receipt(tx_hash2)
-
-        # Link players to the tournament
-        filtered_player_ids = [player_id for player_id in player_ids if player_id != 0]
-        if len(filtered_player_ids) > 0:
-            nonce += 1
-            tx3 = contract.functions.addPlayerTournament(
-                tournament_id,
-                filtered_player_ids
-            ).build_transaction({
-                'from': wallet_address,
-                'nonce': nonce,
-                'gas': 3000000,
-                'gasPrice': w3.to_wei('10', 'gwei')
-            })
-            signed_tx3 = w3.eth.account.sign_transaction(tx3, private_key)
-            tx_hash3 = w3.eth.send_raw_transaction(signed_tx3.raw_transaction)
-            w3.eth.wait_for_transaction_receipt(tx_hash3)
     except Exception as e:
         return JsonResponse({'error': f'Blockchain transaction failed: {str(e)}'}, status=500)
 

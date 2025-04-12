@@ -9,11 +9,11 @@ function getBarGraph(stats) {
 
     const ctx = canvas.getContext('2d');
     const data = {
-        labels: ['Local', 'AI', 'Online', 'T_local', 'T_online'],
+        labels: ['Local', 'AI', 'Online', 'Tournament'],
         datasets: [
             {
                 label: 'Local Total',
-                data: [stats.local.total, null, null, stats.tournaments_local.total, null],
+                data: [stats.local.total, null, null, null],
                 backgroundColor: '#888',
                 barThickness: 20,
                 categoryPercentage: 0.4,
@@ -21,14 +21,14 @@ function getBarGraph(stats) {
             },
             {
                 label: 'Wins',
-                data: [null, stats.ai.wins, stats.online.wins, null, stats.tournaments_online.wins],
+                data: [null, stats.ai.wins, stats.online.wins, stats.tournament.wins],
                 backgroundColor: '#2196f3',
                 barThickness: 10,
                 order: 0,
             },
             {
                 label: 'Losses',
-                data: [null, stats.ai.losses, stats.online.losses, null, stats.tournaments_online.losses],
+                data: [null, stats.ai.losses, stats.online.losses, stats.tournament.losses],
                 backgroundColor: '#ca1e1e',
                 barThickness: 10,
                 order: 1,
@@ -93,32 +93,44 @@ export function lastGamesStats(matchHistory, profile) {
     let totalScoreMe = 0;
     let totalScoreOpp = 0;
 
-    const matchTypes = { local: 0, AI: 0, online: 0, tournament_local: 0, tournament_online: 0 };
+    const matchTypes = { local: 0, AI: 0, online: 0, tournament: 0};
 
     for (const match of matchHistory) {
-        const isPlayer1 = match.player_left__display_name === profile.display_name;
-        const myScore = isPlayer1 ? match.score_left : match.score_right;
-        const oppScore = isPlayer1 ? match.score_right : match.score_left;
-
-        totalScoreMe += myScore;
-        totalScoreOpp += oppScore;
-
-        const type = match.match_type;
-        if (matchTypes[type] !== undefined) matchTypes[type]++;
-
-        if (type === 'local' || type === 'tournament_local') {
+        let type = match.match_type;
+        if (type === 'tournament_local')
+            type = 'tournament';
+        // Skip if the match type is not in the list
+        if (matchTypes[type] === undefined)
+            continue;
+        // Add to the match type count
+        matchTypes[type]++;
+        if (type === 'local') {
             neutral++;
-        } else if (myScore > oppScore) {
-            wins++;
-        } else {
-            losses++;
+            totalScoreMe += match.score_left; // I'm always left in local matches
+            totalScoreOpp += match.score_right;
+        } else if (type === 'AI' || type === 'online') {
+            const isPlayer1 = match.player_left__display_name === profile.display_name;
+            const myScore = isPlayer1 ? match.score_left : match.score_right;
+            const oppScore = isPlayer1 ? match.score_right : match.score_left;
+            totalScoreMe += myScore;
+            totalScoreOpp += oppScore;
+            if (myScore > oppScore)
+                wins++;
+            else
+                losses++;
+        } else { // is tournament
+            if (match.winner === profile.display_name)
+                wins++;
+            else
+                losses++;
         }
     }
 
     const totalGames = wins + losses + neutral;
+    const totalNormalMatches = matchTypes.local + matchTypes.AI + matchTypes.online;
     const winrate = wins + losses > 0 ? Math.round((wins / (wins + losses)) * 100) : 0;
-    const avgMe = totalGames > 0 ? (totalScoreMe / totalGames).toFixed(1) : '0';
-    const avgOpp = totalGames > 0 ? (totalScoreOpp / totalGames).toFixed(1) : '0';
+    const avgMe = totalNormalMatches > 0 ? (totalScoreMe / totalNormalMatches).toFixed(1) : '0';
+    const avgOpp = totalNormalMatches > 0 ? (totalScoreOpp / totalNormalMatches).toFixed(1) : '0';
 
     const container = newElement('div', { id: 'last-games-stats', classList: ['last-games-container'] });
 
@@ -192,7 +204,7 @@ export function lastGamesStats(matchHistory, profile) {
     
         const li = newElement('li', { parent: list, classList: ['match-type-item'] });
     
-        newElement('span', { parent: li, textContent: type.replace("_"," "), classList: ['type-label'] });
+        newElement('span', { parent: li, textContent: type, classList: ['type-label'] });
         newElement('span', { parent: li, textContent: `${percent}%`, classList: ['type-percent'] });
     });
     return container;
@@ -223,14 +235,13 @@ function getSummaryStats(stats) {
         local: 'local',
         ai: 'AI',
         online: 'online',
-        tournaments_local: 'tournament',
-        tournaments_online: 'tournament_online'
+        tournament: 'tournament',
     };
 
     for (const key in modes) {
         const section = stats[key];
-        const total = section.total ?? 0;
-        const seconds = section.total_seconds ?? 0;
+        const total = section?.total ?? 0;
+        const seconds = section?.total_seconds ?? 0;
 
         const row = newElement('tr', { parent: tbody });
 
@@ -261,27 +272,24 @@ function addExtraStats(stats) {
     let globalSeconds = 0;
   
     for (const key in stats) {
-      const section = stats[key];
-      const { total = 0, wins = 0, total_seconds = 0 } = section;
+        const section = stats[key];
+        const { total = 0, wins = 0, total_seconds = 0 } = section;
   
-      // losses = total - wins (solo si wins está definido)
-      if ('wins' in section) {
-        section.losses = total - wins;
-      }
-  
-      // avg_match_duration = total_seconds / total
-      section.avg_match_duration = total > 0 ? +(total_seconds / total).toFixed(1) : 0;
-  
-      // winrate = wins / total
-      if (wins !== undefined && total > 0) {
-        section.winrate = +(wins / total * 100).toFixed(1);
-      }
-  
-      globalTotal += total;
-      globalSeconds += total_seconds;
+        // Add losses if not already present
+        if ('wins' in section && 'total' in section)
+            section.losses = total - wins;
+
+        // avg_match_duration = total_seconds / total
+        section.avg_match_duration = total > 0 ? (total_seconds / total).toFixed(1) : 0;
+
+        // winrate = wins / total
+        if (wins !== undefined && total > 0)
+            section.winrate = +(wins / total * 100).toFixed(1);
+
+        globalTotal += total;
+        globalSeconds += total_seconds;
     }
   
-    // añadir resumen global
     stats.summary = {
       total: globalTotal,
       total_seconds: globalSeconds,
@@ -294,6 +302,7 @@ function addExtraStats(stats) {
 // Main function to generate the stats section
 export default function getStatsSection(profile, stats, matchHistory) {
     stats = addExtraStats(stats);
+
     const component = newElement('div', { id: 'stats-section', classList: ['section-block'] });
 
     // Append the canvas with the bar graph to the component

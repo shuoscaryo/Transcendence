@@ -2,8 +2,34 @@ from django.http import JsonResponse
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from pong_project.models import MatchHistory
+from web3 import Web3
+import json
 
 CustomUser = get_user_model()
+
+def get_tournament_stats(user_id):
+    # Connect to ganache
+    w3 = Web3(Web3.HTTPProvider("http://ganache:7545"))
+    if not w3.is_connected():
+        raise Exception("Could not connect to blockchain")
+
+    # Load contract ABI and address
+    with open("/ganache/Tournaments.json") as f:
+        file = json.load(f)
+        contract_address = file.get("address")
+        contract_abi = file.get("abi")
+    contract = w3.eth.contract(address=contract_address, abi=contract_abi)
+
+    # Get tournament stats
+    total = contract.functions.getTournamentCountForUser(user_id).call()
+    wins = contract.functions.getWinCount(user_id).call()
+    total_seconds = contract.functions.getTotalDuration(user_id).call()
+
+    return {
+        "total": total,
+        "wins": wins,
+        "total_seconds": total_seconds
+    }
 
 def get_profile_stats(display_name):
     try:
@@ -80,15 +106,7 @@ def get_profile_stats(display_name):
             },
             'ai': count_stats(ai_matches),
             'online': count_stats(online_matches),
-            'tournaments_local': { # TODO: implement
-                'total': 0,  # placeholder, not implemented
-                'total_seconds': 0,  # placeholder
-            },
-            'tournaments_online': { # TODO: implement
-                'total': 0,  # placeholder, not implemented
-                'wins': 0,  # placeholder
-                'total_seconds': 0,  # placeholder
-            },
+            'tournament': get_tournament_stats(user.id),
         }
 
         return JsonResponse(stats)

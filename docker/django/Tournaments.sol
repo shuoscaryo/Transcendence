@@ -22,10 +22,16 @@ contract Tournaments {
         uint duration;
     }
 
+    struct UserData {
+        uint[] tournamentsPlayed;
+        uint wins;
+        uint totalDuration;
+    }
+
     uint public nextId = 0;
 
     mapping(uint => Tournament) public tournaments;
-    mapping(uint => uint[]) public userTournaments;
+    mapping(uint => UserData) public userData;
 
     event TournamentCreated(uint tournamentId);
 
@@ -50,6 +56,18 @@ contract Tournaments {
         t.duration = _duration;
         t.gameType = _gameType;
 
+        for (uint i = 0; i < _playerIds.length; i++) {
+            uint playerId = _playerIds[i];
+            if (playerId != 0) {
+                userData[playerId].tournamentsPlayed.push(nextId);
+                userData[playerId].totalDuration += _duration;
+            }
+        }
+
+        if (_winnerId != 0) {
+            userData[_winnerId].wins += 1;
+        }
+
         emit TournamentCreated(nextId);
         nextId++;
     }
@@ -69,14 +87,7 @@ contract Tournaments {
         );
     }
 
-    // Link players to the tournament
-    function addPlayerTournament(uint tournamentId, uint[] memory players) public {
-        for (uint i = 0; i < players.length; i++) {
-            userTournaments[players[i]].push(tournamentId);
-        }
-    }
-
-    // Get a tournament played by the index (0 is first ever played)
+    // Get tournament data by user index
     function getUserTournament(uint userId, uint index)
         public
         view
@@ -91,8 +102,8 @@ contract Tournaments {
             string memory gameType
         )
     {
-        require(index < userTournaments[userId].length, "Index out of bounds");
-        uint tournamentId = userTournaments[userId][index];
+        require(index < userData[userId].tournamentsPlayed.length, "Index out of bounds");
+        uint tournamentId = userData[userId].tournamentsPlayed[index];
         Tournament storage t = tournaments[tournamentId];
         return (
             t.winnerId,
@@ -119,8 +130,8 @@ contract Tournaments {
             uint s2
         )
     {
-        require(tournamentIndex < userTournaments[userId].length, "Tournament index out of bounds");
-        uint tournamentId = userTournaments[userId][tournamentIndex];
+        require(tournamentIndex < userData[userId].tournamentsPlayed.length, "Tournament index out of bounds");
+        uint tournamentId = userData[userId].tournamentsPlayed[tournamentIndex];
         require(matchIndex < tournaments[tournamentId].matches.length, "Match index out of bounds");
 
         Match storage m = tournaments[tournamentId].matches[matchIndex];
@@ -134,8 +145,18 @@ contract Tournaments {
         );
     }
 
-    // Get length of tournaments used played in
+    // Get tournament count for a user
     function getTournamentCountForUser(uint userId) public view returns (uint) {
-        return userTournaments[userId].length;
+        return userData[userId].tournamentsPlayed.length;
+    }
+
+    // Get wins for a user
+    function getWinCount(uint userId) public view returns (uint) {
+        return userData[userId].wins;
+    }
+
+    // Get total duration for a user
+    function getTotalDuration(uint userId) public view returns (uint) {
+        return userData[userId].totalDuration;
     }
 }
