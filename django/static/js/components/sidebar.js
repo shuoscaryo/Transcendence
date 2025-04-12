@@ -15,7 +15,6 @@ function getUpperHalf(isLogged)
     const headerButtonsDict = {
         'play':{ label: 'Play', image: Path.img('playLogo.png'), action: () => {navigate("/game/match/local");}},
         'friends':{ label: 'Friends', image: Path.img('friendsLogo.png'), action: () => {navigate("/main/friends");}},
-        'chat':{ label: 'Chat', image: Path.img('chatLogo.png'), action: () => {navigate("/main/chat");}},
         'profile':{ label: 'Profile', image: Path.img('profileLogo.png'), action: () => {navigate("/main/profile");}},
         'settings':{ label: 'Settings', image: Path.img('settingsLogo.png'), action: () => {navigate("/main/settings");}},
     };
@@ -24,7 +23,6 @@ function getUpperHalf(isLogged)
         buttons = [
             headerButtonsDict['play'],
             headerButtonsDict['friends'],
-            headerButtonsDict['chat'],
             headerButtonsDict['profile'],
             headerButtonsDict['settings'],
         ];
