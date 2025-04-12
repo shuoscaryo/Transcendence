@@ -1,22 +1,28 @@
-#!/bin/bash
+#!/bin/sh
 
-set -e  # Exit immediately if a command exits with a non-zero status
+# Check if MNEMONIC is set
+if [ -z "$MNEMONIC" ]; then
+  echo "MNEMONIC env var is not set. Cannot start Ganache."
+  sleep 3
+  exit 1
+fi
 
-# Start Ganache with the fixed mnemonic in the background
-ganache --host 0.0.0.0 --port 7545 --mnemonic "cube same payment father quiz ethics detect click fox final art thumb" --db /ganache_ref &
+# Ensure folders exist
+mkdir -p /ganache
+mkdir -p /ganache_db
 
-# Wait for Ganache to be ready
-echo "⏳ Waiting for Ganache to start..."
-until curl -s http://127.0.0.1:7545 > /dev/null; do
-  sleep 1
-done
-echo "✅ Ganache is running with the predefined mnemonic!"
+MNEMONIC_FILE="/ganache/.mnemonic_used"
 
-# Run the Python deployment script
-python3 /app/scripts/deploy.py
+if [ -f "$MNEMONIC_FILE" ]; then
+  PREV_MNEMONIC=$(cat "$MNEMONIC_FILE")
+  if [ "$PREV_MNEMONIC" != "$MNEMONIC" ]; then
+    echo "⚠️ MNEMONIC has changed. Resetting Ganache data..."
+    rm -rf /ganache_db/*
+    rm -f /ganache/*.json
+  fi
+fi
 
-# Copy the artifacts to blockchain_data
-cp -r /app/artifacts/contracts/Tournaments.sol/Tournaments.json /app/blockchain_data/
+echo "$MNEMONIC" > "$MNEMONIC_FILE"
 
-# Keep the container running
-tail -f /dev/null
+# Start Ganache
+ganache --host 0.0.0.0 --port 7545 --mnemonic "$MNEMONIC" --db /ganache_db

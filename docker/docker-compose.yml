@@ -10,27 +10,29 @@ services:
       - postgresql:/var/lib/postgresql/data
     networks:
       - app-network
+    restart: on-failure
 
   django:
     build:
       context: ..
       dockerfile: ./docker/django/Dockerfile-django
-    env_file:
-      - ../.env
     image: django
     container_name: django
     environment:
       FORTY_TWO_CLIENT_SECRET: ${FORTY_TWO_CLIENT_SECRET}
       FORTY_TWO_CLIENT_ID: ${FORTY_TWO_CLIENT_ID}
+      MNEMONIC: ${MNEMONIC}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes: 
       - django:/app
-      - ganache_data:/app/blockchain_data  # Connect Django with Ganache
     networks:
       - app-network
     restart: on-failure
     depends_on:
       - postgresql
-      - ganache-hardhat
+      - ganache
 
   nginx:
     build: ./nginx
@@ -39,8 +41,6 @@ services:
     ports:
       - "443:443"
       - "80:80"
-    env_file:
-      - ../.env
     volumes: 
       - django:/app
     networks:
@@ -49,18 +49,19 @@ services:
     depends_on:
       - django
 
-  ganache-hardhat:
+  ganache:
     build:
       context: ..
       dockerfile: ./docker/ganache/Dockerfile-ganache
-    image: ganache-hardhat
-    container_name: ganache-hardhat
+    image: ganache
+    container_name: ganache
+    environment:
+      MNEMONIC: ${MNEMONIC}
     volumes:
-      - ganache_data:/app/blockchain_data  # Shared volume for Django
-      - ganache_ref:/ganache_ref
+      - ganache_db:/ganache_db
     networks:
       - app-network
-    restart: unless-stopped
+    restart: on-failure
 
 volumes:
   postgresql:
@@ -77,19 +78,12 @@ volumes:
       type: none
       device: ../django
       o: bind
-  ganache_data:
-    name: Transcendence_ganache
+  ganache_db:
+    name: Transcendence_ganache_db
     driver: local
     driver_opts:
       type: none
-      device: ../ganache-data
-      o: bind
-  ganache_ref:
-    name: Transcendence_ganache_ref
-    driver: local
-    driver_opts:
-      type: none
-      device: ../ganache-ref
+      device: ../ganache-db
       o: bind
 
 networks:

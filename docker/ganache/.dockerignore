@@ -1,7 +1,0 @@
-node_modules
-.env
-artifacts
-cache
-.dockerignore
-Dockerfile-ganache
-README.md

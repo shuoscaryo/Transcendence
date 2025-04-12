@@ -1,19 +1,20 @@
-# Usar una imagen base de Python 3
 FROM python:3.9-buster
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y postgresql-client
+RUN apt-get update && apt-get install -y postgresql-client\
+    curl\
+    build-essential
 
 # Install dependencies
 COPY ./docker/django/requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 RUN rm requirements.txt
-RUN pip install web3
-RUN pip install pillow
-RUN pip install uvicorn
 
 EXPOSE 8000
+
+COPY ./docker/django/deploy.py /ganache/
+COPY ./docker/django/Tournaments.sol /ganache/
 
 COPY ./docker/django/init.sh /usr/local/bin/init.sh
 CMD ["bash", "/usr/local/bin/init.sh"]

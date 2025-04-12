@@ -1,15 +1,15 @@
 PROJECT := transcendence
-CONTAINERS := django postgresql ganache-hardhat
+CONTAINERS := django postgresql ganache nginx
 YML_PATH = ./docker/docker-compose.yml
-VOLUMES := ./postgresql-data ./ganache-data
+DB_VOLUMES := ./postgresql-data ./ganache-db
 ENV_FILE := .env
 
 DOCKER_COMPOSE := sudo ENV_FILE=$(ENV_FILE) docker compose --env-file $(ENV_FILE) -f $(YML_PATH) -p $(PROJECT)
 
-run: $(VOLUMES)	
+run: $(DB_VOLUMES)
 	$(DOCKER_COMPOSE) up --build --remove-orphans
 
-dt: $(VOLUMES)
+dt: $(DB_VOLUMES)
 	$(DOCKER_COMPOSE) up --build -d --remove-orphans
 
 down:
@@ -22,12 +22,12 @@ clean:
 	$(DOCKER_COMPOSE) down -v --remove-orphans --rmi all
 
 fclean: clean
-	sudo rm -rf $(VOLUMES)
+	sudo rm -rf $(DB_VOLUMES)
 
 re: fclean run
 
-$(VOLUMES):
-	mkdir -p $(VOLUMES) 2>/dev/null
+$(DB_VOLUMES):
+	mkdir -p $(DB_VOLUMES) 2>/dev/null
 
 exec-%:
 	$(DOCKER_COMPOSE) exec $* sh

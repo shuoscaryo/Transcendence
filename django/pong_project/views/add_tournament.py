@@ -152,23 +152,24 @@ def add_tournament(request):
             
     try:
         # Connect to Ganache
-        w3 = Web3(Web3.HTTPProvider("http://ganache-hardhat:7545"))
+        w3 = Web3(Web3.HTTPProvider("http://ganache:7545"))
         if not w3.is_connected():
             return JsonResponse({'error': 'Could not connect to blockchain'}, status=500)
 
-        with open("/app/blockchain_data/contractAddress.json") as f:
-            contract_address = json.load(f)["address"]
-
-        with open("/app/blockchain_data/Tournaments.json") as f:
-            contract_abi = json.load(f)["abi"]
+        with open("/ganache/Tournaments.json") as f:
+            file = json.load(f)
+            contract_address = file.get("address")
+            contract_abi = file.get("abi")
 
         contract = w3.eth.contract(address=contract_address, abi=contract_abi)
-
-        sender_address = "0x9dbBE0483E8f7C8231bd9e8c117b0f7821abD8Ea"
-        private_key = "0x5832c8b670e026f7d230a7e4f8e2894c432d1a21dd62e29221e460f892258ac0"
+        
+        with open("/ganache/wallet.json") as f:
+            wallet = json.load(f)
+            wallet_address = wallet.get("address")
+            private_key = wallet.get("private_key")
 
         # Create Tournament
-        nonce = w3.eth.get_transaction_count(sender_address)
+        nonce = w3.eth.get_transaction_count(wallet_address)
         tx1 = contract.functions.addTournament(
             winner_id,
             winner_name,
@@ -178,7 +179,7 @@ def add_tournament(request):
             duration,
             game_type
         ).build_transaction({
-            'from': sender_address,
+            'from': wallet_address,
             'nonce': nonce,
             'gas': 3000000,
             'gasPrice': w3.to_wei('10', 'gwei')
@@ -201,7 +202,7 @@ def add_tournament(request):
                 match['score1'],
                 match['score2']
             ).build_transaction({
-                'from': sender_address,
+                'from': wallet_address,
                 'nonce': nonce,
                 'gas': 3000000,
                 'gasPrice': w3.to_wei('10', 'gwei')
@@ -218,7 +219,7 @@ def add_tournament(request):
                 tournament_id,
                 filtered_player_ids
             ).build_transaction({
-                'from': sender_address,
+                'from': wallet_address,
                 'nonce': nonce,
                 'gas': 3000000,
                 'gasPrice': w3.to_wei('10', 'gwei')

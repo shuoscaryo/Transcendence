@@ -96,15 +96,14 @@ def get_tournament(contract, user_id, pos):
 
 def get_tournaments(user_id, offset, length):
     # Connect to the blockchain
-    w3 = Web3(Web3.HTTPProvider("http://ganache-hardhat:7545"))
+    w3 = Web3(Web3.HTTPProvider("http://ganache:7545"))
     if not w3.is_connected():
         raise Exception("Could not connect to the blockchain")
 
-    with open("/app/blockchain_data/contractAddress.json") as f:
-        contract_address = json.load(f)["address"]
-
-    with open("/app/blockchain_data/Tournaments.json") as f:
-        contract_abi = json.load(f)["abi"]
+    with open("/ganache/Tournaments.json") as f:
+        contract_json = json.load(f)
+        contract_address = contract_json["address"]
+        contract_abi = contract_json["abi"]
 
     contract = w3.eth.contract(address=contract_address, abi=contract_abi)
 
