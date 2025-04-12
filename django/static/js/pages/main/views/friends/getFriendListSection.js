@@ -80,7 +80,6 @@ export function getFriendRow(friend) {
                 }
             )}
         },
-        'chat': { label: 'Chat', image: Path.img('chatLogo.png'), action: null },
         'profile': { label: 'Profile', image: Path.img('profileLogo.png'),
             action: () => navigate(`/main/profile/${friend.display_name}`) },
     };
