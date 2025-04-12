@@ -60,8 +60,7 @@ def check_matches(matches, player_names):
                 s2 = int(match.get('score2', -1))
             except (ValueError, TypeError):
                 return False
-
-            if not (0 < s1 < 100 and 0 < s2 < 100):
+            if not (0 <= s1 < 100 and 0 <= s2 < 100):
                 return False
 
     return True

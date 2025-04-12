@@ -10,12 +10,15 @@ class Tournament {
     }
 
     init(players) {
-		this.players = {...players};
+		this.players = [...players];
         const shuffledPlayers = this._shuffle(players);
         this._createMatchBoxes(shuffledPlayers.length);
+        this.matchList = [];
         this.match = 0;
         this.round = 0;
         this.over = false;
+        this.startTime = performance.now() / 1000;
+        this.duration = null;
 
         // Fill the first round with players
         let j = 0;
@@ -28,19 +31,39 @@ class Tournament {
 
         // Skip the first match if it's the null one
         if (this.matchBoxes[0]?.[0] === null)
-            this.setMatchResult(1);
+            this.setMatchResult(0,1);
         if (this.matchBoxes[0]?.[1] === null)
-            this.setMatchResult(0);
+            this.setMatchResult(1,0);
     }
 
     getMatchPlayers() {
         return [this.matchBoxes[this.round][this.match], this.matchBoxes[this.round][this.match + 1]];
     }
     
-    setMatchResult(winner) { // winner = 0 or 1 (0 = left player, 1 = right player)
+    setMatchResult(score1, score2) { 
         if (this.over)
             return;
         
+        // Add to the match list
+        if (this.matchBoxes[this.round][this.match] !== null && this.matchBoxes[this.round][this.match + 1] !== null)
+            this.matchList.push({
+                player1: this.matchBoxes[this.round][this.match] ? this.matchBoxes[this.round][this.match] : undefined,
+                player2: this.matchBoxes[this.round][this.match + 1] ? this.matchBoxes[this.round][this.match + 1] : undefined,
+                score1: score1,
+                score2: score2,
+            });
+        else {
+            let player_name;
+            if (this.matchBoxes[this.round][this.match] === null)
+                player_name = this.matchBoxes[this.round][this.match + 1];
+            else
+                player_name = this.matchBoxes[this.round][this.match];
+            this.matchList.push({player1: player_name});
+        }
+                
+
+        // winner = 0 or 1 (0 = left player, 1 = right player)
+        const winner = score1 < score2;
         // Write the winner on the next match box
         for (let i = 0; i < this.matchBoxes[this.round + 1].length; i++) {
             if (this.matchBoxes[this.round + 1][i] === undefined) {
@@ -56,14 +79,15 @@ class Tournament {
 
         if (this.round == this.matchBoxes.length - 1) {
             this.over = true;
+            this.duration = Math.round(performance.now() / 1000 - this.startTime);
             return;
         }
 
         // Call this function again if the next match doesn't have both players
         if (this.matchBoxes[this.round][this.match] === null)
-            this.setMatchResult(1);
+            this.setMatchResult(0,1);
         else if (this.matchBoxes[this.round][this.match + 1] === null)
-            this.setMatchResult(0);
+            this.setMatchResult(1,0);
     }
 
     _shuffle(array) {
@@ -266,7 +290,7 @@ function loadFormView(component, myData) {
             }
             g_tournament.init(players);
             component.innerHTML = '';
-            loadMatchesView(component);
+            loadMatchesView(component, myData);
         },
     });
     buttonNext.id = "button-next";
@@ -296,13 +320,13 @@ function loadFormView(component, myData) {
     }
 }
 
-
-async function loadMatchesView(component) {
+async function loadMatchesView(component, myData) {
     const containerDiv = document.createElement('div');
     containerDiv.id = 'div-container';
     component.append(containerDiv);
     
     if( g_tournament.over ) {
+
         const winnerDiv = document.createElement('div');
         winnerDiv.id = 'winner';
         containerDiv.append(winnerDiv);
@@ -311,11 +335,19 @@ async function loadMatchesView(component) {
         winnerText.textContent = `${g_tournament.getWinner()} Wins the Tournament!`;
         winnerDiv.append(winnerText);
 
-		const dataToServer = {
-			"winner": g_tournament.getWinner(),
-			"matches" : g_tournament.matchBoxes,
-		};
-        ViewScope.request('POST', Path.API.ADD_TOURNAMENT, {body:dataToServer});
+        const tournamentData = {
+            game_type: "local",
+            winner: g_tournament.getWinner(),
+            players: g_tournament.players,
+            matches: g_tournament.matchList,
+            duration: g_tournament.duration,
+            real_user: myData?.display_name,
+        };
+        ViewScope.request('POST', Path.API.ADD_TOURNAMENT, {body:tournamentData,
+            onResolve: (res) => {
+                console.log(res.status, res.data);
+            }
+        });
     }
 
     const matchesList = g_tournament.getComponent();
@@ -331,12 +363,12 @@ async function loadMatchesView(component) {
             bgColor: 'var(--color-gray)',
             content: 'Left Player Auto Win',
             onClick: () => {
-                g_tournament.setMatchResult(0);
+                g_tournament.setMatchResult(1,0);
                 if (!g_tournament.over)
                     matchesList.replaceChildren(g_tournament.getComponent());
                 else {
                     component.innerHTML = '';
-                    loadMatchesView(component);
+                    loadMatchesView(component, myData);
                 }
             },
         });
@@ -347,7 +379,7 @@ async function loadMatchesView(component) {
             content: 'Start Match',
             onClick: () => {
                 component.innerHTML = '';
-                loadGameView(component);
+                loadGameView(component, myData);
             },
         });
         buttonsDiv.append(buttonNext);
@@ -356,12 +388,12 @@ async function loadMatchesView(component) {
             bgColor: 'var(--color-gray)',
             content: 'Right Player Auto Win',
             onClick: () => {
-                g_tournament.setMatchResult(1);
+                g_tournament.setMatchResult(0,1);
                 if (!g_tournament.over)
                     matchesList.replaceChildren(g_tournament.getComponent());
                 else {
                     component.innerHTML = '';
-                    loadMatchesView(component);
+                    loadMatchesView(component, myData);
                 }
             },
         });
@@ -379,7 +411,7 @@ async function loadMatchesView(component) {
     }
 }
 
-function loadGameView(component) {
+function loadGameView(component, myData) {
     const gameContainer = document.createElement('div');
     const players = g_tournament.getMatchPlayers();
     let [game, pong] = createPongGameComponent({
@@ -393,11 +425,10 @@ function loadGameView(component) {
         },
         maxScore: 3,
         onContinueButton: (game) => {
-            const winner = game.playerLeft.score > game.playerRight.score ? 0 : 1;
-            g_tournament.setMatchResult(winner);
+            g_tournament.setMatchResult(game.playerLeft.score, game.playerRight.score);
             pong = null;
             component.innerHTML = '';
-            loadMatchesView(component);
+            loadMatchesView(component, myData);
         },
     });
     g_pong = pong;
