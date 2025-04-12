@@ -16,7 +16,7 @@ MNEMONIC_FILE="/ganache/.mnemonic_used"
 if [ -f "$MNEMONIC_FILE" ]; then
   PREV_MNEMONIC=$(cat "$MNEMONIC_FILE")
   if [ "$PREV_MNEMONIC" != "$MNEMONIC" ]; then
-    echo "⚠️ MNEMONIC has changed. Resetting Ganache data..."
+    echo "MNEMONIC has changed. Resetting Ganache data..."
     rm -rf /ganache_db/*
     rm -f /ganache/*.json
   fi
@@ -25,4 +25,4 @@ fi
 echo "$MNEMONIC" > "$MNEMONIC_FILE"
 
 # Start Ganache
-ganache --host 0.0.0.0 --port 7545 --mnemonic "$MNEMONIC" --db /ganache_db
+ganache --host 0.0.0.0 --port 7545 --mnemonic "$MNEMONIC" --db /ganache_db >/dev/null
