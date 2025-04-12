@@ -2,9 +2,7 @@ FROM python:3.9-buster
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y postgresql-client\
-    curl\
-    build-essential
+RUN apt-get update && apt-get install -y postgresql-client
 
 # Install dependencies
 COPY ./docker/django/requirements.txt /app/
