@@ -343,11 +343,7 @@ async function loadMatchesView(component, myData) {
             duration: g_tournament.duration,
             real_user: myData?.display_name,
         };
-        ViewScope.request('POST', Path.API.ADD_TOURNAMENT, {body:tournamentData,
-            onResolve: (res) => {
-                console.log(res.status, res.data);
-            }
-        });
+        ViewScope.request('POST', Path.API.ADD_TOURNAMENT, {body:tournamentData});
     }
 
     const matchesList = g_tournament.getComponent();

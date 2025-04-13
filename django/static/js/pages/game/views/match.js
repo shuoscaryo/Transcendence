@@ -26,7 +26,6 @@ async function sendMatchResult(type, game) {
 }
 
 function renderOnlineInGame(component, data) {
-	console.log(data);
 	newElement("p", {
 		parent: component,
 		textContent: data.room,

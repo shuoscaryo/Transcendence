@@ -71,7 +71,6 @@ function getTournamentInfoDiv(profile, matches) {
 }
 
 function getMatchHistoryRow(profile, match) {
-    console.log(match);
     if (match.match_type.startsWith('tournament')) {
         const tournamentDiv = newElement('div', {classList: ['tournament-div']});
         const matchDiv = getNormalMatchDiv(profile, match);
@@ -100,7 +99,6 @@ function getMatchHistoryRow(profile, match) {
         return getNormalMatchDiv(profile, match);
 }
 function getNormalMatchDiv(profile, match) {
-    console.log(match);
     const component = newElement('div', {classList: ['match']});
     if (match.match_type.startsWith('tournament'))
         component.classList.add('tournament');
@@ -226,11 +224,14 @@ export default function getMatchHistorySection(profile, matchHistory, path) {
                         currMatchDisplayed += matchesPerFetch;
                         if (currMatchDisplayed >= maxMatches)
                             currMatchDisplayed = maxMatches;
-                        console.log(currMatchDisplayed);
+
                         // update lastGamesStats
                         const lastGamesDiv = document.querySelector('#last-games-stats');
                         if (lastGamesDiv)
                             lastGamesDiv.replaceWith(lastGamesStats(matchHistory, profile));
+                        getMoreButton.disabled = false;
+                    },
+                    onThrow: () => {
                         getMoreButton.disabled = false;
                     }
                 }
