@@ -1,5 +1,4 @@
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import get_user_model
 from web3 import Web3
 from django.utils import timezone
@@ -69,7 +68,6 @@ def check_real_user(real_user, player_names):
     return real_user is None or (is_valid_string(real_user) and real_user in player_names)
 
 
-@csrf_exempt
 def add_tournament(request):
     if request.method != 'POST':
         return JsonResponse({'error': 'Invalid request method'}, status=405)

@@ -1,4 +1,3 @@
-from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import json
 import re
@@ -18,7 +17,6 @@ def crop_center(image):
     bottom = (height + min_dim) / 2
     return image.crop((left, top, right, bottom))
 
-@csrf_exempt
 def update_credentials(request, credential):
     if not request.user.is_authenticated:
         return JsonResponse({'error': 'Unauthorized'}, status=401)

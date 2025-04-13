@@ -1,11 +1,9 @@
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import get_user_model, login as django_login
 import json
 
 CustomUser = get_user_model()
 
-@csrf_exempt
 def register(request):
     if request.method == 'POST':
         try:

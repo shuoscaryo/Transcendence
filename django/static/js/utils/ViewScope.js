@@ -1,3 +1,5 @@
+import getCookie from "/static/js/utils/getCookie.js";
+
 /**
  * ViewScope is a global singleton that manages the lifecycle of views in a single-page application (SPA).
  *
@@ -137,10 +139,14 @@ class ViewScope {
             }
 
             // Remove the Content-Type header if is set to null
-            if (finalHeaders['Content-Type'] === null) {
+            if (finalHeaders['Content-Type'] === null)
                 delete finalHeaders['Content-Type'];
-            }
-    
+
+            // Add CSRF token to headers if available
+            const csrfToken = getCookie('csrftoken');
+            if (csrfToken && !('X-CSRFToken' in finalHeaders))
+                finalHeaders['X-CSRFToken'] = csrfToken;
+
             // Final options: merge fixed defaults + user options
             const fetchOptions = Object.assign({
                 method: method.toUpperCase(),
