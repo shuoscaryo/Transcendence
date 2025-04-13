@@ -151,7 +151,7 @@ def get_match_history(display_name, request):
 
         matches, total_matches = get_matches(user, offset, limit)
         tournaments, total_tournaments = get_tournaments(user_id, offset, limit)
-        merged_games = merge_by_date(matches, tournaments)
+        merged_games = merge_by_date(matches, tournaments)[:limit]
         total = total_matches + total_tournaments
 
         return JsonResponse({'matches': merged_games, 'total_matches': total})
