@@ -68,6 +68,7 @@
     }
 
     #search-button {
+        min-width: fit-content;
         border-radius: 0.5rem;
     }
 

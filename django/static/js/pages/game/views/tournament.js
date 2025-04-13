@@ -425,7 +425,7 @@ function loadGameView(component, myData) {
         },
         maxScore: 3,
         onContinueButton: (game) => {
-            g_tournament.setMatchResult(game.playerLeft.score, game.playerRight.score);
+            g_tournament.setMatchResult(game.getPlayerLeft().score, game.getPlayerRight().score);
             pong = null;
             component.innerHTML = '';
             loadMatchesView(component, myData);
