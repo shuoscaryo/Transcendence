@@ -3,7 +3,8 @@ set -e
 
 # Check if required environment variables are set
 if [ -z "$POSTGRES_DB" ] || [ -z "$POSTGRES_USER" ] || [ -z "$POSTGRES_PASSWORD" ] || \
-   [ -z "$MNEMONIC" ] || [ -z "$FORTY_TWO_CLIENT_ID" ] || [ -z "$FORTY_TWO_CLIENT_SECRET" ]; then
+   [ -z "$MNEMONIC" ] || [ -z "$FORTY_TWO_CLIENT_ID" ] || [ -z "$FORTY_TWO_CLIENT_SECRET"] || \
+   [ -z "$DJANGO_SECRET_KEY"]; then
     echo "❌ Missing one or more required environment variables:"
     echo "  - POSTGRES_DB"
     echo "  - POSTGRES_USER"
@@ -11,6 +12,7 @@ if [ -z "$POSTGRES_DB" ] || [ -z "$POSTGRES_USER" ] || [ -z "$POSTGRES_PASSWORD"
     echo "  - MNEMONIC"
     echo "  - FORTY_TWO_CLIENT_ID"
     echo "  - FORTY_TWO_CLIENT_SECRET"
+    echo " -  DJANGO_SECRET_KEY"
     sleep 5
     exit 1
 fi
