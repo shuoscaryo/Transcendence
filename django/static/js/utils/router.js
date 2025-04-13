@@ -1,6 +1,5 @@
 import Path from '/static/js/utils/Path.js';
 import * as css from '/static/js/utils/css.js';
-import request from '/static/js/utils/request.js';
 import WebSocketService from '/static/js/utils/WebSocketService.js';
 import ViewScope from '/static/js/utils/ViewScope.js';
 
@@ -12,8 +11,17 @@ const current = {
 };
 
 async function apiIsLogged() {
-    const response = await request('GET', Path.API.IS_LOGGED);
-    return response.status === 200 && response.data.isLogged;
+    const response = await fetch(Path.API.IS_LOGGED, {
+        method: 'GET',
+        credentials: 'include',
+    });
+    if (!response.ok)
+        return false;
+    // Check if the response is a 200 and contains the isLogged property
+    const data = await response.json();
+    if (!data || typeof data.isLogged !== 'boolean')
+        return false;
+    return response.status === 200 && data.isLogged;
 }
 
 function parsePath(path) {

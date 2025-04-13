@@ -2,8 +2,8 @@ import Path from '/static/js/utils/Path.js';
 import { navigate } from '/static/js/utils/router.js';
 import getHomeButton from '/static/js/components/homeButton.js';
 import getDefaultButton from '/static/js/components/defaultButton.js';
-import request from '/static/js/utils/request.js';
 import newElement from '/static/js/utils/newElement.js';
+import ViewScope from '/static/js/utils/ViewScope.js';
 
 function getUpperHalf(isLogged)
 {
@@ -73,12 +73,15 @@ function getLowerHalf(isLogged)
             textColor: null,
             content: 'logout',
             onClick: async () => {
-                const response = await request("POST", Path.API.LOGOUT);
-                if (response.status !== 200) {
-                    alert(`Couldn't log you out :(`);
-                    return;
-                }
-                navigate("/");
+                const response = await ViewScope.request("POST", Path.API.LOGOUT, {
+                    onResolve: (res) => {
+                        if (res.status !== 200) {
+                            alert("Couldn't log you out :(");
+                            return;
+                        }
+                        navigate("/");
+                    }
+                });
             }
         });
         contractButton.classList.add('button-login');
