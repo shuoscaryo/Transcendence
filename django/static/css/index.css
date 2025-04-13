@@ -9,7 +9,9 @@
     --color-button-fortito-hover: #1a1a1a; /* modificable */
     --color-red: #ca1e1e; /* modificable */
     --color-blue-match: #263253; /* modificable */
+    --color-blue-match-bg: #26325388; /* modificable */
     --color-red-match: #4F2C2F; /* modificable */
+    --color-red-match-bg: #4F2C2F88; /* modificable */
     --color-dark-gray: #2a2a2a; /* modificable */
 }
 

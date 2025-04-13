@@ -232,99 +232,6 @@
         background-color: var(--color-dark-gray);
     }
 
-    /* Create element subsection */
-    #create-elements-subsection {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-        gap: 1rem; /* modificable */
-    }
-    #create-elements-subsection .subsection-header {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        gap: 1rem; /* modificable */
-        width: 100%;
-    }
-
-    #create-elements-subsection .subsection-header .subsection-title {
-        flex: 5;
-        border-radius: 0.5rem;
-        overflow: hidden;
-    }
-
-    #create-elements-subsection .subsection-header button {
-        flex: 1;
-    }
-    #create-elements-form-container {
-        display: flex;
-        flex-direction: row;
-        align-items: space-between;
-        gap: 1rem; /* modificable */
-        width: 100%;
-    }
-    .new-element-form {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.25rem; /* modificable */
-        width: 100%;
-        background-color: var(--color-dark-gray);
-        padding: 1rem;
-        padding-top: 0.5rem;
-        border-radius: 0.5rem;
-        overflow: hidden;
-    }
-    .new-element-form .subsection-title {
-        padding: 0;
-    }
-    
-    .new-element-form form {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        gap: 0.5rem; /* modificable */
-        width: 100%;
-        height: 100%;
-    }
-
-    .new-element-form .input-div {
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem; /* modificable */
-        width: 100%;
-    }
-
-    .new-element-form .input-row {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        gap: 0.5rem; /* modificable */
-        justify-content: center;
-        align-items: center;
-    }
-
-    .input-row label {
-        flex: 1;
-        overflow: hidden;
-    }
-
-    .input-row input,
-    .input-row select {
-        flex: 3;
-    }
-
-    .new-element-form select {
-        width: 100%;
-        height: 2rem;
-        padding: 0.5rem;
-        border-radius: 0.5rem;
-        background-color: var(--color-gray);
-    }
-
-
-    /* Match history subsection*/
     #match-history-div {
         display: flex;
         flex-direction: column;
@@ -342,7 +249,15 @@
         width: 100%;
         gap: 0.25rem; /* modificable */
     } 
-
+    .tournament-div {
+        width: 100%;
+    }
+    .tournament-div.won-match {
+        background-color: var(--color-blue-match-bg);
+    }
+    .tournament-div.lost-match {
+        background-color: var(--color-red-match-bg);
+    }
     .match {
         display: flex;
         flex-direction: row;
@@ -351,6 +266,18 @@
         width: 100%;
         background-color: #3a3a3a;
         height: 4rem;
+        position: relative;
+    }
+    .match .toggle-button {
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 100%;
+        width: 1rem;
+        background-color: rgba(0, 0, 0, 0.2);
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     .match.tournament {
         height: 6rem;
@@ -434,4 +361,27 @@
         height: 3rem;
         border-top-left-radius: 0;
         border-top-right-radius: 0;
+    }
+    .tournament-info-div {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+    }
+    .round-block {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        width: 100%;
+        padding: 0.5rem;
+    }
+    .round-title {
+        font-weight: bold;
+        text-align: center;
+        padding: 0.5rem;
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.05);
     }

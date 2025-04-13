@@ -30,7 +30,77 @@ function getPlayerLink(displayName, profile, realUser = true) {
     return component;
 }
 
+function getTournamentInfoDiv(profile, matches) {
+    const component = newElement('div', {classList: ['tournament-info-div']});
+
+    let currentIndex = 0;
+    let roundNumber = 1;
+    let matchesRemaining = matches.length;
+
+    while (matchesRemaining > 0) {
+        const roundDiv = newElement('div', {classList: ['round-block'], parent: component});
+        newElement('div', {
+            textContent: `Round ${roundNumber}`,
+            classList: ['round-title'],
+            parent: roundDiv
+        });
+
+        const matchesContainer = newElement('div', {classList: ['round-matches'], parent: roundDiv});
+        const matchCount = Math.pow(2, Math.floor(Math.log2(matchesRemaining + 1)) - 1);
+
+        for (let i = 0; i < matchCount && currentIndex < matches.length; i++, currentIndex++) {
+            const match = matches[currentIndex];
+            const matchDiv = newElement('div', {classList: ['mini-match', 'match-div'], parent: matchesContainer});
+        
+            const p1 = match.playerLeft;
+            const p2 = match.playerRight;
+        
+            if (!p1 || !p2) {
+                const skipper = p1 || p2;
+                matchDiv.textContent = `${skipper} skips`;
+            } else {
+                matchDiv.textContent = `${p1} vs ${p2} : ${match.scoreLeft} - ${match.scoreRight}`;
+            }
+        }
+
+        matchesRemaining -= matchCount;
+        roundNumber++;
+    }
+
+    return component;
+}
+
 function getMatchHistoryRow(profile, match) {
+    console.log(match);
+    if (match.match_type.startsWith('tournament')) {
+        const tournamentDiv = newElement('div', {classList: ['tournament-div']});
+        const matchDiv = getNormalMatchDiv(profile, match);
+        tournamentDiv.append(matchDiv);
+        if (matchDiv.classList.contains('won-match'))
+            tournamentDiv.classList.add('won-match');
+        else
+            tournamentDiv.classList.add('lost-match');
+        const toggleButton = newElement('button', {
+            classList: ['toggle-button'],
+            parent: matchDiv,
+        });
+        toggleButton.textContent = '▼';
+        
+        const matchesDiv = getTournamentInfoDiv(profile, match.matches);
+        tournamentDiv.append(matchesDiv);
+        let isHidden = true;
+        matchesDiv.style.display = 'none';
+        toggleButton.addEventListener('click', () => {
+            isHidden = !isHidden;
+            matchesDiv.style.display = isHidden ? 'none' : 'block';
+            toggleButton.textContent = isHidden ? '▼' : '▲';
+        });
+        return tournamentDiv;
+    } else
+        return getNormalMatchDiv(profile, match);
+}
+function getNormalMatchDiv(profile, match) {
+    console.log(match);
     const component = newElement('div', {classList: ['match']});
     if (match.match_type.startsWith('tournament'))
         component.classList.add('tournament');
