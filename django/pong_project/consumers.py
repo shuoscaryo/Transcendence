@@ -19,7 +19,7 @@ class PongConsumer(AsyncWebsocketConsumer):
             await self.accept()
         else:
             self.errorClose = True
-            await self.close(code=4000)
+            await self.close()
             return
 
         self.user_id = self.scope['user'].id
@@ -28,7 +28,8 @@ class PongConsumer(AsyncWebsocketConsumer):
         await self.update_online_status(True)
 
     async def disconnect(self, close_code):
-        if close_code == 4000:
+        # Don't execute if errorClose is set to True
+        if hasattr(self, 'errorClose') and self.errorClose:
             return
 
         # Remove from channel group so this consumer stops receiving messages.
