@@ -34,6 +34,9 @@ export default class Path {
         UPDATE_CREDENTIALS: 'update_credentials',
         ADD_MATCH: 'add-match',
         ADD_TOURNAMENT: 'add-tournament',
+
+        // Game
+        GET_GAME_STATE: 'get-game-state',
     };
 
     static _WS_MSG = {

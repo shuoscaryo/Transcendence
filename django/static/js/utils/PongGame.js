@@ -418,7 +418,9 @@ export default class PongGame {
         if (status.paddleRight)
             this._paddleRight.setValues(status.paddleRight);
         this._playerRight.score = status.playerRight?.score ?? this._playerRight.score;
+        this._playerRight.name = status.playerRight?.name ?? this._playerRight.name;
         this._playerLeft.score = status.playerLeft?.score ?? this._playerLeft.score;
+        this._playerLeft.name = status.playerLeft?.name ?? this._playerLeft.name;
         this._maxScore = status.maxScore ?? this._maxScore;
         this._state = status.state ?? this._state;
         this._lastState = status.lastState ?? this._lastState;

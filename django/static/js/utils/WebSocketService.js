@@ -72,6 +72,7 @@ class WebSocketService {
         // Check if it's a specific message type
 		if (this.specificListeners.has(msg_type))
 			throw new Error(`Cannot subscribe to specific message type: ${msg_type}`);
+		console.log(`WSS addCallback: ${msg_type}`); //XXX
 	  
 		// Add to listeners list (persistent or one-time)
 		const target = once ? this.oneTimeListeners : this.listeners;
