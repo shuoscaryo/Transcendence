@@ -38,6 +38,9 @@ class OnlineState {
                 WebSocketService.send("disconnected");
             else if (this.state === OnlineStates.FIND_MATCH)
                 WebSocketService.send("stop_find_match");
+
+            if (this.pong)
+                this.pong.stop();
         });
 
         this.go(OnlineStates.WAIT_START);
@@ -173,7 +176,6 @@ class OnlineState {
                 console.error(`Unknown role: ${res.data.role}`);
             // create pong
             const [pongComponent, pong] = createPongGameComponent(this.data);
-            ViewScope.onDestroy(() => { pong.stop(); });
             // Remove the buttons from the component
             this.statusDiv = pongComponent.querySelector(".div-buttons");
             this.statusDiv.innerHTML = "";
@@ -230,9 +232,9 @@ class OnlineState {
         this.pong.stop();
         this.pong = null;
         this.component.append(getDefaultButton({
-            bgColor: 'var(--color-lime)', content: 'go Home',
+            bgColor: 'var(--color-lime)', content: 'Continue',
             onClick: () => {
-                this.go(OnlineStates.INIT);
+                navigate("/");
             }
         }));
     }
@@ -302,6 +304,11 @@ export default async function getView(isLogged, path) {
         const [game, pong] = createPongGameComponent(data);
         component.append(game);
         ViewScope.onDestroy(() => { pong.stop(); });
+        // Luego añadimos algo grande
+const bigDiv = document.createElement('div');
+bigDiv.style.height = '1000px';
+bigDiv.style.backgroundColor = 'red';
+component.append(bigDiv);
     } else if (path.subPath === "/local") {
 		data.playerLeft = { name: displayName ?? "Me" , controller: new PlayerController("w", "s") };
         data.playerRight = { name: "Random Chump", controller: new PlayerController("ArrowUp", "ArrowDown") };
