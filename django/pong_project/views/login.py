@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login as django_login
 import json
 
-def login(request):
+def login_view(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
@@ -12,6 +12,8 @@ def login(request):
 
         username = data.get('username')
         password = data.get('password')
+        if not username or not password:
+            return JsonResponse({'error': 'Username and password are required'}, status=400)
         user = authenticate(request, username=username, password=password)
         if user is not None:
             django_login(request, user)

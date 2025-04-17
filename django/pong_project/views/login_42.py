@@ -80,7 +80,6 @@ def login_42(request):
 
     response = requests.post(token_url, data=data)
     token_info = response.json()
-    print(token_info)
     access_token = token_info.get("access_token")
 
     if not access_token:
@@ -94,9 +93,7 @@ def login_42(request):
     # Try to find user by unique 42 ID
     User = get_user_model()
     forty_two_id = user_data["id"]
-    print(f"42 id: {forty_two_id} name: {user_data['login']}")
     user = User.objects.filter(forty_two_id=forty_two_id).first()
-    print(f"User is {user}")
     if not user:
         # Generate unique username
         base_username = f"ft_{user_data['login']}"

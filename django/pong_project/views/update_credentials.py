@@ -89,7 +89,7 @@ def update_credentials(request, credential):
 
     # --- Username ---
     if credential == 'username':
-        if not re.fullmatch(r'[a-zA-Z0-9_]{3,20}', value):
+        if not re.fullmatch(r'[a-zA-Z0-9_-]{3,20}', value):
             return JsonResponse({'error': 'Invalid username format'}, status=400)
         if value == user.username:
             return JsonResponse({'error': 'Username is the same as current'}, status=400)

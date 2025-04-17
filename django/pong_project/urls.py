@@ -22,7 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('favicon.ico', views.favicon, name='favicon'),
     path('api/is-logged', views.isLogged),
-    path('api/login', views.login),
+    path('api/login', views.login_view),
     path('api/register', views.register),
     path('api/logout', views.logout),
     path('api/profile/', views.profile),
