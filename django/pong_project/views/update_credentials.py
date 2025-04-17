@@ -97,16 +97,6 @@ def update_credentials(request, credential):
             return JsonResponse({'error': 'Username already taken'}, status=400)
         user.username = value
 
-    # --- Email ---
-    elif credential == 'email':
-        if not re.fullmatch(r'^[^\s@]+@[^\s@]+\.[^\s@]+$', value):
-            return JsonResponse({'error': 'Invalid email format'}, status=400)
-        if value == user.email:
-            return JsonResponse({'error': 'Email is the same as current'}, status=400)
-        if get_user_model().objects.filter(email=value).exclude(id=user.id).exists():
-            return JsonResponse({'error': 'Email already taken'}, status=400)
-        user.email = value
-
     # --- Display name ---
     elif credential == 'display_name':
         if not re.fullmatch(r'[a-zA-Z0-9_]{3,20}', value):

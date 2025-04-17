@@ -1,7 +1,7 @@
 import Path from '/static/js/utils/Path.js';
 import { navigate } from '/static/js/utils/router.js';
 import getDefaultButton from '/static/js/components/defaultButton.js';
-import { emailOk, usernameOk, pwOk } from '/static/js/utils/validators.js';
+import { usernameOk, pwOk } from '/static/js/utils/validators.js';
 import ViewScope from '/static/js/utils/ViewScope.js';
 import getOtherLogin from '../getOtherLogin.js';
 
@@ -23,30 +23,6 @@ function getInput(name, type, placeholder) {
 
 function getForm() {
     const component = document.createElement('form');
-    const emailDiv = getInput('email', 'email', 'Email');
-    const emailInput = emailDiv.querySelector('input');
-    emailInput.addEventListener("focus", () => {
-        emailDiv.querySelector('p').style.display = 'none';
-        emailInput.classList.remove('error-input');
-    });
-    emailInput.addEventListener("blur", () => {
-        const value = emailInput.value;
-        const errorMsg = emailDiv.querySelector('p');
-        if (!emailOk(value)) {
-            errorMsg.textContent = 'Invalid email address';
-            errorMsg.style.display = 'block';
-            emailInput.classList.add('error-input');
-        } else {
-            errorMsg.style.display = 'none';
-            emailInput.classList.remove('error-input');
-        }
-        if (value === '') {
-            errorMsg.style.display = 'none';
-            emailInput.classList.remove('error-input');
-        }
-    });
-    component.append(emailDiv);
-    
 
     const usernameDiv = getInput('username', 'text', 'Username');
     const usernameInput = usernameDiv.querySelector('input');
@@ -153,15 +129,13 @@ function disableButtonOnEvent(button, form) {
     const checkInputs = () => {
         const formData = new FormData(form);
         const jsonData = {
-            email: formData.get('email'),
             username: formData.get('username'),
             display_name: formData.get('display_name'),
             pw: formData.get('password'),
             repPw: formData.get('repeat-password'),
         };
         let disable = false;
-        if (!emailOk(jsonData.email)
-            || !usernameOk(jsonData.username)
+        if (!usernameOk(jsonData.username)
             || !usernameOk(jsonData.display_name)
             || !pwOk(jsonData.pw)
             || jsonData.pw !== jsonData.repPw)
@@ -204,7 +178,6 @@ function getUpperHalf() {
                 return;
             const formData = new FormData(form);
             const jsonData = {
-                email: formData.get('email'),
                 username: formData.get('username'),
                 display_name: formData.get('display_name'),
                 password: formData.get('password'),

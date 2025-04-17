@@ -67,9 +67,6 @@ function getPhotoSection(profile) {
     if (!profile.is_42_user) {
         const username = newElement('span', {id: 'username', parent: userInfo});
         username.textContent = `username: ${profile.username}`;
-
-        const email = newElement('span', {id: 'email', parent: userInfo});
-        email.textContent = `email: ${profile.email}`;
     } else {
         const user42 = newElement('span', {id: 'user-42', parent: userInfo});
         user42.textContent = `42 user`;
@@ -114,14 +111,6 @@ function getUserUpdatesSection(profile) {
                 { label: 'Display name:', type: 'text', name: 'display_name', placeholder: 'display name', validator: validators.usernameOk },
             ],
             successMessage: 'Display name updated'
-        },
-        {
-            endpoint: 'email',
-            fields: [
-                { label: 'Email:', type: 'email', name: 'email', placeholder: 'email', validator: validators.emailOk },
-                { label: 'Password:', type: 'password', name: 'password', placeholder: 'password' }
-            ],
-            successMessage: 'Email updated'
         },
         {
             endpoint: 'password',

@@ -17,7 +17,6 @@ def get_profile(display_name, own_profile=False):
         if own_profile:
             own_profile_data = {
                 "username": user.username,
-                "email": user.email,
                 "friends": [friend.display_name for friend in user.friends.all()],
             }
             output_data.update(own_profile_data)

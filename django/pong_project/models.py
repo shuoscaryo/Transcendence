@@ -17,7 +17,6 @@ class PathAndRename:
         return os.path.join(self.path, filename)
 
 class CustomUser(AbstractUser):
-    email = models.EmailField(unique=True)
     display_name = models.CharField(max_length=30, unique=True)
     profile_photo = models.ImageField(upload_to=PathAndRename('profile_photos/'), blank=True, null=True)
     @property

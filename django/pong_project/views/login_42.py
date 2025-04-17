@@ -113,19 +113,10 @@ def login_42(request):
         while User.objects.filter(display_name=display_name).exists():
             display_name = f"{base_display}_{counter}"
             counter += 1
-        
-        # Generate unique email
-        base_email = f"{user_data['login']}@42.fr"
-        email = base_email
-        counter = 1
-        while User.objects.filter(email=email).exists():
-            email = f"{user_data['login']}_{counter}@42.fr"
-            counter += 1
 
         # Create user account
         user = User.objects.create_user(
             username=username,
-            email=email,
             display_name=display_name,
             last_online=timezone.now(),
             forty_two_id=forty_two_id
