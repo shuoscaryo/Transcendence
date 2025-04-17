@@ -62,15 +62,6 @@ function getUpperHalf() {
     const form = getForm();
     divForm.append(form);
 
-    const forgotPassword = document.createElement('button');
-    forgotPassword.id = 'button-forgot-password';
-    forgotPassword.textContent = 'Forgot Password?';
-    forgotPassword.addEventListener('click', () => {
-        navigate('pages/forgotPassword');
-    });
-    divForm.append(forgotPassword);
-
-    
     const loginButton = getDefaultButton({
         bgColor: 'var(--color-lime)',
         bgHoverColor: 'var(--color-lime-hover)',

@@ -71,13 +71,6 @@
     margin-bottom: 30px;
 }
 
-#button-forgot-password {
-    background-color: transparent;
-    text-decoration: underline;
-    cursor: pointer;
-    color: #aaaaaa;
-}
-
 #div-form form {
     display: flex;
     flex-direction: column;
