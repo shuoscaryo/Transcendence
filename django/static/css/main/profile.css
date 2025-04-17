@@ -299,6 +299,9 @@
         overflow: hidden;
         overflow-x:scroll;
     }
+    .match .match-div::-webkit-scrollbar {
+        display: none;
+    }
 
     .match .players-div {
         flex: 3;
