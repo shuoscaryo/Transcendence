@@ -1,5 +1,6 @@
 .pong-game {
     padding: 24px;
+    flex-shrink: 0;
 }
 
 .pong-game .div-game {
