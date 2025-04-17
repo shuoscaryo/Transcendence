@@ -1,5 +1,12 @@
 import ViewScope from '/static/js/utils/ViewScope.js';
 
+const DEBUG = false;
+function log(...args) {
+	if (DEBUG) {
+		log(...args);
+	}
+}
+
 class WebSocketService {
 	constructor() {
 		this.ws = null;
@@ -25,12 +32,12 @@ class WebSocketService {
 		const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
 		this.ws = new WebSocket(protocol + window.location.host + "/ws/game/");
 
-		this.ws.onopen = () => console.log('WSS connected');
+		this.ws.onopen = () => log('WSS connected');
 		this.ws.onmessage = (event) => this._handleMessage(event.data);
 
 		this.ws.onclose = () => {
 			if (!this.reconnect) return;
-			console.log(`[${new Date().toISOString()}] WSS disconnected, reconnecting...`);
+			log(`[${new Date().toISOString()}] WSS disconnected, reconnecting...`);
 			this.ws = null;
 			setTimeout(() => this.connect(), 1000);
 		};
@@ -48,7 +55,7 @@ class WebSocketService {
 	disconnect() {
 		this.reconnect = false;
 		if (this.ws) {
-            console.log('WSS disconnecting...');
+            log('WSS disconnecting...');
 			this.ws.close();
 			this.ws = null;
 		}
@@ -60,7 +67,7 @@ class WebSocketService {
 			console.error('Invalid message:', json);
 			return;
 		}
-		console.log(`WSS receive: ${json.msg_type}`); //XXX
+		log(`WSS receive: ${json.msg_type}`); //XXX
 
 		(this.specificListeners.get(json.msg_type) || []).forEach(cb => cb(json.data));
 		(this.listeners.get(json.msg_type) || []).forEach(cb => cb(json.data));
@@ -72,7 +79,7 @@ class WebSocketService {
         // Check if it's a specific message type
 		if (this.specificListeners.has(msg_type))
 			throw new Error(`Cannot subscribe to specific message type: ${msg_type}`);
-		console.log(`WSS addCallback: ${msg_type}`); //XXX
+		log(`WSS addCallback: ${msg_type}`); //XXX
 	  
 		// Add to listeners list (persistent or one-time)
 		const target = once ? this.oneTimeListeners : this.listeners;
@@ -88,7 +95,7 @@ class WebSocketService {
 
 	// Remove callback
     rmCallback(msg_type, callback) {
-		console.log(`WSS rmCallback: ${msg_type}`); //XXX
+		log(`WSS rmCallback: ${msg_type}`); //XXX
         // Delete from listeners
         const list = this.listeners.get(msg_type) || [];
         this.listeners.set(msg_type, list.filter(cb => cb !== callback));
@@ -105,7 +112,7 @@ class WebSocketService {
 
 	// Send
 	send(msg_type, data = {}) {
-		console.log(`WSS send: ${msg_type}`);
+		log(`WSS send: ${msg_type}`);
 		if (this.isConnected()) {
 			this.ws.send(JSON.stringify({ msg_type, ...data }));
 		} else {
