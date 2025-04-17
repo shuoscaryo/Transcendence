@@ -22,8 +22,9 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 DEBUG = True
 
-ALLOWED_HOSTS = [os.getenv('DOMAIN_NAME')]
+#ALLOWED_HOSTS = []
 
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -47,6 +48,7 @@ CHANNEL_LAYERS = {
 
 SECURE_SSL_REDIRECT = False  # Disable forced SSL redirect for local development
 CSRF_TRUSTED_ORIGINS = ["https://localhost"]  # Allow frontend
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
