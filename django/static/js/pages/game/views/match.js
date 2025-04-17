@@ -225,8 +225,6 @@ class OnlineState {
     _stateGameOver() {
         const text = this.game_over_msg === 'no_players' ? 'Game cancelled' : 'Game over';
         this.statusMessage.textContent = text;
-        const contBtn = getDefaultButton({ content:'Continue', onClick:()=>this.go(OnlineStates.INIT) });
-        this.component.append(contBtn);
         this.pong.stop();
         this.pong = null;
     }
