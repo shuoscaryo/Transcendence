@@ -229,6 +229,12 @@ class OnlineState {
         this.statusDiv.textContent = text;
         this.pong.stop();
         this.pong = null;
+        this.component.append(getDefaultButton({
+            bgColor: 'var(--color-lime)', content: 'go Home',
+            onClick: () => {
+                this.go(OnlineStates.INIT);
+            }
+        }));
     }
 }
 
