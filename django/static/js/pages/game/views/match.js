@@ -83,8 +83,6 @@ class OnlineState {
         if (this.state !== OnlineStates.GAME && this.state !== OnlineStates.WAIT_START)
             return;
         this.game_over_msg = msg.reason;
-        this.pong.stop();
-        this.pong = null;
         this.go(OnlineStates.GAME_OVER, {clearHtml: false});
     }
 
@@ -229,6 +227,8 @@ class OnlineState {
         this.statusMessage.textContent = text;
         const contBtn = getDefaultButton({ content:'Continue', onClick:()=>this.go(OnlineStates.INIT) });
         this.component.append(contBtn);
+        this.pong.stop();
+        this.pong = null;
     }
 }
 

@@ -286,7 +286,7 @@ class PongConsumer(AsyncWebsocketConsumer):
             len(active_rooms[room_name]["players"]) < 2:
             return
         # Delete the room of the player
-        await delete_room(self.channel_layer, room_name, "no_players")
+        await delete_room(self.channel_layer, room_name, "game_over")
 
 
     async def update_online_status(self, is_connecting):
