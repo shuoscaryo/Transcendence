@@ -10,13 +10,13 @@ import newElement from "/static/js/utils/newElement.js";
 const OnlineStates = {
   INIT: "Init",
   FIND_MATCH: "FindMatch",
-  WAIT_START: "WaitStart", // NOTE split into more states
+  WAIT_START: "WaitStart",
   GAME: "Game",
   GAME_OVER: "GameOver",
 };
 
 class OnlineState {
-    constructor(component, data) { // NOTE the game should start on Init if GET_GAME_STATE says not in game or WaitStart otherwise
+    constructor(component, data) {
         this.component = component;
         this.data = data;
         this.state = null;
@@ -152,11 +152,13 @@ class OnlineState {
             // setup players and controllers
             this.data.playerLeft = {
                 name: res.data.player_left.display_name,
-                uid: res.data.player_left.uid
+                uid: res.data.player_left.uid,
+                score: res.data.game_state.playerLeft?.score ?? 0,
             };
             this.data.playerRight = {
                 name: res.data.player_right.display_name,
-                uid: res.data.player_right.uid
+                uid: res.data.player_right.uid,
+                score: res.data.game_state.playerRight?.score ?? 0,
             };
             this.data.type = res.data.role;
             if (res.data.role === 'host') {
@@ -174,7 +176,7 @@ class OnlineState {
             // create pong
             const [pongComponent, pong] = createPongGameComponent(this.data);
             ViewScope.onDestroy(() => { pong.stop(); });
-            newElement("p", { parent: this.component, textContent: res.data.role, style: "text-align:center;" }); // XXX
+            this.statusMessage = newElement("p", { parent: this.component, style: "text-align:center;" });
             this.component.append(pongComponent);
             this.pong = pong;
         }
@@ -185,10 +187,10 @@ class OnlineState {
         this.data.playerRight = res.data.player_right.display_name;
         // update pong
         this.pong.setGameStatus(this.data);
+        this.pong._draw();
 
         // status message
-        if (!this.statusMessage)
-            this.statusMessage = newElement("p", { parent: this.component, style: "text-align:center;" });
+            
         this.statusMessage.textContent = "Game ends in 10...";
         let sec = 10;
         const interval = setInterval(() => {
@@ -223,9 +225,8 @@ class OnlineState {
     }
 
     _stateGameOver() {
-        this.pong.stop();
         const text = this.game_over_msg === 'no_players' ? 'Game cancelled' : 'Game over';
-        newElement("p", { parent: this.component, textContent: text, style:"text-align:center;" });
+        this.statusMessage.textContent = text;
         const contBtn = getDefaultButton({ content:'Continue', onClick:()=>this.go(OnlineStates.INIT) });
         this.component.append(contBtn);
     }

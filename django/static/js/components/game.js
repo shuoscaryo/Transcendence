@@ -15,7 +15,9 @@ export default function createPongGameComponent(data) {
     const playerLeftDiv = newElement('div', { classList: ['div-player', 'player-left'], parent: statsDiv });
     playerLeftDiv.textContent = data.playerLeft.name;
     const scoreDiv = newElement('div', { classList: ['div-score'], parent: statsDiv });
-    scoreDiv.textContent = '0 - 0';
+    const leftScore = data?.playerLeft?.score ?? 0;
+    const rightScore = data?.playerRight?.score ?? 0;
+    scoreDiv.textContent = `${leftScore} - ${rightScore}`;
     const playerRightDiv = newElement('div', { classList: ['div-player', 'player-right'], parent: statsDiv });
     playerRightDiv.textContent = data.playerRight.name;
 
