@@ -304,11 +304,6 @@ export default async function getView(isLogged, path) {
         const [game, pong] = createPongGameComponent(data);
         component.append(game);
         ViewScope.onDestroy(() => { pong.stop(); });
-        // Luego añadimos algo grande
-const bigDiv = document.createElement('div');
-bigDiv.style.height = '1000px';
-bigDiv.style.backgroundColor = 'red';
-component.append(bigDiv);
     } else if (path.subPath === "/local") {
 		data.playerLeft = { name: displayName ?? "Me" , controller: new PlayerController("w", "s") };
         data.playerRight = { name: "Random Chump", controller: new PlayerController("ArrowUp", "ArrowDown") };
