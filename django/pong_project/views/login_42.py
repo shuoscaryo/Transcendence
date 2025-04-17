@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model, login
 from django.utils import timezone
 from PIL import Image, ExifTags
 from io import BytesIO
+from django.views.decorators.http import require_GET
 
 def apply_exif_orientation(img):
     try:
@@ -57,6 +58,7 @@ def process_square_image(image_bytes, size=256):
     img.save(buffer, format='JPEG')
     return buffer.getvalue()
 
+@require_GET
 def login_42(request):
     code = request.GET.get("code")
     if not code:
