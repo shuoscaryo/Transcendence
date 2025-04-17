@@ -68,7 +68,7 @@ def login_42(request):
     client_id = os.environ.get("FORTY_TWO_CLIENT_ID")
     client_secret = os.environ.get("FORTY_TWO_CLIENT_SECRET")
     token_url = "https://api.intra.42.fr/oauth/token"
-    redirect_uri = f"https://{request.get_host()}/api/login_42"
+    redirect_uri = f"https://{request.get_host()}:4443/api/login_42"
 
     data = {
         "grant_type": "authorization_code",
@@ -80,6 +80,7 @@ def login_42(request):
 
     response = requests.post(token_url, data=data)
     token_info = response.json()
+    print(token_info)
     access_token = token_info.get("access_token")
 
     if not access_token:
@@ -93,8 +94,9 @@ def login_42(request):
     # Try to find user by unique 42 ID
     User = get_user_model()
     forty_two_id = user_data["id"]
+    print(f"42 id: {forty_two_id} name: {user_data['login']}")
     user = User.objects.filter(forty_two_id=forty_two_id).first()
-
+    print(f"User is {user}")
     if not user:
         # Generate unique username
         base_username = f"ft_{user_data['login']}"
@@ -111,15 +113,24 @@ def login_42(request):
         while User.objects.filter(display_name=display_name).exists():
             display_name = f"{base_display}_{counter}"
             counter += 1
+        
+        # Generate unique email
+        base_email = f"{user_data['login']}@42.fr"
+        email = base_email
+        counter = 1
+        while User.objects.filter(email=email).exists():
+            email = f"{user_data['login']}_{counter}@42.fr"
+            counter += 1
 
         # Create user account
         user = User.objects.create_user(
             username=username,
-            email=None,
+            email=email,
             display_name=display_name,
             last_online=timezone.now(),
             forty_two_id=forty_two_id
         )
+
         user.set_unusable_password()
 
         # Save profile image from 42

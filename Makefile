@@ -4,7 +4,7 @@ YML_PATH = ./docker/docker-compose.yml
 DB_VOLUMES := ./postgresql-data ./ganache-db
 ENV_FILE := .env
 
-DOCKER_COMPOSE := sudo ENV_FILE=$(ENV_FILE) docker compose --env-file $(ENV_FILE) -f $(YML_PATH) -p $(PROJECT)
+DOCKER_COMPOSE := docker compose --env-file $(ENV_FILE) -f $(YML_PATH) -p $(PROJECT)
 
 run: $(DB_VOLUMES)
 	$(DOCKER_COMPOSE) up --build --remove-orphans
@@ -22,7 +22,7 @@ clean:
 	$(DOCKER_COMPOSE) down -v --remove-orphans --rmi all
 
 fclean: clean
-	sudo rm -rf $(DB_VOLUMES)
+	rm -rf $(DB_VOLUMES)
 
 re: fclean run
 

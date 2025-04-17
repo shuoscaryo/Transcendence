@@ -40,8 +40,8 @@ services:
     image: nginx
     container_name: nginx
     ports:
-      - "443:443"
-      - "80:80"
+      - "4443:4443"
+      - "8080:8080"
     volumes: 
       - django:/app
     networks:

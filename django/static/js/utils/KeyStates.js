@@ -27,7 +27,9 @@ class KeyStates {
     }
 
     static get(key) {
-        return KeyStates.keyState[key.toLowerCase()] || false;
+        const isLetter = key.length === 1 && key.match(/[a-z]/i);
+        const processedKey = isLetter ? key.toLowerCase() : key;
+        return KeyStates.keyState[processedKey] || false;
     }
 }
 

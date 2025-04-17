@@ -12,7 +12,7 @@ RUN openssl req -x509 -nodes -out /etc/nginx/ssl/transcendence.crt -keyout /etc/
 # Copy configuration files
 COPY ./config/nginx.conf /etc/nginx/nginx.conf
 
-EXPOSE 443
+EXPOSE 4443
 
 # Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
