@@ -6,12 +6,18 @@ class KeyStates {
     }
 
     static init() {
-        document.addEventListener('keydown', (event) => {
-            KeyStates.keyState[event.key] = true;
+        document.addEventListener('keydown', event => {
+            const key = event.key.length === 1 
+                ? event.key.toLowerCase() 
+                : event.key;
+            KeyStates.keyState[key] = true;
         });
-
-        document.addEventListener('keyup', (event) => {
-            KeyStates.keyState[event.key] = false;
+          
+        document.addEventListener('keyup', event => {
+            const key = event.key.length === 1 
+                ? event.key.toLowerCase() 
+                : event.key;
+            KeyStates.keyState[key] = false;
         });
 
         // Reset all keys when window loses focus
@@ -21,7 +27,7 @@ class KeyStates {
     }
 
     static get(key) {
-        return KeyStates.keyState[key] || false;
+        return KeyStates.keyState[key.toLowerCase()] || false;
     }
 }
 
