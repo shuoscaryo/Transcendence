@@ -22,7 +22,7 @@ class OnlineState {
         this.state = null;
         this.cleanupFns = [];
         this.pong = null;
-        this.statusMessage = null;
+        this.statusDiv = null;
         ViewScope.onDestroy(() => this._cleanup());
 
         // Global WebSocket callbacks
@@ -174,7 +174,9 @@ class OnlineState {
             // create pong
             const [pongComponent, pong] = createPongGameComponent(this.data);
             ViewScope.onDestroy(() => { pong.stop(); });
-            this.statusMessage = newElement("p", { parent: this.component, style: "text-align:center;" });
+            // Remove the buttons from the component
+            this.statusDiv = pongComponent.querySelector(".div-buttons");
+            this.statusDiv.innerHTML = "";
             this.component.append(pongComponent);
             this.pong = pong;
         }
@@ -189,15 +191,15 @@ class OnlineState {
 
         // status message
             
-        this.statusMessage.textContent = "Game ends in 10...";
+        this.statusDiv.textContent = "Waiting for other player 10...";
         let sec = 10;
         const interval = setInterval(() => {
             if (--sec > 0)
-                this.statusMessage.textContent = `Game ends in ${sec}...`;
+                this.statusDiv.textContent = `Waiting for other player ${sec}...`;
             else {
                 clearInterval(interval);
                 cancelCleanup();
-                this.statusMessage.textContent = '';
+                this.statusDiv.textContent = '';
             }
         }, 1000);
         const cancelCleanup = this.addCleanup(() => clearInterval(interval));
@@ -207,15 +209,15 @@ class OnlineState {
     }
 
     _stateGame() {
-        this.statusMessage.textContent = "Game starting in 3...";
+        this.statusDiv.textContent = "Game starting in 3...";
         let sec = 3;
         const interval = setInterval(() => {
             if (--sec > 0)
-                this.statusMessage.textContent = `Game starting in ${sec}...`;
+                this.statusDiv.textContent = `Game starting in ${sec}...`;
             else {
                 clearInterval(interval);
                 cancelCleanup();
-                this.statusMessage.textContent = '';
+                this.statusDiv.textContent = '';
                 this.pong.start();
             }
         }, 1000);
@@ -224,7 +226,7 @@ class OnlineState {
 
     _stateGameOver() {
         const text = this.game_over_msg === 'no_players' ? 'Game cancelled' : 'Game over';
-        this.statusMessage.textContent = text;
+        this.statusDiv.textContent = text;
         this.pong.stop();
         this.pong = null;
     }

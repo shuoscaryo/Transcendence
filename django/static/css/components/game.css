@@ -51,10 +51,13 @@
 
 .pong-game .div-game .div-buttons {
     width: 100%;
+    font-size: 24px;
     display: flex;
+    align-items: center;
     justify-content: space-evenly;
     background-color: #111111;
     border-top: 2px solid #ffffff;
+    min-height: 48px;
 }
 
 .pong-game .div-game .div-buttons button {
