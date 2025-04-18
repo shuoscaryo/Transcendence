@@ -27,7 +27,8 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
     volumes: 
-      - django:/app
+      - django-static:/app/static
+      - django-media:/app/media
     networks:
       - app-network
     restart: on-failure
@@ -42,7 +43,8 @@ services:
     ports:
       - "4443:4443"
     volumes: 
-      - django:/app
+      -  django-static:/app/static
+      -  django-media:/app/media
     networks:
       - app-network
     restart: on-failure
@@ -64,27 +66,11 @@ services:
     restart: on-failure
 
 volumes:
-  postgresql:
-    name: Transcendence_postgresql
-    driver: local
-    driver_opts:
-      type: none
-      device: ../postgresql-data
-      o: bind
-  django:
-    name: Transcendence_django
-    driver: local
-    driver_opts:
-      type: none
-      device: ../django
-      o: bind
-  ganache_db:
-    name: Transcendence_ganache_db
-    driver: local
-    driver_opts:
-      type: none
-      device: ../ganache-db
-      o: bind
+  postgresql: {}
+  django-static: {}
+  django-media: {}
+  ganache_db: {}
+
 
 networks:
   app-network:

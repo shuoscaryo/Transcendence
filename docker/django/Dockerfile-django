@@ -11,8 +11,9 @@ RUN rm requirements.txt
 
 EXPOSE 8000
 
+COPY ./django /app
 COPY ./docker/django/deploy.py /ganache/
 COPY ./docker/django/Tournaments.sol /ganache/
-
 COPY ./docker/django/init.sh /usr/local/bin/init.sh
+
 CMD ["bash", "/usr/local/bin/init.sh"]

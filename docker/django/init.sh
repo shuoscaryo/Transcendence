@@ -69,6 +69,13 @@ echo "Ganache is ready!"
 echo "Deploying contracts..."
 python /ganache/deploy.py
 
+# Create media folder and move default profile photo
+mkdir -p /app/media/profile_photos
+if [ ! -f "/app/media/profile_photos/default.jpg" ]; then
+    echo "Moving default profile photo..."
+    cp /app/static/default.jpg /app/media/profile_photos/
+fi
+
 # Start Django with uvicorn
 echo "Starting Django with Uvicorn..."
 uvicorn pong_project.asgi:application --host 0.0.0.0 --port 8000 --reload
