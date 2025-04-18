@@ -41,7 +41,6 @@ services:
     container_name: nginx
     ports:
       - "4443:4443"
-      - "8080:8080"
     volumes: 
       - django:/app
     networks:
