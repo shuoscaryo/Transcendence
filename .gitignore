@@ -16,6 +16,7 @@
 !en.subject.pdf
 !Makefile
 !docker/**/*
+!docker-compose.yml
 
 #ignore all object files and libraries
 django/**/__pycache__/

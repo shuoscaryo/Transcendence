@@ -10,7 +10,7 @@ RUN mkdir -p /app /www /etc/nginx/ssl
 RUN openssl req -x509 -nodes -out /etc/nginx/ssl/transcendence.crt -keyout /etc/nginx/ssl/transcendence.key -subj "/C=ES/ST=Madrid/L=Madrid/O=42/OU=42/CN=orudek.42.fr/UID=orudek"
 
 # Copy configuration files
-COPY ./config/nginx.conf /etc/nginx/nginx.conf
+COPY ./docker/nginx/nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 4443
 

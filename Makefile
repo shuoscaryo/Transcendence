@@ -1,15 +1,15 @@
 PROJECT := transcendence
 CONTAINERS := django postgresql ganache nginx
-YML_PATH = ./docker/docker-compose.yml
+YML_PATH = ./docker-compose.yml
 ENV_FILE := .env
 
-DOCKER_COMPOSE := docker compose --env-file $(ENV_FILE) -f $(YML_PATH) -p $(PROJECT)
+DOCKER_COMPOSE := docker compose -f $(YML_PATH) -p $(PROJECT)
 
 run:
-	$(DOCKER_COMPOSE) up --build --remove-orphans
+	$(DOCKER_COMPOSE) up --build
 
 dt:
-	$(DOCKER_COMPOSE) up --build -d --remove-orphans
+	$(DOCKER_COMPOSE) up --build -d
 
 down:
 	$(DOCKER_COMPOSE) down
@@ -22,7 +22,6 @@ clean:
 
 fclean:
 	$(DOCKER_COMPOSE) down -v --remove-orphans --rmi all
-	docker network rm Transcendence_network 2>/dev/null || true
 
 re: fclean run
 

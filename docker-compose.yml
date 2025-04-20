@@ -2,6 +2,7 @@ services:
   postgresql:
     image: postgres:17
     container_name: postgresql
+    env_file: ./.env
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -14,10 +15,11 @@ services:
 
   django:
     build:
-      context: ..
-      dockerfile: ./docker/django/Dockerfile-django
+      context: .
+      dockerfile: ./docker/django/Dockerfile
     image: django
     container_name: django
+    env_file: ./.env
     environment:
       FORTY_TWO_CLIENT_SECRET: ${FORTY_TWO_CLIENT_SECRET}
       FORTY_TWO_CLIENT_ID: ${FORTY_TWO_CLIENT_ID}
@@ -37,7 +39,9 @@ services:
       - ganache
 
   nginx:
-    build: ./nginx
+    build:
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile
     image: nginx
     container_name: nginx
     ports:
@@ -53,10 +57,11 @@ services:
 
   ganache:
     build:
-      context: ..
-      dockerfile: ./docker/ganache/Dockerfile-ganache
+      context: .
+      dockerfile: ./docker/ganache/Dockerfile
     image: ganache
     container_name: ganache
+    env_file: ./.env
     environment:
       MNEMONIC: ${MNEMONIC}
     volumes:
