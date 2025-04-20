@@ -6,6 +6,7 @@ export default async function getPage( isLogged, path) {
     const css = [
         Path.css('main/index.css'),
         Path.css('main/sidebar.css'),
+        Path.css('components/footer.css'),
     ];
     const component = document.createElement('div');
 
