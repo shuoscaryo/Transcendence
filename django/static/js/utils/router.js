@@ -10,6 +10,27 @@ const current = {
     viewOnDestroy: null,
 };
 
+// if the path is a number between 400 and 599, it is an error page
+function isErrorPage(path) {
+    const number = parseInt(path.substring(1), 10);
+    return !isNaN(number) && number >= 400 && number <= 599;
+}
+
+function normalizePath(path) {
+    if (!path) return '/main/home';
+
+    if (path === '/' || path === '/home' || path === '/main' || path === '/main/' || path === '/home/')
+        return '/main/home';
+    if (path === '/login')
+        return '/login/login';
+    if (path === '/register')
+        return '/login/register';
+    if (isErrorPage(path))
+        return `/error${path}`;
+
+    return path;
+}
+
 async function apiIsLogged() {
     const response = await fetch(Path.API.IS_LOGGED, {
         method: 'GET',
@@ -145,12 +166,6 @@ async function loadPage(path, isLogged) {
     return {status: 200};
 }
 
-// if hte path is a number between 400 and 599, it is an error page
-function isErrorPage(path) {
-    const number = parseInt(path.substring(1), 10);
-    return !isNaN(number) && number >= 400 && number <= 599;
-}
-
 /**
  * Handles the routing logic for the application.
  *
@@ -169,6 +184,7 @@ function isErrorPage(path) {
  * @returns nothing
  */
 export async function router() {
+    console.log(`pathname: ${window.location.pathname}`);
     const isLogged = await apiIsLogged();
 
     // Connect or disconnect the WebSocket
@@ -182,15 +198,8 @@ export async function router() {
         WebSocketService.disconnect();
     
     // Change path to the correct page on specific cases
-    let path = window.location.pathname;
-    if (path === '/' || path === '/home' || path === '/main' || path === '/main/' ||  path === '/home/')
-        path = '/main/home';
-    else if (path === '/login')
-        path = '/login/login';
-    else if (path === '/register')
-        path = '/login/register';
-    else if (isErrorPage(path))
-        path = `/error${path}`;
+    let path = normalizePath(window.location.pathname);
+
     // Redirect home if logged in from login pages
     if (isLogged && path.startsWith("/login"))
         return navigate('/home', true);
@@ -232,12 +241,16 @@ export async function router() {
  * @param {boolean} [redirect=false] - Determines whether to replace the current history entry (`true`) or add a new one (`false`).
  */
 export function navigate(path = null, redirect=false) {
-
     if (path != null){
-        if (redirect)
-            window.history.replaceState({}, '', path);
-        else
-            window.history.pushState({}, '', path);
+        const normalizedPath = normalizePath(path);
+        const currentPath = normalizePath(window.location.pathname);
+        // Check if the path is the same as the current one
+        if (currentPath !== normalizedPath) {
+            if (redirect)
+                window.history.replaceState({}, '', path);
+            else
+                window.history.pushState({}, '', path);
+        }
     }
     router();
 }
