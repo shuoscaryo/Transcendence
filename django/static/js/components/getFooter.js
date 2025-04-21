@@ -7,7 +7,7 @@ export default function getFooter() {
 
     newElement('span', {
         parent: component,
-        textContent: 'Ft-transcendence by 2 '
+        textContent: 'Ft-transcendence by '
     });
 
     const users = [
