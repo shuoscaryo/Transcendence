@@ -184,7 +184,6 @@ async function loadPage(path, isLogged) {
  * @returns nothing
  */
 export async function router() {
-    console.log(`pathname: ${window.location.pathname}`);
     const isLogged = await apiIsLogged();
 
     // Connect or disconnect the WebSocket
