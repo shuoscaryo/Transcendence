@@ -14,6 +14,13 @@ export class Controller {
         throw new Error("Must override getMove()");
     }
 
+	getControls() { // Used to show the move keys on the screen
+		return {
+			up: null, // replace with the key name
+			down: null, // replace with the key name
+		}
+	}
+
 	start() { // Called on game start if needed
 		// Do nothing
 	}
@@ -29,6 +36,13 @@ export class PlayerController extends Controller {
 		this.upKey = upKey;
 		this.downKey = downKey;
     }
+
+	getControls	() {
+		return {
+			up: this.upKey,
+			down: this.downKey,
+		}
+	}
 
     getMove(paddleID, gameStatus) {
         if (KeyStates.get(this.upKey))
@@ -51,6 +65,13 @@ export class RemoteControllerOutgoing extends Controller {
         this._downKey = downKey;
 		this._started = false;
     }
+
+	getControls() {
+		return {
+			up: this._upKey,
+			down: this._downKey,
+		}
+	}
 
     _setupKeyListeners() {
         const updateMove = () => {

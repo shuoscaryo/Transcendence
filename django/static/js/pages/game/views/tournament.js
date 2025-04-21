@@ -326,7 +326,6 @@ async function loadMatchesView(component, myData) {
     component.append(containerDiv);
     
     if( g_tournament.over ) {
-
         const winnerDiv = document.createElement('div');
         winnerDiv.id = 'winner';
         containerDiv.append(winnerDiv);
@@ -345,15 +344,14 @@ async function loadMatchesView(component, myData) {
         };
         ViewScope.request('POST', Path.API.ADD_TOURNAMENT, {body:tournamentData});
     }
-
     const matchesList = g_tournament.getComponent();
     matchesList.id = "tournament";
     containerDiv.append(matchesList);
-
+    
     const buttonsDiv = document.createElement('div');
     buttonsDiv.id = 'buttons-div';
     containerDiv.append(buttonsDiv);
-
+    
     if (!g_tournament.over) {
         const buttonTest0 = getDefaultButton({
             bgColor: 'var(--color-gray)',
@@ -379,7 +377,7 @@ async function loadMatchesView(component, myData) {
             },
         });
         buttonsDiv.append(buttonNext);
-
+        
         const buttonTest1 = getDefaultButton({
             bgColor: 'var(--color-gray)',
             content: 'Right Player Auto Win',
